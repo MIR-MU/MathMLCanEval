@@ -7,8 +7,10 @@
         <class>cz.muni.fi.mir.domain.Annotation</class>
         <class>cz.muni.fi.mir.domain.ApplicationRun</class>
         <class>cz.muni.fi.mir.domain.CannonicOutput</class>
+        <class>cz.muni.fi.mir.domain.Configuration</class>
         <class>cz.muni.fi.mir.domain.Formula</class>
         <class>cz.muni.fi.mir.domain.Program</class>
+        <class>cz.muni.fi.mir.domain.Revision</class>
         <class>cz.muni.fi.mir.domain.SourceDocument</class>
         <class>cz.muni.fi.mir.domain.User</class>
         <class>cz.muni.fi.mir.domain.UserRole</class>

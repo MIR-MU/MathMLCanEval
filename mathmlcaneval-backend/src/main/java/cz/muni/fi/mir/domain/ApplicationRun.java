@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -37,6 +38,12 @@ public class ApplicationRun implements Serializable
     private DateTime stop;
     @OneToOne
     private User user;
+    
+    @ManyToOne
+    private Configuration configuration;
+    
+    @ManyToOne
+    private Revision revision;
 
     public Long getId()
     {
@@ -88,6 +95,28 @@ public class ApplicationRun implements Serializable
         this.user = user;
     }
 
+    public Configuration getConfiguration()
+    {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration)
+    {
+        this.configuration = configuration;
+    }
+
+    public Revision getRevision()
+    {
+        return revision;
+    }
+
+    public void setRevision(Revision revision)
+    {
+        this.revision = revision;
+    }
+    
+    
+
     @Override
     public int hashCode()
     {
@@ -118,8 +147,8 @@ public class ApplicationRun implements Serializable
     @Override
     public String toString()
     {
-        return "ApplicationRun{" + "id=" + id + ", note=" + note + ", start=" + start + ", stop=" + stop + ", user=" + user + '}';
+        return "ApplicationRun{" + "id=" + id + ", note=" + note + ", start=" + start + ", stop=" + stop + ", user=" + user + ", configuration=" + configuration + ", revision=" + revision + '}';
     }
-    
+
     
 }

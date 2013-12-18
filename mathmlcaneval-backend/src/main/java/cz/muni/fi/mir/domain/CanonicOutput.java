@@ -27,10 +27,7 @@ public class CanonicOutput implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name="revision")
-    private String revision;
-    
+        
     @Column(name="output")
     private String output;
     
@@ -54,17 +51,7 @@ public class CanonicOutput implements Serializable
     public void setId(Long id)
     {
         this.id = id;
-    }
-
-    public String getRevision()
-    {
-        return revision;
-    }
-
-    public void setRevision(String revision)
-    {
-        this.revision = revision;
-    }
+    }    
 
     public String getOutput()
     {
@@ -119,7 +106,7 @@ public class CanonicOutput implements Serializable
     @Override
     public String toString()
     {
-        return "CanonicOutput{" + "id=" + id + ", revision=" + revision + ", output=" + output + ", parents=" + parents + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
+        return "CanonicOutput{" + "id=" + id + ", output=" + output + ", parents=" + parents + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
     }
 
     @Override
