@@ -4,3 +4,13 @@
 *.jar
 *.war
 *.ear
+
+#ignore log files
+*.log
+
+#ignore build folders
+mathmlcaneval-backend/target
+mathmlcaneval-frontend/target
+
+#ignore nb files
+nb-configuration.xml

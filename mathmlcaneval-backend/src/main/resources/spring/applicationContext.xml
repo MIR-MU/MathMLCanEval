@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:s="http://www.springframework.org/schema/security" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context 
+                            http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/tx 
+                            http://www.springframework.org/schema/tx/spring-tx.xsd
+                            http://www.springframework.org/schema/aop 
+                            http://www.springframework.org/schema/aop/spring-aop.xsd
+                            http://www.springframework.org/schema/security
+                            http://www.springframework.org/schema/security/spring-security.xsd
+                            http://www.springframework.org/schema/cache 
+                            http://www.springframework.org/schema/cache/spring-cache.xsd">
+    
+    
+    
+    
+    <tx:annotation-driven transaction-manager="transactionManager" />    
+<!--    <cache:annotation-driven cache-manager="cacheManager"/>-->
+                    
+    <context:component-scan base-package="cz.muni.fi.mir" />
+    
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    
+    
+    <!-- http://forum.spring.io/forum/spring-projects/data/29626-how-to-turn-off-hibernate-cache-for-query-jpa -->
+    <!-- http://stackoverflow.com/questions/13956224/spring-3-2-and-cache-abstraction-missing-ehcache-implementation -->
+    <!-- http://stackoverflow.com/questions/13083987/spring3-1-and-hibernate4-eh-cache -->
+    <!-- TODO zistit ako to funguje je to daka novinka .. -->
+    
+<!--    <bean id="ehCacheManager"
+        class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+        p:configLocation="classpath:META-INF/ehcache.xml"
+        p:shared="false" />
+
+    <bean id="cacheManager"
+        class="org.springframework.cache.ehcache.EhCacheCacheManager"
+        p:cacheManager-ref="ehCacheManager" />
+    -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:config/jdbc.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+    </bean>
+    
+<!--    <bean id="bookAspect" class="cz.muni.ics.ff.bis.backend.aspects.AuthorExecutionLogger" />
+    <bean id="departmentAspect" class="cz.muni.ics.ff.bis.backend.aspects.DepartmentExecutionLogger" />
+    <bean id="userAspect" class="cz.muni.ics.ff.bis.backend.aspects.UserExecutionLogger" />-->
+    
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${hibernate.connection.driver_class}"/>
+        <property name="jdbcUrl" value="${hibernate.connection.url}"/>
+        <property name="user" value="${hibernate.connection.username}"/>
+        <property name="password" value="${hibernate.connection.password}"/>
+            <!-- tieto properties nejdu .... -->
+<!--        <property name="hibernate.c3p0.min_size" value="${hibernate.c3p0.min_size}" />
+        <property name="hibernate.c3p0.max_size" value="${hibernate.c3p0.max_size}"/>
+        <property name="hibernate.c3p0.timeout" value="${hibernate.c3p0.timeout}"/>
+        <property name="hibernate.c3p0.max_statements" value="${hibernate.c3p0.max_statements}"/>
+        <property name="hibernate.c3p0.idle_test_period" value="${hibernate.c3p0.idle_test_period}"/>-->
+    </bean>
+    
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="mathcaleval" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <prop key="hibernate.hbm2ddl.import_files">${hibernate.hbm2ddl.import_files}</prop>
+                <prop key="hibernate.cacheable">${hibernate.cacheable}</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    
+<!--    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="departments"/>
+            </set>
+        </property>
+    </bean>  
+    
+    <bean id="mapper" class="org.dozer.DozerBeanMapper">
+        <property name="mappingFiles">
+            <list>
+                <value>config/dozer-mapping.xml</value>
+            </list>
+        </property>
+    </bean>
+    
+   -->
+    
+</beans>

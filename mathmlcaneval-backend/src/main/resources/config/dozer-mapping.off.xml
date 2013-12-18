@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net  
+                              http://dozer.sourceforge.net/schema/beanmapping.xsd">  
+    <configuration>
+        <!--
+        nutnost vlastnej konverzie, pretoze by default by hodilo hodnotu .now()
+        -->
+        <custom-converters>
+            <converter type="cz.muni.ics.ff.bis.tools.JodaTimeConverter">
+                <class-a>org.joda.time.DateTime</class-a>
+                <class-b>org.joda.time.DateTime</class-b>
+            </converter>  
+        </custom-converters>
+    </configuration>
+    
+    
+    <mapping wildcard="false">
+        <class-a>cz.muni.ics.ff.bis.backend.domain.Publication</class-a>
+        <class-b>cz.muni.ics.ff.bis.setup.importer.publication.CSVPublication</class-b>
+        <field custom-converter="cz.muni.ics.ff.bis.setup.importer.publication.DozerPublisherConvertor">
+            <a>publisher</a>
+            <b>publisher</b>
+        </field>
+    </mapping>
+    
+    
+    <!-- 
+    wildcard=false zabezpeci ze dozer sa nebude snazit automaticky
+    konvertovat jednotlive field, ale je nutne ich zadat manualne. Dovodom je fakt
+    ze niektore fields sa medzi objektami nenachadzaju (Xml nema ID, normalny nema
+    status, atd.)
+    -->
+    <mapping wildcard="false">
+        <class-a>cz.muni.ics.ff.bis.setup.importer.author.XMLAuthor</class-a>
+        <class-b>cz.muni.ics.ff.bis.backend.domain.Author</class-b>
+        <field>
+            <a>acronymID</a>
+            <b>acronymID</b>
+        </field>
+        <field>
+            <a>description</a>
+            <b>description</b>
+        </field>
+        <field>
+            <a>profession</a>
+            <b>profession</b>
+        </field>
+        <field>
+            <a>origin</a>
+            <b>origin</b>
+        </field>
+        <field>
+            <a>birthDate</a>
+            <b>birthDate</b>
+        </field>
+        <field>
+            <a>deathDate</a>
+            <b>deathDate</b>
+        </field>
+        <field>
+            <a>mu_uco</a>
+            <b>uco</b>
+        </field>
+        <field>
+            <a>authorName</a>
+            <b>authorName</b>
+        </field>
+        <field>
+            <a>alternativeNames</a>
+            <b>alternativeNames</b>
+        </field>
+    </mapping>      
+    
+    
+    <mapping wildcard="false">
+        <class-a>cz.muni.ics.ff.bis.setup.importer.author.XMLAuthorName</class-a>
+        <class-b>cz.muni.ics.ff.bis.backend.domain.AuthorName</class-b>
+        <field>
+            <a>name</a>
+            <b>name</b>
+        </field>
+        <field>
+            <a>surname</a>
+            <b>surname</b>
+        </field>
+        <field>
+            <a>display</a>
+            <b>display</b>
+        </field>
+        <field>
+            <a>transliterated</a>
+            <b>transliterated</b>
+        </field>
+    </mapping> 
+       
+</mappings>

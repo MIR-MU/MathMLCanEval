@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   		http://www.springframework.org/schema/beans/spring-beans.xsd
+	   		http://www.springframework.org/schema/context
+	   		http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/mvc 
+			http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+                            
+                            
+    <!-- not strictly necessary for this example, but still useful, see http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/mvc.html#mvc-ann-controller for more information -->
+    <context:component-scan base-package="cz.muni.fi.mir" />
+
+    <!-- the mvc resources tag does the magic -->
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+  
+    <import resource="classpath*:/spring/applicationContext.xml" />
+    
+     
+<!--    <bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" id="messageSource">
+        <property name="basename" value="classpath:/bundle/messages" />
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean> -->
+    
+    
+    <!--    http://stackoverflow.com/a/9401900 -->
+    <mvc:interceptors>
+        <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <property name="paramName" value="lang" />
+        </bean>
+    </mvc:interceptors>
+   
+    
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" >
+        <property name="defaultLocale" value="cs_CZ"/>
+    </bean>
+    
+    <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+    
+    <bean id="userServiceProvider" class="cz.muni.fi.mir.UserServiceProvider" />
+    
+    
+    
+    <!-- 
+    toto je definovane v podstate aj v backend app-contexte, pretoze ak by sme spustili nejaku cast
+    backendu bez behu servera, tak by configurak obsahoval na strane backendu aj definicie serverovej casti,
+    ktora vsak neexistuje lebo je definovana na strane serveru. Server pritom pri buildovani includne
+    -->
+<!--    <bean id="mapper-server" class="org.dozer.DozerBeanMapper">
+        <property name="mappingFiles">
+            <list>
+                <value>config/dozer-server-mapping.xml</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean name="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource" />
+    </bean> 
+    
+    
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="cz.muni.ics.ff.bis.server.convertor.DateTimeToString"/>
+                <bean class="cz.muni.ics.ff.bis.server.convertor.StringToDateTime"/>
+                <bean class="cz.muni.ics.ff.bis.server.convertor.StringToDepartment"/>
+                <bean class="cz.muni.ics.ff.bis.server.convertor.StringToSource"/>
+            </list>
+        </property>
+    </bean>
+    
+    
+    <mvc:annotation-driven validator="validator" conversion-service="conversionService"/> -->
+    <mvc:annotation-driven />
+</beans>
