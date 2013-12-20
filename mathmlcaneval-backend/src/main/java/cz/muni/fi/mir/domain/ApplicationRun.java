@@ -31,11 +31,11 @@ public class ApplicationRun implements Serializable
     @Column(name = "note")
     private String note;
     @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-    @Column(name="start")
-    private DateTime start;
+    @Column(name="startTime")       // sql99
+    private DateTime startTime;
     @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-    @Column(name="stop")
-    private DateTime stop;
+    @Column(name="stopTime")
+    private DateTime stopTime;
     @OneToOne
     private User user;
     
@@ -65,24 +65,24 @@ public class ApplicationRun implements Serializable
         this.note = note;
     }
 
-    public DateTime getStart()
+    public DateTime getStartTime()
     {
-        return start;
+        return startTime;
     }
 
-    public void setStart(DateTime start)
+    public void setStartTime(DateTime startTime)
     {
-        this.start = start;
+        this.startTime = startTime;
     }
 
-    public DateTime getStop()
+    public DateTime getStopTime()
     {
-        return stop;
+        return stopTime;
     }
 
-    public void setStop(DateTime stop)
+    public void setStopTime(DateTime stopTime)
     {
-        this.stop = stop;
+        this.stopTime = stopTime;
     }
 
     public User getUser()
@@ -147,7 +147,7 @@ public class ApplicationRun implements Serializable
     @Override
     public String toString()
     {
-        return "ApplicationRun{" + "id=" + id + ", note=" + note + ", start=" + start + ", stop=" + stop + ", user=" + user + ", configuration=" + configuration + ", revision=" + revision + '}';
+        return "ApplicationRun{" + "id=" + id + ", note=" + note + ", startTime=" + startTime + ", stopTime=" + stopTime + ", user=" + user + ", configuration=" + configuration + ", revision=" + revision + '}';
     }
 
     

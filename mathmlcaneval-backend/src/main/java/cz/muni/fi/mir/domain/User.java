@@ -7,7 +7,6 @@ package cz.muni.fi.mir.domain;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,20 +14,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 /**
- * tabulka sa vola Users, pretoze user je reserved keyword v postgresql
  * @author Empt
  */
-@Entity(name="Users")
+@Entity(name="users")   // because user is 99 resrved word...
 public class User implements Serializable
 {
     private static final long serialVersionUID = -8362731814249179743L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="username")    
+    @Column(name="username",unique = true)    
     private String username;
     @Column(name="realName")
     private String realName;

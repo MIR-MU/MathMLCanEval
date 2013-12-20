@@ -25,11 +25,11 @@ public class Program implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name="title")
-    private String title;
+    @Column(name="name")
+    private String name;
     @Column(name="version")
     private String version;
-    @Column(name="parameters")
+    @Column(name="pparameters") // because parameters is SQL-99 reserved keyword....
     private String parameters;
     @Column(name="note")
     private String note;    
@@ -44,14 +44,14 @@ public class Program implements Serializable
         this.id = id;
     }
 
-    public String getTitle()
+    public String getName()
     {
-        return title;
+        return name;
     }
 
-    public void setTitle(String title)
+    public void setName(String name)
     {
-        this.title = title;
+        this.name = name;
     }
 
     public String getVersion()
@@ -114,7 +114,7 @@ public class Program implements Serializable
     @Override
     public String toString()
     {
-        return "Program{" + "id=" + id + ", title=" + title + ", version=" + version + ", parameters=" + parameters + ", note=" + note + '}';
+        return "Program{" + "id=" + id + ", name=" + name + ", version=" + version + ", parameters=" + parameters + ", note=" + note + '}';
     }
     
     

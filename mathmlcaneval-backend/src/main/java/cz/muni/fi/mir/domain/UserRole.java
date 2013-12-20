@@ -19,6 +19,8 @@ import javax.persistence.Id;
 @Entity(name="UserRole")
 public class UserRole implements Serializable
 {
+    private static final long serialVersionUID = 6057382222751855434L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,8 +47,6 @@ public class UserRole implements Serializable
     {
         this.roleName = roleName;
     }
-
-    
 
     @Override
     public int hashCode()
