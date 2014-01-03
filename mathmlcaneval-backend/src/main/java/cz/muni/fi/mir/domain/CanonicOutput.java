@@ -28,8 +28,11 @@ public class CanonicOutput implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
         
-    @Column(name="output")
-    private String output;
+    @Column(name="outputForm")
+    private String outputForm;
+    
+    @Column(name="similarForm")
+    private String similarForm;
     
     @OneToMany
     private Set<Formula> parents;
@@ -53,14 +56,14 @@ public class CanonicOutput implements Serializable
         this.id = id;
     }    
 
-    public String getOutput()
+    public String getOutputForm()
     {
-        return output;
+        return outputForm;
     }
 
-    public void setOutput(String output)
+    public void setOutputForm(String outputForm)
     {
-        this.output = output;
+        this.outputForm = outputForm;
     }
 
     public Set<Formula> getParents()
@@ -103,12 +106,15 @@ public class CanonicOutput implements Serializable
         this.annotations = annotations;
     }
 
-    @Override
-    public String toString()
+    public String getSimilarForm()
     {
-        return "CanonicOutput{" + "id=" + id + ", output=" + output + ", parents=" + parents + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
+        return similarForm;
     }
 
+    public void setSimilarForm(String similarForm)
+    {
+        this.similarForm = similarForm;
+    }
     @Override
     public int hashCode()
     {
@@ -135,6 +141,10 @@ public class CanonicOutput implements Serializable
         }
         return true;
     }
-    
-    
+
+    @Override
+    public String toString()
+    {
+        return "CanonicOutput{" + "id=" + id + ", outputForm=" + outputForm + ", similarForm=" + similarForm + ", parents=" + parents + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
+    }
 }

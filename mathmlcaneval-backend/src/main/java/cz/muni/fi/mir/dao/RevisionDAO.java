@@ -22,4 +22,5 @@ public interface RevisionDAO
     
     
     List<Revision> getAllRevisions();
+    List<Revision> findRevisionByNote(String note);
 }

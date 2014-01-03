@@ -62,4 +62,11 @@ public class RevisionServiceImpl implements RevisionService
     {
         return revisionDAO.getAllRevisions();
     }    
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Revision> findRevisionByNote(String note)
+    {
+        return revisionDAO.findRevisionByNote(note);
+    }
 }

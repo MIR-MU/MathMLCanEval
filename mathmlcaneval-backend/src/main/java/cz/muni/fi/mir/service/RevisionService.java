@@ -21,5 +21,6 @@ public interface RevisionService
     Revision getRevisionByHash(String hash);
     
     
-    List<Revision> getAllRevisions();    
+    List<Revision> getAllRevisions(); 
+    List<Revision> findRevisionByNote(String note);
 }

@@ -45,6 +45,10 @@ public class UserRoleDAOImpl implements UserRoleDAO
         {
             entityManager.remove(ur);
         }
+        else
+        {
+            logger.info("Trying to delete UserRole with ID that has not been found. The ID is ["+userRole.getId().toString()+"]");
+        }
     }
 
     @Override
@@ -59,7 +63,7 @@ public class UserRoleDAOImpl implements UserRoleDAO
         List<UserRole> resultList = new ArrayList<>();
         try
         {
-            resultList = entityManager.createQuery("SELECT ur FROM UserRole ur", UserRole.class)
+            resultList = entityManager.createQuery("SELECT ur FROM userRole ur", UserRole.class)
                     .getResultList();
         }
         catch(NoResultException nre)

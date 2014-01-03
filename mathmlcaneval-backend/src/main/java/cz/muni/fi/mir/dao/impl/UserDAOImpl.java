@@ -38,7 +38,7 @@ public class UserDAOImpl implements UserDAO
         User u = null;
         try
         {
-            u = entityManager.createQuery("SELECT u FROM Users u WHERE u.username = :username", User.class)
+            u = entityManager.createQuery("SELECT u FROM users u WHERE u.username = :username", User.class)
                     .setParameter("username", username).getSingleResult();
         }
         catch(NoResultException nre)
@@ -63,6 +63,10 @@ public class UserDAOImpl implements UserDAO
         {
             entityManager.remove(u);
         }
+        else
+        {
+            logger.info("Trying to delete User with ID that has not been found. The ID is ["+user.getId().toString()+"]");
+        }
     }
 
     @Override
@@ -78,7 +82,7 @@ public class UserDAOImpl implements UserDAO
         
         try
         {
-            resultList = entityManager.createQuery("SELECT u FROM Users u", User.class)
+            resultList = entityManager.createQuery("SELECT u FROM users u", User.class)
                     .getResultList();
         }
         catch(NoResultException nre)
@@ -96,7 +100,7 @@ public class UserDAOImpl implements UserDAO
         
         try
         {
-            resultList = entityManager.createQuery("SELECT u FROM Users u where :userRoleId IN(u.userRoles)", User.class)
+            resultList = entityManager.createQuery("SELECT u FROM users u WHERE :userRoleId MEMBER OF u.userRoles", User.class)
                     .setParameter("userRoleId", userRole.getId()).getResultList();
         }
         catch(NoResultException nre)
@@ -114,7 +118,7 @@ public class UserDAOImpl implements UserDAO
         
         try
         {
-            resultList = entityManager.createQuery("SELECT u FROM Users u where u.realName LIKE :realName", User.class)
+            resultList = entityManager.createQuery("SELECT u FROM users u WHERE u.realName LIKE :realName", User.class)
                     .setParameter("realName", "%"+name+"%").getResultList();
         }
         catch(NoResultException nre)

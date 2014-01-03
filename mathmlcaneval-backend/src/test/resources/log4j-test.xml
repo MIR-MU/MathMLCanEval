@@ -47,18 +47,11 @@
     </logger>
     
     
-<!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder"> 
-        <level value="TRACE"/>
-    </logger>
-    -->
+    
+    
     <!-- 3rdparty Loggers -->	
     <logger name="org.hibernate.tool.hbm2ddl">
-        <level value="info"/>
-    </logger>
-    
-    <!-- pre testy -->
-    <logger name="org.hibernate.tool.hbm2ddl.SchemaExport">
-        <level value="FATAL"/>
+        <level value="fatal"/>
     </logger>
     
     <logger name="org.springframework">
@@ -73,7 +66,7 @@
     </logger>
 	
     <logger name="org.hibernate">
-        <level value="fatal"/>  
+        <level value="info"/>  
     </logger>
     
     <logger name="org.apache.catalina">

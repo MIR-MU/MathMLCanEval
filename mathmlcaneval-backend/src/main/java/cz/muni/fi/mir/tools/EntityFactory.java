@@ -4,15 +4,19 @@
  */
 package cz.muni.fi.mir.tools;
 
+import cz.muni.fi.mir.domain.Annotation;
+import cz.muni.fi.mir.domain.AnnotationFlag;
+import cz.muni.fi.mir.domain.Configuration;
+import cz.muni.fi.mir.domain.Program;
+import cz.muni.fi.mir.domain.Revision;
+import cz.muni.fi.mir.domain.SourceDocument;
 import cz.muni.fi.mir.domain.User;
 import cz.muni.fi.mir.domain.UserRole;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
- *
+ * Class used for creating objects.
  * @author Empt
  */
 public class EntityFactory
@@ -115,5 +119,141 @@ public class EntityFactory
         }        
         
         return ur;
+    }
+    
+    
+    /**
+     * Method used for creating new SourceDocument without setting any field
+     * @return empty SourceDocument
+     */
+    public static SourceDocument createSourceDocument()
+    {
+        return new SourceDocument();
+    }
+    
+    
+    /**
+     * Method used for creating new SourceDocument with fields set as were given on input.
+     * @param note note for new SourceDocument
+     * @param path path for new SourceDocument
+     * @return SourceDocument with given parameters
+     */
+    public static SourceDocument createSourceDocument(String note, String path)
+    {
+        SourceDocument sc = createSourceDocument();
+        sc.setNote(note);
+        sc.setPath(path);
+        
+        return sc;
+    }
+    
+    /**
+     * Method used for creating new Revision without setting any fields
+     * @return empty Revision
+     */
+    public static Revision createRevision()
+    {
+        return new Revision();
+    }
+    
+    /**
+     * Method used for creating new Revision with fields set as were given on input
+     * @param hash hash of revision, meant as unique identifier
+     * @param note note for this revision
+     * @return Revision with given parameters
+     */
+    public static Revision createRevision(String hash, String note)
+    {
+        Revision r = createRevision();
+        r.setNote(note);
+        r.setRevisionHash(hash);
+        
+        return r;
+    }
+    
+    /**
+     * Method used for creating new Program without setting any fields
+     * @return empty Program
+     */
+    public static Program createProgram()
+    {
+        return new Program();
+    }
+    
+    /**
+     * Method used for creating program with fields set as were given on input
+     * @param name name of the program
+     * @param note note for program
+     * @param parameters 
+     * @param version
+     * @return program with fields set as were given on input
+     */
+    public static Program createProgram(String name, String note,String parameters,String version)
+    {
+        Program p = createProgram();
+        p.setName(name);
+        p.setNote(note);
+        p.setParameters(parameters);
+        p.setVersion(version);
+        
+        return p;
+    }
+    
+    
+    /**
+     * Method used for creating empty configuration.
+     * @return empty configuration entity
+     */
+    public static Configuration createConfiguration()
+    {
+        return new Configuration();
+    }
+    
+    
+    /**
+     * Method used for creating Configuration out of given input
+     * @param config String representation of XML configuration file
+     * @param name name of configuration 
+     * @param note note for this configuration
+     * @return configuration with fields set as were given on input
+     */
+    public static Configuration createConfiguration(String config, String name, String note)
+    {
+        Configuration c = createConfiguration();
+        c.setName(name);
+        c.setConfig(config);
+        c.setNote(note);
+        
+        return c;
+    }
+    
+    
+    public static AnnotationFlag createAnnotaionFlag()
+    {
+        return new AnnotationFlag();
+    }
+    
+    public static AnnotationFlag createAnnotaionFlag(String value)
+    {
+        AnnotationFlag af = createAnnotaionFlag();
+        af.setFlagValue(value);
+        
+        return af;
+    }
+    
+    
+    public static Annotation createAnnotation()
+    {
+        return new Annotation();
+    }
+    
+    public static Annotation createAnnotation(String note,User user,AnnotationFlag af)
+    {
+        Annotation a = createAnnotation();
+        a.setNote(note);
+        a.setUser(user);
+        a.setAnnotationFlag(af);
+        
+        return a;
     }
 }

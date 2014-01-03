@@ -45,6 +45,10 @@ public class SourceDocumentDAOImpl implements SourceDocumentDAO
         {
             entityManager.remove(sd);
         }
+        else
+        {
+            logger.info("Trying to delete SourceDocument with ID that has not been found. The ID is ["+sourceDocument.getId().toString()+"]");
+        }
     }
 
     @Override
@@ -103,5 +107,4 @@ public class SourceDocumentDAOImpl implements SourceDocumentDAO
         
         return resultList;
     }
-    
 }

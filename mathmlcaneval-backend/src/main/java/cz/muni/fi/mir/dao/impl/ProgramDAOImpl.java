@@ -6,6 +6,7 @@ package cz.muni.fi.mir.dao.impl;
 
 import cz.muni.fi.mir.dao.ProgramDAO;
 import cz.muni.fi.mir.domain.Program;
+import cz.muni.fi.mir.tools.Tools;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -39,6 +40,10 @@ public class ProgramDAOImpl implements ProgramDAO
         if(p != null)
         {
             entityManager.remove(p);
+        }
+        else
+        {
+            logger.info("Trying to delete Program with ID that has not been found. The ID is ["+program.getId().toString()+"]");
         }
     }
 
@@ -76,9 +81,13 @@ public class ProgramDAOImpl implements ProgramDAO
     public List<Program> getProgramByNameAndVersion(String name, String version)
     {
         List<Program> resultList = new ArrayList<>();
+        if(Tools.getInstance().stringIsEmpty(name) && Tools.getInstance().stringIsEmpty(version))
+        {
+            return getAllPrograms();
+        }
         
         try
-        {
+        {           
             resultList = entityManager.createQuery("SELECT p FROM program p WHERE p.name = :name AND p.version = :version", Program.class)
                     .setParameter("name", name).setParameter("version", version).getResultList();
         }
@@ -93,7 +102,18 @@ public class ProgramDAOImpl implements ProgramDAO
     @Override
     public List<Program> getAllPrograms()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Program> resultList = new ArrayList<>();
+        
+        try
+        {
+            resultList = entityManager.createQuery("SELECT p FROM program p", Program.class)
+                    .getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
     }
-    
 }

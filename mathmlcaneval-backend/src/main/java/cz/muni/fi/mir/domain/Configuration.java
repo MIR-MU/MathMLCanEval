@@ -30,6 +30,9 @@ public class Configuration implements Serializable
     @Column(name="config")
     private String config;
     
+    @Column(name="name")
+    private String name;
+    
     @Column(name="note")
     private String note;
 
@@ -63,6 +66,18 @@ public class Configuration implements Serializable
         this.note = note;
     }
 
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    
+    
+
     @Override
     public int hashCode()
     {
@@ -93,8 +108,6 @@ public class Configuration implements Serializable
     @Override
     public String toString()
     {
-        return "Configuration{" + "id=" + id + ", config=" + config + ", note=" + note + '}';
+        return "Configuration{" + "id=" + id + ", config=" + config + ", name=" + name + ", note=" + note + '}';
     }
-    
-    
 }

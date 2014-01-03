@@ -16,7 +16,7 @@ import javax.persistence.Id;
  *
  * @author Empt
  */
-@Entity(name="UserRole")
+@Entity(name="userRole")
 public class UserRole implements Serializable
 {
     private static final long serialVersionUID = 6057382222751855434L;

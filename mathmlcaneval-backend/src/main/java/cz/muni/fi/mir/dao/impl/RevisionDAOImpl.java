@@ -39,6 +39,10 @@ public class RevisionDAOImpl implements RevisionDAO
         {
             entityManager.remove(r);
         }
+        else
+        {
+            logger.info("Trying to delete Revision with ID that has not been found. The ID is ["+revision.getId().toString()+"]");
+        }
     }
 
     @Override
@@ -87,4 +91,22 @@ public class RevisionDAOImpl implements RevisionDAO
         
         return result;
     }    
+
+    @Override
+    public List<Revision> findRevisionByNote(String note)
+    {
+        List<Revision> resultList = new ArrayList<>();
+        
+        try
+        {
+            resultList = entityManager.createQuery("SELECT r FROM revision r WHERE r.note LIKE :note", Revision.class)
+                    .setParameter("note", "%"+note+"%").getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
+    }
 }

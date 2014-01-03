@@ -186,7 +186,7 @@ public class Tools
      * @throws NoSuchAlgorithmException
      * @throws UnsupportedEncodingException
      */
-    public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException 
+    public String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException 
     {
         MessageDigest md = MessageDigest.getInstance("SHA-1");        
         byte[] sha1hash = new byte[40];
@@ -195,7 +195,7 @@ public class Tools
         return convertToHex(sha1hash);
     }
 
-    private static String convertToHex(byte[] data) 
+    private String convertToHex(byte[] data) 
     {
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < data.length; i++) 

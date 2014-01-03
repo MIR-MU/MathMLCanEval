@@ -29,39 +29,45 @@ public class SourceDocumentServiceImpl implements SourceDocumentService
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void updateSourceDocument(SourceDocument sourceDocument)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        sourceDocumentDAO.updateSourceDocument(sourceDocument);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteSourceDocument(SourceDocument sourceDocument)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        sourceDocumentDAO.deleteSourceDocument(sourceDocument);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SourceDocument getSourceDocumentByID(Long id)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return sourceDocumentDAO.getSourceDocumentByID(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SourceDocument getSourceDocumentByPath(String path)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return sourceDocumentDAO.getSourceDocumentByPath(path);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SourceDocument> getAllDocuments()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return sourceDocumentDAO.getAllDocuments();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SourceDocument> getDocumentsOnSubPath(String subPath)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return sourceDocumentDAO.getDocumentsOnSubPath(subPath);
     }
     
 }
