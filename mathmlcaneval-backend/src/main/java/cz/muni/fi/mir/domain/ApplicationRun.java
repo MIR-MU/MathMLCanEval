@@ -20,28 +20,29 @@ import org.joda.time.DateTime;
  *
  * @author Empt
  */
-@Entity(name = "applicationrun")
+@Entity(name = "applicationRun")
 public class ApplicationRun implements Serializable
 {
+
     private static final long serialVersionUID = -6547413491097181885L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "note")
     private String note;
-    @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-    @Column(name="startTime")       // sql99
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Column(name = "startTime")       // sql99
     private DateTime startTime;
-    @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-    @Column(name="stopTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Column(name = "stopTime")
     private DateTime stopTime;
     @OneToOne
     private User user;
-    
+
     @ManyToOne
     private Configuration configuration;
-    
+
     @ManyToOne
     private Revision revision;
 
@@ -114,8 +115,6 @@ public class ApplicationRun implements Serializable
     {
         this.revision = revision;
     }
-    
-    
 
     @Override
     public int hashCode()
@@ -137,11 +136,7 @@ public class ApplicationRun implements Serializable
             return false;
         }
         final ApplicationRun other = (ApplicationRun) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
@@ -149,6 +144,4 @@ public class ApplicationRun implements Serializable
     {
         return "ApplicationRun{" + "id=" + id + ", note=" + note + ", startTime=" + startTime + ", stopTime=" + stopTime + ", user=" + user + ", configuration=" + configuration + ", revision=" + revision + '}';
     }
-
-    
 }

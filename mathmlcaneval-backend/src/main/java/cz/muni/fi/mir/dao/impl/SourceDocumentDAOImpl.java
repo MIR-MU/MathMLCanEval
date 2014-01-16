@@ -63,8 +63,8 @@ public class SourceDocumentDAOImpl implements SourceDocumentDAO
         SourceDocument sd = null;
         try
         {
-            sd = entityManager.createQuery("SELECT sd FROM sourceDocument sd where sd.path = :path", SourceDocument.class)
-                    .setParameter("path", path).getSingleResult();
+            sd = entityManager.createQuery("SELECT sd FROM sourceDocument sd where sd.documentPath = :documentPath", SourceDocument.class)
+                    .setParameter("documentPath", path).getSingleResult();
         }
         catch(NoResultException nre)
         {
@@ -97,8 +97,8 @@ public class SourceDocumentDAOImpl implements SourceDocumentDAO
         List<SourceDocument> resultList = new ArrayList<>();
         try
         {
-            resultList = entityManager.createQuery("SELECT sd FROM sourceDocument sd WHERE sd.path LIKE :path", SourceDocument.class)
-                    .setParameter("path", subPath+"%").getResultList();
+            resultList = entityManager.createQuery("SELECT sd FROM sourceDocument sd WHERE sd.documentPath LIKE :documentPath", SourceDocument.class)
+                    .setParameter("documentPath", subPath+"%").getResultList();
         }
         catch(NoResultException nre)
         {

@@ -40,7 +40,8 @@ public class UserTest
     
     
     @Autowired private UserRoleService userRoleService;
-    @Autowired private UserService userService;
+    @Autowired
+    private UserService userService;
     private List<UserRole> roles = new ArrayList<>(3);
     private static final Long ID = new Long(1);
     

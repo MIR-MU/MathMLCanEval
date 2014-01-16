@@ -27,22 +27,25 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
  * @author Empt
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:spring/applicationContext-test.xml"})
-@TestExecutionListeners({
-    DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class})
+@ContextConfiguration(locations =
+{
+    "classpath:spring/applicationContext-test.xml"
+})
+@TestExecutionListeners(
+{
+    DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class
+})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ConfigurationTest
 {
+
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ConfigurationTest.class);
-    
-    
-    
-    @Autowired private ConfigurationService configurationService;
+
+    @Autowired
+    private ConfigurationService configurationService;
     private static final Long ID = new Long(1);
     private List<Configuration> configs = new ArrayList<>(3);
-    
-    
-    
+
     @Before
     public void init()
     {
@@ -56,11 +59,11 @@ public class ConfigurationTest
     {
         logger.info("Running ConfigurationTest#testCreateAndGetConfiguration()");
         configurationService.createConfiguration(configs.get(0));
-        
+
         Configuration result = configurationService.getConfigurationByID(ID);
-        
-        assertNotNull("Configuration object was not created.",result);
-        
+
+        assertNotNull("Configuration object was not created.", result);
+
         deepCompare(configs.get(0), result);
     }
 
@@ -68,21 +71,21 @@ public class ConfigurationTest
     public void testUpdateConfiguration()
     {
         logger.info("Running ConfigurationTest#testUpdateConfiguration()");
-        
+
         configurationService.createConfiguration(configs.get(0));
-        
+
         Configuration result = configurationService.getConfigurationByID(ID);
-        
-        assertNotNull("Configuration object was not created.",result);
-        
+
+        assertNotNull("Configuration object was not created.", result);
+
         result.setName("hello");
         result.setNote("1:2 nakoniec");
         result.setConfig(TestTools.getConfig(false, false, true));
-        
+
         configurationService.updateConfiguration(result);
-        
+
         Configuration updatedResult = configurationService.getConfigurationByID(ID);
-        
+
         deepCompare(result, updatedResult);
     }
 
@@ -90,36 +93,35 @@ public class ConfigurationTest
     public void testDeleteConfiguration()
     {
         logger.info("Running ConfigurationTest#testDeleteConfiguration()");
-        
+
         configurationService.createConfiguration(configs.get(0));
-        
+
         Configuration result = configurationService.getConfigurationByID(ID);
-        
-        assertNotNull("Configuration object was not created.",result);
-        
+
+        assertNotNull("Configuration object was not created.", result);
+
         configurationService.deleteConfiguration(result);
-        
-        
-        assertNull("Configuration object was not deleted.",configurationService.getConfigurationByID(ID));
+
+        assertNull("Configuration object was not deleted.", configurationService.getConfigurationByID(ID));
     }
 
     @Test
     public void testGetAllCofigurations()
     {
         logger.info("Running ConfigurationTest#testGetAllCofigurations()");
-        for(Configuration c : configs)
+        for (Configuration c : configs)
         {
             configurationService.createConfiguration(c);
         }
-        
+
         List<Configuration> result = configurationService.getAllCofigurations();
-        
-        assertEquals(TestTools.ERROR_LIST_SIZE,configs.size(),result.size());
-        
-        Collections.sort(configs,TestTools.confiurationComparator);
-        Collections.sort(result,TestTools.confiurationComparator);
-        
-        for(int i = 0 ; i < configs.size(); i++)
+
+        assertEquals(TestTools.ERROR_LIST_SIZE, configs.size(), result.size());
+
+        Collections.sort(configs, TestTools.confiurationComparator);
+        Collections.sort(result, TestTools.confiurationComparator);
+
+        for (int i = 0; i < configs.size(); i++)
         {
             deepCompare(configs.get(i), result.get(i));
         }
@@ -129,44 +131,43 @@ public class ConfigurationTest
     public void testGetBySubstringNote()
     {
         logger.info("Running ConfigurationTest#testGetBySubstringNote()");
-        for(Configuration c : configs)
+        for (Configuration c : configs)
         {
             configurationService.createConfiguration(c);
         }
-        
+
         List<Configuration> result = configurationService.getBySubstringNote("hodnoty su");
-        assertEquals(TestTools.ERROR_LIST_SIZE, 2,result.size());
-        
-        for(Configuration c : result)
+        assertEquals(TestTools.ERROR_LIST_SIZE, 2, result.size());
+
+        for (Configuration c : result)
         {
-            assertTrue("does not contain substrin",c.getNote().contains("hodnoty su"));
+            assertTrue("does not contain substrin", c.getNote().contains("hodnoty su"));
         }
-        
+
     }
 
     @Test
     public void testFindyByName()
     {
         logger.info("Running ConfigurationTest#testFindyByName()");
-        for(Configuration c : configs)
+        for (Configuration c : configs)
         {
             configurationService.createConfiguration(c);
         }
-        
+
         List<Configuration> result = configurationService.findyByName("vsetko");
-        assertEquals(TestTools.ERROR_LIST_SIZE,2,result.size());
-        
-        for(Configuration c : result)
+        assertEquals(TestTools.ERROR_LIST_SIZE, 2, result.size());
+
+        for (Configuration c : result)
         {
-            assertTrue("Configuration does not have field name set properly.",c.getName().contains("vsetko"));
+            assertTrue("Configuration does not have field name set properly.", c.getName().contains("vsetko"));
         }
     }
-    
-    
+
     private void deepCompare(Configuration expected, Configuration actual)
     {
-        assertEquals(TestTools.ERROR_WRONG_ID, expected.getId(),actual.getId());
-        assertEquals("Given Configuration has wrong name.",expected.getName(),actual.getName());
-        assertEquals("Given Configuration has wrong note.",expected.getNote(),actual.getNote());
+        assertEquals(TestTools.ERROR_WRONG_ID, expected.getId(), actual.getId());
+        assertEquals("Given Configuration has wrong name.", expected.getName(), actual.getName());
+        assertEquals("Given Configuration has wrong note.", expected.getNote(), actual.getNote());
     }
 }

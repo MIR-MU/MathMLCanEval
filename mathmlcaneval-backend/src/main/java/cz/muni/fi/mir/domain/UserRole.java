@@ -16,16 +16,17 @@ import javax.persistence.Id;
  *
  * @author Empt
  */
-@Entity(name="userRole")
+@Entity(name = "userRole")
 public class UserRole implements Serializable
 {
+
     private static final long serialVersionUID = 6057382222751855434L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name="roleName")
+
+    @Column(name = "roleName")
     private String roleName;
 
     public Long getId()
@@ -68,11 +69,7 @@ public class UserRole implements Serializable
             return false;
         }
         final UserRole other = (UserRole) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override

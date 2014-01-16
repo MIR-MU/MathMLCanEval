@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package cz.muni.fi.mir.domain;
 
 import java.io.Serializable;
@@ -18,19 +17,20 @@ import javax.persistence.Id;
  *
  * @author emptak
  */
-@Entity(name="revision")
+@Entity(name = "revision")
 public class Revision implements Serializable
 {
+
     private static final long serialVersionUID = -2258957018668800641L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name="revisionHash")
+
+    @Column(name = "revisionHash")
     private String revisionHash;
-    
-    @Column(name="note")
+
+    @Column(name = "note")
     private String note;
 
     public Long getId()
@@ -83,11 +83,7 @@ public class Revision implements Serializable
             return false;
         }
         final Revision other = (Revision) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
@@ -95,7 +91,5 @@ public class Revision implements Serializable
     {
         return "Revision{" + "id=" + id + ", revisionHash=" + revisionHash + ", note=" + note + '}';
     }
-    
-    
-    
+
 }

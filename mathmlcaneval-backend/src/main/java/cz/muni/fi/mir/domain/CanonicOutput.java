@@ -19,30 +19,31 @@ import javax.persistence.OneToMany;
  *
  * @author Empt
  */
-@Entity(name="canonicOutput")
+@Entity(name = "canonicOutput")
 public class CanonicOutput implements Serializable
 {
+
     private static final long serialVersionUID = 6956045766345845859L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-        
-    @Column(name="outputForm")
+
+    @Column(name = "outputForm")
     private String outputForm;
-    
-    @Column(name="similarForm")
+
+    @Column(name = "similarForm")
     private String similarForm;
-    
+
     @OneToMany
     private Set<Formula> parents;
-    
-    @Column(name="runtime")
+
+    @Column(name = "runtime")
     private long runningTime;
-    
+
     @ManyToOne
     private ApplicationRun applicationRun;
-    
+
     @OneToMany
     private Set<Annotation> annotations;
 
@@ -54,7 +55,7 @@ public class CanonicOutput implements Serializable
     public void setId(Long id)
     {
         this.id = id;
-    }    
+    }
 
     public String getOutputForm()
     {
@@ -115,6 +116,7 @@ public class CanonicOutput implements Serializable
     {
         this.similarForm = similarForm;
     }
+
     @Override
     public int hashCode()
     {
@@ -135,11 +137,7 @@ public class CanonicOutput implements Serializable
             return false;
         }
         final CanonicOutput other = (CanonicOutput) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override

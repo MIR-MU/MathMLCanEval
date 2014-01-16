@@ -16,23 +16,24 @@ import javax.persistence.Id;
  *
  * @author Empt
  */
-@Entity(name="program")
+@Entity(name = "program")
 public class Program implements Serializable
 {
+
     private static final long serialVersionUID = 7394481046699929994L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name="name")
+
+    @Column(name = "name")
     private String name;
-    @Column(name="version")
+    @Column(name = "version")
     private String version;
-    @Column(name="pparameters") // because parameters is SQL-99 reserved keyword....
+    @Column(name = "pparameters") // because parameters is SQL-99 reserved keyword....
     private String parameters;
-    @Column(name="note")
-    private String note;    
+    @Column(name = "note")
+    private String note;
 
     public Long getId()
     {
@@ -104,11 +105,7 @@ public class Program implements Serializable
             return false;
         }
         final Program other = (Program) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
@@ -116,6 +113,4 @@ public class Program implements Serializable
     {
         return "Program{" + "id=" + id + ", name=" + name + ", version=" + version + ", parameters=" + parameters + ", note=" + note + '}';
     }
-    
-    
 }

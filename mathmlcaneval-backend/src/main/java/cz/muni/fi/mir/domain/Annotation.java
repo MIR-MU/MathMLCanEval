@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.domain;
 
 import java.io.Serializable;
@@ -14,24 +10,31 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
+ * The purpose of this class is to capture some comments of given Canonic
+ * output. Class remembers user who submitted this annotation, note and
+ * {@link cz.muni.fi.mir.domain.AnnotationFlag} which specifies in closer terms
+ * the output result.
  *
- * @author Empt
+ * @version 1.0
+ * @since 1.0
+ * @author Dominik Szalai
  */
 @Entity(name = "annotation")
 public class Annotation implements Serializable
 {
+
     private static final long serialVersionUID = -8493177720663943928L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @ManyToOne
     private User user;
-    
+
     @Column(name = "note")
     private String note;
-    
+
     @ManyToOne
     private AnnotationFlag annotationFlag;
 
@@ -75,7 +78,6 @@ public class Annotation implements Serializable
         this.annotationFlag = annotationFlag;
     }
 
-    
     @Override
     public int hashCode()
     {
@@ -96,11 +98,7 @@ public class Annotation implements Serializable
             return false;
         }
         final Annotation other = (Annotation) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
@@ -108,6 +106,4 @@ public class Annotation implements Serializable
     {
         return "Annotation{" + "id=" + id + ", user=" + user + ", note=" + note + ", annotationFlag=" + annotationFlag + '}';
     }
-
-    
 }

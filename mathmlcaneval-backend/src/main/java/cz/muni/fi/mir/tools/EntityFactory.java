@@ -6,6 +6,7 @@ package cz.muni.fi.mir.tools;
 
 import cz.muni.fi.mir.domain.Annotation;
 import cz.muni.fi.mir.domain.AnnotationFlag;
+import cz.muni.fi.mir.domain.ApplicationRun;
 import cz.muni.fi.mir.domain.Configuration;
 import cz.muni.fi.mir.domain.Program;
 import cz.muni.fi.mir.domain.Revision;
@@ -14,6 +15,7 @@ import cz.muni.fi.mir.domain.User;
 import cz.muni.fi.mir.domain.UserRole;
 import java.util.ArrayList;
 import java.util.List;
+import org.joda.time.DateTime;
 
 /**
  * Class used for creating objects.
@@ -142,7 +144,7 @@ public class EntityFactory
     {
         SourceDocument sc = createSourceDocument();
         sc.setNote(note);
-        sc.setPath(path);
+        sc.setDocumentPath(path);
         
         return sc;
     }
@@ -255,5 +257,23 @@ public class EntityFactory
         a.setAnnotationFlag(af);
         
         return a;
+    }
+    
+    public static ApplicationRun createApplicationRun()
+    {
+        return new ApplicationRun();
+    }
+    
+    public static ApplicationRun createApplicationRun(String note,DateTime startTime,DateTime stopTime, User user, Revision revision, Configuration configuration)
+    {
+        ApplicationRun ap = createApplicationRun();
+        ap.setNote(note);
+        ap.setStartTime(startTime);
+        ap.setStopTime(stopTime);
+        ap.setUser(user);
+        ap.setRevision(revision);
+        ap.setConfiguration(configuration);
+        
+        return ap;
     }
 }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang3.StringUtils;
 
 /*
  * To change this template, choose Tools | Templates
@@ -39,7 +40,13 @@ public class Main
         System.out.println(similarityFormConverter.convert(getFirstXML()));
         System.out.println(similarityFormConverter.convert(getSecondXML()));
         
+        System.out.println(StringUtils.getLevenshteinDistance(similarityFormConverter.convert(getFirstXML()), "x*y+zx+z"));
     }
+    
+//    private static double getScore(String s1, String s2)
+//    {
+//       // if(s1)
+//    }
     
     private static String getFirstXML()
     {

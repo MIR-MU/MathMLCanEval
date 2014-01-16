@@ -18,23 +18,23 @@ import javax.persistence.ManyToMany;
 /**
  * @author Empt
  */
-@Entity(name="users")   // because user is 99 resrved word...
+@Entity(name = "users")   // because user is 99 resrved word...
 public class User implements Serializable
 {
+
     private static final long serialVersionUID = -8362731814249179743L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="username",unique = true)    
+    @Column(name = "username", unique = true)
     private String username;
-    @Column(name="realName")
+    @Column(name = "realName")
     private String realName;
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
-    
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
-    
 
     public Long getId()
     {
@@ -86,8 +86,6 @@ public class User implements Serializable
         this.realName = realName;
     }
 
-    
-    
     @Override
     public int hashCode()
     {
@@ -108,11 +106,7 @@ public class User implements Serializable
             return false;
         }
         final User other = (User) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override

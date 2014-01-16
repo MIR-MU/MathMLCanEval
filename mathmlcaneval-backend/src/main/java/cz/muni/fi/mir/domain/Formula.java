@@ -25,21 +25,22 @@ import org.joda.time.DateTime;
 @Entity(name = "formula")
 public class Formula implements Serializable
 {
+
     private static final long serialVersionUID = 7807040500942149400L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;                            // db id
-    
+
     //@Type(type="cz.muni.fi.mir.domain.SQLXMLType")
-    @Column(name="xml")
+    @Column(name = "xml")
     private String xml;                         // formulka v MathML
-    @Column(name="note")
+    @Column(name = "note")
     private String note;                        // poznamka
     @ManyToOne
     private SourceDocument sourceDocument;
-    @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-    @Column(name="stop")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Column(name = "insertTime")
     private DateTime insertTime;                    // datum pridani
     @ManyToOne
     private Program program;                    // konverzni program
@@ -160,11 +161,7 @@ public class Formula implements Serializable
             return false;
         }
         final Formula other = (Formula) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
@@ -172,6 +169,4 @@ public class Formula implements Serializable
     {
         return "Formula{" + "id=" + id + ", xml=" + xml + ", note=" + note + ", sourceDocument=" + sourceDocument + ", insertTime=" + insertTime + ", program=" + program + ", user=" + user + ", outputs=" + outputs + ", fimilarFormulas=" + fimilarFormulas + '}';
     }
-    
-    
 }

@@ -27,21 +27,25 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
  * @author Empt
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:spring/applicationContext-test.xml"})
-@TestExecutionListeners({
-    DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class})
+@ContextConfiguration(locations =
+{
+    "classpath:spring/applicationContext-test.xml"
+})
+@TestExecutionListeners(
+{
+    DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class
+})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AnnotationFlagTest
 {
+
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(AnnotationFlagTest.class);
-    
-    
-    
-    @Autowired private AnnotationFlagService annotationFlagService;
+
+    @Autowired
+    private AnnotationFlagService annotationFlagService;
     private List<AnnotationFlag> aFlags = new ArrayList<>();
     private static final Long ID = new Long(1);
-    
-    
+
     @Before
     public void init()
     {
@@ -58,9 +62,9 @@ public class AnnotationFlagTest
     {
         logger.info("Running AnnotationFlagTest#testCreateAndGetFlagAnnotation()");
         annotationFlagService.createFlagAnnotation(aFlags.get(0));
-        
+
         AnnotationFlag af = annotationFlagService.getAnnotationFlagByID(ID);
-        
+
         deepCompare(aFlags.get(0), af);
     }
 
@@ -69,18 +73,17 @@ public class AnnotationFlagTest
     {
         logger.info("Running AnnotationFlagTest#testCreateAndGetConfiguration()");
         annotationFlagService.createFlagAnnotation(aFlags.get(0));
-        
+
         AnnotationFlag result = annotationFlagService.getAnnotationFlagByID(ID);
-        assertNotNull("AnnotationFlag object was not created.",result);
-        
+        assertNotNull("AnnotationFlag object was not created.", result);
+
         result.setFlagValue("changed");
-        
+
         annotationFlagService.updateFlagAnnotation(result);
-        
-        
+
         AnnotationFlag updatedResult = annotationFlagService.getAnnotationFlagByID(ID);
-        
-        deepCompare(result, updatedResult);        
+
+        deepCompare(result, updatedResult);
     }
 
     @Test
@@ -88,61 +91,61 @@ public class AnnotationFlagTest
     {
         logger.info("Running AnnotationFlagTest#testCreateAndGetConfiguration()");
         annotationFlagService.createFlagAnnotation(aFlags.get(0));
-        
+
         AnnotationFlag result = annotationFlagService.getAnnotationFlagByID(ID);
-        assertNotNull("AnnotationFlag object was not created.",result);
-        
+        assertNotNull("AnnotationFlag object was not created.", result);
+
         annotationFlagService.deleteFlagAnnotation(result);
-        
-        assertNull("AnnotationFlag object was not deleted.",annotationFlagService.getAnnotationFlagByID(ID));        
+
+        assertNull("AnnotationFlag object was not deleted.", annotationFlagService.getAnnotationFlagByID(ID));
     }
 
     @Test
     public void testGetAllAnnotationFlags()
     {
         logger.info("Running AnnotationFlagTest#testCreateAndGetConfiguration()");
-        for(AnnotationFlag af : aFlags)
+        for (AnnotationFlag af : aFlags)
         {
             annotationFlagService.createFlagAnnotation(af);
         }
-        
+
         List<AnnotationFlag> result = annotationFlagService.getAllAnnotationFlags();
-        
-        assertEquals(TestTools.ERROR_LIST_SIZE,aFlags.size(),result.size());
-        
-        Collections.sort(aFlags,TestTools.annotationFlagComparator);
-        Collections.sort(result,TestTools.annotationFlagComparator);
-        
-        for(int i = 0; i < aFlags.size();i++)
+
+        assertEquals(TestTools.ERROR_LIST_SIZE, aFlags.size(), result.size());
+
+        Collections.sort(aFlags, TestTools.annotationFlagComparator);
+        Collections.sort(result, TestTools.annotationFlagComparator);
+
+        for (int i = 0; i < aFlags.size(); i++)
         {
             deepCompare(aFlags.get(i), result.get(i));
         }
-        
+
     }
 
     @Test
     public void testFindAnnotationFlagByValue()
     {
         logger.info("Running AnnotationFlagTest#testCreateAndGetConfiguration()");
-        
-        for(AnnotationFlag af : aFlags)
+
+        for (AnnotationFlag af : aFlags)
         {
             annotationFlagService.createFlagAnnotation(af);
         }
-        
+
         List<AnnotationFlag> result = annotationFlagService.findAnnotationFlagByValue(AnnotationFlag.VALUE_PROPER_RESULT);
-        
-        assertEquals(TestTools.ERROR_LIST_SIZE,2,result.size());
-        
-        for(AnnotationFlag af : result)
+
+        assertEquals(TestTools.ERROR_LIST_SIZE, 2, result.size());
+
+        for (AnnotationFlag af : result)
         {
-            assertTrue("AnnotationFlag object does not have proper value.",af.getFlagValue().contains(AnnotationFlag.VALUE_PROPER_RESULT));
+            assertTrue("AnnotationFlag object does not have proper value.", af.getFlagValue().contains(AnnotationFlag.VALUE_PROPER_RESULT));
         }
     }
-    
+
     private void deepCompare(AnnotationFlag expected, AnnotationFlag actual)
     {
-        assertEquals(TestTools.ERROR_WRONG_ID,expected.getId(),actual.getId());
-        assertEquals("Field value for AnnotationFlag object is wrong",expected.getFlagValue(),actual.getFlagValue());
+        assertEquals(TestTools.ERROR_WRONG_ID, expected.getId(), actual.getId());
+        assertEquals("Field value for AnnotationFlag object is wrong", expected.getFlagValue(), actual.getFlagValue());
     }
 }

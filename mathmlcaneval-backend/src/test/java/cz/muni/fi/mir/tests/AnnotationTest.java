@@ -33,9 +33,14 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
  * @author Empt
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:spring/applicationContext-test.xml"})
-@TestExecutionListeners({
-    DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class})
+@ContextConfiguration(locations =
+{
+    "classpath:spring/applicationContext-test.xml"
+})
+@TestExecutionListeners(
+{
+    DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class
+})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AnnotationTest
 {

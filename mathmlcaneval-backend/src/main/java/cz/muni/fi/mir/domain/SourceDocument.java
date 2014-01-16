@@ -16,18 +16,19 @@ import javax.persistence.Id;
  *
  * @author Empt
  */
-@Entity(name="sourceDocument")
+@Entity(name = "sourceDocument")
 public class SourceDocument implements Serializable
 {
+
     private static final long serialVersionUID = -8320292185197252228L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="note")
+    @Column(name = "note")
     private String note;
-    @Column(name="path")
-    private String path;
+    @Column(name = "documentPath")
+    private String documentPath;    //path sql99
 
     public Long getId()
     {
@@ -49,14 +50,14 @@ public class SourceDocument implements Serializable
         this.note = note;
     }
 
-    public String getPath()
+    public String getDocumentPath()
     {
-        return path;
+        return documentPath;
     }
 
-    public void setPath(String path)
+    public void setDocumentPath(String documentPath)
     {
-        this.path = path;
+        this.documentPath = documentPath;
     }
 
     @Override
@@ -79,16 +80,12 @@ public class SourceDocument implements Serializable
             return false;
         }
         final SourceDocument other = (SourceDocument) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString()
     {
-        return "SourceDocument{" + "id=" + id + ", note=" + note + ", path=" + path + '}';
-    }    
+        return "SourceDocument{" + "id=" + id + ", note=" + note + ", documentPath=" + documentPath + '}';
+    }
 }
