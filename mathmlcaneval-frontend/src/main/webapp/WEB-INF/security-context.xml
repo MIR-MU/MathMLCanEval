@@ -15,6 +15,7 @@
     <security:http auto-config="true" use-expressions="true" access-denied-page="/denied/">
      
         <!--     <security:intercept-url pattern="/user/**" access="hasRole('ROLE_TEAM_UVT')" />-->
+        <security:intercept-url pattern="/user/register/" access="hasRole('ROLE_ADMINISTRATOR')" />
      
         <security:form-login
             login-page="/user/login/"

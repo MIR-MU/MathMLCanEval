@@ -60,6 +60,21 @@ public class UserRoleTest
     }
 
     @Test
+    public void testGetUserRoleByName()
+    {
+        logger.info("Running UserRoleTest#testGetUserRoleByName()");
+        UserRole ur = EntityFactory.createUserRole("ROLE_ADMIN");
+
+        userRoleService.createUserRole(ur);
+
+        assertNotNull("not created",userRoleService.getUserRoleByID(ID));
+
+        UserRole result = userRoleService.getUserRoleByName("ROLE_ADMIN");
+
+        deepCompare(ur, result);
+    }
+
+    @Test
     public void testDelete()
     {
         logger.info("Running UserRoleTest#testDelete()");

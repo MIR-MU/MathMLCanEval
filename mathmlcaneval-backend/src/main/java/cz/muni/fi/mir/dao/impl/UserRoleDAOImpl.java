@@ -58,6 +58,23 @@ public class UserRoleDAOImpl implements UserRoleDAO
     }
 
     @Override
+    public UserRole getUserRoleByName(String roleName)
+    {
+        UserRole ur = null;
+        try
+        {
+            ur = entityManager.createQuery("SELECT ur FROM userRole ur WHERE ur.roleName = :roleName", UserRole.class)
+                    .setParameter("roleName", roleName).getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+
+        return ur;
+    }
+
+    @Override
     public List<UserRole> getAllUserRoles()
     {
         List<UserRole> resultList = new ArrayList<>();

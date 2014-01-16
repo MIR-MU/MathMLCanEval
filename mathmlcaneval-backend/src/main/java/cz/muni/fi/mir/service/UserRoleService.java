@@ -18,6 +18,7 @@ public interface UserRoleService
     void deleteUserRole(UserRole userRole);
     
     UserRole getUserRoleByID(Long id);
+    UserRole getUserRoleByName(String roleName);
     
     List<UserRole> getAllUserRoles();     
 }

@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+import javax.validation.constraints.Size;
 
 /**
  * @author Empt
@@ -27,11 +29,17 @@ public class User implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "username", unique = true)
+    @Size(min = 3, max = 255)
     private String username;
     @Column(name = "realName")
     private String realName;
     @Column(name = "password")
+    @Size(min = 3, max = 255)
     private String password;
+
+    // for verifying password at account creation, not persisted.
+    @Transient
+    private String passwordVerify;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
@@ -64,6 +72,16 @@ public class User implements Serializable
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    public String getPasswordVerify()
+    {
+        return passwordVerify;
+    }
+
+    public void setPasswordVerify(String passwordVerify)
+    {
+        this.passwordVerify = passwordVerify;
     }
 
     public List<UserRole> getUserRoles()

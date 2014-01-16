@@ -40,15 +40,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
-    <filter-mapping>
-        <filter-name>encoding-filter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-        
-    <error-page>
-        <error-code>404</error-code>
-        <location>/errors/404.html</location>
-    </error-page>
     <filter>
         <filter-name>encoding-filter</filter-name>
         <filter-class>
@@ -63,6 +54,16 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
+
+    <filter-mapping>
+        <filter-name>encoding-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errors/404.html</location>
+    </error-page>
     
     
     

@@ -51,6 +51,13 @@ public class UserRoleServiceImpl implements UserRoleService
 
     @Override
     @Transactional(readOnly = true)
+    public UserRole getUserRoleByName(String roleName)
+    {
+        return userRoleDAO.getUserRoleByName(roleName);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<UserRole> getAllUserRoles()
     {
         return userRoleDAO.getAllUserRoles();
