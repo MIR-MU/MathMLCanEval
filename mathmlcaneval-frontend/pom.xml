@@ -70,6 +70,11 @@
             <artifactId>spring-security-taglibs</artifactId>
             <version>${org.springframework.security.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.0.1.Final</version> <!-- 5.x nie je podporovana springom 3.x -->
+        </dependency>
         
         <dependency>
             <groupId>javax.servlet</groupId>

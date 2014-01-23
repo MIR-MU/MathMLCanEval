@@ -1,10 +1,12 @@
 package cz.muni.fi.mir.sandbox;
 
 
-import cz.muni.fi.mir.domain.User;
-import cz.muni.fi.mir.domain.UserRole;
-import cz.muni.fi.mir.service.UserRoleService;
-import cz.muni.fi.mir.service.UserService;
+import cz.muni.fi.mir.db.dao.impl.CanonicOutputDAOImpl;
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.CanonicOutputService;
+import cz.muni.fi.mir.db.service.UserRoleService;
+import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.SimilarityFormConverter;
 import cz.muni.fi.mir.tools.Tools;
@@ -33,14 +35,21 @@ public class Main
     private static UserService userService = A.getBean("userService");
     private static UserRoleService userRoleService = A.getBean("userRoleService");
     private static SimilarityFormConverter similarityFormConverter = A.getBean("similarityFormConverter");
-    
+    private static CanonicOutputDAOImpl canonicDAO = A.getBean("canonicOutputDAO");
+    private static CanonicOutputService canonicOutputService = A.getBean("canonicOutputService");
     public static void main(String[] args)
     {  
       
-        System.out.println(similarityFormConverter.convert(getFirstXML()));
-        System.out.println(similarityFormConverter.convert(getSecondXML()));
+//        System.out.println(similarityFormConverter.convert(getFirstXML()));
+//        System.out.println(similarityFormConverter.convert(getSecondXML()));
+//        
+//        System.out.println(StringUtils.getLevenshteinDistance(similarityFormConverter.convert(getFirstXML()), "x*y+zx+z"));
+//        System.out.println(userService.getAllUsers());
+//        
+//        
+//        System.out.println(canonicOutputService.findSimilarForms(canonicOutputService.getCanonicOutputByID(1L), 2,false));
         
-        System.out.println(StringUtils.getLevenshteinDistance(similarityFormConverter.convert(getFirstXML()), "x*y+zx+z"));
+        System.out.println(StringUtils.getLevenshteinDistance("abad", "zzzabcd"));
     }
     
 //    private static double getScore(String s1, String s2)

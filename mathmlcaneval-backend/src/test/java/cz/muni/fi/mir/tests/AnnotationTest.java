@@ -4,14 +4,14 @@
  */
 package cz.muni.fi.mir.tests;
 
-import cz.muni.fi.mir.domain.Annotation;
-import cz.muni.fi.mir.domain.AnnotationFlag;
-import cz.muni.fi.mir.domain.User;
-import cz.muni.fi.mir.domain.UserRole;
-import cz.muni.fi.mir.service.AnnotationFlagService;
-import cz.muni.fi.mir.service.AnnotationService;
-import cz.muni.fi.mir.service.UserRoleService;
-import cz.muni.fi.mir.service.UserService;
+import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.AnnotationFlag;
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.AnnotationFlagService;
+import cz.muni.fi.mir.db.service.AnnotationService;
+import cz.muni.fi.mir.db.service.UserRoleService;
+import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -4,7 +4,7 @@
  */
 package cz.muni.fi.mir.sandbox;
 
-import cz.muni.fi.mir.domain.User;
+import cz.muni.fi.mir.db.domain.User;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

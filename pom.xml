@@ -1,13 +1,36 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>cz.muni.fi.mir</groupId>
-  <artifactId>mathml-canonicalizer</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>MathMLCanEval</name>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>cz.muni.fi.mir</groupId>
+    <artifactId>mathml-canonicalizer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>MathMLCanEval</name>
     <modules>
         <module>mathmlcaneval-backend</module>
         <module>mathmlcaneval-frontend</module>
     </modules>
+    
+    <developers>
+        <developer>
+            <id>empt</id>
+            <email>emptulik@gmail.com</email>
+            <name>Dominik Szalai</name>
+        </developer>
+    </developers>
+    
+    <description>
+        MathML Canonicalizer je open-source nástroj vyvíjený a nasazený pro pot?eby normalizace vstupních dat u systém? pro vyhledávání matematických formulí v plnotextových digitálních knihovnách v?deckých publikací. 
+        Cílem projektu je 
+        (i) vytvo?it rozsáhlou testovací databázi matematických formulí pokrývající celé Presentation zna?kování standardu MathML 3.0 a webovou aplikaci umož?ující s touto bází efektivn? pracovat, 
+        (ii) vyhodnotit korektnost práce MathML Canonicalizeru nad touto bází a 
+        (iii) na základ? toho vylepšit jeho implementaci.
+    </description>
+    
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
 </project>

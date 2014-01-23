@@ -4,8 +4,8 @@
  */
 package cz.muni.fi.mir.tests;
 
-import cz.muni.fi.mir.domain.Configuration;
-import cz.muni.fi.mir.service.ConfigurationService;
+import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;

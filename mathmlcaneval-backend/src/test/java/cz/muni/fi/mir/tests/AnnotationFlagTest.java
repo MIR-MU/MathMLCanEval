@@ -4,8 +4,8 @@
  */
 package cz.muni.fi.mir.tests;
 
-import cz.muni.fi.mir.domain.AnnotationFlag;
-import cz.muni.fi.mir.service.AnnotationFlagService;
+import cz.muni.fi.mir.db.domain.AnnotationFlag;
+import cz.muni.fi.mir.db.service.AnnotationFlagService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;

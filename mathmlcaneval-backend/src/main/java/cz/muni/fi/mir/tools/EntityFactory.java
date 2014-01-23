@@ -4,15 +4,17 @@
  */
 package cz.muni.fi.mir.tools;
 
-import cz.muni.fi.mir.domain.Annotation;
-import cz.muni.fi.mir.domain.AnnotationFlag;
-import cz.muni.fi.mir.domain.ApplicationRun;
-import cz.muni.fi.mir.domain.Configuration;
-import cz.muni.fi.mir.domain.Program;
-import cz.muni.fi.mir.domain.Revision;
-import cz.muni.fi.mir.domain.SourceDocument;
-import cz.muni.fi.mir.domain.User;
-import cz.muni.fi.mir.domain.UserRole;
+import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.AnnotationFlag;
+import cz.muni.fi.mir.db.domain.ApplicationRun;
+import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.Program;
+import cz.muni.fi.mir.db.domain.Revision;
+import cz.muni.fi.mir.db.domain.SourceDocument;
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.ArrayList;
 import java.util.List;
 import org.joda.time.DateTime;
@@ -275,5 +277,23 @@ public class EntityFactory
         ap.setConfiguration(configuration);
         
         return ap;
+    }
+    
+    public static CanonicOutput createCanonicOutput()
+    {
+        return new CanonicOutput();
+    }
+    
+    public static CanonicOutput createCanonicOutput(String outputForm,String similarForm,List<Formula> parents,long runningTime, ApplicationRun ar,List<Annotation> annotations)
+    {
+        CanonicOutput co = createCanonicOutput();
+        co.setOutputForm(outputForm);
+        co.setSimilarForm(similarForm);
+        co.setParents(parents);
+        co.setRunningTime(runningTime);
+        co.setApplicationRun(ar);
+        co.setAnnotations(annotations);
+        
+        return co;
     }
 }

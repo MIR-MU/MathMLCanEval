@@ -4,11 +4,11 @@
  */
 package cz.muni.fi.mir.tools;
 
-import cz.muni.fi.mir.domain.User;
-import cz.muni.fi.mir.domain.UserRole;
-import cz.muni.fi.mir.service.AnnotationFlagService;
-import cz.muni.fi.mir.service.UserRoleService;
-import cz.muni.fi.mir.service.UserService;
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.AnnotationFlagService;
+import cz.muni.fi.mir.db.service.UserRoleService;
+import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.wrappers.ApplicationContextWrapper;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;

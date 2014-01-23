@@ -5,19 +5,24 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.UserValidator;
-import cz.muni.fi.mir.domain.User;
-import cz.muni.fi.mir.domain.UserRole;
-import cz.muni.fi.mir.service.UserRoleService;
-import cz.muni.fi.mir.service.UserService;
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.forms.UserForm;
+import cz.muni.fi.mir.db.service.UserRoleService;
+import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.validation.Valid;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +31,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
- * @author Empt
+ * @author Dominik Szalai
+ * @author Robert Siska
  */
 @Controller
 @RequestMapping(value ="/user")
@@ -34,7 +40,22 @@ public class UserController
 {
     @Autowired private UserService userService;
     @Autowired private UserRoleService userRoleService;
+    @Autowired private Mapper mapper;
     
+    
+    @RequestMapping(value = "/",method = RequestMethod.GET)
+    public ModelAndView list()
+    {
+        List<User> result = userService.getAllUsers();
+        List<UserForm> users = new ArrayList<>();
+        for(User u : result)
+        {
+            users.add(mapper.map(u,UserForm.class));
+        }
+        ModelMap mm = new ModelMap("users", users);
+        
+        return new ModelAndView("user_list",mm);
+    }
     
     @RequestMapping("/login/")
     public ModelAndView handleLogin()
@@ -49,17 +70,15 @@ public class UserController
     }
 
     @ModelAttribute("newUser")
-    public User getLoginForm() {
-        return new User();
+    public UserForm getLoginForm() {
+        return new UserForm();
     }
 
     @RequestMapping(value = "/register/", method = RequestMethod.POST)
     public ModelAndView createUser(
-            @ModelAttribute("newUser") @Valid User user,
+            @ModelAttribute("newUser") @Valid UserForm user,
             BindingResult result)
     {
-        UserValidator userValidator = new UserValidator();
-        userValidator.validate(user, result);
 
         if (result.hasErrors())
         {

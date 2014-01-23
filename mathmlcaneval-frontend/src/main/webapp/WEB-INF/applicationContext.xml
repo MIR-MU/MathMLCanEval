@@ -36,7 +36,7 @@ and open the template in the editor.
         <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
             <property name="paramName" value="lang" />
         </bean>
-</mvc:interceptors>
+    </mvc:interceptors>
    
     
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" >
@@ -54,10 +54,10 @@ and open the template in the editor.
     backendu bez behu servera, tak by configurak obsahoval na strane backendu aj definicie serverovej casti,
     ktora vsak neexistuje lebo je definovana na strane serveru. Server pritom pri buildovani includne
     -->
-<!--    <bean id="mapper-server" class="org.dozer.DozerBeanMapper">
+    <bean id="mapper" class="org.dozer.DozerBeanMapper">
         <property name="mappingFiles">
             <list>
-                <value>config/dozer-server-mapping.xml</value>
+                <value>config/dozer-mapping.xml</value>
             </list>
         </property>
     </bean>
@@ -66,7 +66,7 @@ and open the template in the editor.
         <property name="validationMessageSource" ref="messageSource" />
     </bean> 
     
-    
+    <!--
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <list>
@@ -77,8 +77,8 @@ and open the template in the editor.
             </list>
         </property>
     </bean>
-    
-    
-    <mvc:annotation-driven validator="validator" conversion-service="conversionService"/> -->
-    <mvc:annotation-driven />
+    <mvc:annotation-driven validator="validator" conversion-service="conversionService"/> 
+    -->
+    <mvc:annotation-driven validator="validator" /> 
+<!--    <mvc:annotation-driven />-->
 </beans>

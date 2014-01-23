@@ -4,15 +4,15 @@
  */
 package cz.muni.fi.mir.tests;
 
-import cz.muni.fi.mir.domain.Annotation;
-import cz.muni.fi.mir.domain.AnnotationFlag;
-import cz.muni.fi.mir.domain.ApplicationRun;
-import cz.muni.fi.mir.domain.Configuration;
-import cz.muni.fi.mir.domain.Program;
-import cz.muni.fi.mir.domain.Revision;
-import cz.muni.fi.mir.domain.SourceDocument;
-import cz.muni.fi.mir.domain.User;
-import cz.muni.fi.mir.domain.UserRole;
+import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.AnnotationFlag;
+import cz.muni.fi.mir.db.domain.ApplicationRun;
+import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.Program;
+import cz.muni.fi.mir.db.domain.Revision;
+import cz.muni.fi.mir.db.domain.SourceDocument;
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.Comparator;
 
 /**

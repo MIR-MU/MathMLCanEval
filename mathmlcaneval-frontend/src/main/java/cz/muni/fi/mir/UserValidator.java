@@ -4,9 +4,9 @@
  */
 package cz.muni.fi.mir;
 
-import cz.muni.fi.mir.domain.User;
-import cz.muni.fi.mir.service.UserService;
-import cz.muni.fi.mir.wrappers.ApplicationContextWrapper;
+import cz.muni.fi.mir.forms.UserForm;
+import cz.muni.fi.mir.db.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -16,19 +16,19 @@ import org.springframework.validation.Validator;
  */
 public class UserValidator implements Validator
 {
-    private static UserService userService = ApplicationContextWrapper.getInstance().getBean("userService");
+    @Autowired private UserService userService;
 
     @Override
     public boolean supports(Class c)
     {
-        return User.class.equals(c);
+        return UserForm.class.equals(c);
     }
 
     @Override
     public void validate(Object obj, Errors errors)
     {
-        User user = (User)obj;
-
+        UserForm user = (UserForm)obj;
+        
         if (userService.getUserByUsername(user.getUsername()) != null)
         {
             errors.rejectValue("username", "register.alreadyExists");

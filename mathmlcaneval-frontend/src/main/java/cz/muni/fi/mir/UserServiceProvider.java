@@ -4,9 +4,9 @@
  */
 package cz.muni.fi.mir;
 
-import cz.muni.fi.mir.domain.User;
-import cz.muni.fi.mir.domain.UserRole;
-import cz.muni.fi.mir.service.UserService;
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.UserService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

@@ -4,8 +4,8 @@
  */
 package cz.muni.fi.mir.tests;
 
-import cz.muni.fi.mir.domain.UserRole;
-import cz.muni.fi.mir.service.UserRoleService;
+import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;

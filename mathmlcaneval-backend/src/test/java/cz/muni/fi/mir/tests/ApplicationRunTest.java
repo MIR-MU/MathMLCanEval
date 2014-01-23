@@ -5,16 +5,16 @@
  */
 package cz.muni.fi.mir.tests;
 
-import cz.muni.fi.mir.domain.ApplicationRun;
-import cz.muni.fi.mir.domain.Configuration;
-import cz.muni.fi.mir.domain.Revision;
-import cz.muni.fi.mir.domain.User;
-import cz.muni.fi.mir.domain.UserRole;
-import cz.muni.fi.mir.service.ApplicationRunService;
-import cz.muni.fi.mir.service.ConfigurationService;
-import cz.muni.fi.mir.service.RevisionService;
-import cz.muni.fi.mir.service.UserRoleService;
-import cz.muni.fi.mir.service.UserService;
+import cz.muni.fi.mir.db.domain.ApplicationRun;
+import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.Revision;
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.ApplicationRunService;
+import cz.muni.fi.mir.db.service.ConfigurationService;
+import cz.muni.fi.mir.db.service.RevisionService;
+import cz.muni.fi.mir.db.service.UserRoleService;
+import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;

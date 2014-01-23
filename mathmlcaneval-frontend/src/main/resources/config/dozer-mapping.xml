@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net  
+                              http://dozer.sourceforge.net/schema/beanmapping.xsd">  
+    <configuration>
+        <!--
+        nutnost vlastnej konverzie, pretoze by default by hodilo hodnotu .now()
+        -->
+        <custom-converters>
+            <converter type="cz.muni.fi.mir.tools.JodaTimeConverter">
+                <class-a>org.joda.time.DateTime</class-a>
+                <class-b>org.joda.time.DateTime</class-b>
+            </converter>  
+        </custom-converters>
+    </configuration>
+    
+    
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.AnnotationFlag</class-a>
+        <class-b>cz.muni.fi.mir.forms.AnnotationFlagForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.Annotation</class-a>
+        <class-b>cz.muni.fi.mir.forms.AnnotationForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.ApplicationRun</class-a>
+        <class-b>cz.muni.fi.mir.forms.ApplicationRunForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.CanonicOutput</class-a>
+        <class-b>cz.muni.fi.mir.forms.CanonicOutputForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.Configuration</class-a>
+        <class-b>cz.muni.fi.mir.forms.ConfigurationForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.Formula</class-a>
+        <class-b>cz.muni.fi.mir.forms.FormulaForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.Program</class-a>
+        <class-b>cz.muni.fi.mir.forms.ProgramForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.Revision</class-a>
+        <class-b>cz.muni.fi.mir.forms.RevisionForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.SourceDocument</class-a>
+        <class-b>cz.muni.fi.mir.forms.SourceDocumentForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.User</class-a>
+        <class-b>cz.muni.fi.mir.forms.UserForm</class-b>
+    </mapping>
+    <mapping>
+        <class-a>cz.muni.fi.mir.db.domain.UserRole</class-a>
+        <class-b>cz.muni.fi.mir.forms.UserRoleForm</class-b>
+    </mapping>
+</mappings>
