@@ -10,13 +10,11 @@ import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
-import cz.muni.fi.mir.similarity.SimilarForm;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -83,7 +81,18 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     @Override
     public List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<CanonicOutput> resultList = new ArrayList<>();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun := appRun", CanonicOutput.class)
+                    .setParameter("appRun", applicationRun).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;       
     }
 
     @Override

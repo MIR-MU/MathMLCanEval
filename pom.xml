@@ -6,10 +6,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>MathMLCanEval</name>
-    <modules>
-        <module>mathmlcaneval-backend</module>
-        <module>mathmlcaneval-frontend</module>
-    </modules>
+    
+    <url>https://mir.fi.muni.cz/mathml-normalization/</url>
     
     <developers>
         <developer>
@@ -17,14 +15,19 @@
             <email>emptulik@gmail.com</email>
             <name>Dominik Szalai</name>
         </developer>
+        <developer>
+            <id>siska</id>
+            <email>xsiska2@mail.muni.cz</email>
+            <name>Robert ≈†i≈°ka</name>
+        </developer>
     </developers>
     
     <description>
-        MathML Canonicalizer je open-source n·stroj vyvÌjen˝ a nasazen˝ pro pot?eby normalizace vstupnÌch dat u systÈm? pro vyhled·v·nÌ matematick˝ch formulÌ v plnotextov˝ch digit·lnÌch knihovn·ch v?deck˝ch publikacÌ. 
-        CÌlem projektu je 
-        (i) vytvo?it rozs·hlou testovacÌ datab·zi matematick˝ch formulÌ pokr˝vajÌcÌ celÈ Presentation zna?kov·nÌ standardu MathML 3.0 a webovou aplikaci umoû?ujÌcÌ s touto b·zÌ efektivn? pracovat, 
-        (ii) vyhodnotit korektnost pr·ce MathML Canonicalizeru nad touto b·zÌ a 
-        (iii) na z·klad? toho vylepöit jeho implementaci.
+        MathML Canonicalizer je open-source n√°stroj vyv√≠jen√Ω a nasazen√Ω pro potreby normalizace vstupn√≠ch dat u syst√©mu pro vyhled√°v√°n√≠ matematick√Ωch formul√≠ v plnotextov√Ωch digit√°ln√≠ch knihovn√°ch vedeck√Ωch publikac√≠. 
+        C√≠lem projektu je 
+        (i) vytvorit rozs√°hlou testovac√≠ datab√°zi matematick√Ωch formul√≠ pokr√Ωvaj√≠c√≠ cel√© Presentation znackov√°n√≠ standardu MathML 3.0 a webovou aplikaci umo≈ænuj√≠c√≠ s touto b√°z√≠ efektivne pracovat, 
+        (ii) vyhodnotit korektnost pr√°ce MathML Canonicalizeru nad touto b√°z√≠ a 
+        (iii) na z√°klade toho vylep≈°it jeho implementaci.
     </description>
     
     <licenses>
@@ -33,4 +36,32 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
+    
+    
+    <modules>
+        <module>mathmlcaneval-backend</module>
+        <module>mathmlcaneval-frontend</module>
+    </modules>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java-version>1.7</java-version>
+        <org.springframework-version>4.0.0.RELEASE</org.springframework-version>
+        <org.springframework.security.version>3.2.1.CI-SNAPSHOT</org.springframework.security.version>        
+        <org.hibernate-version>4.3.0.CR1</org.hibernate-version>
+        <c3p0.version>0.9.5-pre5</c3p0.version>
+        <psql.jdbc.version>9.1-901-1.jdbc4</psql.jdbc.version>      
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir><!-- for frontend-->  
+    </properties>
+        
+    <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>http://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
