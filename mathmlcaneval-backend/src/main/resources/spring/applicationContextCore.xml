@@ -83,8 +83,7 @@
                 <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
                 <prop key="hibernate.hbm2ddl.import_files">${hibernate.hbm2ddl.import_files}</prop>
                 <prop key="hibernate.cacheable">${hibernate.cacheable}</prop>
-                <prop key="hibernate.search.lucene_version">${hibernate.search.lucene_version}</prop>
-                <prop key="
+                <prop key="hibernate.search.lucene_version">${hibernate.search.lucene_version}</prop>                
             </props>
         </property>
     </bean>
