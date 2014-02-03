@@ -6,6 +6,7 @@
 package cz.muni.fi.mir.forms;
 
 import java.util.Objects;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -14,6 +15,7 @@ import java.util.Objects;
 public class RevisionForm
 {
     private Long id;
+    @NotEmpty(message = "{validator.revision.hash.empty}")
     private String revisionHash;
     private String note;
 

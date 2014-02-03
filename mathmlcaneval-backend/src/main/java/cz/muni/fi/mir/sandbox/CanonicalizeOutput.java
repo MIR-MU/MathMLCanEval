@@ -20,7 +20,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.xml.security.c14n.CanonicalizationException;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.c14n.InvalidCanonicalizerException;
@@ -62,35 +61,15 @@ public class CanonicalizeOutput
                     + "</math>";
         
         
-//        CanonicalizeOutput co = new CanonicalizeOutput();
-//        try
-//        {
-//            System.out.println(co.canonicalize("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-//                    + "<math>\n"
-//                    + "  <mfrac linethickness=\"1\">\n"
-//                    + "    \n"
-//                    + "    <mrow>\n"
-//                    + "      <mi> x </mi>\n"
-//                    + "      <mo> + </mo>\n"
-//                    + "      <mi> y </mi>\n"
-//                    + "      <mo> + </mo>\n"
-//                    + "      <mi> z </mi>\n"
-//                    + "    </mrow>\n"
-//                    + "    <!-- test -->\n"
-//                    + "    <mrow>\n"
-//                    + "      <mi> x </mi>\n"
-//                    + "      \n"
-//                    + "      <mo> + </mo>\n"
-//                    + "      <mi> z </mi>\n"
-//                    + "    </mrow>\n"
-//                    + "  </mfrac>\n"
-//                    + "  <mfenced>\n"
-//                    + "  </mfenced>\n"
-//                    + "</math>"));
-//        } catch (InvalidCanonicalizerException | ParserConfigurationException | IOException | SAXException | CanonicalizationException ex)
-//        {
-//            Logger.getLogger(CanonicalizeOutput.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        CanonicalizeOutput co = new CanonicalizeOutput();
+        try
+        {
+            System.out.println(co.canonicalize(xml));
+        } 
+        catch (InvalidCanonicalizerException | ParserConfigurationException | IOException | SAXException | CanonicalizationException ex)
+        {
+            Logger.getLogger(CanonicalizeOutput.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 

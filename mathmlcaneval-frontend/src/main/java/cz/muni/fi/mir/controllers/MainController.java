@@ -21,4 +21,11 @@ public class MainController
     {
         return new ModelAndView("index");
     }
+    
+    
+    @RequestMapping(value="/errors/404.html")
+    public ModelAndView handle404()
+    {
+        return new ModelAndView("errors/404");
+    }
 }

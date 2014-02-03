@@ -4,7 +4,6 @@
  */
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.UserValidator;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
 import cz.muni.fi.mir.forms.UserForm;
@@ -12,19 +11,20 @@ import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
+import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,18 +41,14 @@ public class UserController
     @Autowired private UserService userService;
     @Autowired private UserRoleService userRoleService;
     @Autowired private Mapper mapper;
+    @Autowired private SecurityContextFacade securityContext;
     
     
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @RequestMapping(value = {"/","/list","/list/"},method = RequestMethod.GET)
     public ModelAndView list()
-    {
-        List<User> result = userService.getAllUsers();
-        List<UserForm> users = new ArrayList<>();
-        for(User u : result)
-        {
-            users.add(mapper.map(u,UserForm.class));
-        }
-        ModelMap mm = new ModelMap("users", users);
+    {        
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("userList", userService.getAllUsers());
         
         return new ModelAndView("user_list",mm);
     }
@@ -63,27 +59,25 @@ public class UserController
         return new ModelAndView("login");
     }
     
-    @RequestMapping(value = "/register/", method = RequestMethod.GET)
+    @RequestMapping(value = {"/create","/create/"}, method = RequestMethod.GET)
     public ModelAndView handleRegister()
     {
-        return new ModelAndView("register");
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("userForm", new UserForm());
+        mm.addAttribute("userRolesFormList", userRoleService.getAllUserRoles());
+        return new ModelAndView("user_create",mm);
     }
 
-    @ModelAttribute("newUser")
-    public UserForm getLoginForm() {
-        return new UserForm();
-    }
-
-    @RequestMapping(value = "/register/", method = RequestMethod.POST)
+    @RequestMapping(value = {"/create","/create/"}, method = RequestMethod.POST)
     public ModelAndView createUser(
-            @ModelAttribute("newUser") @Valid UserForm user,
+            @ModelAttribute("userForm") @Valid UserForm user,
             BindingResult result)
     {
-
         if (result.hasErrors())
         {
-            return new ModelAndView("register");
+            return new ModelAndView("user_create");
         }
+        
 
         UserRole userRole = userRoleService.getUserRoleByName("ROLE_USER");
         User u = null;
@@ -97,6 +91,58 @@ public class UserController
         }
         userService.createUser(u);
 
-        return new ModelAndView("index");
+        return new ModelAndView("redirect:/user/list/");
+    }
+    
+    @RequestMapping(value = {"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
+    public ModelAndView deleteUser(@PathVariable Long id)
+    {
+        userService.deleteUser(EntityFactory.createUser(id));
+        
+        return new ModelAndView("redirect:/user/list/");
+    }
+    
+    @RequestMapping(value= {"/profile","/profile/"},method = RequestMethod.GET)
+    public ModelAndView showProfile()
+    {
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("userForm", mapper.map(userService.getUserByUsername(securityContext.getLoggedUser()), UserForm.class));
+        
+        return new ModelAndView("user_edit",mm);
+    }
+    
+    @RequestMapping(value={"/edit","/edit/"},method = RequestMethod.GET)
+    public ModelAndView editUser()
+    {
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("userForm", new UserForm());
+        
+        return new ModelAndView("user_edit",mm);        
+    }
+    
+    /**
+     * handles also update of user profile
+     * @param userForm
+     * @param result
+     * @param model
+     * @return 
+     */
+    @RequestMapping(value={"/edit","/edit/"},method = RequestMethod.POST)
+    public ModelAndView editUserSubmit(@Valid @ModelAttribute("userForm") UserForm userForm, BindingResult result, Model model)
+    {
+        if(result.hasErrors())
+        {
+            ModelMap mm = new ModelMap();
+            mm.addAttribute("userForm", userForm);
+            mm.addAttribute(model);
+            
+            return new ModelAndView("user_edit",mm);
+        }
+        else
+        {
+            userService.updateUser(mapper.map(userForm,User.class));
+            
+            return new ModelAndView("redirect:/");
+        }
     }
 }

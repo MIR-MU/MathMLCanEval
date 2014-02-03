@@ -86,7 +86,7 @@ public class CanonicOutputTest
     private List<ApplicationRun> appruns = new ArrayList<>(5);
     private List<AnnotationFlag> aFlags = new ArrayList<>();
     private List<Annotation> annotations = new ArrayList<>();
-    private List<CanonicOutput> canonicOutpus = new ArrayList<>();
+    private List<CanonicOutput> canonicOutputs = new ArrayList<>();
     
     @Before
     public void init()
@@ -150,15 +150,20 @@ public class CanonicOutputTest
         {
             annotationService.createAnnotation(a);
         }
+        
+        canonicOutputs.add(EntityFactory.createCanonicOutput(TestTools.getFirstXML(), similarityFormConverter.convert(TestTools.getFirstXML()), null, 512516l, appruns.get(0), annotations.subList(0, 2)));
     }
     
     @Test
     public void testCreateAndGetCanonicOutput()
     {
-//        logger.info("Running CanonicOutputTest#testCreateAndGetCanonicOutput()");
-//        canonicOutputService.createCanonicOutput(EntityFactory.createCanonicOutput("test", "test", null, 512516l, appruns.get(0), annotations.subList(0, 2)));
-//    
-//        System.out.println(canonicOutputService.getCanonicOutputByID(ID));
+        logger.info("Running CanonicOutputTest#testCreateAndGetCanonicOutput()");
+        canonicOutputService.createCanonicOutput(canonicOutputs.get(0));
+        
+        CanonicOutput result = canonicOutputService.getCanonicOutputByID(ID);
+        
+        assertNotNull("n",result);
+        deepCompare(canonicOutputs.get(0), result);
     }
     
     @Test
@@ -194,6 +199,14 @@ public class CanonicOutputTest
     @Test
     public void testGetSimilarCanonicOutputs()
     {
+    }
+    
+    private void deepCompare(CanonicOutput expected, CanonicOutput actual)
+    {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getOutputForm(), actual.getOutputForm());
+        assertEquals(expected.getSimilarForm(), actual.getSimilarForm());
+        //todo kolekcie
     }
     
 }

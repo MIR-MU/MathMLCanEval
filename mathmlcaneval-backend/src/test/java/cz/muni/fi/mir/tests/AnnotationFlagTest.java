@@ -49,12 +49,7 @@ public class AnnotationFlagTest
     @Before
     public void init()
     {
-        //PROPER_RESULT, MIGHT_BE_PROPER, WRONG, CHECK_PLS
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_PROPER_RESULT));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_PROPER_RESULT));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_MIGHT_BE_PROPER));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_WRONG));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_CHECK_PLS));
+        aFlags = DataTestTools.provideAnnotationFlagList();
     }
 
     @Test
@@ -133,13 +128,13 @@ public class AnnotationFlagTest
             annotationFlagService.createFlagAnnotation(af);
         }
 
-        List<AnnotationFlag> result = annotationFlagService.findAnnotationFlagByValue(AnnotationFlag.VALUE_PROPER_RESULT);
+        List<AnnotationFlag> result = annotationFlagService.findAnnotationFlagByValue("PROPER");
 
         assertEquals(TestTools.ERROR_LIST_SIZE, 2, result.size());
 
         for (AnnotationFlag af : result)
         {
-            assertTrue("AnnotationFlag object does not have proper value.", af.getFlagValue().contains(AnnotationFlag.VALUE_PROPER_RESULT));
+            assertTrue("AnnotationFlag object does not have proper value.", af.getFlagValue().contains("PROPER"));
         }
     }
 

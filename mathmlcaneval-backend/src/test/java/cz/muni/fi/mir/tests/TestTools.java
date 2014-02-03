@@ -121,4 +121,70 @@ public class TestTools
 
         return sb.toString();
     }
+    
+    public static String getFirstXML()
+    {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                    + "<math>\n"
+                    + "  <mfrac linethickness=\"1\">\n"
+                    + "    \n"
+                    + "    <mrow>\n"
+                    + "      <mi> x </mi>\n"
+                    + "      <mo> + </mo>\n"
+                    + "      <mi> y </mi>\n"
+                    + "      <mo> + </mo>\n"
+                    + "      <mi> z </mi>\n"
+                    + "    </mrow>\n"
+                    + "    <!-- test -->\n"
+                    + "    <mrow>\n"
+                    + "      <mi> x </mi>\n"
+                    + "      \n"
+                    + "      <mo> + </mo>\n"
+                    + "      <mi> z </mi>\n"
+                    + "    </mrow>\n"
+                    + "  </mfrac>\n"
+                    + "  <mfenced>\n"
+                    + "  </mfenced>\n"
+                    + "</math>";
+    }
+    
+    
+    public static String getSecondXML()
+    {
+        return "<math mathvariant='italic'>\n" +
+            "    <mrow>\n" +
+            "        <mmultiscripts>\n" +
+            "            <mtext>R</mtext>\n" +
+            "            <mtext>i</mtext>\n" +
+            "            <none></none>\n" +
+            "            <none></none>\n" +
+            "            <mtext>j</mtext>\n" +
+            "            <mtext>kl</mtext>\n" +
+            "            <none></none>\n" +
+            "        </mmultiscripts>\n" +
+            "        <mo>=</mo>\n" +
+            "        <msup>\n" +
+            "            <mtext>g</mtext>\n" +
+            "            <mtext>jm</mtext>\n" +
+            "        </msup>\n" +
+            "        <msub>\n" +
+            "            <mtext>R</mtext>\n" +
+            "            <mtext>imkl</mtext>\n" +
+            "        </msub>\n" +
+            "        <mo>+</mo>\n" +
+            "        <msqrt>\n" +
+            "            <mn>1</mn>\n" +
+            "            <mo>-</mo>\n" +
+            "            <msup>\n" +
+            "                <mtext>g</mtext>\n" +
+            "                <mtext>jm</mtext>\n" +
+            "            </msup>\n" +
+            "            <msub>\n" +
+            "                <mtext>R</mtext>\n" +
+            "                <mtext>mikl</mtext>\n" +
+            "            </msub>\n" +
+            "        </msqrt>\n" +
+            "    </mrow>\n" +
+            "</math>";
+    }
 }

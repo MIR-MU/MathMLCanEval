@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.db.domain;
 
 import java.io.Serializable;
@@ -17,7 +13,9 @@ import javax.persistence.Transient;
  * This class came out as idea from Martin Liska. He argued that is not good to
  * hold validity result in note of annotation. Therefore each annotation has
  * this Flag which flags given result. Possible values might be like
- * PROPER_RESULT, MIGHT_BE_PROPER, WRONG, CHECK_PLS or whatever.
+ * PROPER_RESULT, MIGHT_BE_PROPER, WRONG, CHECK_PLS, which are default values as of
+ * version 1.0. Other might be added later, just don't forget to add @Transient annotation
+ * so column won't be persisted.
  *
  * @version 1.0
  * @since 1.0

@@ -20,6 +20,9 @@
 
         <!-- Bootstrap core CSS -->
         <link href="<c:url value="/resources/css/bootstrap.min.cosmo.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/shCore.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/shThemeDefault.css" />" rel="stylesheet" type="text/css" />
 
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -35,29 +38,33 @@
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
+                        <span class="sr-only">!Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">MathMLCanEval</a>
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}">MathMLCanEval</a>
                 </div>
-                <div class="navbar-collapse collapse">
-                    <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
-                        <ul class="nav navbar-nav">                            
+                <div class="navbar-collapse collapse">                    
+                    <ul class="nav navbar-nav">
+                        <li><a href="${pageContext.request.contextPath}/about/"><spring:message code="navigation.section.about" /></a></li>
+                            <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">uzivatelia <b class="caret"></b></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="navigation.section.management" /><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Vytvorit</a></li>
-                                    <li><a href="#">zoznam</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/revision/create/"><spring:message code="navigation.revision.create" /></a></li>
+                                    <li><a href="${pageContext.request.contextPath}/revision/list/"><spring:message code="navigation.revision.list" /></a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="${pageContext.request.contextPath}/program/create/"><spring:message code="navigation.program.create" /></a></li>
+                                    <li><a href="${pageContext.request.contextPath}/program/list/"><spring:message code="navigation.program.list" /></a></li>
+                                    <li class="divider"></li>
                                     <li><a href="#">Something else here</a></li>
                                     <li class="divider"></li>
                                     <li><a href="#">Separated link</a></li>
                                 </ul>
                             </li>
-                            <li><a href="${pageContext.request.contextPath}/user/logout/">Logout</a></li>
-                        </ul>
-                    </sec:authorize>
+                        </sec:authorize>
+                    </ul>                    
                     <sec:authorize access="hasRole('ROLE_ANONYMOUS')">
                         <form class="navbar-form navbar-right" role="form" action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
                             <div class="form-group">
@@ -72,16 +79,19 @@
                     <sec:authorize access="hasRole('ROLE_USER')">
                         <ul class="nav navbar-nav navbar-right">                            
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="navigation.section.user" /><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/user/profile/"><spring:message code="navigation.user.myprofile" /></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/user/create/"><spring:message code="navigation.user.create" /></a></li>
+                                    <li><a href="${pageContext.request.contextPath}/user/list/"><spring:message code="navigation.user.list" /></a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="${pageContext.request.contextPath}/userrole/create/"><spring:message code="navigation.userrole.create" /></a></li>
+                                    <li><a href="${pageContext.request.contextPath}/userrole/list/"><spring:message code="navigation.userrole.list" /></a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="${pageContext.request.contextPath}/user/logout/"><spring:message code="navigation.section.logout" /></a></li>
                                 </ul>
-                            </li>
-                            <li><a href="${pageContext.request.contextPath}/user/logout/">Logout</a></li>
+                            </li>                            
                         </ul>
                     </sec:authorize>
 

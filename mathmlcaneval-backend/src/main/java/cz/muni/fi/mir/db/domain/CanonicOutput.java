@@ -32,7 +32,7 @@ public class CanonicOutput implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "outputForm")
+    @Column(name = "outputForm",columnDefinition = "text")
     private String outputForm;
 
     @Column(name = "similarForm")

@@ -1,18 +1,21 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cz.muni.fi.mir.forms;
 
 import java.util.Objects;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- *
- * @author Empt
+ * Class representing every form related to Program on presentation layer.
+ * Class servers as so called Data Transfer object. Use {@link org.dozer.Mapper} map
+ * methods between conversions
+ * @author Dominik Szalai
+ * @version 1.0
+ * @since 1.0
  */
 public class ProgramForm 
 {
     private Long id;
+    @NotEmpty(message = "{validator.program.name.empty}")
     private String name;
     private String version;    
     private String parameters;    

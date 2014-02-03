@@ -36,6 +36,26 @@ public class EntityFactory
     }
     
     /**
+     * Method creates user with given id.
+     * @param id of user
+     * @return user with given id
+     */
+    public static User createUser(Long id)
+    {
+        if(id == null)
+        {
+            return createUser();
+        }
+        else
+        {
+            User u = createUser();
+            u.setId(id);
+            
+            return u;
+        }
+    }
+    
+    /**
      * Method creates user with given input
      * @param username username of user
      * @param password user's <b>hashed</b> password
@@ -82,6 +102,26 @@ public class EntityFactory
     public static UserRole createUserRole()
     {
         return new UserRole();
+    }
+    
+    /**
+     * Method creates UserRole with given id
+     * @param id to be set
+     * @return user role with give id
+     */
+    public static UserRole createUserRole(Long id)
+    {
+        if(id == null)
+        {
+            return createUserRole();
+        }
+        else
+        {
+            UserRole ur = createUserRole();
+            ur.setId(id);
+            
+            return ur;
+        }
     }
     
     /**
@@ -160,6 +200,27 @@ public class EntityFactory
         return new Revision();
     }
     
+    
+    /**
+     * Method creates revision with given id.
+     * @param id of revision to be set
+     * @return revision with given ID.
+     */
+    public static Revision createRevision(Long id)
+    {
+        if(id == null)
+        {
+            return createRevision();
+        }
+        else
+        {
+            Revision r = createRevision();
+            r.setId(id);
+
+            return r;
+        }        
+    }
+    
     /**
      * Method used for creating new Revision with fields set as were given on input
      * @param hash hash of revision, meant as unique identifier
@@ -182,6 +243,26 @@ public class EntityFactory
     public static Program createProgram()
     {
         return new Program();
+    }
+    
+    /**
+     * Method used for creating Program with given id
+     * @param id of program
+     * @return program with given id
+     */
+    public static Program createProgram(Long id)
+    {
+        if(id==null)
+        {
+            return createProgram();
+        }
+        else
+        {
+            Program p = createProgram();
+            p.setId(id);
+
+            return p;            
+        }        
     }
     
     /**

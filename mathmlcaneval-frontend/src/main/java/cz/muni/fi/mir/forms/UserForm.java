@@ -4,10 +4,13 @@
  */
 package cz.muni.fi.mir.forms;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.collections4.functors.InstantiateFactory;
+import org.apache.commons.collections4.list.LazyList;
 
 /**
  * @author Empt
@@ -23,7 +26,7 @@ public class UserForm
     private String password;
     @NotNull
     private String passwordVerify;
-    private List<UserRoleForm> userRoleForms;
+    private List<UserRoleForm> userRoleForms = LazyList.lazyList(new ArrayList<UserRoleForm>(), new InstantiateFactory(UserRoleForm.class));
 
     public Long getId()
     {
@@ -111,6 +114,6 @@ public class UserForm
     @Override
     public String toString()
     {
-        return "User{" + "id=" + id + ", username=" + username + ", password=" + password + ", userRoles=" + userRoleForms + '}';
+        return "UserForm{" + "id=" + id + ", username=" + username + ", realName=" + realName + ", password=" + password + ", passwordVerify=" + passwordVerify + ", userRoleForms=" + userRoleForms + '}';
     }
 }

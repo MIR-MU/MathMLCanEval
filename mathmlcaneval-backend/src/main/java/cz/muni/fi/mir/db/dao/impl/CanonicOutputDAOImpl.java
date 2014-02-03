@@ -98,18 +98,53 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     @Override
     public List<CanonicOutput> getCanonicOutputByFormula(Formula formula)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<CanonicOutput> resultList = new ArrayList<>();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT f.outputs FROM formula f WHERE f.id = :formulaID", CanonicOutput.class)
+                    .setParameter("formulaID", formula.getId()).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
     }
 
     @Override
     public List<CanonicOutput> getCanonicOutputByParentFormula(Formula formula)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<CanonicOutput> resultList = new ArrayList<>();
+        
+        try
+        {
+            resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE :formulaID MEMBER OF co.parents", CanonicOutput.class)
+                    .setParameter("formulaID", formula.getId()).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
     }
 
     @Override
     public List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<CanonicOutput> resultList = new ArrayList<>();
+        
+        try
+        {
+            resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.similarForm = :form", CanonicOutput.class)
+                    .setParameter("form", canonicOutput.getSimilarForm()).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
     }
 }

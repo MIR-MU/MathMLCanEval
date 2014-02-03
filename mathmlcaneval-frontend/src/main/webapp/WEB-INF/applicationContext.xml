@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xmlns:context="http://www.springframework.org/schema/context"
@@ -14,9 +9,7 @@ and open the template in the editor.
 	   		http://www.springframework.org/schema/context/spring-context.xsd
 			http://www.springframework.org/schema/mvc 
 			http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-                            
-                            
-    <!-- not strictly necessary for this example, but still useful, see http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/mvc.html#mvc-ann-controller for more information -->
+                                                        
     <context:component-scan base-package="cz.muni.fi.mir" />
 
     <!-- the mvc resources tag does the magic -->
@@ -29,7 +22,7 @@ and open the template in the editor.
         <property name="basename" value="classpath:i18n/messages" />
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
-
+    
     
     <!--    http://stackoverflow.com/a/9401900 -->
     <mvc:interceptors>
@@ -47,13 +40,6 @@ and open the template in the editor.
     
     <bean id="userServiceProvider" class="cz.muni.fi.mir.UserServiceProvider" />
     
-    
-    
-    <!-- 
-    toto je definovane v podstate aj v backend app-contexte, pretoze ak by sme spustili nejaku cast
-    backendu bez behu servera, tak by configurak obsahoval na strane backendu aj definicie serverovej casti,
-    ktora vsak neexistuje lebo je definovana na strane serveru. Server pritom pri buildovani includne
-    -->
     <bean id="mapper" class="org.dozer.DozerBeanMapper">
         <property name="mappingFiles">
             <list>
@@ -64,21 +50,14 @@ and open the template in the editor.
     
     <bean name="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <property name="validationMessageSource" ref="messageSource" />
-    </bean> 
+    </bean>     
     
-    <!--
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <list>
-                <bean class="cz.muni.ics.ff.bis.server.convertor.DateTimeToString"/>
-                <bean class="cz.muni.ics.ff.bis.server.convertor.StringToDateTime"/>
-                <bean class="cz.muni.ics.ff.bis.server.convertor.StringToDepartment"/>
-                <bean class="cz.muni.ics.ff.bis.server.convertor.StringToSource"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToUserRole"/>
             </list>
         </property>
     </bean>
-    <mvc:annotation-driven validator="validator" conversion-service="conversionService"/> 
-    -->
-    <mvc:annotation-driven validator="validator" /> 
-<!--    <mvc:annotation-driven />-->
+    <mvc:annotation-driven validator="validator" conversion-service="conversionService"/>    
 </beans>

@@ -9,14 +9,6 @@
 
     <name>MathMLCanEval - Frontend</name>
     
-    <properties>
-        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java-version>1.7</java-version>
-        <org.springframework-version>4.0.0.RELEASE</org.springframework-version>
-        <org.springframework.security.version>3.2.1.CI-SNAPSHOT</org.springframework.security.version>
-        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
-    </properties>
     <parent>
         <groupId>cz.muni.fi.mir</groupId>
         <artifactId>mathml-canonicalizer</artifactId>
@@ -85,6 +77,11 @@
             <groupId>net.sf.dozer</groupId>
             <artifactId>dozer</artifactId>
             <version>5.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.0</version>
         </dependency>
     </dependencies>
 
