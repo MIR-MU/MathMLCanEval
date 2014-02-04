@@ -7,7 +7,6 @@
 package cz.muni.fi.mir.services;
 
 import cz.muni.fi.mir.db.domain.ApplicationRun;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -20,8 +19,10 @@ import org.springframework.stereotype.Component;
 @Component("mailService")
 public class MailServiceImpl implements MailService
 {
-    @Autowired private MailSender mailsender;
-    @Autowired SimpleMailMessage templateMessage;
+    //@Autowired 
+    private MailSender mailsender;
+   // @Autowired 
+    private SimpleMailMessage templateMessage;
     
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MailServiceImpl.class);
     
@@ -43,4 +44,16 @@ public class MailServiceImpl implements MailService
             logger.error(me);
         }
     }
+
+    public void setMailsender(MailSender mailsender)
+    {
+        this.mailsender = mailsender;
+    }
+
+    public void setTemplateMessage(SimpleMailMessage templateMessage)
+    {
+        this.templateMessage = templateMessage;
+    }
+    
+    
 }

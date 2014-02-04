@@ -1,9 +1,3 @@
-<%-- 
-    Document   : revision_list
-    Created on : Jan 29, 2014, 4:39:55 PM
-    Author     : Empt
---%>
-
 <div class="container content">
     <div class="row">
         <div class="col-lg-10">
@@ -11,29 +5,31 @@
                 <div class="form-group">                    
                     <input type="text" name="keywords" class="form-control search-bar" />
                 </div>
-                <button type="submit" class=" btn btn-primary">!search</button>
+                <button type="submit" class=" btn btn-primary"><spring:message code="general.label.search" /></button>
             </form>
         </div>
         <div class="col-lg-2">
             <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                 <div class="pull-right">        
-                    <a href="${pageContext.request.contextPath}/program/create/" class="btn btn-primary">!create Program</a>        
+                    <a href="${pageContext.request.contextPath}/program/create/" class="btn btn-primary"><spring:message code="entity.program.create" /></a>        
                 </div>
             </sec:authorize>
         </div>
     </div>
 
+    <div class="pull-right"><span class="glyphicon glyphicon-refresh"></span></div>
+
     <table class="table table-bordered table-striped pull-top-50">
         <thead>
             <tr>
-                <th>!id</th>
-                <th>!name</th>
-                <th>!version</th>
-                <th>!parameters</th>
-                <th>!note</th>
-                <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
-                    <th>!options</th>
-                </sec:authorize>
+                <th><spring:message code="general.field.id" /></th>
+                <th><spring:message code="entity.program.name" /></th>
+                <th><spring:message code="entity.program.version" /></th>
+                <th><spring:message code="entity.program.parameters" /></th>
+                <th><spring:message code="entity.program.note" /></th>
+                    <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                    <th><spring:message code="general.table.option" /></th>
+                    </sec:authorize>
             </tr>
         </thead>
         <c:choose>
@@ -41,14 +37,18 @@
                 <c:forEach items="${programList}" var="entry">
                     <tr>
                         <td><c:out value="${entry.id}" /></td>
-                        <td><c:out value="${entry.name}" /></td>
-                        <td><c:out value="${entry.version}" /></td>
+                        <td><a href="${pageContext.request.contextPath}/program/list/name=<c:out value="${entry.name}" />/"><c:out value="${entry.name}" /></a></td>
+                        <td><a href="${pageContext.request.contextPath}/program/list/name=<c:out value="${entry.name}" />;version=<c:out value="${entry.version}" />/"><c:out value="${entry.version}" /></a></td>
                         <td><c:out value="${entry.parameters}" /></td>
                         <td><c:out value="${entry.note}" /></td>
                         <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                             <td>
-                                <a href="${pageContext.request.contextPath}/program/delete/<c:out value="${entry.id}" />/">x</a> 
-                                <a href="${pageContext.request.contextPath}/program/edit/<c:out value="${entry.id}" />/">+</a>
+                                <a href="${pageContext.request.contextPath}/program/edit/<c:out value="${entry.id}" />/">
+                                    <span class="glyphicon glyphicon-wrench"></span>
+                                </a>
+                                <a href="${pageContext.request.contextPath}/program/delete/<c:out value="${entry.id}" />/">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a> 
                             </td>
                         </sec:authorize>                
                     </tr>
@@ -57,10 +57,10 @@
             <c:otherwise>
                 <tr>
                     <sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
-                        <td colspan="5" class="text-center">!no records so far</td>
+                        <td colspan="5" class="text-center"><spring:message code="general.table.norecords" /></td>
                     </sec:authorize>
                     <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-                        <td colspan="6" class="text-center">!no records so far</td>
+                        <td colspan="6" class="text-center"><spring:message code="general.table.norecords" /></td>
                     </sec:authorize>
                 </tr>
             </c:otherwise>

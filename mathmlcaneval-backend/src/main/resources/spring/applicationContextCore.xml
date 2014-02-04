@@ -102,7 +102,7 @@
    -->
    
    
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+<!--    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="{mail.host}" />
     </bean>
     
@@ -111,4 +111,9 @@
         <property name="subject" value="{mail.subject}" />
     </bean>
     
+    <bean id="mailSerivce" class="cz.muni.fi.mir.services.MailServiceImpl">
+        <property name="mailsender" ref="mailSender" />
+        <property name="templateMessage" ref="templateMessage" />
+    </bean>
+    -->
 </beans>
