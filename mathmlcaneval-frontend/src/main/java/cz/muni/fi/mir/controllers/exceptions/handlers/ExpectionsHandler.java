@@ -17,13 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
  *
  * @author Empt
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class ExpectionsHandler
 {
-    @ExceptionHandler(MappingException.class)
-    @ResponseStatus(value = HttpStatus.I_AM_A_TEAPOT,reason = "null obtained")
-    public ModelAndView handleMappingException(MappingException me)
-    {
-        return null;
-    }
+//    @ExceptionHandler(MappingException.class)
+//    @ResponseStatus(value = HttpStatus.I_AM_A_TEAPOT,reason = "null obtained")
+//    public ModelAndView handleMappingException(MappingException me)
+//    {
+//        return null;
+//    }
 }

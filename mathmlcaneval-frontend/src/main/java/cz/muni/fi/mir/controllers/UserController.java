@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.User;
@@ -9,13 +5,14 @@ import cz.muni.fi.mir.db.domain.UserRole;
 import cz.muni.fi.mir.forms.UserForm;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
+import cz.muni.fi.mir.forms.UserRoleForm;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +27,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- *
+ * This class serves for handling requests for User objects with requests starting with <b>/user</b>
+ * path.
  * @author Dominik Szalai
  * @author Robert Siska
  */
@@ -42,6 +40,8 @@ public class UserController
     @Autowired private UserRoleService userRoleService;
     @Autowired private Mapper mapper;
     @Autowired private SecurityContextFacade securityContext;
+    
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(UserController.class);
     
     
     @RequestMapping(value = {"/","/list","/list/"},method = RequestMethod.GET)
@@ -65,16 +65,21 @@ public class UserController
         ModelMap mm = new ModelMap();
         mm.addAttribute("userForm", new UserForm());
         mm.addAttribute("userRolesFormList", userRoleService.getAllUserRoles());
+        
         return new ModelAndView("user_create",mm);
     }
 
     @RequestMapping(value = {"/create","/create/"}, method = RequestMethod.POST)
     public ModelAndView createUser(
             @ModelAttribute("userForm") @Valid UserForm user,
-            BindingResult result)
+            BindingResult result,
+            Model model)
     {
         if (result.hasErrors())
         {
+            ModelMap mm = new ModelMap();
+            mm.addAttribute("userForm", user);
+            mm.addAttribute(model);
             return new ModelAndView("user_create");
         }
         
@@ -83,11 +88,11 @@ public class UserController
         User u = null;
         try {
             String encodedPassword = Tools.getInstance().SHA1(user.getPassword());
-            u = EntityFactory.createUser(user.getUsername(), encodedPassword, user.getRealName(), userRole);
+            u = EntityFactory.createUser(user.getUsername(), encodedPassword, user.getRealName(),user.getEmail(), userRole);
 
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex)
         {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.info(ex);
         }
         userService.createUser(u);
 
@@ -108,14 +113,39 @@ public class UserController
         ModelMap mm = new ModelMap();
         mm.addAttribute("userForm", mapper.map(userService.getUserByUsername(securityContext.getLoggedUser()), UserForm.class));
         
+        List<UserRoleForm> userRolesFormList = new ArrayList<>();
+        List<UserRole> temp = userRoleService.getAllUserRoles();
+        for(UserRole ur : temp)
+        {
+            userRolesFormList.add(mapper.map(ur,UserRoleForm.class));
+        }
+        
+        mm.addAttribute("userRolesFormList",userRolesFormList);
+        
+        
         return new ModelAndView("user_edit",mm);
     }
     
-    @RequestMapping(value={"/edit","/edit/"},method = RequestMethod.GET)
-    public ModelAndView editUser()
+    @RequestMapping(value={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
+    public ModelAndView editUser(@PathVariable Long id)
     {
         ModelMap mm = new ModelMap();
-        mm.addAttribute("userForm", new UserForm());
+        User u = userService.getUserByID(id);
+        UserForm uf = mapper.map(u,UserForm.class);
+        mm.addAttribute("userForm", uf);
+        
+        
+        // nastudovat ako funguje cache
+        //http://docs.spring.io/spring/docs/4.0.0.RC1/spring-framework-reference/html/cache.html
+        // userrole sa totiz nemeni casto a je dobre to mat v cache ako furt selectit z db
+        List<UserRoleForm> userRolesFormList = new ArrayList<>();
+        List<UserRole> temp = userRoleService.getAllUserRoles();
+        for(UserRole ur : temp)
+        {
+            userRolesFormList.add(mapper.map(ur,UserRoleForm.class));
+        }
+        
+        mm.addAttribute("userRolesFormList",userRolesFormList);
         
         return new ModelAndView("user_edit",mm);        
     }
@@ -140,9 +170,38 @@ public class UserController
         }
         else
         {
-            userService.updateUser(mapper.map(userForm,User.class));
+            User u = mapper.map(userForm,User.class);
+            if(userService.getUserByUsername(securityContext.getLoggedUser())
+                    .getUserRoles().contains(userRoleService.getUserRoleByName("ROLE_ADMINISTRATOR")))
+            {
+                //ak daco bude treba zatial neviem co.
+            }
+            else
+            {
+                User uDB = userService.getUserByID(userForm.getId());
+                // because user cannot change his roles
+                // they are not present in form therefore
+                // submited form will contain empty list
+                // where should be at least 1 user role
+                // name ROLE_USER. So all we have to do 
+                // is to select them from DB assign to user
+                // and then just stored modified user
+                u.setUserRoles(uDB.getUserRoles());
+                
+                
+                if(Tools.getInstance().stringIsEmpty(u.getPassword()))
+                {
+                    // we didnt fill password field and
+                    // password verify (it would fail upon
+                    // validation above). it means user did not
+                    // changed his password so we have reselect
+                    // it from database (or "cached" object)
+                    u.setPassword(uDB.getPassword());
+                }
+            }
+            userService.updateUser(u);
             
-            return new ModelAndView("redirect:/");
+            return new ModelAndView("redirect:/user/list/");
         }
     }
 }

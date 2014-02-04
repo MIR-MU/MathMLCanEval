@@ -17,6 +17,8 @@ import org.springframework.validation.Validator;
 public class UserValidator implements Validator
 {
     @Autowired private UserService userService;
+    
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(UserValidator.class);
 
     @Override
     public boolean supports(Class c)
@@ -31,12 +33,17 @@ public class UserValidator implements Validator
         
         if (userService.getUserByUsername(user.getUsername()) != null)
         {
-            errors.rejectValue("username", "register.alreadyExists");
+            errors.rejectValue("username", "validator.user.username.taken");
         }
 
         if (!user.getPassword().equals(user.getPasswordVerify()))
         {
-            errors.rejectValue("passwordVerify", "register.passwordsDontMatch");
+            errors.rejectValue("passwordVerify", "validator.user.password.nomatch");
+        }
+        
+        if(!user.getEmail().equals(user.getEmailVerify()))
+        {
+            errors.rejectValue("emailVerify", "validator.user.email.nomatch");
         }
     }
 }

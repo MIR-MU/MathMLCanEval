@@ -58,9 +58,9 @@
                                     <li><a href="${pageContext.request.contextPath}/program/create/"><spring:message code="navigation.program.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/program/list/"><spring:message code="navigation.program.list" /></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#">Something else here</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/sourcedocument/create/"><spring:message code="navigation.sourcedocument.create" /></a></li>
+                                    <li><a href="${pageContext.request.contextPath}/sourcedocument/list/"><spring:message code="navigation.sourcedocument.list" /></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
                                 </ul>
                             </li>
                         </sec:authorize>

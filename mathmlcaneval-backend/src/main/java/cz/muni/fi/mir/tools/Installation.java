@@ -45,6 +45,7 @@ public class Installation
             u = EntityFactory.createUser("administrator", 
                     Tools.getInstance ().SHA1("heslo"), 
                     "Admin adminovic",
+                    "example@example.com",
                     rolez);
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex)
         {

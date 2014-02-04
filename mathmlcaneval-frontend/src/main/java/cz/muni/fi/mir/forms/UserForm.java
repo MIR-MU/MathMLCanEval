@@ -7,10 +7,11 @@ package cz.muni.fi.mir.forms;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.apache.commons.collections4.functors.InstantiateFactory;
+import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.list.LazyList;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author Empt
@@ -18,15 +19,19 @@ import org.apache.commons.collections4.list.LazyList;
 public class UserForm
 {
     private Long id;    
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 255,message = "{validator.user.username.length}")
     private String username;
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 255,message = "{validator.user.realnname.length}")
     private String realName; 
-    @NotNull
-    private String password;
-    @NotNull
-    private String passwordVerify;
-    private List<UserRoleForm> userRoleForms = LazyList.lazyList(new ArrayList<UserRoleForm>(), new InstantiateFactory(UserRoleForm.class));
+    @NotEmpty(message = "{validator.user.password.empty}")
+    private String password;    
+    private String passwordVerify;    
+    @Email(message = "{validator.user.email.format}")
+    @NotEmpty(message = "{validator.user.email.empty}")
+    private String email;
+    private String emailVerify;
+    
+    private List<UserRoleForm> userRoleForms = LazyList.lazyList(new ArrayList<UserRoleForm>(), FactoryUtils.instantiateFactory(UserRoleForm.class));
 
     public Long getId()
     {
@@ -46,6 +51,16 @@ public class UserForm
     public void setUsername(String username)
     {
         this.username = username;
+    }
+
+    public String getRealName()
+    {
+        return realName;
+    }
+
+    public void setRealName(String realName)
+    {
+        this.realName = realName;
     }
 
     public String getPassword()
@@ -68,6 +83,26 @@ public class UserForm
         this.passwordVerify = passwordVerify;
     }
 
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    public String getEmailVerify()
+    {
+        return emailVerify;
+    }
+
+    public void setEmailVerify(String emailVerify)
+    {
+        this.emailVerify = emailVerify;
+    }
+
     public List<UserRoleForm> getUserRoleForms()
     {
         return userRoleForms;
@@ -77,17 +112,7 @@ public class UserForm
     {
         this.userRoleForms = userRoleForms;
     }
-
-    public String getRealName()
-    {
-        return realName;
-    }
-
-    public void setRealName(String realName)
-    {
-        this.realName = realName;
-    }
-
+    
     @Override
     public int hashCode()
     {

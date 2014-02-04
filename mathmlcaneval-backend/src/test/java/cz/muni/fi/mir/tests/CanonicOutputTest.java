@@ -111,8 +111,8 @@ public class CanonicOutputTest
         UserRole role = EntityFactory.createUserRole("ROLE_ADMINISTRATOR");
         userRoleService.createUserRole(role);
         
-        users.add(EntityFactory.createUser("username2", "password2", "real name2", role));
-        users.add(EntityFactory.createUser("username3", "password3", "real name3", role));
+        users.add(EntityFactory.createUser("username2", "password2", "real name2", "example@example.com", role));
+        users.add(EntityFactory.createUser("username3", "password3", "real name3", "example@example.com", role));
         for (User u : users)
         {
             userService.createUser(u);

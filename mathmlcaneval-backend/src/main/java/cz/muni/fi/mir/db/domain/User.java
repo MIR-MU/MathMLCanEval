@@ -32,6 +32,9 @@ public class User implements Serializable
     private String realName;
     @Column(name = "password")
     private String password;
+    
+    @Column(name = "email")
+    private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
@@ -86,6 +89,16 @@ public class User implements Serializable
         this.realName = realName;
     }
 
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+    
     @Override
     public int hashCode()
     {

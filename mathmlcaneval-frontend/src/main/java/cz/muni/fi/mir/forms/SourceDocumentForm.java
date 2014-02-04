@@ -5,6 +5,7 @@
 package cz.muni.fi.mir.forms;
 
 import java.util.Objects;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -14,6 +15,7 @@ public class SourceDocumentForm
 {
     private Long id;    
     private String note;
+    @NotEmpty
     private String documentPath; 
 
     public Long getId()

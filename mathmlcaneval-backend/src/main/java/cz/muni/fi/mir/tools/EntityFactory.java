@@ -60,16 +60,18 @@ public class EntityFactory
      * @param username username of user
      * @param password user's <b>hashed</b> password
      * @param realName user's real name
+     * @param email users email
      * @param roles roles of user to which (s)he belongs
      * @return user with set fields as were given on input
      */
-    public static User createUser(String username, String password, String realName, List<UserRole> roles)
+    public static User createUser(String username, String password, String realName, String email, List<UserRole> roles)
     {
         User u =createUser();
         u.setPassword(password);
         u.setRealName(realName);
         u.setUsername(username);
         u.setUserRoles(roles);
+        u.setEmail(email);
         
         return u;
     }
@@ -79,10 +81,11 @@ public class EntityFactory
      * @param username username of user
      * @param password hashed password of user
      * @param realName real name of user
+     * @param email users email
      * @param userRole single role
      * @return user with fields set as input
      */
-    public static User createUser(String username, String password, String realName, UserRole userRole)
+    public static User createUser(String username, String password, String realName, String email, UserRole userRole)
     {
         User u =createUser();
         u.setPassword(password);
@@ -91,7 +94,7 @@ public class EntityFactory
         List<UserRole> rolez = new ArrayList<>();
         rolez.add(userRole);
         u.setUserRoles(rolez);
-        
+        u.setEmail(email);
         return u;
     }
     

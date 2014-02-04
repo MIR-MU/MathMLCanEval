@@ -11,13 +11,13 @@
                 <div class="form-group">                    
                     <input type="text" name="keywords" class="form-control search-bar" />
                 </div>
-                <button type="submit" class=" btn btn-primary">!search</button>
+                <button type="submit" class=" btn btn-primary"><spring:message code="general.label.search" /></button>
             </form>
         </div>
         <div class="col-lg-2">
             <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                 <div class="pull-right">        
-                    <a href="${pageContext.request.contextPath}/user/create/" class="btn btn-primary">!create user</a>        
+                    <a href="${pageContext.request.contextPath}/user/create/" class="btn btn-primary"><spring:message code="entity.user.create" /></a>        
                 </div>
             </sec:authorize>
         </div>
@@ -26,14 +26,14 @@
     <table class="table table-bordered table-striped pull-top-50">
         <thead>
             <tr>
-                <th>!id</th>
-                <th>!username</th>
-                <th>!realName</th>
-                <th>!email</th>
-                <th>!roles</th>
-                <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
-                    <th>!options</th>
-                </sec:authorize>
+                <th><spring:message code="general.field.id" /></th>
+                <th><spring:message code="entity.user.username" /></th>
+                <th><spring:message code="entity.user.realname" /></th>
+                <th><spring:message code="entity.user.email" /></th>
+                <th><spring:message code="entity.user.userroles" /></th>
+                    <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                    <th><spring:message code="general.table.option" /></th>
+                    </sec:authorize>
             </tr>
         </thead>
         <c:choose>
@@ -43,16 +43,20 @@
                         <td><c:out value="${entry.id}" /></td>
                         <td><c:out value="${entry.username}" /></td>
                         <td><c:out value="${entry.realName}" /></td>
-                        <td>!x</td>
+                        <td><c:out value="${entry.email}" /></td>
                         <td>
                             <c:forEach items="${entry.userRoles}" var="roleEntry">
                                 <c:out value="${roleEntry.roleName}" />
                             </c:forEach>
                         </td>
                         <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
-                            <td>
-                                <a href="${pageContext.request.contextPath}/user/delete/<c:out value="${entry.id}" />/">x</a> 
-                                <a href="${pageContext.request.contextPath}/user/edit/<c:out value="${entry.id}" />/">+</a>
+                            <td>                                
+                                <a href="${pageContext.request.contextPath}/user/edit/<c:out value="${entry.id}" />/">
+                                    <span class="glyphicon glyphicon-wrench"></span>
+                                </a>
+                                <a href="${pageContext.request.contextPath}/user/delete/<c:out value="${entry.id}" />/">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a> 
                             </td>
                         </sec:authorize>                
                     </tr>
@@ -61,10 +65,10 @@
             <c:otherwise>
                 <tr>
                     <sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
-                        <td colspan="5" class="text-center">!no records so far</td>
+                        <td colspan="5" class="text-center"><spring:message code="general.table.norecords" /></td>
                     </sec:authorize>
                     <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-                        <td colspan="6" class="text-center">!no records so far</td>
+                        <td colspan="6" class="text-center"><spring:message code="general.table.norecords" /></td>
                     </sec:authorize>
                 </tr>
             </c:otherwise>

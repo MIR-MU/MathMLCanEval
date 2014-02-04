@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.InternetAddressEditor;
 import org.springframework.stereotype.Component;
 
 /**

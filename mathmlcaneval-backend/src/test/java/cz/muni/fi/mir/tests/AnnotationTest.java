@@ -73,9 +73,9 @@ public class AnnotationTest
         aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_CHECK_PLS));
         
         
-        users.add(EntityFactory.createUser("username1", "password1", "druhe viac aslovne cislo1", roles));
-        users.add(EntityFactory.createUser("username2", "password2", "druhe viac aslovne cislo2", roles));
-        users.add(EntityFactory.createUser("username3", "password3", "druhe viac aslovne cislo3", roles));
+        users.add(EntityFactory.createUser("username1", "password1", "druhe viac aslovne cislo1", "example@example.com", roles));
+        users.add(EntityFactory.createUser("username2", "password2", "druhe viac aslovne cislo2", "example@example.com", roles));
+        users.add(EntityFactory.createUser("username3", "password3", "druhe viac aslovne cislo3", "example@example.com", roles));
         
         
         for(UserRole ur : roles)

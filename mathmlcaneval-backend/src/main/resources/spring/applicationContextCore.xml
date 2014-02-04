@@ -52,12 +52,7 @@
             </list>
         </property>
         <property name="ignoreUnresolvablePlaceholders" value="true" />
-    </bean>-->
-    
-<!--    <bean id="bookAspect" class="cz.muni.ics.ff.bis.backend.aspects.AuthorExecutionLogger" />
-    <bean id="departmentAspect" class="cz.muni.ics.ff.bis.backend.aspects.DepartmentExecutionLogger" />
-    <bean id="userAspect" class="cz.muni.ics.ff.bis.backend.aspects.UserExecutionLogger" />-->
-    
+    </bean>--> 
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${hibernate.connection.driver_class}"/>
@@ -103,16 +98,17 @@
                 <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="departments"/>
             </set>
         </property>
-    </bean>  
-    
-    <bean id="mapper" class="org.dozer.DozerBeanMapper">
-        <property name="mappingFiles">
-            <list>
-                <value>config/dozer-mapping.xml</value>
-            </list>
-        </property>
+    </bean> 
+   -->
+   
+   
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="{mail.host}" />
     </bean>
     
-   -->
+    <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="{mail.from}" />
+        <property name="subject" value="{mail.subject}" />
+    </bean>
     
 </beans>

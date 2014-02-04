@@ -63,7 +63,7 @@ public class UserTest
         // now they all should have assigned ID so we sort them
         Collections.sort(roles,TestTools.userRoleComparator);
         
-        u = EntityFactory.createUser("username", "password", "real name", roles);
+        u = EntityFactory.createUser("username", "password", "real name", "example@example.com", roles);
     }
     
     
@@ -134,8 +134,8 @@ public class UserTest
         u.setRealName("nahodne viac slovne meno");
         
         userService.createUser(u);
-        userService.createUser(EntityFactory.createUser("username2", "password", "druhe viac aslovne cislo", roles));
-        userService.createUser(EntityFactory.createUser("username3", "password", "dbezsd", roles));
+        userService.createUser(EntityFactory.createUser("username2", "password", "druhe viac aslovne cislo", "example@example.com", roles));
+        userService.createUser(EntityFactory.createUser("username3", "password", "dbezsd", "example@example.com", roles));
         
         User result = userService.getUserByID(ID);
         assertNotNull("user has been not created", result);
@@ -171,9 +171,9 @@ public class UserTest
         logger.info("Running UserTest#testGetAll()");
         List<User> temp = new ArrayList<>(4);
         temp.add(u);
-        temp.add(EntityFactory.createUser("username2", "password2", "real name2", roles));
-        temp.add(EntityFactory.createUser("username3", "password3", "real name3", roles.subList(0, 2)));
-        temp.add(EntityFactory.createUser("username4", "password4", "real name4", roles.get(0)));
+        temp.add(EntityFactory.createUser("username2", "password2", "real name2", "example@example.com", roles));
+        temp.add(EntityFactory.createUser("username3", "password3", "real name3", "example@example.com", roles.subList(0, 2)));
+        temp.add(EntityFactory.createUser("username4", "password4", "real name4", "example@example.com", roles.get(0)));
         
         for(User uTemp : temp)
         {
@@ -197,9 +197,9 @@ public class UserTest
     public void testGetByRole()
     {
         logger.info("Running UserTest#testGetAll()");
-        User u1 = EntityFactory.createUser("username1", "password1", "real name1", roles.get(1));
-        User u2 = EntityFactory.createUser("username2", "password2", "real name2", roles.get(2));
-        User u3 = EntityFactory.createUser("username3", "password3", "real name3", roles.subList(1, 3));
+        User u1 = EntityFactory.createUser("username1", "password1", "real name1", "example@example.com", roles.get(1));
+        User u2 = EntityFactory.createUser("username2", "password2", "real name2", "example@example.com", roles.get(2));
+        User u3 = EntityFactory.createUser("username3", "password3", "real name3", "example@example.com", roles.subList(1, 3));
         
         userService.createUser(u1);
         userService.createUser(u2);
@@ -228,7 +228,7 @@ public class UserTest
         assertEquals("username not same", expected.getUsername(),actual.getUsername());
         assertEquals("real naem not same", expected.getRealName(),actual.getRealName());
         assertEquals("pass not same", expected.getPassword(),actual.getPassword());
-        
+        assertEquals("email not same",expected.getEmail(),actual.getEmail());
         assertTrue("roles are not the same",(expected.getUserRoles().containsAll(actual.getUserRoles()) &&
                 actual.getUserRoles().containsAll(expected.getUserRoles())));
     }

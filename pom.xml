@@ -46,9 +46,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java-version>1.7</java-version>
-        <org.springframework-version>4.0.0.RELEASE</org.springframework-version>
-        <org.springframework.security.version>3.2.1.CI-SNAPSHOT</org.springframework.security.version>        
-        <org.hibernate-version>4.3.0.CR1</org.hibernate-version>
+        <org.springframework-version>4.0.1.RELEASE</org.springframework-version>
+        <org.springframework.security.version>3.2.0.RELEASE</org.springframework.security.version>        
+        <org.hibernate-version>4.3.1.Final</org.hibernate-version>
         <c3p0.version>0.9.5-pre5</c3p0.version>
         <psql.jdbc.version>9.1-901-1.jdbc4</psql.jdbc.version>      
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir><!-- for frontend-->  

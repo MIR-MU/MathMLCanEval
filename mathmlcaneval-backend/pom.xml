@@ -39,7 +39,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>cz.muni.fi.mir.Main</mainClass>
+                    <mainClass>cz.muni.fi.mir.tools.Installation</mainClass>
                 </configuration>
             </plugin>
             <plugin>

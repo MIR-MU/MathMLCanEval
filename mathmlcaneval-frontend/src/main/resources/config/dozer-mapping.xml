@@ -55,9 +55,13 @@
     <mapping>
         <class-a>cz.muni.fi.mir.db.domain.User</class-a>
         <class-b>cz.muni.fi.mir.forms.UserForm</class-b>
+        <field>
+            <a>userRoles</a>
+            <b>userRoleForms</b>
+        </field>
     </mapping>
     <mapping>
         <class-a>cz.muni.fi.mir.db.domain.UserRole</class-a>
-        <class-b>cz.muni.fi.mir.forms.UserRoleForm</class-b>
+        <class-b>cz.muni.fi.mir.forms.UserRoleForm</class-b>        
     </mapping>
 </mappings>
