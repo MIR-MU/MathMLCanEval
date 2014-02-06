@@ -49,9 +49,7 @@ public class ConfigurationTest
     @Before
     public void init()
     {
-        configs.add(EntityFactory.createConfiguration(TestTools.getConfig(true, true, true), "vsetko true", "vsetky hodnoty su true lebo kacka"));
-        configs.add(EntityFactory.createConfiguration(TestTools.getConfig(true, true, false), "priemerny config 2:1", "vsetky hodnoty su true lebo medved"));
-        configs.add(EntityFactory.createConfiguration(TestTools.getConfig(false, false, false), "vsetko false", "vsetky podnoty su true lebo holub"));
+        configs = DataTestTools.provideConfigurationList();
     }
 
     @Test

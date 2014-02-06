@@ -82,5 +82,12 @@ public class UserServiceImpl implements UserService
     {
         return userDAO.findUserByRealName(name);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> getUsersByRoles(List<UserRole> roles)
+    {
+        return userDAO.getUsersByRoles(roles);
+    }
     
 }

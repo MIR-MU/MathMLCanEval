@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -203,5 +205,23 @@ public class UserController
             
             return new ModelAndView("redirect:/user/list/");
         }
+    }
+    
+    
+    @RequestMapping(value={"/list/{filters}","/list/{filters}/"},method = RequestMethod.GET)
+    public ModelAndView filterList(@MatrixVariable(pathVar = "filters") Map<String,List<String>> filters)
+    {
+        ModelMap mm = new ModelMap();
+        
+        if(filters.containsKey("role_name"))
+        {
+            mm.addAttribute("userList", userService.getUsersByRole(userRoleService.getUserRoleByName(filters.get("role_name").get(0))));
+        }
+        else
+        {
+            mm.addAttribute("userList", userService.getAllUsers());
+        }
+        
+        return new ModelAndView("user_list",mm);
     }
 }

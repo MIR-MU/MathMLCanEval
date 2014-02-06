@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -42,46 +43,49 @@ public class UserRoleTest
 
     @Autowired
     UserRoleService userRoleService;
+    private List<UserRole> roles = new ArrayList<>(3);
     private static final Long ID = new Long(1);
+    
+    @Before
+    public void init()
+    {
+        roles = DataTestTools.provideUserRolesList();
+    }
 
     @Test
     public void testCreateAndGet()
     {
         logger.info("Running UserRoleTest#testCreateAndGet()");
-        UserRole ur = EntityFactory.createUserRole("ROLE_ADMIN");
 
-        userRoleService.createUserRole(ur);
+        userRoleService.createUserRole(roles.get(0));
 
         UserRole result = userRoleService.getUserRoleByID(ID);
 
         assertNotNull("UserRole object was not created.", result);
 
-        deepCompare(ur, result);
+        deepCompare(roles.get(0), result);
     }
 
     @Test
     public void testGetUserRoleByName()
     {
         logger.info("Running UserRoleTest#testGetUserRoleByName()");
-        UserRole ur = EntityFactory.createUserRole("ROLE_ADMIN");
 
-        userRoleService.createUserRole(ur);
+        userRoleService.createUserRole(roles.get(1));
 
-        assertNotNull("not created",userRoleService.getUserRoleByID(ID));
+        assertNotNull("UserRole object was not created.",userRoleService.getUserRoleByID(ID));
 
-        UserRole result = userRoleService.getUserRoleByName("ROLE_ADMIN");
+        UserRole result = userRoleService.getUserRoleByName(roles.get(1).getRoleName());
 
-        deepCompare(ur, result);
+        deepCompare(roles.get(1), result);
     }
 
     @Test
     public void testDelete()
     {
         logger.info("Running UserRoleTest#testDelete()");
-
-        UserRole ur = EntityFactory.createUserRole("ROLE_ADMIN");
-
-        userRoleService.createUserRole(ur);
+        
+        userRoleService.createUserRole(roles.get(0));
 
         UserRole result = userRoleService.getUserRoleByID(ID);
         assertNotNull("UserRole object was not created.", result);
@@ -95,10 +99,8 @@ public class UserRoleTest
     public void testUpdate()
     {
         logger.info("Running UserRoleTest#testUpdate()");
-
-        UserRole ur = EntityFactory.createUserRole("ROLE_ADMIN");
-
-        userRoleService.createUserRole(ur);
+        
+        userRoleService.createUserRole(roles.get(2));
         UserRole result = userRoleService.getUserRoleByID(ID);
         assertNotNull("UserRole object was not created.", result);
 
@@ -111,12 +113,7 @@ public class UserRoleTest
     @Test
     public void testGetAll()
     {
-        logger.info("Running UserRoleTest#testGetAll()");
-        List<UserRole> roles = new ArrayList<>();
-        roles.add(EntityFactory.createUserRole("ROLE_ANONYMOUS"));
-        roles.add(EntityFactory.createUserRole("ROLE_USER"));
-        roles.add(EntityFactory.createUserRole("ROLE_EDITOR"));
-        roles.add(EntityFactory.createUserRole("ROLE_ADMINISTRATOR"));
+        logger.info("Running UserRoleTest#testGetAll()");        
 
         for (UserRole ur : roles)
         {

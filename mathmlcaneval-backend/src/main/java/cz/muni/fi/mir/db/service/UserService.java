@@ -24,5 +24,6 @@ public interface UserService
     
     List<User> getAllUsers();
     List<User> getUsersByRole(UserRole userRole);
+    List<User> getUsersByRoles(List<UserRole> roles);
     List<User> findUserByRealName(String name);
 }

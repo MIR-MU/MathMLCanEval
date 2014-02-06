@@ -71,39 +71,32 @@ public class ApplicationRunTest
     @Before
     public void init()
     {
-        configs.add(EntityFactory.createConfiguration(TestTools.getConfig(true, true, true), "vsetko true", "vsetky hodnoty su true lebo kacka"));
-        configs.add(EntityFactory.createConfiguration(TestTools.getConfig(true, true, false), "priemerny config 2:1", "vsetky hodnoty su true lebo medved"));
-        configs.add(EntityFactory.createConfiguration(TestTools.getConfig(false, false, false), "vsetko false", "vsetky podnoty su true lebo holub"));
+        configs = DataTestTools.provideConfigurationList();
         for(Configuration c : configs)
         {
             configurationService.createConfiguration(c);
         }
         
-        revs.add(EntityFactory.createRevision("f383d4a196c27992bf9bcb903919cf354024554a", "nahodna poznamka aby sa nieco naslo"));
-        revs.add(EntityFactory.createRevision("f383d4a196c27992bf9bcb903919cf354024554b", "nahodna poznamka aby si nieco naslo"));
-        revs.add(EntityFactory.createRevision("f383d4a196c27992bf9bcb903919cf354024554c", "nahodna poznamka aby so nieco naslo"));
-        revs.add(EntityFactory.createRevision("f383d4a196c27992bf9bcb903919cf354024554d", "toto sa nenajde"));
+        revs = DataTestTools.provideRevisions();
         for(Revision r : revs)
         {
             revisionService.createRevision(r);
         }
         
-        UserRole role = EntityFactory.createUserRole("ROLE_ADMINISTRATOR");
-        userRoleService.createUserRole(role);
+        List<UserRole> roles = DataTestTools.provideUserRolesList();
+        for(UserRole ur : roles)
+        {
+            userRoleService.createUserRole(ur);
+        }
         
+        users = DataTestTools.provideUserRoleListGeneral(roles);
         
-        users.add(EntityFactory.createUser("username2", "password2", "real name2", "example@example.com", role));
-        users.add(EntityFactory.createUser("username3", "password3", "real name3", "example@example.com", role));
         for(User u : users)
         {
             userService.createUser(u);
         }
         
-        appruns.add(EntityFactory.createApplicationRun("poznamka 1", new DateTime(2013, 02, 02, 12, 13), new DateTime(2013, 02, 02, 12, 14), users.get(0), revs.get(0),configs.get(0)));
-        appruns.add(EntityFactory.createApplicationRun("poznamka 2", new DateTime(2013, 02, 02, 13, 13), new DateTime(2013, 02, 02, 14, 14), users.get(0), revs.get(0),configs.get(0)));
-        appruns.add(EntityFactory.createApplicationRun("poznamka 3", new DateTime(2013, 02, 02, 14, 13), new DateTime(2013, 02, 02, 14, 14), users.get(1), revs.get(1),configs.get(0)));
-        appruns.add(EntityFactory.createApplicationRun("poznamka 4", new DateTime(2013, 02, 02, 15, 13), new DateTime(2013, 02, 02, 15, 14), users.get(1), revs.get(2),configs.get(1)));
-        appruns.add(EntityFactory.createApplicationRun("poznamka 5", new DateTime(2013, 02, 02, 16, 13), new DateTime(2013, 02, 02, 16, 14), users.get(0), revs.get(1),configs.get(2)));       
+        appruns = DataTestTools.provideApplicationRuns(users, revs, configs);
     }
     
     @Test

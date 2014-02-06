@@ -7,42 +7,42 @@
             <div class="col-sm-7">
                 <form:input type="text" path="username" cssClass="form-control" />
             </div>
-            <form:errors path="username" element="div" class="col-sm-3 alert alert-success"/>            
+            <form:errors path="username" element="div" class="col-sm-3 alert alert-danger"/>            
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.user.realname" /></label>
             <div class="col-sm-7">
                 <form:input type="text" path="realName" cssClass="form-control" />
             </div>
-            <form:errors path="realName" element="div" class="col-sm-3 alert alert-success"/>            
+            <form:errors path="realName" element="div" class="col-sm-3 alert alert-danger"/>            
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.user.email" /></label>
             <div class="col-sm-7">
                 <form:input type="email" path="email" cssClass="form-control" />
             </div>
-            <form:errors path="email" element="div" class="col-sm-3 alert alert-success"/>            
+            <form:errors path="email" element="div" class="col-sm-3 alert alert-danger"/>            
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.user.email.verify" /></label>
             <div class="col-sm-7">
                 <form:input type="email" path="emailVerify" cssClass="form-control" />
             </div>
-            <form:errors path="emailVerify" element="div" class="col-sm-3 alert alert-success"/>            
+            <form:errors path="emailVerify" element="div" class="col-sm-3 alert alert-danger"/>            
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.user.password" /></label>
             <div class="col-sm-7">
                 <form:password path="password" cssClass="form-control" />
             </div>
-            <form:errors path="password" element="div" class="col-sm-3 alert alert-success"/>            
+            <form:errors path="password" element="div" class="col-sm-3 alert alert-danger"/>            
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.user.password.verify" /></label>
             <div class="col-sm-7">
                 <form:password path="passwordVerify" cssClass="form-control" />
             </div>
-            <form:errors path="passwordVerify" element="div" class="col-sm-3 alert alert-success"/>            
+            <form:errors path="passwordVerify" element="div" class="col-sm-3 alert alert-danger"/>            
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.user.userroles" /></label>

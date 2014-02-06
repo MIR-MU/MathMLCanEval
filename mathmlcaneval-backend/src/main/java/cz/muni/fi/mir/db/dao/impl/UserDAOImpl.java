@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -120,6 +121,45 @@ public class UserDAOImpl implements UserDAO
         {
             resultList = entityManager.createQuery("SELECT u FROM users u WHERE u.realName LIKE :realName", User.class)
                     .setParameter("realName", "%"+name+"%").getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
+    }
+
+    /**
+     * TODO
+     * @param roles
+     * @return 
+     */
+    @Override
+    public List<User> getUsersByRoles(List<UserRole> roles)
+    {
+        
+        List<User> resultList = new ArrayList<>();
+        
+        
+        StringBuilder query = new StringBuilder("SELECT u FROM users u WHERE ");
+        for(int i =0;i<roles.size();i++)
+        {
+            query.append(":roles").append(i).append(" MEMBER OF u.userRole");
+            if(i < roles.size() -1)
+            {
+                query.append(" AND ");
+            }
+        }
+        
+        try
+        {
+            TypedQuery<User> q = entityManager.createQuery(query.toString(), User.class);
+            for(int i =0;i<roles.size();i++)
+            {
+                q.setParameter("roles"+i, roles.get(i));
+            }
+            resultList = q.getResultList();
         }
         catch(NoResultException nre)
         {

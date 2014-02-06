@@ -43,16 +43,13 @@ public class UserTest
     @Autowired
     private UserService userService;
     private List<UserRole> roles = new ArrayList<>(3);
+    private List<User> users = new ArrayList<>(3);
     private static final Long ID = new Long(1);
-    
-    private User u = null;
     
     @Before
     public void init()
     {        
-        roles.add(EntityFactory.createUserRole("ROLE_ANONYMOUS"));
-        roles.add(EntityFactory.createUserRole("ROLE_USER"));
-        roles.add(EntityFactory.createUserRole("ROLE_ADMINISTRATOR"));
+        roles = DataTestTools.provideUserRolesList();
         
         
         for(UserRole ur : roles)
@@ -63,7 +60,7 @@ public class UserTest
         // now they all should have assigned ID so we sort them
         Collections.sort(roles,TestTools.userRoleComparator);
         
-        u = EntityFactory.createUser("username", "password", "real name", "example@example.com", roles);
+        users = DataTestTools.provideUserRoleListSpecific(roles);
     }
     
     
@@ -72,14 +69,14 @@ public class UserTest
     {
         logger.info("Running UserTest#createAndGetUser()");
         
-        userService.createUser(u);
+        userService.createUser(users.get(0));
         
         User result = userService.getUserByID(ID);
         
         
         assertNotNull("User object was not created.",result);
         
-        deepCompare(u, result);
+        deepCompare(users.get(0), result);
     }
     
     @Test
@@ -87,7 +84,7 @@ public class UserTest
     {
         logger.info("Running UserTest#createAndGetUser()");
         
-        userService.createUser(u);
+        userService.createUser(users.get(0));
         
         
         User result = userService.getUserByID(ID);
@@ -115,7 +112,7 @@ public class UserTest
     {
         logger.info("Running UserTest#testDelete()");
         
-        userService.createUser(u);
+        userService.createUser(users.get(0));
         
         User result = userService.getUserByID(ID);
         assertNotNull("User object was not created.", result);
@@ -131,19 +128,15 @@ public class UserTest
     {
         logger.info("Running UserTest#testFindUserByRealName()");
         
-        u.setRealName("nahodne viac slovne meno");
+        for(User u : users)
+        {
+            userService.createUser(u);
+        }
         
-        userService.createUser(u);
-        userService.createUser(EntityFactory.createUser("username2", "password", "druhe viac aslovne cislo", "example@example.com", roles));
-        userService.createUser(EntityFactory.createUser("username3", "password", "dbezsd", "example@example.com", roles));
-        
-        User result = userService.getUserByID(ID);
-        assertNotNull("user has been not created", result);
-        
-        List<User> rList = userService.findUserByRealName("viac sl");
+        List<User> rList = userService.findUserByRealName("tretie");
         assertEquals("result should be one",1,rList.size());
         
-        deepCompare(u, rList.get(0));
+        deepCompare(users.get(1), rList.get(0));
         rList.clear();
         
         rList = userService.findUserByRealName("viac");
@@ -155,13 +148,13 @@ public class UserTest
     public void testGetUserByUsername()
     {
         logger.info("Running UserTest#testGetUserByUsername()");
-        userService.createUser(u);
+        userService.createUser(users.get(0));
         
         assertNotNull("not created",userService.getUserByID(ID));
         
-        User result = userService.getUserByUsername("username");
+        User result = userService.getUserByUsername(users.get(0).getUsername());
         
-        deepCompare(u, result);
+        deepCompare(users.get(0), result);
     }
     
     
@@ -169,26 +162,20 @@ public class UserTest
     public void testGetAll()
     {
         logger.info("Running UserTest#testGetAll()");
-        List<User> temp = new ArrayList<>(4);
-        temp.add(u);
-        temp.add(EntityFactory.createUser("username2", "password2", "real name2", "example@example.com", roles));
-        temp.add(EntityFactory.createUser("username3", "password3", "real name3", "example@example.com", roles.subList(0, 2)));
-        temp.add(EntityFactory.createUser("username4", "password4", "real name4", "example@example.com", roles.get(0)));
-        
-        for(User uTemp : temp)
+        for(User u : users)
         {
-            userService.createUser(uTemp);
+            userService.createUser(u);
         }
         
         List<User> resultList = userService.getAllUsers();
         
         Collections.sort(resultList,TestTools.userComparator);
-        Collections.sort(temp,TestTools.userComparator);
-        assertEquals("not same count",4,resultList.size());
+        Collections.sort(users,TestTools.userComparator);
+        assertEquals("not same count",users.size(),resultList.size());
         
         for(int i =0 ; i < resultList.size();i++)
         {
-            deepCompare(temp.get(i), resultList.get(i));
+            deepCompare(users.get(i), resultList.get(i));
         }     
     }
     
@@ -197,26 +184,48 @@ public class UserTest
     public void testGetByRole()
     {
         logger.info("Running UserTest#testGetAll()");
-        User u1 = EntityFactory.createUser("username1", "password1", "real name1", "example@example.com", roles.get(1));
-        User u2 = EntityFactory.createUser("username2", "password2", "real name2", "example@example.com", roles.get(2));
-        User u3 = EntityFactory.createUser("username3", "password3", "real name3", "example@example.com", roles.subList(1, 3));
+        for(User u : users)
+        {
+            userService.createUser(u);
+        }
         
-        userService.createUser(u1);
-        userService.createUser(u2);
-        userService.createUser(u3);
+        UserRole temp = EntityFactory.createUserRole("ROLE_TEST");
+        userRoleService.createUserRole(temp);
         
         
         List<User> list1 = userService.getUsersByRole(roles.get(1));
         List<User> list2 = userService.getUsersByRole(roles.get(2));
         
         // anon
-        assertEquals("not zero",0,userService.getUsersByRole(roles.get(0)).size());
+        assertEquals("not zero",0,userService.getUsersByRole(temp).size());
         
         // user
         assertEquals("should be two",2,list1.size());
         
         // admin
-        assertEquals("should be two",2,list2.size());
+        assertEquals("should be two",1,list2.size());
+    }
+    
+    @Test 
+    public void testGetByRoles()
+    {
+        logger.info("Running UserTest#testGetByRoles()");
+        User u1 = EntityFactory.createUser("username1", "password1", "real name1", "example@example.com", roles.get(1));
+        User u2 = EntityFactory.createUser("username2", "password2", "real name2", "example@example.com", roles.get(2));
+        User u3 = EntityFactory.createUser("username3", "password3", "real name3", "example@example.com", roles.subList(1, 3));
+        User u4 = EntityFactory.createUser("username4", "password4", "real name4", "example@example.com", roles.subList(1, 3));
+        
+        userService.createUser(u1);
+        userService.createUser(u2);
+        userService.createUser(u3);
+        userService.createUser(u4);
+        
+//        List<User> result = userService.getUsersByRoles(roles.subList(1, 3));
+//        
+//        for(User u : result)
+//        {
+//            System.out.println(u.getId());
+//        }
     }
     
     

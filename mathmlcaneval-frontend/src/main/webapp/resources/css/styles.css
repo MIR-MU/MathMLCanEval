@@ -28,3 +28,8 @@ and open the template in the editor.
 {
     text-align: center;
 }
+
+.space-bottom-10
+{
+    margin-bottom: 10px;
+}

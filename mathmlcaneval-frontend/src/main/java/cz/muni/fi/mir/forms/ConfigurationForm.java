@@ -6,6 +6,7 @@
 package cz.muni.fi.mir.forms;
 
 import java.util.Objects;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -14,7 +15,9 @@ import java.util.Objects;
 public class ConfigurationForm
 {
     private Long id;
+    @NotEmpty(message = "{validator.configuration.config.empty}")
     private String config;
+    @NotEmpty(message = "{validator.configuration.name.empty}")
     private String name;
     private String note;
 

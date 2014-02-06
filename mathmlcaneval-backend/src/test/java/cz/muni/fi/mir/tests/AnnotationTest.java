@@ -62,20 +62,9 @@ public class AnnotationTest
     @Before
     public void init()
     {
-        roles.add(EntityFactory.createUserRole("ROLE_ANONYMOUS"));
-        roles.add(EntityFactory.createUserRole("ROLE_USER"));
-        roles.add(EntityFactory.createUserRole("ROLE_ADMINISTRATOR"));
-        
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_PROPER_RESULT));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_PROPER_RESULT));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_MIGHT_BE_PROPER));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_WRONG));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_CHECK_PLS));
-        
-        
-        users.add(EntityFactory.createUser("username1", "password1", "druhe viac aslovne cislo1", "example@example.com", roles));
-        users.add(EntityFactory.createUser("username2", "password2", "druhe viac aslovne cislo2", "example@example.com", roles));
-        users.add(EntityFactory.createUser("username3", "password3", "druhe viac aslovne cislo3", "example@example.com", roles));
+        roles = DataTestTools.provideUserRolesList();        
+        aFlags = DataTestTools.provideAnnotationFlagList();        
+        users = DataTestTools.provideUserRoleListGeneral(roles);
         
         
         for(UserRole ur : roles)
@@ -93,11 +82,7 @@ public class AnnotationTest
             userService.createUser(u);
         }
         
-        annotations.add(EntityFactory.createAnnotation("poznamka", users.get(0), aFlags.get(0)));
-        annotations.add(EntityFactory.createAnnotation("poznamkaaa", users.get(0), aFlags.get(1)));
-        annotations.add(EntityFactory.createAnnotation("poznamka12313", users.get(0), aFlags.get(1)));
-        annotations.add(EntityFactory.createAnnotation("aha2313", users.get(1), aFlags.get(1)));
-        annotations.add(EntityFactory.createAnnotation("pozyuyiua12313", users.get(1), aFlags.get(1)));
+        annotations = DataTestTools.provideAnnotationList(users, aFlags);
     }
 
     @Test

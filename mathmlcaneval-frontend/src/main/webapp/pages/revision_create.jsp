@@ -6,7 +6,7 @@
             <div class="col-sm-7">
                 <form:input type="text" path="revisionHash" cssClass="form-control" />
             </div>
-            <form:errors path="revisionHash" element="div" class="col-sm-3 alert alert-success"/>            
+            <form:errors path="revisionHash" element="div" class="col-sm-3 alert alert-danger"/>            
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.revision.note" /></label>

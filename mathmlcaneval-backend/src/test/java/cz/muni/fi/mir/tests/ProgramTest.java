@@ -49,11 +49,7 @@ public class ProgramTest
     @Before
     public void init()
     {
-        programs.add(EntityFactory.createProgram("texlive", "linux verzia", "-d -s -p", "2013.2"));
-        programs.add(EntityFactory.createProgram("texlive", "linux verzia", "-d -s", "2013.2"));
-        programs.add(EntityFactory.createProgram("texlive", "linux verzia", "-d -p", "2013.3"));
-        programs.add(EntityFactory.createProgram("miktex", "windows verzia", "-a -q", "2011.4"));
-        programs.add(EntityFactory.createProgram("miktex", "linux verzia", "-a -q", "2014.1beta.0.0.3"));
+        programs = DataTestTools.providePrograms();
     }
 
     @Test

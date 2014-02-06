@@ -61,6 +61,9 @@
                                     <li><a href="${pageContext.request.contextPath}/sourcedocument/create/"><spring:message code="navigation.sourcedocument.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/sourcedocument/list/"><spring:message code="navigation.sourcedocument.list" /></a></li>
                                     <li class="divider"></li>
+                                    <li><a href="${pageContext.request.contextPath}/configuration/create/"><spring:message code="navigation.configuration.create" /></a></li>
+                                    <li><a href="${pageContext.request.contextPath}/configuration/list/"><spring:message code="navigation.configuration.list" /></a></li>
+                                    <li class="divider"></li>
                                 </ul>
                             </li>
                         </sec:authorize>

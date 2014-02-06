@@ -49,11 +49,7 @@ public class SourceDocumentTest
     @Before
     public void init()
     {
-        docs.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 1", "/home/empt/input/test1.xhtml"));
-        docs.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 2", "/home/empt/input/data/test2.xhtml"));
-        docs.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 3", "/home/empt/input/fata/test3.xhtml"));
-        docs.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 4", "/home/empt/input/data/test4.xhtml"));
-
+        docs = DataTestTools.provideSourceDocuments();
     }
 
     @Test
