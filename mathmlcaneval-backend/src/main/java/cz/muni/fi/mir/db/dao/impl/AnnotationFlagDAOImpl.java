@@ -1,13 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.AnnotationFlagDAO;
 import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.tools.Tools;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -16,7 +12,9 @@ import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Empt
+ * @author Dominik Szalai
+ * @version 1.0
+ * @since 1.0
  */
 @Repository(value = "annotationFlagDAO")
 public class AnnotationFlagDAOImpl implements AnnotationFlagDAO
@@ -61,11 +59,11 @@ public class AnnotationFlagDAOImpl implements AnnotationFlagDAO
     @Override
     public List<AnnotationFlag> getAllAnnotationFlags()
     {
-        List<AnnotationFlag> resultList = new ArrayList<>();
+        List<AnnotationFlag> resultList = Collections.emptyList();
         
         try
         {
-            resultList = entityManager.createQuery("SELECT af FROM annotationflag af", AnnotationFlag.class)
+            resultList = entityManager.createQuery("SELECT af FROM annotationflag af ORDER BY af.id DESC", AnnotationFlag.class)
                     .getResultList();
         }
         catch(NoResultException nre)
@@ -85,11 +83,11 @@ public class AnnotationFlagDAOImpl implements AnnotationFlagDAO
         }
         else
         {
-            List<AnnotationFlag> resultList = new ArrayList<>();
+            List<AnnotationFlag> resultList = Collections.emptyList();
             
             try
             {
-                resultList = entityManager.createQuery("SELECT af FROM annotationflag af WHERE af.flagValue LIKE :value", AnnotationFlag.class)
+                resultList = entityManager.createQuery("SELECT af FROM annotationflag af WHERE af.flagValue LIKE :value ORDER BY af.id DESC", AnnotationFlag.class)
                         .setParameter("value", "%"+value+"%").getResultList();
             }
             catch(NoResultException nre)
@@ -100,5 +98,4 @@ public class AnnotationFlagDAOImpl implements AnnotationFlagDAO
             return resultList;
         }
     }
-    
 }

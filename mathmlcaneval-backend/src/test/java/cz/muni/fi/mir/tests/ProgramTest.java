@@ -6,7 +6,6 @@ package cz.muni.fi.mir.tests;
 
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.service.ProgramService;
-import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

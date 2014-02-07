@@ -9,9 +9,9 @@ package cz.muni.fi.mir.db.dao;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
+import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import java.util.List;
-import org.w3c.dom.Document;
 
 /**
  *
@@ -23,7 +23,7 @@ public interface FormulaDAO
     void updateFormula(Formula formula);
     void deleteFormula(Formula formula);
     
-    List<Formula> getFormulasBySourceDocument(Document document);
+    List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
     List<Formula> getFormulasByProgram(Program program);
     List<Formula> getFormulasByUser(User user);
     List<Formula> getFormulasBySimilarOutput(CanonicOutput canonicOutput);

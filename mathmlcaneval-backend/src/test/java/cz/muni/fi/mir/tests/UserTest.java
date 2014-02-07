@@ -206,6 +206,9 @@ public class UserTest
         assertEquals("should be two",1,list2.size());
     }
     
+    /**
+     * TODO
+     */
     @Test 
     public void testGetByRoles()
     {
@@ -228,7 +231,11 @@ public class UserTest
 //        }
     }
     
-    
+    @Test
+    public void testGetByEmail()
+    {
+        //TODO
+    }
     
     
     private void deepCompare(User expected, User actual)
@@ -240,6 +247,5 @@ public class UserTest
         assertEquals("email not same",expected.getEmail(),actual.getEmail());
         assertTrue("roles are not the same",(expected.getUserRoles().containsAll(actual.getUserRoles()) &&
                 actual.getUserRoles().containsAll(expected.getUserRoles())));
-    }
-    
+    }    
 }

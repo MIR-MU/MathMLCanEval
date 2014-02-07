@@ -89,5 +89,11 @@ public class UserServiceImpl implements UserService
     {
         return userDAO.getUsersByRoles(roles);
     }
+
+    @Override
+    public User getUserByEmail(String email)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

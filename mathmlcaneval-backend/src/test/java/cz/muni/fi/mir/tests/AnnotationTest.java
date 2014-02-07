@@ -12,7 +12,6 @@ import cz.muni.fi.mir.db.service.AnnotationFlagService;
 import cz.muni.fi.mir.db.service.AnnotationService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
-import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +52,6 @@ public class AnnotationTest
     @Autowired private UserRoleService userRoleService;
     
     private List<AnnotationFlag> aFlags = new ArrayList<>();
-    private List<UserRole> roles = new ArrayList<>(3);
     private List<Annotation> annotations = new ArrayList<>();
     private List<User> users = new ArrayList<>();
     private static final Long ID = new Long(1);
@@ -62,21 +60,19 @@ public class AnnotationTest
     @Before
     public void init()
     {
-        roles = DataTestTools.provideUserRolesList();        
-        aFlags = DataTestTools.provideAnnotationFlagList();        
-        users = DataTestTools.provideUserRoleListGeneral(roles);
-        
-        
+        List<UserRole> roles = DataTestTools.provideUserRolesList();     
         for(UserRole ur : roles)
         {
             userRoleService.createUserRole(ur);
         }
         
+        aFlags = DataTestTools.provideAnnotationFlagList(); 
         for(AnnotationFlag af : aFlags)
         {
             annotationFlagService.createFlagAnnotation(af);
         }
         
+        users = DataTestTools.provideUserRoleListGeneral(roles);
         for(User u : users)
         {
             userService.createUser(u);
@@ -93,8 +89,9 @@ public class AnnotationTest
         
         Annotation a = annotationService.getAnnotationByID(ID);
         
-        deepCompare(annotations.get(0), a);
+        assertNotNull("Annotation was not created",a);
         
+        deepCompare(annotations.get(0), a);        
     }
 
     @Test

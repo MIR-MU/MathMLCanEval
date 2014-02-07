@@ -81,7 +81,8 @@ public class CanonicOutputTest
     
     private static final Long ID = new Long(1);
     private List<Configuration> configs = new ArrayList<>(3);
-    private List<User> users = new ArrayList<>(2);
+    private List<User> users = new ArrayList<>(3);
+    private List<UserRole> roles = new ArrayList<>();
     private List<Revision> revs = new ArrayList<>(4);
     private List<ApplicationRun> appruns = new ArrayList<>(5);
     private List<AnnotationFlag> aFlags = new ArrayList<>();
@@ -91,67 +92,51 @@ public class CanonicOutputTest
     @Before
     public void init()
     {
-        configs.add(EntityFactory.createConfiguration(TestTools.getConfig(true, true, true), "vsetko true", "vsetky hodnoty su true lebo kacka"));
-        configs.add(EntityFactory.createConfiguration(TestTools.getConfig(true, true, false), "priemerny config 2:1", "vsetky hodnoty su true lebo medved"));
-        configs.add(EntityFactory.createConfiguration(TestTools.getConfig(false, false, false), "vsetko false", "vsetky podnoty su true lebo holub"));
+        configs = DataTestTools.provideConfigurationList();
         for (Configuration c : configs)
         {
             configurationService.createConfiguration(c);
         }
         
-        revs.add(EntityFactory.createRevision("f383d4a196c27992bf9bcb903919cf354024554a", "nahodna poznamka aby sa nieco naslo"));
-        revs.add(EntityFactory.createRevision("f383d4a196c27992bf9bcb903919cf354024554b", "nahodna poznamka aby si nieco naslo"));
-        revs.add(EntityFactory.createRevision("f383d4a196c27992bf9bcb903919cf354024554c", "nahodna poznamka aby so nieco naslo"));
-        revs.add(EntityFactory.createRevision("f383d4a196c27992bf9bcb903919cf354024554d", "toto sa nenajde"));
+        revs = DataTestTools.provideRevisions();
         for (Revision r : revs)
         {
             revisionService.createRevision(r);
         }
         
-        UserRole role = EntityFactory.createUserRole("ROLE_ADMINISTRATOR");
-        userRoleService.createUserRole(role);
+        roles = DataTestTools.provideUserRolesList();
+        for(UserRole ur : roles)
+        {
+            userRoleService.createUserRole(ur);
+        }
         
-        users.add(EntityFactory.createUser("username2", "password2", "real name2", "example@example.com", role));
-        users.add(EntityFactory.createUser("username3", "password3", "real name3", "example@example.com", role));
+        users = DataTestTools.provideUserRoleListGeneral(roles);
         for (User u : users)
         {
             userService.createUser(u);
         }
         
-        appruns.add(EntityFactory.createApplicationRun("poznamka 1", new DateTime(2013, 02, 02, 12, 13), new DateTime(2013, 02, 02, 12, 14), users.get(0), revs.get(0), configs.get(0)));
-        appruns.add(EntityFactory.createApplicationRun("poznamka 2", new DateTime(2013, 02, 02, 13, 13), new DateTime(2013, 02, 02, 14, 14), users.get(0), revs.get(0), configs.get(0)));
-        appruns.add(EntityFactory.createApplicationRun("poznamka 3", new DateTime(2013, 02, 02, 14, 13), new DateTime(2013, 02, 02, 14, 14), users.get(1), revs.get(1), configs.get(0)));
-        appruns.add(EntityFactory.createApplicationRun("poznamka 4", new DateTime(2013, 02, 02, 15, 13), new DateTime(2013, 02, 02, 15, 14), users.get(1), revs.get(2), configs.get(1)));
-        appruns.add(EntityFactory.createApplicationRun("poznamka 5", new DateTime(2013, 02, 02, 16, 13), new DateTime(2013, 02, 02, 16, 14), users.get(0), revs.get(1), configs.get(2)));
-        
+        appruns = DataTestTools.provideApplicationRuns(users, revs, configs);
         for (ApplicationRun ar : appruns)
         {
             applicationRunService.createApplicationRun(ar);
         }
         
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_PROPER_RESULT));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_PROPER_RESULT));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_MIGHT_BE_PROPER));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_WRONG));
-        aFlags.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_CHECK_PLS));
-        
+        aFlags = DataTestTools.provideAnnotationFlagList();
         for (AnnotationFlag af : aFlags)
         {
             annotationFlagService.createFlagAnnotation(af);
         }
         
-        annotations.add(EntityFactory.createAnnotation("poznamka", users.get(0), aFlags.get(0)));
-        annotations.add(EntityFactory.createAnnotation("poznamkaaa", users.get(0), aFlags.get(1)));
-        annotations.add(EntityFactory.createAnnotation("poznamka12313", users.get(0), aFlags.get(1)));
-        annotations.add(EntityFactory.createAnnotation("aha2313", users.get(1), aFlags.get(1)));
-        annotations.add(EntityFactory.createAnnotation("pozyuyiua12313", users.get(1), aFlags.get(1)));
-        
+        annotations = DataTestTools.provideAnnotationList(users, aFlags);
         for (Annotation a : annotations)
         {
             annotationService.createAnnotation(a);
         }
         
         canonicOutputs.add(EntityFactory.createCanonicOutput(TestTools.getFirstXML(), similarityFormConverter.convert(TestTools.getFirstXML()), null, 512516l, appruns.get(0), annotations.subList(0, 2)));
+        canonicOutputs.add(EntityFactory.createCanonicOutput(TestTools.getFirstXML(), similarityFormConverter.convert(TestTools.getFirstXML()), null, 512516, appruns.get(1), annotations.subList(1, 2)));
+        canonicOutputs.add(EntityFactory.createCanonicOutput(TestTools.getSecondXML(), similarityFormConverter.convert(TestTools.getSecondXML()), null, 5125, appruns.get(1), annotations));
     }
     
     @Test
@@ -162,13 +147,14 @@ public class CanonicOutputTest
         
         CanonicOutput result = canonicOutputService.getCanonicOutputByID(ID);
         
-        assertNotNull("n",result);
+        assertNotNull("Canonic Output was not created.",result);
         deepCompare(canonicOutputs.get(0), result);
     }
     
     @Test
     public void testUpdateCanonicOutput()
     {
+        
     }
     
     @Test

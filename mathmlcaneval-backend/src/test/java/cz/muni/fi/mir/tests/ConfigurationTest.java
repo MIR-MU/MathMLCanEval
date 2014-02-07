@@ -139,7 +139,7 @@ public class ConfigurationTest
 
         for (Configuration c : result)
         {
-            assertTrue("does not contain substrin", c.getNote().contains("hodnoty su"));
+            assertTrue("Given configuration does not have proper substring in note.", c.getNote().contains("hodnoty su"));
         }
 
     }

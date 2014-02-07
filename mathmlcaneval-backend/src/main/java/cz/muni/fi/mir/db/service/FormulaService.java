@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  *
- * @author Raikonen
+ * @author Dominik Szalai
  */
 public interface FormulaService
 {

@@ -26,7 +26,7 @@ public class UserRole implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "roleName")
+    @Column(name = "roleName",unique = true)
     private String roleName;
 
     public Long getId()

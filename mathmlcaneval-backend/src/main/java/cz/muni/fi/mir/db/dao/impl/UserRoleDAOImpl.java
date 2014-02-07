@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.UserRoleDAO;
 import cz.muni.fi.mir.db.domain.UserRole;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,7 +11,10 @@ import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Empt
+ * @author Dominik Szalai
+ * @author Robert Siska
+ * @version 1.0
+ * @since 1.0
  */
 @Repository(value = "userRoleDAO")
 public class UserRoleDAOImpl implements UserRoleDAO
@@ -77,7 +76,7 @@ public class UserRoleDAOImpl implements UserRoleDAO
     @Override
     public List<UserRole> getAllUserRoles()
     {
-        List<UserRole> resultList = new ArrayList<>();
+        List<UserRole> resultList = Collections.emptyList();
         try
         {
             resultList = entityManager.createQuery("SELECT ur FROM userRole ur", UserRole.class)

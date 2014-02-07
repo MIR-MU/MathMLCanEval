@@ -6,7 +6,6 @@ package cz.muni.fi.mir.tests;
 
 import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.service.AnnotationFlagService;
-import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,6 +59,8 @@ public class AnnotationFlagTest
 
         AnnotationFlag af = annotationFlagService.getAnnotationFlagByID(ID);
 
+        assertNotNull("AnnotationFlag was not created",af);
+        
         deepCompare(aFlags.get(0), af);
     }
 

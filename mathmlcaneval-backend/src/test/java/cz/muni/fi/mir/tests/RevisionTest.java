@@ -6,7 +6,6 @@ package cz.muni.fi.mir.tests;
 
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.service.RevisionService;
-import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -160,5 +159,4 @@ public class RevisionTest
         assertEquals("Given revision does not have expected hash.", expected.getRevisionHash(), actual.getRevisionHash());
         assertEquals("Given revision does not have expected note.", expected.getNote(), actual.getNote());
     }
-
 }

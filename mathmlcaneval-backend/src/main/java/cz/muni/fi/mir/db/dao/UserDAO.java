@@ -9,8 +9,19 @@ import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.List;
 
 /**
- *
- * @author Empt
+ *  The purpose of this interface is to provide basic CRUD operations and search 
+ * functionality on UserRole objects persisted inside any given database engine 
+ * specified by configuration. Since there might be some functionality that requires
+ * more operation calls, no transaction management should be managed on this layer.
+ * Also no validation is made on this layer so make sure you do not pass non-valid
+ * objects into implementation of this DAO (Database Access Object) layer.
+ * 
+ * @author Dominik Szalai
+ * @author Robert Siska
+ * 
+ * @version 1.0
+ * @since 1.0
+ * 
  */
 public interface UserDAO
 {
@@ -20,6 +31,7 @@ public interface UserDAO
     
     User getUserByID(Long id);
     User getUserByUsername(String username);
+    User getUserByEmail(String email);
     
     
     List<User> getAllUsers();

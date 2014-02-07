@@ -20,7 +20,8 @@ public interface UserService
     
     User getUserByID(Long id);
     User getUserByUsername(String username);
-    
+    User getUserByEmail(String email);
+   
     
     List<User> getAllUsers();
     List<User> getUsersByRole(UserRole userRole);

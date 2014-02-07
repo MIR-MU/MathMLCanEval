@@ -168,5 +168,11 @@ public class UserDAOImpl implements UserDAO
         
         return resultList;
     }
+
+    @Override
+    public User getUserByEmail(String email)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

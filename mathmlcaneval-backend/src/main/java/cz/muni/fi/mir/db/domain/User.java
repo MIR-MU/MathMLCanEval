@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.db.domain;
 
 import java.io.Serializable;
@@ -16,7 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 /**
- * @author Empt
+ * @author Dominik Szalai
+ * 
+ * @since 1.0
+ * @version 1.0
  */
 @Entity(name = "users")   // because user is 99 resrved word...
 public class User implements Serializable
@@ -31,11 +30,9 @@ public class User implements Serializable
     @Column(name = "realName")
     private String realName;
     @Column(name = "password")
-    private String password;
-    
-    @Column(name = "email")
+    private String password;    
+    @Column(name = "email", unique = true)
     private String email;
-
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
 
