@@ -8,6 +8,7 @@ import cz.muni.fi.mir.db.dao.UserDAO;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -79,7 +80,7 @@ public class UserDAOImpl implements UserDAO
     @Override
     public List<User> getAllUsers()
     {
-        List<User> resultList = new ArrayList<>();
+        List<User> resultList = Collections.emptyList();
         
         try
         {
@@ -97,7 +98,7 @@ public class UserDAOImpl implements UserDAO
     @Override
     public List<User> getUsersByRole(UserRole userRole)
     {
-        List<User> resultList = new ArrayList<>();
+        List<User> resultList = Collections.emptyList();
         
         try
         {
@@ -115,7 +116,7 @@ public class UserDAOImpl implements UserDAO
     @Override
     public List<User> findUserByRealName(String name)
     {
-        List<User> resultList = new ArrayList<>();
+        List<User> resultList = Collections.emptyList();
         
         try
         {
@@ -172,7 +173,18 @@ public class UserDAOImpl implements UserDAO
     @Override
     public User getUserByEmail(String email)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        User result = null;
+        try
+        {
+            result = entityManager.createQuery("SELECT u FROM users u WHERE u.email = :email", User.class)
+                    .setParameter("email", email).getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return result;
     }
     
 }

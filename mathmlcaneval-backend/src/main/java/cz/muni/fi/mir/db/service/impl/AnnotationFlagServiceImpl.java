@@ -5,6 +5,7 @@
 package cz.muni.fi.mir.db.service.impl;
 
 import cz.muni.fi.mir.db.dao.AnnotationFlagDAO;
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.service.AnnotationFlagService;
 import java.util.List;
@@ -62,5 +63,27 @@ public class AnnotationFlagServiceImpl implements AnnotationFlagService
     public List<AnnotationFlag> findAnnotationFlagByValue(String value)
     {
         return annotationFlagDAO.findAnnotationFlagByValue(value);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AnnotationFlag> getAllAnnotationFlagsFromRange(int start, int end)
+    {
+        if(start < 0)
+        {
+            throw new IllegalArgumentException("ERROR: start cannot be lower than zero. Start value is ["+start+"].");
+        }
+        else if(end < 0)
+        {
+            throw new IllegalArgumentException("ERROR: end cannot be lower than zero. End value is ["+start+"].");
+        }
+        else if(start > end)
+        {
+            throw new IllegalArgumentException("ERROR: end value cannot be lower than start value. Current value for end is ["+end+"] and for start ["+start+"]");
+        }
+        else
+        {
+            return annotationFlagDAO.getAllAnnotationFlagsFromRange(start, end);
+        }
     }
 }

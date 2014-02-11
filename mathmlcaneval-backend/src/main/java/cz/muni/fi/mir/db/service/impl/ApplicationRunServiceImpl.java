@@ -82,4 +82,26 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
     {
         return applicationRunDAO.getAllApplicationRunsByConfiguration(configuration);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ApplicationRun> getAllApplicationRunsFromRange(int start, int end)
+    {
+        if (start < 0)
+        {
+            throw new IllegalArgumentException("ERROR: start cannot be lower than zero. Start value is [" + start + "].");
+        } 
+        else if (end < 0)
+        {
+            throw new IllegalArgumentException("ERROR: end cannot be lower than zero. End value is [" + start + "].");
+        } 
+        else if (start > end)
+        {
+            throw new IllegalArgumentException("ERROR: end value cannot be lower than start value. Current value for end is [" + end + "] and for start [" + start + "]");
+        } 
+        else
+        {
+            return applicationRunDAO.getAllApplicationRunsFromRange(start, end);
+        }
+    }
 }

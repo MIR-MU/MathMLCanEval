@@ -51,10 +51,7 @@ public class TestTools
             return sd1.getId().compareTo(sd2.getId());
         }
     };
-
-    /**
-     *
-     */
+    
     public static Comparator<Revision> revisionComparator = new Comparator<Revision>()
     {
         @Override
@@ -90,6 +87,15 @@ public class TestTools
             return af1.getId().compareTo(af2.getId());
         }
     };
+    
+    public static Comparator<AnnotationFlag> annotationFlagComparatorInverted = new Comparator<AnnotationFlag>()
+    {
+        @Override
+        public int compare(AnnotationFlag af1, AnnotationFlag af2)
+        {
+            return af2.getId().compareTo(af1.getId());
+        }
+    };
 
     public static Comparator<Annotation> annotationComparator = new Comparator<Annotation>()
     {
@@ -97,6 +103,15 @@ public class TestTools
         public int compare(Annotation a1, Annotation a2)
         {
             return a1.getId().compareTo(a2.getId());
+        }
+    };
+    
+    public static Comparator<Annotation> annotationComparatorInverted = new Comparator<Annotation>()
+    {
+        @Override
+        public int compare(Annotation a1, Annotation a2)
+        {
+            return a2.getId().compareTo(a1.getId());
         }
     };
     
@@ -108,83 +123,13 @@ public class TestTools
             return ar1.getId().compareTo(ar2.getId());
         }
     };
-
-    public static String getConfig(boolean omit, boolean allow, boolean indent)
-    {
-        StringBuilder sb = new StringBuilder("<toor>");
-
-        sb.append("\t<omit>").append(omit).append("</omit>");
-        sb.append("\t<allow>").append(allow).append("</allow>");
-        sb.append("\t<indent>").append(indent).append("</indent>");
-
-        sb.append("</toor>");
-
-        return sb.toString();
-    }
     
-    public static String getFirstXML()
+    public static Comparator<ApplicationRun> applicationRunComparatorInverted = new Comparator<ApplicationRun>()
     {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                    + "<math>\n"
-                    + "  <mfrac linethickness=\"1\">\n"
-                    + "    \n"
-                    + "    <mrow>\n"
-                    + "      <mi> x </mi>\n"
-                    + "      <mo> + </mo>\n"
-                    + "      <mi> y </mi>\n"
-                    + "      <mo> + </mo>\n"
-                    + "      <mi> z </mi>\n"
-                    + "    </mrow>\n"
-                    + "    <!-- test -->\n"
-                    + "    <mrow>\n"
-                    + "      <mi> x </mi>\n"
-                    + "      \n"
-                    + "      <mo> + </mo>\n"
-                    + "      <mi> z </mi>\n"
-                    + "    </mrow>\n"
-                    + "  </mfrac>\n"
-                    + "  <mfenced>\n"
-                    + "  </mfenced>\n"
-                    + "</math>";
-    }
-    
-    
-    public static String getSecondXML()
-    {
-        return "<math mathvariant='italic'>\n" +
-            "    <mrow>\n" +
-            "        <mmultiscripts>\n" +
-            "            <mtext>R</mtext>\n" +
-            "            <mtext>i</mtext>\n" +
-            "            <none></none>\n" +
-            "            <none></none>\n" +
-            "            <mtext>j</mtext>\n" +
-            "            <mtext>kl</mtext>\n" +
-            "            <none></none>\n" +
-            "        </mmultiscripts>\n" +
-            "        <mo>=</mo>\n" +
-            "        <msup>\n" +
-            "            <mtext>g</mtext>\n" +
-            "            <mtext>jm</mtext>\n" +
-            "        </msup>\n" +
-            "        <msub>\n" +
-            "            <mtext>R</mtext>\n" +
-            "            <mtext>imkl</mtext>\n" +
-            "        </msub>\n" +
-            "        <mo>+</mo>\n" +
-            "        <msqrt>\n" +
-            "            <mn>1</mn>\n" +
-            "            <mo>-</mo>\n" +
-            "            <msup>\n" +
-            "                <mtext>g</mtext>\n" +
-            "                <mtext>jm</mtext>\n" +
-            "            </msup>\n" +
-            "            <msub>\n" +
-            "                <mtext>R</mtext>\n" +
-            "                <mtext>mikl</mtext>\n" +
-            "            </msub>\n" +
-            "        </msqrt>\n" +
-            "    </mrow>\n" +
-            "</math>";
-    }
+        @Override
+        public int compare(ApplicationRun ar1,ApplicationRun ar2)
+        {
+            return ar2.getId().compareTo(ar1.getId());
+        }
+    };
 }

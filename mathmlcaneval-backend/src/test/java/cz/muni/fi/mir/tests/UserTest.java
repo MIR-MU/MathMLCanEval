@@ -213,15 +213,12 @@ public class UserTest
     public void testGetByRoles()
     {
         logger.info("Running UserTest#testGetByRoles()");
-        User u1 = EntityFactory.createUser("username1", "password1", "real name1", "example@example.com", roles.get(1));
-        User u2 = EntityFactory.createUser("username2", "password2", "real name2", "example@example.com", roles.get(2));
-        User u3 = EntityFactory.createUser("username3", "password3", "real name3", "example@example.com", roles.subList(1, 3));
-        User u4 = EntityFactory.createUser("username4", "password4", "real name4", "example@example.com", roles.subList(1, 3));
-        
-        userService.createUser(u1);
-        userService.createUser(u2);
-        userService.createUser(u3);
-        userService.createUser(u4);
+        List<User> temp = DataTestTools.provideUserRoleListGeneral(roles);
+        temp.add(EntityFactory.createUser("username4", "password4", "real name4", "example4@example.com", roles.subList(1, 3)));
+        for(User u : temp)
+        {
+            userService.createUser(u);
+        }
         
 //        List<User> result = userService.getUsersByRoles(roles.subList(1, 3));
 //        
@@ -234,7 +231,20 @@ public class UserTest
     @Test
     public void testGetByEmail()
     {
-        //TODO
+        logger.info("Running UserTest#testGetByEmail()");
+        for(User u : users)
+        {
+            userService.createUser(u);
+        }
+        
+        User u1 = userService.getUserByEmail("example1@example.com");
+        User u2 = userService.getUserByEmail("example3@example.com");
+        
+        assertNotNull("User was not created", u1);
+        assertNotNull("User was not created", u2);
+        
+        deepCompare(users.get(0), u1);
+        deepCompare(users.get(2), u2);
     }
     
     

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.db.domain;
 
 import java.io.Serializable;
@@ -17,8 +13,13 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 /**
+ * This class serves as container for tests. Inside application run store all
+ * required values such as additional note, when test started and ended, who run
+ * the test, which configuration and revision was used.
  *
- * @author Empt
+ * @author Dominik Szalai
+ * @version 1.0
+ * @since 1.0
  */
 @Entity(name = "applicationRun")
 public class ApplicationRun implements Serializable

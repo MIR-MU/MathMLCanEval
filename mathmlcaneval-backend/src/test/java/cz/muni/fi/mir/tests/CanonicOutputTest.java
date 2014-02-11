@@ -134,9 +134,9 @@ public class CanonicOutputTest
             annotationService.createAnnotation(a);
         }
         
-        canonicOutputs.add(EntityFactory.createCanonicOutput(TestTools.getFirstXML(), similarityFormConverter.convert(TestTools.getFirstXML()), null, 512516l, appruns.get(0), annotations.subList(0, 2)));
-        canonicOutputs.add(EntityFactory.createCanonicOutput(TestTools.getFirstXML(), similarityFormConverter.convert(TestTools.getFirstXML()), null, 512516, appruns.get(1), annotations.subList(1, 2)));
-        canonicOutputs.add(EntityFactory.createCanonicOutput(TestTools.getSecondXML(), similarityFormConverter.convert(TestTools.getSecondXML()), null, 5125, appruns.get(1), annotations));
+        canonicOutputs.add(EntityFactory.createCanonicOutput(DataTestTools.getFirstXML(), similarityFormConverter.convert(DataTestTools.getFirstXML()), null, 512516l, appruns.get(0), annotations.subList(0, 2)));
+        canonicOutputs.add(EntityFactory.createCanonicOutput(DataTestTools.getFirstXML(), similarityFormConverter.convert(DataTestTools.getFirstXML()), null, 512516, appruns.get(1), annotations.subList(1, 2)));
+        canonicOutputs.add(EntityFactory.createCanonicOutput(DataTestTools.getSecondXML(), similarityFormConverter.convert(DataTestTools.getSecondXML()), null, 5125, appruns.get(1), annotations));
     }
     
     @Test

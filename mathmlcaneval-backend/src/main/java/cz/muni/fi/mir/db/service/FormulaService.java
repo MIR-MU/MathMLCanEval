@@ -26,5 +26,4 @@ public interface FormulaService
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
     List<Formula> getFormulasByProgram(Program program);
     List<Formula> getFormulasByUser(User user);
-    List<Formula> getFormulasBySimilarOutput(CanonicOutput canonicOutput);
 }

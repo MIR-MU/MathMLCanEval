@@ -22,6 +22,7 @@ public interface AnnotationService
     Annotation getAnnotationByID(Long id);
     
     List<Annotation> getAllAnnotations();
+    List<Annotation> getAllAnnotationsFromRange(int start, int end) throws IllegalArgumentException;
     List<Annotation> getAnnotationByUser(User user);
     List<Annotation> getAnnotationByFlag(AnnotationFlag flag);
     List<Annotation> findByNote(String note);

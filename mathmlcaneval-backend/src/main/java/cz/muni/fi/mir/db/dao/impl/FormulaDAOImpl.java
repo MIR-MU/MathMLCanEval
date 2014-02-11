@@ -7,13 +7,14 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.FormulaDAO;
-import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
@@ -58,24 +59,50 @@ public class FormulaDAOImpl implements FormulaDAO
     @Override
     public List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Formula> resultList = Collections.emptyList();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT f FROM formula f WHERE f.sourceDocument = :sourceDocument", Formula.class)
+                    .setParameter("sourceDocument", sourceDocument).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
     }
     @Override
     public List<Formula> getFormulasByProgram(Program program)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Formula> resultList = Collections.emptyList();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT f FROM formula f WHERE f.program = :program", Formula.class)
+                    .setParameter("program", program).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
     }
 
     @Override
     public List<Formula> getFormulasByUser(User user)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Formula> resultList = Collections.emptyList();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT f FROM formula f WHERE f.user = :user", Formula.class)
+                    .setParameter("user", user).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
     }
-
-    @Override
-    public List<Formula> getFormulasBySimilarOutput(CanonicOutput canonicOutput)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

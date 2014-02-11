@@ -7,7 +7,6 @@ package cz.muni.fi.mir.db.domain;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,7 +31,7 @@ public class CanonicOutput implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "outputForm",columnDefinition = "text")
+    @Column(name = "outputForm",columnDefinition = "TEXT",length = 10000)
     private String outputForm;
 
     @Column(name = "similarForm")

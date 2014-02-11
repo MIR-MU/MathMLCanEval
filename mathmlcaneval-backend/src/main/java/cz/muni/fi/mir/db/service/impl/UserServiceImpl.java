@@ -91,9 +91,10 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getUserByEmail(String email)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return userDAO.getUserByEmail(email);
     }
     
 }

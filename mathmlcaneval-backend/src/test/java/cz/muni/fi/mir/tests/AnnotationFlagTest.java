@@ -6,8 +6,11 @@ package cz.muni.fi.mir.tests;
 
 import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.service.AnnotationFlagService;
+import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.RandomString;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -41,7 +44,8 @@ public class AnnotationFlagTest
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(AnnotationFlagTest.class);
 
     @Autowired
-    private AnnotationFlagService annotationFlagService;
+    private AnnotationFlagService annotationFlagService;    
+    private RandomString randomString = new RandomString(8);
     private List<AnnotationFlag> aFlags = new ArrayList<>();
     private static final Long ID = new Long(1);
 
@@ -136,6 +140,33 @@ public class AnnotationFlagTest
         for (AnnotationFlag af : result)
         {
             assertTrue("AnnotationFlag object does not have proper value.", af.getFlagValue().contains("PROPER"));
+        }
+    }
+    
+    @Test
+    public void testGetAllFromRange()
+    {
+        logger.info("Running AnnotationFlagTest#testGetAllFromRange()");
+        
+        List<AnnotationFlag> temp = new ArrayList<>();
+        for(int i =0 ; i < 100;i++)
+        {
+            AnnotationFlag af = EntityFactory.createAnnotaionFlag(randomString.nextString());
+            temp.add(af);
+            
+            annotationFlagService.createFlagAnnotation(af);
+        }
+        Collections.sort(temp, TestTools.annotationFlagComparatorInverted);
+        
+        temp = temp.subList(30, 75);
+        
+        List<AnnotationFlag> result = annotationFlagService.getAllAnnotationFlagsFromRange(30, 75);
+        
+        assertEquals(TestTools.ERROR_LIST_SIZE,temp.size(),result.size());
+        
+        for(int i = 0 ; i < temp.size(); i++)
+        {
+            deepCompare(temp.get(i), result.get(i));
         }
     }
 

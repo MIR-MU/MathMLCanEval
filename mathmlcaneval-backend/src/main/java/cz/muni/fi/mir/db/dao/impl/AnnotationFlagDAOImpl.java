@@ -1,6 +1,7 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.AnnotationFlagDAO;
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.tools.Tools;
 import java.util.Collections;
@@ -97,5 +98,23 @@ public class AnnotationFlagDAOImpl implements AnnotationFlagDAO
             
             return resultList;
         }
+    }
+
+    @Override
+    public List<AnnotationFlag> getAllAnnotationFlagsFromRange(int start, int end)
+    {
+        List<AnnotationFlag> resultList = Collections.emptyList();
+        
+        try
+        {
+            resultList = entityManager.createQuery("SELECT af FROM annotationflag af ORDER BY af.id DESC",AnnotationFlag.class)
+                    .setFirstResult(start).setMaxResults(end-start).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.db.domain;
 
 import java.io.Serializable;
@@ -14,8 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
- * @author emptak
+ * The purpose of this class is to capture Configuration which was used during testing.
+ * Because value is stored as Text String with length 10000 so capacity is nearly unlimited.
+ * If we are using PostgreSQL database column type will be converted into TEXT.
+ * 
+ * @author Dominik Szalai
+ * 
+ * @version 1.0
+ * @since 1.0
  */
 @Entity(name = "configuration")
 public class Configuration implements Serializable
@@ -27,7 +28,7 @@ public class Configuration implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "config")
+    @Column(name = "config",columnDefinition = "text",length = 10000)
     private String config;
 
     @Column(name = "name")

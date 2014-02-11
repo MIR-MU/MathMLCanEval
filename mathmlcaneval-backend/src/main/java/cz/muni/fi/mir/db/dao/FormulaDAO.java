@@ -6,7 +6,6 @@
 
 package cz.muni.fi.mir.db.dao;
 
-import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
@@ -26,5 +25,4 @@ public interface FormulaDAO
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
     List<Formula> getFormulasByProgram(Program program);
     List<Formula> getFormulasByUser(User user);
-    List<Formula> getFormulasBySimilarOutput(CanonicOutput canonicOutput);
 }

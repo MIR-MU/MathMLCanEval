@@ -78,7 +78,7 @@ public class ConfigurationTest
 
         result.setName("hello");
         result.setNote("1:2 nakoniec");
-        result.setConfig(TestTools.getConfig(false, false, true));
+        result.setConfig(DataTestTools.getConfig(false, false, true));
 
         configurationService.updateConfiguration(result);
 

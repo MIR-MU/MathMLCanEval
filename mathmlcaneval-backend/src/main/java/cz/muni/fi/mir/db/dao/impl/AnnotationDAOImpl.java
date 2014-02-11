@@ -87,7 +87,7 @@ public class AnnotationDAOImpl implements AnnotationDAO
         }
         catch(NoResultException nre)
         {
-            logger.debug(resultList);
+            logger.debug(nre);
         }
         
         return resultList;
@@ -128,4 +128,22 @@ public class AnnotationDAOImpl implements AnnotationDAO
         
         return resultList;
     }    
+
+    @Override
+    public List<Annotation> getAllAnnotationsFromRange(int start, int end)
+    {
+        List<Annotation> resultList = Collections.emptyList();
+        
+        try
+        {
+            resultList = entityManager.createQuery("SELECT a FROM annotation a ORDER BY a.id DESC",Annotation.class)
+                    .setFirstResult(start).setMaxResults(end-start).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
+    }
 }

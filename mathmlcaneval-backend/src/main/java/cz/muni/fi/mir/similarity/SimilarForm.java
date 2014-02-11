@@ -6,6 +6,7 @@
 
 package cz.muni.fi.mir.similarity;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +19,10 @@ import javax.persistence.Table;
  */
 @Table(name = "canonicOutput")
 @Entity
-public class SimilarForm
+public class SimilarForm implements Serializable
 {
+    private static final long serialVersionUID = 3861587013945745864L;
+    
     @Id
     @Column(name="id")
     private Long id;

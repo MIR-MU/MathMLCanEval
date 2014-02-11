@@ -25,6 +25,7 @@ public interface ApplicationRunService
     ApplicationRun getApplicationRunByID(Long id);
     
     List<ApplicationRun> getAllApplicationRuns();
+    List<ApplicationRun> getAllApplicationRunsFromRange(int start, int end);
     List<ApplicationRun> getAllApplicationRunsByUser(User user);
     List<ApplicationRun> getAllApplicationRunsByRevision(Revision revision);
     List<ApplicationRun> getAllApplicationRunsByConfiguration(Configuration configuration);

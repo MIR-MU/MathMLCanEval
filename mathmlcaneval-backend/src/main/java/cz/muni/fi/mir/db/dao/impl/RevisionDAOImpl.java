@@ -7,6 +7,7 @@ package cz.muni.fi.mir.db.dao.impl;
 import cz.muni.fi.mir.db.dao.RevisionDAO;
 import cz.muni.fi.mir.db.domain.Revision;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -77,7 +78,7 @@ public class RevisionDAOImpl implements RevisionDAO
     @Override
     public List<Revision> getAllRevisions()
     {
-        List<Revision> result = new ArrayList<>();
+        List<Revision> result = Collections.emptyList();
         
         try
         {
@@ -95,7 +96,7 @@ public class RevisionDAOImpl implements RevisionDAO
     @Override
     public List<Revision> findRevisionByNote(String note)
     {
-        List<Revision> resultList = new ArrayList<>();
+        List<Revision> resultList = Collections.emptyList();
         
         try
         {

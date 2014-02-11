@@ -68,11 +68,4 @@ public class FormulaServiceImpl implements FormulaService
     {
         return formulaDAO.getFormulasByUser(user);
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Formula> getFormulasBySimilarOutput(CanonicOutput canonicOutput)
-    {
-        return formulaDAO.getFormulasBySimilarOutput(canonicOutput);
-    }
 }

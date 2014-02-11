@@ -6,7 +6,7 @@ package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.SourceDocumentDAO;
 import cz.muni.fi.mir.db.domain.SourceDocument;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -77,7 +77,7 @@ public class SourceDocumentDAOImpl implements SourceDocumentDAO
     @Override
     public List<SourceDocument> getAllDocuments()
     {
-        List<SourceDocument> resultList = new ArrayList<>();
+        List<SourceDocument> resultList = Collections.emptyList();
         try
         {
             resultList = entityManager.createQuery("SELECT sd FROM sourceDocument sd", SourceDocument.class)
@@ -94,7 +94,7 @@ public class SourceDocumentDAOImpl implements SourceDocumentDAO
     @Override
     public List<SourceDocument> getDocumentsOnSubPath(String subPath)
     {
-        List<SourceDocument> resultList = new ArrayList<>();
+        List<SourceDocument> resultList = Collections.emptyList();
         try
         {
             resultList = entityManager.createQuery("SELECT sd FROM sourceDocument sd WHERE sd.documentPath LIKE :documentPath", SourceDocument.class)

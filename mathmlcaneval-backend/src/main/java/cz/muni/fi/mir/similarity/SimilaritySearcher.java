@@ -42,13 +42,14 @@ public class SimilaritySearcher
      * done (we have to obtain all pairs) we start calculating distance which
      * determines the difference between our desired canonic output and others
      * persisted inside database. For calculation is used Levensthein distance
-     * see {@linkplain http://en.wikipedia.org/wiki/Levenshtein_distance} based
-     * on Apache StringUtils calculation see
+     * see <a
+     * href="http://en.wikipedia.org/wiki/Levenshtein_distance">http://en.wikipedia.org/wiki/Levenshtein_distance</a>
+     * based on Apache StringUtils calculation see
      * {@link org.apache.commons.lang3.StringUtils#getLevenshteinDistance(java.lang.CharSequence, java.lang.CharSequence) }.
      * The maximum allowed distance is specified by given input parameter. After
      * distance is calculated and distance is in allowed range the <b>id</b> of
      * matched output is added into temp list which is later used for obtaining
-     * matched similar forms for given input. 
+     * matched similar forms for given input.
      *
      * @param canonicOutput output of which similar forms are to be found inside
      * database
@@ -66,10 +67,11 @@ public class SimilaritySearcher
         try
         {
             if (optimizeLength)
-            {  
+            {
                 sForms = entityManager.createQuery("SELECT sf FROM SimilarForm sf WHERE LENGTH(sf.similarForm) = :stringLength", SimilarForm.class)
                         .setParameter("stringLength", canonicOutput.getSimilarForm().length()).getResultList();
-            } else
+            } 
+            else
             {
                 sForms = entityManager.createQuery("SELECT sf FROM SimilarForm sf", SimilarForm.class).getResultList();
             }
@@ -107,10 +109,10 @@ public class SimilaritySearcher
     }
 
     /**
-     * Method is same as {@link #findSimilarFormsUsingLevensthein(cz.muni.fi.mir.db.domain.CanonicOutput, int, boolean) 
+     * Method is same as {@link #findSimilarFormsUsingLevensthein(cz.muni.fi.mir.db.domain.CanonicOutput, int, boolean)
      * }. The only difference is in optimizeLength parameter which serves as
      * direct String upper bound length limitation. If set to 0 or any negative
-     * number {@link #findSimilarFormsUsingLevensthein(cz.muni.fi.mir.db.domain.CanonicOutput, int, boolean) 
+     * number {@link #findSimilarFormsUsingLevensthein(cz.muni.fi.mir.db.domain.CanonicOutput, int, boolean)
      * }
      * with false is called. So if we call method with
      * <u>optimizeLength=</u><b>3</b> only strings that has length 3 or less are

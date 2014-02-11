@@ -12,6 +12,8 @@ import cz.muni.fi.mir.db.service.AnnotationFlagService;
 import cz.muni.fi.mir.db.service.AnnotationService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
+import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.RandomString;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +52,7 @@ public class AnnotationTest
     @Autowired private AnnotationFlagService annotationFlagService;
     @Autowired private UserService userService;
     @Autowired private UserRoleService userRoleService;
+    private RandomString randomString = new RandomString(8);
     
     private List<AnnotationFlag> aFlags = new ArrayList<>();
     private List<Annotation> annotations = new ArrayList<>();
@@ -206,6 +209,34 @@ public class AnnotationTest
         for(Annotation a : resultList)
         {
             assertTrue("Given annotaion has wrong note set in its field.",a.getNote().contains("poz"));
+        }
+    }
+    
+    
+    @Test
+    public void testGetAllByRange()
+    {
+        logger.info("Running AnnotationTest#testGetAllByRange()");
+        
+        List<Annotation> temp = new ArrayList<>();
+        for(int i = 0 ; i < 100; i++)
+        {
+            Annotation a  = EntityFactory.createAnnotation(randomString.nextString(), users.get(1), aFlags.get(2));
+            
+            temp.add(a);
+            annotationService.createAnnotation(a);
+        }
+        
+        Collections.sort(temp, TestTools.annotationComparatorInverted);
+        temp = temp.subList(40,80);
+        
+        List<Annotation> result = annotationService.getAllAnnotationsFromRange(40, 80);
+        
+        assertEquals(TestTools.ERROR_LIST_SIZE, temp.size(),result.size());
+        
+        for(int i = 0 ; i < result.size();i++)
+        {
+            deepCompare(temp.get(i), result.get(i));
         }
     }
     

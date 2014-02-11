@@ -15,6 +15,8 @@ import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
+import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.RandomString;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,6 +61,8 @@ public class ApplicationRunTest
     private UserService userService;
     @Autowired
     private ApplicationRunService applicationRunService;
+    
+    private RandomString randomString = new RandomString(25);
 
     private static final Long ID = new Long(1);
     private List<Configuration> configs = new ArrayList<>(3);
@@ -225,6 +229,33 @@ public class ApplicationRunTest
         for (ApplicationRun apr : result)
         {
             assertEquals(configs.get(0), apr.getConfiguration());
+        }
+    }
+    
+    @Test
+    public void testGetAllApplicationRunsFromRange()
+    {
+        logger.info("Running ApplicationRunTest#testGetAllApplicationRunsFromRange()");
+        List<ApplicationRun> temp = new ArrayList<>();
+        for(int i = 0 ; i < 100; i++)
+        {
+            ApplicationRun ar = EntityFactory.createApplicationRun(randomString.nextString(),DataTestTools.getRandomDate(), DataTestTools.getRandomDate(), users.get(0), revs.get(1), configs.get(2));
+            temp.add(ar);
+            
+            applicationRunService.createApplicationRun(ar);
+        }
+        
+        Collections.sort(temp,TestTools.applicationRunComparatorInverted);
+        
+        temp = temp.subList(1, 31);
+        
+        List<ApplicationRun> result = applicationRunService.getAllApplicationRunsFromRange(1, 31);
+        
+        assertEquals(TestTools.ERROR_LIST_SIZE,temp.size(),result.size());
+        
+        for(int i = 0 ; i < result.size();i++)
+        {
+            deepCompare(temp.get(i), result.get(i));
         }
     }
 

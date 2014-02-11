@@ -122,6 +122,6 @@ public class User implements Serializable
     @Override
     public String toString()
     {
-        return "User{" + "id=" + id + ", username=" + username + ", password=" + password + ", userRoles=" + userRoles + '}';
+        return "User{" + "id=" + id + ", username=" + username + ", realName=" + realName + ", password=" + password + ", email=" + email + ", userRoles=" + userRoles + '}';
     }
 }

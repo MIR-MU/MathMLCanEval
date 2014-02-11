@@ -11,6 +11,7 @@ import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -64,7 +65,7 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     @Override
     public List<CanonicOutput> getCanonicOutputBySimilarForm(String form)
     {
-        List<CanonicOutput> resultList = new ArrayList<>();
+        List<CanonicOutput> resultList = Collections.emptyList();
         try
         {
             resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.similarForm = :similarForm", CanonicOutput.class)
@@ -81,7 +82,7 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     @Override
     public List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun)
     {
-        List<CanonicOutput> resultList = new ArrayList<>();
+        List<CanonicOutput> resultList = Collections.emptyList();
         try
         {
             resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun := appRun", CanonicOutput.class)
@@ -98,7 +99,7 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     @Override
     public List<CanonicOutput> getCanonicOutputByFormula(Formula formula)
     {
-        List<CanonicOutput> resultList = new ArrayList<>();
+        List<CanonicOutput> resultList = Collections.emptyList();
         try
         {
             resultList = entityManager.createQuery("SELECT f.outputs FROM formula f WHERE f.id = :formulaID", CanonicOutput.class)
@@ -115,7 +116,7 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     @Override
     public List<CanonicOutput> getCanonicOutputByParentFormula(Formula formula)
     {
-        List<CanonicOutput> resultList = new ArrayList<>();
+        List<CanonicOutput> resultList = Collections.emptyList();
         
         try
         {
@@ -133,7 +134,7 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     @Override
     public List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput)
     {
-        List<CanonicOutput> resultList = new ArrayList<>();
+        List<CanonicOutput> resultList = Collections.emptyList();
         
         try
         {

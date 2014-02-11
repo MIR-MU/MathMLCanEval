@@ -8,6 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * Class used as Wrapper for Application context. It also provides several methods
  * upon this AppCtx.
+ * 
  * @author Dominik Szalai <a href="mailto:emptulik&#64;gmail.com">emptulik&#64;gmail.com</a>
  */
 public class ApplicationContextWrapper implements ApplicationContextAware

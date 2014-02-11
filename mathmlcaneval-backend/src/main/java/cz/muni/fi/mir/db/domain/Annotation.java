@@ -1,7 +1,5 @@
 package cz.muni.fi.mir.db.domain;
 
-import cz.muni.fi.mir.db.domain.User;
-import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -14,7 +12,7 @@ import javax.persistence.ManyToOne;
 /**
  * The purpose of this class is to capture some comments of given Canonic
  * output. Class remembers user who submitted this annotation, note and
- * {@link cz.muni.fi.mir.domain.AnnotationFlag} which specifies in closer terms
+ * {@link cz.muni.fi.mir.db.domain.AnnotationFlag} which specifies in closer terms
  * the output result.
  *
  * @version 1.0
@@ -34,7 +32,7 @@ public class Annotation implements Serializable
     @ManyToOne
     private User user;
 
-    @Column(name = "note")
+    @Column(name = "note",columnDefinition = "text")
     private String note;
 
     @ManyToOne

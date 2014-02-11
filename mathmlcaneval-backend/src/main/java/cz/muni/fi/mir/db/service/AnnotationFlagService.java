@@ -46,6 +46,8 @@ public interface AnnotationFlagService
      */
     List<AnnotationFlag> getAllAnnotationFlags();
     
+    List<AnnotationFlag> getAllAnnotationFlagsFromRange(int start, int end);
+    
     /**
      * 
      * @param value

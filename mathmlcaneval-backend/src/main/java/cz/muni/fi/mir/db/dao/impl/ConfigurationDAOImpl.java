@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.ConfigurationDAO;
 import cz.muni.fi.mir.db.domain.Configuration;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -14,8 +10,11 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 /**
+ * @author Dominik Szalai
  *
- * @author Empt
+ * @version 1.0
+ * @since 1.0
+ *
  */
 @Repository(value = "configurationDAO")
 public class ConfigurationDAOImpl implements ConfigurationDAO
@@ -60,7 +59,7 @@ public class ConfigurationDAOImpl implements ConfigurationDAO
     @Override
     public List<Configuration> getAllCofigurations()
     {
-        List<Configuration> resultList = new ArrayList<>();
+        List<Configuration> resultList = Collections.emptyList();
         
         try
         {
@@ -78,7 +77,7 @@ public class ConfigurationDAOImpl implements ConfigurationDAO
     @Override
     public List<Configuration> getBySubstringNote(String subString)
     {
-        List<Configuration> resultList = new ArrayList<>();
+        List<Configuration> resultList = Collections.emptyList();
         
         try
         {
@@ -96,7 +95,7 @@ public class ConfigurationDAOImpl implements ConfigurationDAO
     @Override
     public List<Configuration> findyByName(String name)
     {
-        List<Configuration> resultList = new ArrayList<>();
+        List<Configuration> resultList = Collections.emptyList();
         try
         {
             resultList = entityManager.createQuery("SELECT c FROM configuration c WHERE c.name LIKE :name", Configuration.class)

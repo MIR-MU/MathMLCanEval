@@ -8,6 +8,7 @@ import cz.muni.fi.mir.db.dao.ProgramDAO;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.tools.Tools;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -62,7 +63,7 @@ public class ProgramDAOImpl implements ProgramDAO
     @Override
     public List<Program> getProgramByName(String name)
     {
-        List<Program> resultList = new ArrayList<>();
+        List<Program> resultList = Collections.emptyList();
         
         try
         {
@@ -80,7 +81,7 @@ public class ProgramDAOImpl implements ProgramDAO
     @Override
     public List<Program> getProgramByNameAndVersion(String name, String version)
     {
-        List<Program> resultList = new ArrayList<>();
+        List<Program> resultList = Collections.emptyList();
         if(Tools.getInstance().stringIsEmpty(name) && Tools.getInstance().stringIsEmpty(version))
         {
             return getAllPrograms();
@@ -102,7 +103,7 @@ public class ProgramDAOImpl implements ProgramDAO
     @Override
     public List<Program> getAllPrograms()
     {
-        List<Program> resultList = new ArrayList<>();
+        List<Program> resultList = Collections.emptyList();
         
         try
         {
