@@ -33,3 +33,8 @@ and open the template in the editor.
 {
     margin-bottom: 10px;
 }
+
+.userRoleTemplate
+{
+    display: none;
+}

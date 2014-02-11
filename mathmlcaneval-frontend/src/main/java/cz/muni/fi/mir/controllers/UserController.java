@@ -80,17 +80,18 @@ public class UserController
         if (result.hasErrors())
         {
             ModelMap mm = new ModelMap();
+            System.out.println(user);
             mm.addAttribute("userForm", user);
             mm.addAttribute(model);
-            return new ModelAndView("user_create");
+            mm.addAttribute("userRolesFormList", userRoleService.getAllUserRoles());
+            return new ModelAndView("user_create",mm);
         }
         
 
-        UserRole userRole = userRoleService.getUserRoleByName("ROLE_USER");
-        User u = null;
+        //UserRole userRole = userRoleService.getUserRoleByName("ROLE_USER");
+        User u = mapper.map(user, User.class);
         try {
-            String encodedPassword = Tools.getInstance().SHA1(user.getPassword());
-            u = EntityFactory.createUser(user.getUsername(), encodedPassword, user.getRealName(),user.getEmail(), userRole);
+            u.setPassword(Tools.getInstance().SHA1(u.getPassword()));
 
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex)
         {
@@ -140,14 +141,14 @@ public class UserController
         // nastudovat ako funguje cache
         //http://docs.spring.io/spring/docs/4.0.0.RC1/spring-framework-reference/html/cache.html
         // userrole sa totiz nemeni casto a je dobre to mat v cache ako furt selectit z db
-        List<UserRoleForm> userRolesFormList = new ArrayList<>();
-        List<UserRole> temp = userRoleService.getAllUserRoles();
-        for(UserRole ur : temp)
-        {
-            userRolesFormList.add(mapper.map(ur,UserRoleForm.class));
-        }
-        
-        mm.addAttribute("userRolesFormList",userRolesFormList);
+//        List<UserRoleForm> userRolesFormList = new ArrayList<>();
+//        List<UserRole> temp = userRoleService.getAllUserRoles();
+//        for(UserRole ur : temp)
+//        {
+//            userRolesFormList.add(mapper.map(ur,UserRoleForm.class));
+//        }
+        // roles does not have to be converted into forms
+        mm.addAttribute("userRolesFormList",userRoleService.getAllUserRoles());
         
         return new ModelAndView("user_edit",mm);        
     }
@@ -167,6 +168,8 @@ public class UserController
             ModelMap mm = new ModelMap();
             mm.addAttribute("userForm", userForm);
             mm.addAttribute(model);
+            
+            mm.addAttribute("userRolesFormList",userRoleService.getAllUserRoles());
             
             return new ModelAndView("user_edit",mm);
         }

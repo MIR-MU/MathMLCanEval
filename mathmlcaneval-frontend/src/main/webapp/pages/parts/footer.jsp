@@ -16,10 +16,34 @@
 <script type="text/javascript" src="<c:url value="/resources/js/shAutoloader.js" />"></script>
 <script>
     SyntaxHighlighter.autoloader(
-  'xml  <c:url value="/resources/js/shBrushXml.js" />'
-);
- 
-SyntaxHighlighter.all();
+            'xml  <c:url value="/resources/js/shBrushXml.js" />'
+            );
+
+    SyntaxHighlighter.all();
+
+    $(document).ready(function() {
+        if($("#userRolesRows > div").length === 0)
+        {
+            $("#userRolesRows").append(getUserRolesHTML()); 
+        }  
+
+        $(this).on('click','.addrow',function() {
+            $("#userRolesRows").append(getUserRolesHTML()); 
+        });
+    });
+
+    function getUserRolesHTML()
+    {
+        var count = $("#userRolesRows > div").length;
+        console.log(count);
+        var $html = $(".userRoleTemplate").clone();
+        $html.find("select").attr({
+            'id': 'userRoleForms' + count,
+            'name' : 'userRoleForms['+count+']'
+        });
+        
+        return $html.html();
+    }
 </script>
 </body>
 </html>

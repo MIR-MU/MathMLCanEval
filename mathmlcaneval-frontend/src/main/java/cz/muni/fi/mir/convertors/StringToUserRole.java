@@ -36,7 +36,14 @@ public class StringToUserRole implements Converter<String, UserRoleForm>
         }
         else
         {
-            return mapper.map(userRoleService.getUserRoleByID(new Long(source)), UserRoleForm.class);
+            if(source.equals("-1"))
+            {
+                return null;
+            }
+            else
+            {
+                return mapper.map(userRoleService.getUserRoleByID(new Long(source)), UserRoleForm.class);
+            }            
         }
     }    
 }
