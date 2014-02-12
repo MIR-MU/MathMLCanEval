@@ -21,17 +21,64 @@ import java.util.List;
 public interface ConfigurationDAO
 {
 
+    /**
+     * Method creates given Configuration inside database.
+     *
+     * @param configuration to be created.
+     */
     void createConfiguration(Configuration configuration);
 
+    /**
+     * Method updates given Configuration inside database.
+     *
+     * @param configuration Configuration to be updated.
+     */
     void updateConfiguration(Configuration configuration);
 
+    /**
+     * Method removes Configuration from database. Because EntityManager just
+     * checks ID, no other values than ID have to be set
+     *
+     * @param configuration to be deleted
+     */
     void deleteConfiguration(Configuration configuration);
 
+    /**
+     * Method fetches Configuration from database based on given ID passed as
+     * method argument.
+     *
+     * @param id of Configuration to be obtained
+     * @return Configuration with given ID, null if there is no such
+     * Configuration.
+     */
     Configuration getConfigurationByID(Long id);
 
+    /**
+     * Method fetches all Configurations out of database in <b>DESCENDING</b>
+     * order.
+     *
+     * @return List of Configurations in descending order. If there are no
+     * Configurations yet then empty List is returned.
+     */
     List<Configuration> getAllCofigurations();
 
+    /**
+     * Method fetches all Configurations from database that have given subString
+     * passed as method argument in note.
+     *
+     * @param subString to be found in Configuration note
+     * @return List of Configurations having given subString in note. Empty List
+     * if there are no such Configurations.
+     */
     List<Configuration> getBySubstringNote(String subString);
 
+    /**
+     * Method used for searching between Configuration with aim to find
+     * Configurations having given name in their name.
+     *
+     * @param name of Configuration to be found
+     * @return List of Configurations containing given name in their name. Empty
+     * List if there are no such Configurations.
+     */
     List<Configuration> findyByName(String name);
 }

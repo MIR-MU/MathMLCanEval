@@ -7,7 +7,6 @@ package cz.muni.fi.mir.db.dao.impl;
 import cz.muni.fi.mir.db.dao.UserDAO;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -140,7 +139,7 @@ public class UserDAOImpl implements UserDAO
     public List<User> getUsersByRoles(List<UserRole> roles)
     {
         
-        List<User> resultList = new ArrayList<>();
+        List<User> resultList = Collections.emptyList();
         
         
         StringBuilder query = new StringBuilder("SELECT u FROM users u WHERE ");

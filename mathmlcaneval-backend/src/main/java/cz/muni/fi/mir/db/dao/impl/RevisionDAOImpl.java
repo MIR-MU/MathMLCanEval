@@ -6,7 +6,6 @@ package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.RevisionDAO;
 import cz.muni.fi.mir.db.domain.Revision;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;

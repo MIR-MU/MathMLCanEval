@@ -1,7 +1,6 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.AnnotationFlagDAO;
-import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.tools.Tools;
 import java.util.Collections;

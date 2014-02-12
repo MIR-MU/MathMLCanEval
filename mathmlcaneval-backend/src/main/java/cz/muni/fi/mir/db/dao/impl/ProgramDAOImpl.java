@@ -7,7 +7,6 @@ package cz.muni.fi.mir.db.dao.impl;
 import cz.muni.fi.mir.db.dao.ProgramDAO;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.tools.Tools;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
