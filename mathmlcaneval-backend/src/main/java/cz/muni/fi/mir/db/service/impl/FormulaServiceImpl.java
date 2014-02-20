@@ -50,6 +50,13 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = true)
+    public Formula getFormulaByID(Long id)
+    {
+        return formulaDAO.getFormulaByID(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocumen)
     {
         return formulaDAO.getFormulasBySourceDocument(sourceDocumen);

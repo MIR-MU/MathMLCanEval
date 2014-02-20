@@ -39,6 +39,18 @@
     <mapping>
         <class-a>cz.muni.fi.mir.db.domain.Formula</class-a>
         <class-b>cz.muni.fi.mir.forms.FormulaForm</class-b>
+        <field>
+            <a>program</a>
+            <b>programForm</b>
+        </field>
+        <field>
+            <a>sourceDocument</a>
+            <b>sourceDocumentForm</b>
+        </field>
+        <field>
+            <a>user</a>
+            <b>userForm</b>
+        </field>
     </mapping>
     <mapping>
         <class-a>cz.muni.fi.mir.db.domain.Program</class-a>

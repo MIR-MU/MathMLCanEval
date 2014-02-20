@@ -6,6 +6,7 @@ package cz.muni.fi.mir.forms;
 
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 import org.joda.time.DateTime;
 
 /**
@@ -17,11 +18,13 @@ public class FormulaForm
     private Long id;        
     private String xml;                         
     private String note;
+    @NotNull(message = "{validator.formula.sourceDocument.empty}")
     private SourceDocumentForm sourceDocumentForm;
     private DateTime insertTime;
+    @NotNull(message = "{validator.formula.program.empty}")
     private ProgramForm programForm; 
-    private UserForm userForm;    
-    private Set<CanonicOutputForm> canonicOutputForms;  
+    private UserForm userForm;
+    private Set<CanonicOutputForm> canonicOutputForms;
     private Set<FormulaForm> similarFormulaForms;
 
     public Long getId()

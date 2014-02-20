@@ -64,6 +64,8 @@
                                     <li><a href="${pageContext.request.contextPath}/configuration/create/"><spring:message code="navigation.configuration.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/configuration/list/"><spring:message code="navigation.configuration.list" /></a></li>
                                     <li class="divider"></li>
+                                    <li><a href="${pageContext.request.contextPath}/formula/create/"><spring:message code="navigation.formula.create" /></a></li>
+                                    <li class="divider"></li>
                                 </ul>
                             </li>
                         </sec:authorize>
@@ -91,6 +93,8 @@
                                     <li class="divider"></li>
                                     <li><a href="${pageContext.request.contextPath}/userrole/create/"><spring:message code="navigation.userrole.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/userrole/list/"><spring:message code="navigation.userrole.list" /></a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="${pageContext.request.contextPath}/formula/create/"><spring:message code="navigation.formula.create" /></a></li>
                                     <li class="divider"></li>
                                     <li><a href="${pageContext.request.contextPath}/user/logout/"><spring:message code="navigation.section.logout" /></a></li>
                                 </ul>

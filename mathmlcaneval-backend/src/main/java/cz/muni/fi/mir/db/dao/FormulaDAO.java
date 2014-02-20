@@ -21,7 +21,9 @@ public interface FormulaDAO
     void createFormula(Formula formula);
     void updateFormula(Formula formula);
     void deleteFormula(Formula formula);
-    
+
+    Formula getFormulaByID(Long id);
+
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
     List<Formula> getFormulasByProgram(Program program);
     List<Formula> getFormulasByUser(User user);

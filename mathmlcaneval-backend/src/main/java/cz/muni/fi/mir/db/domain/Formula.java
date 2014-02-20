@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -33,7 +34,7 @@ public class Formula implements Serializable
     private Long id;                            // db id
 
     //@Type(type="cz.muni.fi.mir.domain.SQLXMLType")
-    @Column(name = "xml")
+    @Column(name = "xml", columnDefinition = "text")
     private String xml;                         // formulka v MathML
     @Column(name = "note")
     private String note;                        // poznamka
@@ -44,7 +45,7 @@ public class Formula implements Serializable
     private DateTime insertTime;                    // datum pridani
     @ManyToOne
     private Program program;                    // konverzni program
-    @OneToOne
+    @ManyToOne
     private User user;                          // kto ju vlozil
     @OneToMany
     private Set<CanonicOutput> outputs;         // 

@@ -63,6 +63,8 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <list>
+                <bean class="cz.muni.fi.mir.convertors.StringToProgram"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToSourceDocument"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToUserRole"/>
             </list>
         </property>

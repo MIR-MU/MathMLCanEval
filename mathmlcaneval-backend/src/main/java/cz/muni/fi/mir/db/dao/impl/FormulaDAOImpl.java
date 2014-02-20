@@ -57,6 +57,12 @@ public class FormulaDAOImpl implements FormulaDAO
     }
 
     @Override
+    public Formula getFormulaByID(Long id)
+    {
+        return entityManager.find(Formula.class, id);
+    }
+
+    @Override
     public List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument)
     {
         List<Formula> resultList = Collections.emptyList();

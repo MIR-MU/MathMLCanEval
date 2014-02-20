@@ -190,6 +190,27 @@ public class EntityFactory
     }
 
     /**
+     * Method used for creating SourceDocument with given id
+     *
+     * @param id of source document
+     * @return source document with given id
+     */
+    public static SourceDocument createSourceDocument(Long id)
+    {
+        if (id == null)
+        {
+            return createSourceDocument();
+        }
+        else
+        {
+            SourceDocument sc = createSourceDocument();
+            sc.setId(id);
+
+            return sc;
+        }
+    }
+
+    /**
      * Method used for creating new SourceDocument with fields set as were given
      * on input.
      *
