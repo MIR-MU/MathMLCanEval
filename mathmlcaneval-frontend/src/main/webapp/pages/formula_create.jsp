@@ -38,6 +38,33 @@
             <form:errors path="xml" element="div" class="col-sm-3 alert alert-danger"/>
         </div>
         <div class="form-group">
+            <label class="col-sm-2 control-label"><spring:message code="entity.formula.upload" /></label>
+            <div class="col-sm-7">
+                <input id="fileupload" type="file" path="files[]" data-url="${pageContext.request.contextPath}/formula/upload/" multiple><br/>
+                <div id="dropzone"><spring:message code="general.label.drop" /></div>
+                <div class="progress" id="progress">
+                    <div style="width: 0%;"></div>
+                </div>
+                <table class="table" id="uploaded-files">
+                    <thead>
+                        <tr>
+                            <th><spring:message code="general.label.filename" /></th>
+                            <th><spring:message code="general.label.filesize" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${uploadedFiles}" var="entry">
+                        <tr>
+                            <td><c:out value="${entry.name}" /></td>
+                            <td><c:out value="${entry.formattedSize}" /></td>
+                        </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-xm-7 col-sm-offset-2">
                 <button type="submit" class="btn btn-primary"><spring:message code="general.button.submit" /></button>
             </div>
