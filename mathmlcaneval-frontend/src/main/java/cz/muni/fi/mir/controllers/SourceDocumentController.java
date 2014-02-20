@@ -9,18 +9,18 @@ package cz.muni.fi.mir.controllers;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.forms.SourceDocumentForm;
-import javax.servlet.http.HttpServletRequest;
+import cz.muni.fi.mir.tools.EntityFactory;
 import javax.validation.Valid;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class SourceDocumentController
 {
     @Autowired private SourceDocumentService sourceDocumentService;
+    @Autowired private Mapper mapper;
     
     @RequestMapping(value={"/","/list","/list/"},method = RequestMethod.GET)
     public ModelAndView list()
@@ -52,17 +53,8 @@ public class SourceDocumentController
     }
     
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.POST)
-    public ModelAndView createSubmit(@Valid @ModelAttribute("sourceDocumentForm") SourceDocumentForm sourceDocumentForm,
-            BindingResult result, Model model,HttpServletRequest request, @RequestParam CommonsMultipartFile[] fileUpload)
+    public ModelAndView createSubmit(@Valid @ModelAttribute("sourceDocumentForm") SourceDocumentForm sourceDocumentForm, BindingResult result, Model model)
     {
-        if(fileUpload == null || fileUpload.length == 1)
-        {
-            System.out.println(fileUpload[0].getOriginalFilename());
-            System.out.println(fileUpload[0].getName());
-            System.out.println(fileUpload[0].getStorageDescription());
-            
-        }
-            
         if(result.hasErrors())
         {
             ModelMap mm = new ModelMap();
@@ -73,6 +65,42 @@ public class SourceDocumentController
         }
         else
         {
+            sourceDocumentService.createSourceDocument(mapper.map(sourceDocumentForm, SourceDocument.class));
+            return new ModelAndView("redirect:/sourcedocument/list/");
+        }
+    }
+
+    @RequestMapping(value={"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
+    public ModelAndView deleteSourceDocument(@PathVariable Long id)
+    {
+        sourceDocumentService.deleteSourceDocument(EntityFactory.createSourceDocument(id));
+
+        return new ModelAndView("redirect:/sourcedocument/list/");
+    }
+
+    @RequestMapping(value ={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
+    public ModelAndView editSourceDocument(@PathVariable Long id)
+    {
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("sourceDocumentForm", mapper.map(sourceDocumentService.getSourceDocumentByID(id), SourceDocument.class));
+
+        return new ModelAndView("sourcedocument_edit",mm);
+    }
+
+    @RequestMapping(value={"/edit","/edit/"}, method = RequestMethod.POST)
+    public ModelAndView editSourceDocumentSubmit(@Valid @ModelAttribute("sourceDocumentForm") SourceDocumentForm sourceDocumentForm, BindingResult result, Model model)
+    {
+        if(result.hasErrors())
+        {
+            ModelMap mm = new ModelMap();
+            mm.addAttribute("sourceDocumentForm", sourceDocumentForm);
+            mm.addAttribute(model);
+            
+            return new ModelAndView("sourcedocument_edit",mm);
+        }
+        else
+        {
+            sourceDocumentService.updateSourceDocument(mapper.map(sourceDocumentForm, SourceDocument.class));
             
             return new ModelAndView("redirect:/sourcedocument/list/");
         }

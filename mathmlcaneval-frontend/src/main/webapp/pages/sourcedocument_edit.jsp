@@ -1,6 +1,7 @@
 <div class="container content">
-    <h1><spring:message code="entity.sourceDocument.create" /></h1>
-    <form:form method="post" action="${pageContext.request.contextPath}/sourcedocument/create/" commandName="sourceDocumentForm" cssClass="form-horizontal pull-top-50">
+    <h1><spring:message code="entity.sourceDocument.edit" /></h1>
+    <form:form method="post" action="${pageContext.request.contextPath}/sourcedocument/edit/" commandName="sourceDocumentForm" cssClass="form-horizontal pull-top-50">
+        <form:hidden path="id" />
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.sourceDocument.note" /></label>
             <div class="col-sm-7">
@@ -19,6 +20,6 @@
             <div class="col-xm-7 col-sm-offset-2">
                 <button type="submit" class="btn btn-primary"><spring:message code="general.button.submit" /></button>
             </div>
-        </div>        
+        </div>
     </form:form>
 </div>

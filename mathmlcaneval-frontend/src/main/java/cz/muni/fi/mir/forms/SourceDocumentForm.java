@@ -15,7 +15,7 @@ public class SourceDocumentForm
 {
     private Long id;    
     private String note;
-    @NotEmpty
+    @NotEmpty(message = "{validator.sourceDocument.documentPath.empty}")
     private String documentPath; 
 
     public Long getId()
