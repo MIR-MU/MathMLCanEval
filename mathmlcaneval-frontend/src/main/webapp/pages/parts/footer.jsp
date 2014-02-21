@@ -47,35 +47,22 @@
         return $html.html();
     }
 </script>
-<!-- jquery-fileupload plugin -->
-<script> 
-    $(function () {
-        $('#fileupload').fileupload({
-            dataType: 'json',
- 
-            done: function (e, data) {
-                $("tr:has(td)").remove();
-                $.each(data.result, function (index, file) {
- 
-                    $("#uploaded-files").append(
-                            $('<tr/>')
-                            .append($('<td/>').text(file.name))
-                            .append($('<td/>').text(file.size))
-                            )
-                });
-            },
- 
-            progressall: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $('#progress .bar').css(
-                    'width',
-                    progress + '%'
-                );
-            },
-
-            dropZone: $('#dropzone')
-        });
+<script>
+function refreshTable()
+{
+    $("#uploads-table").empty();
+    for (var i = 0; i < $("#fileinput").prop('files').length; ++i) {
+        $("#uploads-table").append('<tr><td>' + $("#fileinput").prop('files')[i].name + '</td><td>' + $("#fileinput").prop('files')[i].size + '</td></tr>');
+    }
+};
+$(document).ready(function() {
+    $("#fileinput").change(function() { refreshTable(); });
+    $("#filereset").click(function(e) { 
+        e.preventDefault();
+        $(this).parents("form:first")[0].reset();
+        refreshTable(); 
     });
+});
 </script>
 </body>
-</html>s
+</html>

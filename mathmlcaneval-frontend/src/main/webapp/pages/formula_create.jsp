@@ -1,6 +1,6 @@
 <div class="container content">
     <h1><spring:message code="entity.formula.create" /></h1>
-    <form:form method="post" action="${pageContext.request.contextPath}/formula/create/" commandName="formulaForm" cssClass="form-horizontal pull-top-50"
+    <form:form id="fileupload" method="post" action="${pageContext.request.contextPath}/formula/create/" commandName="formulaForm" cssClass="form-horizontal pull-top-50"
                enctype="multipart/form-data">
 
         <div class="form-group">
@@ -39,31 +39,25 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.formula.upload" /></label>
-            <div class="col-sm-7">
-                <input id="fileupload" type="file" path="files[]" data-url="${pageContext.request.contextPath}/formula/upload/" multiple><br/>
-                <div id="dropzone"><spring:message code="general.label.drop" /></div>
-                <div class="progress" id="progress">
-                    <div style="width: 0%;"></div>
-                </div>
-                <table class="table" id="uploaded-files">
+            <div class="col-sm-7 fileupload-buttonbar">
+                <span class="btn btn-primary fileinput-button">
+                   <span><spring:message code="general.label.addfiles" /></span>
+                   <input id="fileinput" type="file" name="uploadedFiles" multiple>
+                </span>
+                <input type="button" id="filereset" class="btn btn-warning cancel" value="<spring:message code="general.label.reset" />">
+
+                </button>
+                <table class="table">
                     <thead>
-                        <tr>
-                            <th><spring:message code="general.label.filename" /></th>
-                            <th><spring:message code="general.label.filesize" /></th>
-                        </tr>
+                       <tr>
+                           <td><spring:message code="general.label.filename" /></td>
+                           <td><spring:message code="general.label.filesize" /></td>
+                       </tr>
                     </thead>
-                    <tbody>
-                        <c:forEach items="${uploadedFiles}" var="entry">
-                        <tr>
-                            <td><c:out value="${entry.name}" /></td>
-                            <td><c:out value="${entry.formattedSize}" /></td>
-                        </tr>
-                        </c:forEach>
-                    </tbody>
+                    <tbody id="uploads-table" />
                 </table>
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-xm-7 col-sm-offset-2">
                 <button type="submit" class="btn btn-primary"><spring:message code="general.button.submit" /></button>

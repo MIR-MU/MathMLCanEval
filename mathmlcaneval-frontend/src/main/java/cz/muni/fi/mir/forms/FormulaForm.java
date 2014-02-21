@@ -6,8 +6,10 @@ package cz.muni.fi.mir.forms;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import org.joda.time.DateTime;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -26,6 +28,8 @@ public class FormulaForm
     private UserForm userForm;
     private Set<CanonicOutputForm> canonicOutputForms;
     private Set<FormulaForm> similarFormulaForms;
+
+    private List<MultipartFile> uploadedFiles;
 
     public Long getId()
     {
@@ -115,6 +119,14 @@ public class FormulaForm
     public void setSimilarFormulaForms(Set<FormulaForm> similarFormulaForms)
     {
         this.similarFormulaForms = similarFormulaForms;
+    }
+
+    public List<MultipartFile> getUploadedFiles() {
+        return uploadedFiles;
+    }
+
+    public void setUploadedFiles(List<MultipartFile> uploadedFiles) {
+        this.uploadedFiles = uploadedFiles;
     }
 
     @Override
