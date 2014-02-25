@@ -64,5 +64,12 @@ $(document).ready(function() {
     });
 });
 </script>
+<script>
+$(document).ready(function() {
+    $("#xml").on('load keyup keypress paste', function() {
+        $("#mathml-preview").html($(this).val())
+    }).trigger("keyup")
+});
+</script>
 </body>
 </html>

@@ -2,7 +2,7 @@
     <h1><spring:message code="entity.formula.entry" /></h1>
     <div class="pull-right">
         <div class="pull-right">
-            <a href="${pageContext.request.contextPath}/formula/list/" class="btn btn-primary space-bottom-10"><spring:message code="general.label.goback" /></a>        
+            <a href="${pageContext.request.contextPath}/formula/edit/${formulaEntry.id}" class="btn btn-primary space-bottom-10"><spring:message code="entity.formula.edit" /></a>
         </div>
     </div>
     <div class="row pull-top-50">
@@ -66,7 +66,7 @@
                             </pre>
                         </div>
                         <div class="col-lg-6">
-<c:out value="${formulaEntry.xml}" />
+<c:out value="${formulaEntry.xml}" escapeXml="false" />
                         </div>
 
                     </div>

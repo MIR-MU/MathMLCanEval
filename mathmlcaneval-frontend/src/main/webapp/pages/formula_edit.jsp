@@ -1,8 +1,8 @@
 <div class="container content">
-    <h1><spring:message code="entity.formula.create" /></h1>
-    <form:form id="fileupload" method="post" action="${pageContext.request.contextPath}/formula/create/" commandName="formulaForm" cssClass="form-horizontal pull-top-50"
-               enctype="multipart/form-data">
-
+    <h1><spring:message code="entity.formula.edit" /></h1>
+    <form:form method="post" action="${pageContext.request.contextPath}/formula/edit/" commandName="formulaForm" cssClass="form-horizontal pull-top-50">
+        <form:hidden path="id" />
+        <form:hidden path="userForm.id" />
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.formula.sourceDocument" /></label>
             <div class="col-sm-7">
@@ -31,8 +31,8 @@
             <form:errors path="note" element="div" class="col-sm-3 alert alert-danger"/>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label"><spring:message code="entity.formula.xml" /></label>
-            <div class="col-sm-6">
+            <label class="col-lg-2 control-label"><spring:message code="entity.formula.xml" /></label>
+            <div class="col-lg-6">
                 <form:textarea path="xml" cssClass="form-control" rows="15" />
             </div>
             <div class="col-lg-4">
@@ -40,27 +40,7 @@
             </div>
             <form:errors path="xml" element="div" class="col-sm-3 alert alert-danger"/>
         </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label"><spring:message code="entity.formula.upload" /></label>
-            <div class="col-sm-7 fileupload-buttonbar">
-                <span class="btn btn-primary fileinput-button">
-                   <span><spring:message code="general.label.addfiles" /></span>
-                   <input id="fileinput" type="file" name="uploadedFiles" multiple>
-                </span>
-                <input type="button" id="filereset" class="btn btn-warning cancel" value="<spring:message code="general.label.reset" />">
 
-                </button>
-                <table class="table">
-                    <thead>
-                       <tr>
-                           <td><spring:message code="general.label.filename" /></td>
-                           <td><spring:message code="general.label.filesize" /></td>
-                       </tr>
-                    </thead>
-                    <tbody id="uploads-table" />
-                </table>
-            </div>
-        </div>
         <div class="form-group">
             <div class="col-xm-7 col-sm-offset-2">
                 <button type="submit" class="btn btn-primary"><spring:message code="general.button.submit" /></button>

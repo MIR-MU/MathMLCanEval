@@ -5,6 +5,7 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.db.service.ProgramService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
@@ -70,9 +71,9 @@ public class FormulaController
         {
             ModelMap mm = new ModelMap();
             mm.addAttribute("formulaForm", formulaForm);
-            mm.addAttribute(model);
             mm.addAttribute("programFormList", programService.getAllPrograms());
             mm.addAttribute("sourceDocumentFormList", sourceDocumentService.getAllDocuments());
+            mm.addAttribute(model);
 
             return new ModelAndView("formula_create", mm);
         } else
@@ -99,6 +100,42 @@ public class FormulaController
                     // ignore wrong uploads
                     logger.info(ex);
                 }
+            }
+
+            return new ModelAndView("redirect:/");
+        }
+    }
+
+    @RequestMapping(value = {"/edit/{id}", "/edit/{id}/"}, method = RequestMethod.GET)
+    public ModelAndView editFormula(@PathVariable Long id)
+    {
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("formulaForm", mapper.map(formulaService.getFormulaByID(id), FormulaForm.class));
+        mm.addAttribute("programFormList", programService.getAllPrograms());
+        mm.addAttribute("sourceDocumentFormList", sourceDocumentService.getAllDocuments());
+
+        return new ModelAndView("formula_edit", mm);
+    }
+
+    @RequestMapping(value = {"/edit", "/edit/"}, method = RequestMethod.POST)
+    public ModelAndView editFormulaSubmit(@Valid @ModelAttribute("formulaForm") FormulaForm formulaForm, BindingResult result, Model model) throws IOException
+    {
+        if (result.hasErrors())
+        {
+            ModelMap mm = new ModelMap();
+            mm.addAttribute("formulaForm", formulaForm);
+            mm.addAttribute("programFormList", programService.getAllPrograms());
+            mm.addAttribute("sourceDocumentFormList", sourceDocumentService.getAllDocuments());
+            mm.addAttribute(model);
+
+            return new ModelAndView("formula_edit", mm);
+        } else
+        {
+            
+            User user = userService.getUserByUsername(securityContext.getLoggedUser());
+            if (user != null && formulaForm.getUserForm().getId().equals(user.getId())) {
+                formulaForm.setInsertTime(DateTime.now());
+                formulaService.updateFormula(mapper.map(formulaForm, Formula.class));
             }
 
             return new ModelAndView("redirect:/");
