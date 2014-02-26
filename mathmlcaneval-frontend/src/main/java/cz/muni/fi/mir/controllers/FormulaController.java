@@ -15,6 +15,7 @@ import cz.muni.fi.mir.forms.UserForm;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.IOException;
 import javax.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +83,7 @@ public class FormulaController
 
             formulaForm.setUserForm(mapper.map(userService.getUserByUsername(user), UserForm.class));
             formulaForm.setInsertTime(DateTime.now());
-            if (formulaForm.getUploadedFiles().isEmpty())
+            if (!StringUtils.isBlank(formulaForm.getXml()))
             {
                 formulaService.createFormula(mapper.map(formulaForm, Formula.class));
             }
@@ -92,9 +93,12 @@ public class FormulaController
                 try
                 {
                     // check validity of file content
-                    formulaForm.setXml(new String(file.getBytes(), "UTF-8"));
-
-                    formulaService.createFormula(mapper.map(formulaForm, Formula.class));
+                    if (file.getSize() > 0)
+                    {
+                        formulaForm.setXml(new String(file.getBytes(), "UTF-8"));
+                        formulaForm.setInsertTime(DateTime.now());
+                        formulaService.createFormula(mapper.map(formulaForm, Formula.class));
+                    }
                 } catch (IOException ex)
                 {
                     // ignore wrong uploads
