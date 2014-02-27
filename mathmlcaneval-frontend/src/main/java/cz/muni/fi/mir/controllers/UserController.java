@@ -14,9 +14,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -71,6 +73,7 @@ public class UserController
         return new ModelAndView("user_create",mm);
     }
 
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value = {"/create","/create/"}, method = RequestMethod.POST)
     public ModelAndView createUser(
             @ModelAttribute("userForm") @Valid UserForm user,
@@ -102,6 +105,7 @@ public class UserController
         return new ModelAndView("redirect:/user/list/");
     }
     
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value = {"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
     public ModelAndView deleteUser(@PathVariable Long id)
     {
@@ -160,8 +164,9 @@ public class UserController
      * @param model
      * @return 
      */
+    @Secured("ROLE_USER")
     @RequestMapping(value={"/edit","/edit/"},method = RequestMethod.POST)
-    public ModelAndView editUserSubmit(@Valid @ModelAttribute("userForm") UserForm userForm, BindingResult result, Model model)
+    public ModelAndView editUserSubmit(@Valid @ModelAttribute("userForm") UserForm userForm, BindingResult result, Model model, HttpServletRequest request)
     {
         if(result.hasErrors())
         {
@@ -176,8 +181,13 @@ public class UserController
         else
         {
             User u = mapper.map(userForm,User.class);
-            if(userService.getUserByUsername(securityContext.getLoggedUser())
-                    .getUserRoles().contains(userRoleService.getUserRoleByName("ROLE_ADMINISTRATOR")))
+            try {
+                u.setPassword(Tools.getInstance ().SHA1(u.getPassword()));
+            } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex)
+            {
+                logger.fatal(null, ex);
+            }
+            if (request.isUserInRole("ROLE_ADMINISTRATOR"))
             {
                 //ak daco bude treba zatial neviem co.
             }
@@ -204,7 +214,13 @@ public class UserController
                     u.setPassword(uDB.getPassword());
                 }
             }
-            userService.updateUser(u);
+            if ((request.isUserInRole("ROLE_ADMINISTRATOR") || u.getUsername().equals(securityContext.getLoggedUser())))
+            {
+                userService.updateUser(u);
+            } else
+            {
+                logger.info(String.format("Blocked unauthorized editing of user %s triggered by user %s.", u.getUsername(), securityContext.getLoggedUser()));
+            }
             
             return new ModelAndView("redirect:/user/list/");
         }

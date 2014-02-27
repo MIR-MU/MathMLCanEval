@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -53,6 +54,7 @@ public class ProgramController
         return new ModelAndView("program_create",mm);
     }
     
+    @Secured("ROLE_USER")
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.POST)
     public ModelAndView createProgramSubmit(@Valid @ModelAttribute("programForm") ProgramForm programForm, BindingResult result, Model model)
     {
@@ -72,6 +74,7 @@ public class ProgramController
     }
     
     
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
     public ModelAndView deleteProgram(@PathVariable Long id)
     {
@@ -89,6 +92,7 @@ public class ProgramController
         return new ModelAndView("program_edit",mm);
     }
     
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/edit/","/edit/"}, method = RequestMethod.POST)
     public ModelAndView editProgramSubmit(@Valid @ModelAttribute("programForm") ProgramForm programForm, BindingResult result, Model model)
     {

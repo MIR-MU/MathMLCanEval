@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -65,6 +66,7 @@ public class FormulaController
         return new ModelAndView("formula_create", mm);
     }
 
+    @Secured("ROLE_USER")
     @RequestMapping(value = {"/create", "/create/"}, method = RequestMethod.POST)
     public ModelAndView createFormulaSubmit(@Valid @ModelAttribute("formulaForm") FormulaForm formulaForm, BindingResult result, Model model) throws IOException
     {
@@ -120,6 +122,7 @@ public class FormulaController
     }
 
     //TODO: threaded
+    @Secured("ROLE_USER")
     @RequestMapping(value = {"/run/{id}", "/run/{id}/"}, method = RequestMethod.GET)
     public ModelAndView canonicalizeFormula(@PathVariable Long id)
     {
@@ -127,5 +130,20 @@ public class FormulaController
         mm.addAttribute("formulaEntry", formulaService.getFormulaByID(id));
 
         return new ModelAndView("formula_view", mm);
+    }
+
+    @Secured("ROLE_USER")
+    @RequestMapping(value={"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
+    public ModelAndView deleteFormula(@PathVariable Long id, HttpServletRequest request)
+    {
+        Formula f = formulaService.getFormulaByID(id);
+        if (request.isUserInRole("ROLE_ADMINISTRATOR") || f.getUser().getUsername().equals(securityContext.getLoggedUser()))
+        {
+            formulaService.deleteFormula(f);
+        } else
+        {
+            logger.info(String.format("Blocked unauthorized deletion of formula %d triggered by user %s.", id, securityContext.getLoggedUser()));
+        }
+        return new ModelAndView("redirect:/");
     }
 }

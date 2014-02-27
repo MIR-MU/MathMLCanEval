@@ -13,6 +13,7 @@ import cz.muni.fi.mir.tools.EntityFactory;
 import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -52,6 +53,7 @@ public class UserRoleController
         return new ModelAndView("userrole_create", mm);
     }
     
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.POST)
     public ModelAndView createUserRoleSubimt(@Valid @ModelAttribute("userRoleForm") UserRoleForm userRoleForm,BindingResult result, Model model)
     {
@@ -71,6 +73,7 @@ public class UserRoleController
         }
     }
     
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
     public ModelAndView deleteUserRole(@PathVariable Long id)
     {
@@ -88,6 +91,7 @@ public class UserRoleController
         return new ModelAndView("userrole_edit", mm);
     }
     
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/edit","/edit/"},method = RequestMethod.POST)
     public ModelAndView editUserRoleSubimt(@Valid @ModelAttribute("userRoleForm") UserRoleForm userRoleForm,BindingResult result, Model model)
     {

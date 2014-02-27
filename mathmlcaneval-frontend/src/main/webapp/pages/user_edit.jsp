@@ -10,7 +10,7 @@
         </c:choose> 
     </h1>
     <hr />
-    <form:form method="post" action="${pageContext.request.contextPath}/user/create/" commandName="userForm" cssClass="form-horizontal pull-top-50">
+    <form:form method="post" action="${pageContext.request.contextPath}/user/edit/" commandName="userForm" cssClass="form-horizontal pull-top-50">
         <form:hidden path="id" />
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.user.username" /></label>

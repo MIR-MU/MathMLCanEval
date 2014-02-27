@@ -13,6 +13,7 @@ import cz.muni.fi.mir.tools.EntityFactory;
 import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -52,6 +53,7 @@ public class SourceDocumentController
         return new ModelAndView("sourcedocument_create",mm);
     }
     
+    @Secured("ROLE_USER")
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.POST)
     public ModelAndView createSubmit(@Valid @ModelAttribute("sourceDocumentForm") SourceDocumentForm sourceDocumentForm, BindingResult result, Model model)
     {
@@ -70,6 +72,7 @@ public class SourceDocumentController
         }
     }
 
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
     public ModelAndView deleteSourceDocument(@PathVariable Long id)
     {
@@ -87,6 +90,7 @@ public class SourceDocumentController
         return new ModelAndView("sourcedocument_edit",mm);
     }
 
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/edit","/edit/"}, method = RequestMethod.POST)
     public ModelAndView editSourceDocumentSubmit(@Valid @ModelAttribute("sourceDocumentForm") SourceDocumentForm sourceDocumentForm, BindingResult result, Model model)
     {

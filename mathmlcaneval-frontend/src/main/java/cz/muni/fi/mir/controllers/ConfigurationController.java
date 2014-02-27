@@ -12,6 +12,7 @@ import cz.muni.fi.mir.forms.ConfigurationForm;
 import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -51,6 +52,7 @@ public class ConfigurationController
         return new ModelAndView("configuration_create",mm);
     }
     
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.POST)
     public ModelAndView createConfigurationSubmit(@Valid @ModelAttribute("configurationForm") ConfigurationForm configurationForm, BindingResult result, Model model)
     {
