@@ -5,7 +5,6 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.Formula;
-import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.db.service.ProgramService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
@@ -14,6 +13,7 @@ import cz.muni.fi.mir.forms.FormulaForm;
 import cz.muni.fi.mir.forms.UserForm;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
@@ -110,44 +110,18 @@ public class FormulaController
         }
     }
 
-    @RequestMapping(value = {"/edit/{id}", "/edit/{id}/"}, method = RequestMethod.GET)
-    public ModelAndView editFormula(@PathVariable Long id)
-    {
-        ModelMap mm = new ModelMap();
-        mm.addAttribute("formulaForm", mapper.map(formulaService.getFormulaByID(id), FormulaForm.class));
-        mm.addAttribute("programFormList", programService.getAllPrograms());
-        mm.addAttribute("sourceDocumentFormList", sourceDocumentService.getAllDocuments());
-
-        return new ModelAndView("formula_edit", mm);
-    }
-
-    @RequestMapping(value = {"/edit", "/edit/"}, method = RequestMethod.POST)
-    public ModelAndView editFormulaSubmit(@Valid @ModelAttribute("formulaForm") FormulaForm formulaForm, BindingResult result, Model model) throws IOException
-    {
-        if (result.hasErrors())
-        {
-            ModelMap mm = new ModelMap();
-            mm.addAttribute("formulaForm", formulaForm);
-            mm.addAttribute("programFormList", programService.getAllPrograms());
-            mm.addAttribute("sourceDocumentFormList", sourceDocumentService.getAllDocuments());
-            mm.addAttribute(model);
-
-            return new ModelAndView("formula_edit", mm);
-        } else
-        {
-            
-            User user = userService.getUserByUsername(securityContext.getLoggedUser());
-            if (user != null && formulaForm.getUserForm().getId().equals(user.getId())) {
-                formulaForm.setInsertTime(DateTime.now());
-                formulaService.updateFormula(mapper.map(formulaForm, Formula.class));
-            }
-
-            return new ModelAndView("redirect:/");
-        }
-    }
-
     @RequestMapping(value = {"/view/{id}", "/view/{id}/"}, method = RequestMethod.GET)
     public ModelAndView viewFormula(@PathVariable Long id)
+    {
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("formulaEntry", formulaService.getFormulaByID(id));
+
+        return new ModelAndView("formula_view", mm);
+    }
+
+    //TODO: threaded
+    @RequestMapping(value = {"/run/{id}", "/run/{id}/"}, method = RequestMethod.GET)
+    public ModelAndView canonicalizeFormula(@PathVariable Long id)
     {
         ModelMap mm = new ModelMap();
         mm.addAttribute("formulaEntry", formulaService.getFormulaByID(id));

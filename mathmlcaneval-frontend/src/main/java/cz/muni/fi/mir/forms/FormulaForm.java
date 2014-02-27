@@ -155,6 +155,6 @@ public class FormulaForm
     @Override
     public String toString()
     {
-        return "Formula{" + "id=" + id + ", xml=" + xml + ", note=" + note + ", sourceDocument=" + sourceDocumentForm + ", insertTime=" + insertTime + ", program=" + programForm + ", user=" + userForm + ", outputs=" + canonicOutputForms + ", fimilarFormulas=" + similarFormulaForms + '}';
+        return "Formula{" + "id=" + id + ", xml=" + xml + ", note=" + note + ", sourceDocument=" + sourceDocumentForm + ", insertTime=" + insertTime + ", program=" + programForm + ", user=" + userForm + ", outputs=" + canonicOutputForms + ", similarFormulas=" + similarFormulaForms + '}';
     }
 }

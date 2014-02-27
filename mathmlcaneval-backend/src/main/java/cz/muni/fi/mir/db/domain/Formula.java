@@ -7,15 +7,15 @@ package cz.muni.fi.mir.db.domain;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -34,7 +34,7 @@ public class Formula implements Serializable
     private Long id;                            // db id
 
     //@Type(type="cz.muni.fi.mir.domain.SQLXMLType")
-    @Column(name = "xml", columnDefinition = "text")
+    @Column(name = "xml", columnDefinition = "text", length = 100000)
     private String xml;                         // formulka v MathML
     @Column(name = "note")
     private String note;                        // poznamka
@@ -47,10 +47,10 @@ public class Formula implements Serializable
     private Program program;                    // konverzni program
     @ManyToOne
     private User user;                          // kto ju vlozil
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<CanonicOutput> outputs;         // 
-    @OneToMany
-    private Set<Formula> fimilarFormulas;
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private Set<Formula> similarFormulas;
 
     public Long getId()
     {
@@ -132,14 +132,14 @@ public class Formula implements Serializable
         this.outputs = outputs;
     }
 
-    public Set<Formula> getFimilarFormulas()
+    public Set<Formula> getSimilarFormulas()
     {
-        return fimilarFormulas;
+        return similarFormulas;
     }
 
-    public void setFimilarFormulas(Set<Formula> fimilarFormulas)
+    public void setSimilarFormulas(Set<Formula> similarFormulas)
     {
-        this.fimilarFormulas = fimilarFormulas;
+        this.similarFormulas = similarFormulas;
     }
 
     @Override
@@ -168,6 +168,6 @@ public class Formula implements Serializable
     @Override
     public String toString()
     {
-        return "Formula{" + "id=" + id + ", xml=" + xml + ", note=" + note + ", sourceDocument=" + sourceDocument + ", insertTime=" + insertTime + ", program=" + program + ", user=" + user + ", outputs=" + outputs + ", fimilarFormulas=" + fimilarFormulas + '}';
+        return "Formula{" + "id=" + id + ", xml=" + xml + ", note=" + note + ", sourceDocument=" + sourceDocument + ", insertTime=" + insertTime + ", program=" + program + ", user=" + user + ", outputs=" + outputs + ", similarFormulas=" + similarFormulas + '}';
     }
 }

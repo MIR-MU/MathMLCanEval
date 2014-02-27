@@ -8,7 +8,6 @@ package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.UserRole;
 import cz.muni.fi.mir.db.service.UserRoleService;
-import cz.muni.fi.mir.forms.UserForm;
 import cz.muni.fi.mir.forms.UserRoleForm;
 import cz.muni.fi.mir.tools.EntityFactory;
 import javax.validation.Valid;

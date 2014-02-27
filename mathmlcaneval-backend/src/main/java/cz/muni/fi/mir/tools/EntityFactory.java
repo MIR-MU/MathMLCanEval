@@ -17,6 +17,7 @@ import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.joda.time.DateTime;
 
 /**
@@ -429,5 +430,70 @@ public class EntityFactory
         co.setAnnotations(annotations);
 
         return co;
+    }
+
+    /**
+     * Method creates CanonicOutput with given id.
+     *
+     * @param id of CanonicOutput
+     * @return CannonicOutput with given id
+     */
+    public static CanonicOutput createCanonicOutput(Long id)
+    {
+        if (id == null)
+        {
+            return createCanonicOutput();
+        }
+        else
+        {
+            CanonicOutput co = createCanonicOutput();
+            co.setId(id);
+
+            return co;
+        }
+    }
+
+    /**
+     * Method creates empty Formula.
+     * @return empty Formula without any values.
+     */
+    public static Formula createFormula()
+    {
+        return new Formula();
+    }
+
+    /**
+     * Method used for creating Formula with given id
+     *
+     * @param id of formula
+     * @return formula formula with given id
+     */
+    public static Formula createFormula(Long id)
+    {
+        if (id == null)
+        {
+            return createFormula();
+        }
+        else
+        {
+            Formula f = createFormula();
+            f.setId(id);
+
+            return f;
+        }
+    }
+
+    public static Formula createFormula(String xml, String note, SourceDocument sourceDocument, DateTime insertTime, Program program, User user, Set<CanonicOutput> outputs, Set<Formula> similarFormulas)
+    {
+        Formula f = createFormula();
+        f.setXml(xml);
+        f.setNote(note);
+        f.setSourceDocument(sourceDocument);
+        f.setInsertTime(insertTime);
+        f.setProgram(program);
+        f.setUser(user);
+        f.setOutputs(outputs);
+        f.setSimilarFormulas(similarFormulas);
+        return f;
     }
 }
