@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mi>x</mi>
+    <mpadded lspace="0.3em" width="+0.6em">
+      <mi>y</mi>
+    </mpadded>
+    <mi>z</mi>
+  </mrow>
+</math>
