@@ -24,8 +24,9 @@
             <thead>
                 <tr>
                     <th><spring:message code="general.field.id" /></th>
-                    <th><spring:message code="entity.sourceDocument.note" /></th>
                     <th><spring:message code="entity.sourceDocument.documentPath" /></th>
+                    <th><spring:message code="entity.sourceDocument.note" /></th>
+                    <th>!formulazozdroja</th>
                     <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                         <th><spring:message code="general.table.option" /></th>
                     </sec:authorize>
@@ -36,8 +37,9 @@
                     <c:forEach items="${sourceDocumentList}" var="entry">
                         <tr>
                             <td><c:out value="${entry.id}" /></td>
-                            <td><a href="${pageContext.request.contextPath}/sourcedocument/view/<c:out value="${entry.id}" />"><c:out value="${entry.note}" /></a></td>
                             <td><c:out value="${entry.documentPath}" /></td>
+                            <td><a href="${pageContext.request.contextPath}/sourcedocument/view/<c:out value="${entry.id}" />"><c:out value="${entry.note}" /></a></td>                            
+                            <td><a href="${pageContext.request.contextPath}/formula/create/sourcedocument/<c:out value="${entry.id}/" />">new formula</a></td>                            
                             <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                                 <td>
                                     <a href="${pageContext.request.contextPath}/sourcedocument/edit/<c:out value="${entry.id}" />/">

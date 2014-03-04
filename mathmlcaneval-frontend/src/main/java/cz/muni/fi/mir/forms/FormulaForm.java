@@ -26,8 +26,8 @@ public class FormulaForm
     @NotNull(message = "{validator.formula.program.empty}")
     private ProgramForm programForm; 
     private UserForm userForm;
-    private Set<CanonicOutputForm> canonicOutputForms;
-    private Set<FormulaForm> similarFormulaForms;
+    private List<CanonicOutputForm> canonicOutputForms;
+    private List<FormulaForm> similarFormulaForms;
 
     private List<MultipartFile> uploadedFiles;
 
@@ -101,22 +101,22 @@ public class FormulaForm
         this.userForm = userForm;
     }
 
-    public Set<CanonicOutputForm> getCanonicOutputForms()
+    public List<CanonicOutputForm> getCanonicOutputForms()
     {
         return canonicOutputForms;
     }
 
-    public void setCanonicOutputForms(Set<CanonicOutputForm> canonicOutputForms)
+    public void setCanonicOutputForms(List<CanonicOutputForm> canonicOutputForms)
     {
         this.canonicOutputForms = canonicOutputForms;
     }
 
-    public Set<FormulaForm> getSimilarFormulaForms()
+    public List<FormulaForm> getSimilarFormulaForms()
     {
         return similarFormulaForms;
     }
 
-    public void setSimilarFormulaForms(Set<FormulaForm> similarFormulaForms)
+    public void setSimilarFormulaForms(List<FormulaForm> similarFormulaForms)
     {
         this.similarFormulaForms = similarFormulaForms;
     }

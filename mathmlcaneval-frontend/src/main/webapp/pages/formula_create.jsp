@@ -7,8 +7,15 @@
             <label class="col-sm-2 control-label"><spring:message code="entity.formula.sourceDocument" /></label>
             <div class="col-sm-7">
                 <form:select path="sourceDocumentForm" multiple="false" class="form-control">
-                    <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
-                    <form:options items="${sourceDocumentFormList}" itemLabel="note" itemValue="id" />
+                    <c:choose>
+                        <c:when test="${fn:length(sourceDocumentFormList) eq 1}">
+                            <form:option value="${sourceDocumentFormList[0].id}"><c:out value="${sourceDocumentFormList[0].documentPath}" /></form:option>
+                        </c:when>
+                        <c:otherwise>
+                            <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
+                            <form:options items="${sourceDocumentFormList}" itemLabel="documentPath" itemValue="id" />
+                        </c:otherwise>
+                    </c:choose>
                 </form:select>
             </div>
             <form:errors path="sourceDocumentForm" element="div" class="col-sm-3 alert alert-danger"/>
@@ -30,15 +37,18 @@
             </div>
             <form:errors path="note" element="div" class="col-sm-3 alert alert-danger"/>
         </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label"><spring:message code="entity.formula.xml" /></label>
-            <div class="col-sm-6">
+        <div clas="row">
+            <form:errors path="xml" element="div" class="col-sm-12 alert alert-danger"/>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="custom-label"><spring:message code="entity.formula.xml" /></div>
                 <form:textarea path="xml" cssClass="form-control" rows="15" />
             </div>
-            <div class="col-lg-4">
+            <div class="col-md-6">
+                <div class="custom-label">!preview</div>
                 <div id="mathml-preview"></div>
             </div>
-            <form:errors path="xml" element="div" class="col-sm-3 alert alert-danger"/>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.formula.upload" /></label>

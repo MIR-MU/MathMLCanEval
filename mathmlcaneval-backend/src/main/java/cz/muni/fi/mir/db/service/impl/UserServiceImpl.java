@@ -25,8 +25,10 @@ public class UserServiceImpl implements UserService
     @Autowired
     private UserDAO userDAO;
     
+    //temp hack bez zistim ako docasne
+    //vypnut security pri vytvarani admin uctu
     @Override
-    @Secured(value = "ROLE_ADMINISTRATOR")
+   // @Secured(value = "ROLE_ADMINISTRATOR")
     @Transactional(readOnly = false)
     public void createUser(User user)
     {

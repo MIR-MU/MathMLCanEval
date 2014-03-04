@@ -63,6 +63,7 @@ public class UserController
         return new ModelAndView("login");
     }
     
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value = {"/create","/create/"}, method = RequestMethod.GET)
     public ModelAndView handleRegister()
     {
@@ -133,6 +134,7 @@ public class UserController
         return new ModelAndView("user_edit",mm);
     }
     
+    @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
     public ModelAndView editUser(@PathVariable Long id)
     {

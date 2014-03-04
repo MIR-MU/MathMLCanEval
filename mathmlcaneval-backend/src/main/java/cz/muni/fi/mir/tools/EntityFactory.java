@@ -483,7 +483,7 @@ public class EntityFactory
         }
     }
 
-    public static Formula createFormula(String xml, String note, SourceDocument sourceDocument, DateTime insertTime, Program program, User user, Set<CanonicOutput> outputs, Set<Formula> similarFormulas)
+    public static Formula createFormula(String xml, String note, SourceDocument sourceDocument, DateTime insertTime, Program program, User user, List<CanonicOutput> outputs, List<Formula> similarFormulas)
     {
         Formula f = createFormula();
         f.setXml(xml);
@@ -494,6 +494,17 @@ public class EntityFactory
         f.setUser(user);
         f.setOutputs(outputs);
         f.setSimilarFormulas(similarFormulas);
+        return f;
+    }
+    
+    public static Formula createFormula(String xml, DateTime inserTime, User user, SourceDocument sourceDocument)
+    {
+        Formula f = createFormula();
+        f.setXml(xml);
+        f.setInsertTime(inserTime);
+        f.setUser(user);
+        f.setSourceDocument(sourceDocument);
+        
         return f;
     }
 }

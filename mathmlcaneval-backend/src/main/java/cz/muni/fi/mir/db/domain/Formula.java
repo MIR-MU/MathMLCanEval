@@ -5,6 +5,7 @@
 package cz.muni.fi.mir.db.domain;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -48,9 +49,9 @@ public class Formula implements Serializable
     @ManyToOne
     private User user;                          // kto ju vlozil
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private Set<CanonicOutput> outputs;         // 
+    private List<CanonicOutput> outputs;         // 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private Set<Formula> similarFormulas;
+    private List<Formula> similarFormulas;
 
     public Long getId()
     {
@@ -122,22 +123,22 @@ public class Formula implements Serializable
         this.user = user;
     }
 
-    public Set<CanonicOutput> getOutputs()
+    public List<CanonicOutput> getOutputs()
     {
         return outputs;
     }
 
-    public void setOutputs(Set<CanonicOutput> outputs)
+    public void setOutputs(List<CanonicOutput> outputs)
     {
         this.outputs = outputs;
     }
 
-    public Set<Formula> getSimilarFormulas()
+    public List<Formula> getSimilarFormulas()
     {
         return similarFormulas;
     }
 
-    public void setSimilarFormulas(Set<Formula> similarFormulas)
+    public void setSimilarFormulas(List<Formula> similarFormulas)
     {
         this.similarFormulas = similarFormulas;
     }

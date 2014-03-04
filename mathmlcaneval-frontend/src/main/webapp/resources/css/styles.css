@@ -38,3 +38,9 @@ and open the template in the editor.
 {
     display: none;
 }
+
+.custom-label
+{
+    font-weight: bold;
+    margin-bottom: 15px;
+}

@@ -46,7 +46,7 @@
     
     <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
     
-    <bean id="userServiceProvider" class="cz.muni.fi.mir.UserServiceProvider" />
+    <bean id="userServiceProvider" class="cz.muni.fi.mir.tools.UserServiceProvider" />
     
     <bean id="mapper" class="org.dozer.DozerBeanMapper">
         <property name="mappingFiles">

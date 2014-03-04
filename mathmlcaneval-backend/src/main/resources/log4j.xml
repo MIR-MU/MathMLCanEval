@@ -20,27 +20,7 @@
         </layout> 
     </appender> 
     
-    <appender name="user" class="org.apache.log4j.RollingFileAppender"> 
-        <param name="file" value="user.log"/>
-        <param name="MaxFileSize" value="10MB"/>
-        <!-- Keep one backup file -->
-        <param name="MaxBackupIndex" value="1"/>
-        <layout class="org.apache.log4j.PatternLayout"> 
-            <param name="ConversionPattern" value="%d{DATE} %p - %m%n"/> 
-        </layout> 
-    </appender> 
-    
-    
-    <appender name="setup" class="org.apache.log4j.RollingFileAppender"> 
-        <param name="file" value="setup.log"/>
-        <param name="MaxFileSize" value="10MB"/>
-        <!-- Keep one backup file -->
-        <param name="MaxBackupIndex" value="1"/>
-        <layout class="org.apache.log4j.PatternLayout"> 
-            <param name="ConversionPattern" value="%d{DATE} %p - %m%n"/> 
-        </layout> 
-    </appender>
-	
+ 
     <!-- Application Loggers -->
     <logger name="cz.muni.fi.mir">
         <level value="info" />

@@ -16,6 +16,9 @@
 <script type='text/javascript' src="<c:url value="/resources/js/jquery-fileupload/jquery.iframe-transport.js" />"></script>
 <script type='text/javascript' src="<c:url value="/resources/js/jquery-fileupload/jquery.fileupload.js" />"></script><script type="text/javascript" src="<c:url value="/resources/js/shCore.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/shAutoloader.js" />"></script>
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 <script>
     SyntaxHighlighter.autoloader(
             'xml  <c:url value="/resources/js/shBrushXml.js" />'
@@ -67,8 +70,9 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
     $("#xml").on('load keyup keypress paste', function() {
-        $("#mathml-preview").html($(this).val())
-    }).trigger("keyup")
+        $("#mathml-preview").html($(this).val());
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, "mathml-preview"]);
+    }).trigger("keyup");
 });
 </script>
 </body>

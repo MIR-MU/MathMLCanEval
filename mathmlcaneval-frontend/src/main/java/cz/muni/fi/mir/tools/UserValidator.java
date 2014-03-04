@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.muni.fi.mir;
+package cz.muni.fi.mir.tools;
 
 import cz.muni.fi.mir.forms.UserForm;
 import cz.muni.fi.mir.db.service.UserService;

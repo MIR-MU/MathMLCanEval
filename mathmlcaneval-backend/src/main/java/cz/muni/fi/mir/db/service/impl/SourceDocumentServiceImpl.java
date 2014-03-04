@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Empt
  */
-@Service(value = "sourceService")
+@Service(value = "sourceDocumentService")
 public class SourceDocumentServiceImpl implements SourceDocumentService
 {
     @Autowired SourceDocumentDAO sourceDocumentDAO;
