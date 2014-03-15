@@ -18,8 +18,13 @@
                                 <td><c:out value="${formulaEntry.id}" /></td>
                             </tr>
                             <tr>
-                                <td><spring:message code="entity.canonicOutput.parent" /></td>
-                                <td><a href="${pageContext.request.contextPath}/formula/view/${formulaEntry.parents[0].id}">${formulaEntry.parents[0].id}</a></td>
+                                <td><spring:message code="entity.canonicOutput.parents" /></td>
+                                <td>
+                                    <c:forEach items="${formulaEntry.parents}" var="parent" varStatus="loop">
+                                        <a href="${pageContext.request.contextPath}/formula/view/${parent.id}">${parent.id}</a>
+                                        ${!loop.last ? ', ' : ''}
+                                    </c:forEach>
+                                </td>
                             </tr>
                             <tr>
                                 <td><spring:message code="entity.canonicOutput.runningTime" /></td>
@@ -46,28 +51,28 @@
                             <ul class="nav nav-tabs">
                                 <li class="active"><a href="#canonicalized" data-toggle="tab"><spring:message code="entity.canonicOutput.outputForm" /></a></li>
                                 <li><a href="#original" data-toggle="tab"><spring:message code="entity.canonicOutput.original" /></a></li>
-                                <li><a href="#diff" data-toggle="tab"><spring:message code="entity.canonicOutput.diff" /></a></li>
+                                <li><a href="#diff" data-toggle="tab" onclick="diffView();"><spring:message code="entity.canonicOutput.diff" /></a></li>
                             </ul>
                             <div class="tab-content">
                             <div class="tab-pane active" id="canonicalized">
                                 <div class="col-lg-6">
                                     <pre class="brush: xml">
-    <c:out value="${formulaEntry.outputForm}" />
+<c:out value="${formulaEntry.outputForm}" />
                                     </pre>
                                 </div>
                                 <div class="col-lg-6">
-    <c:out value="${formulaEntry.outputForm}" escapeXml="false" />
+<c:out value="${formulaEntry.outputForm}" escapeXml="false" />
                                 </div>
                             </div>
 
                             <div class="tab-pane" id="original">
                                 <div class="col-lg-6">
                                     <pre class="brush: xml">
-    <c:out value="${formulaEntry.parents[0].xml}" />
+<c:out value="${formulaEntry.parents[0].xml}" />
                                     </pre>
                                 </div>
                                 <div class="col-lg-6">
-    <c:out value="${formulaEntry.parents[0].xml}" escapeXml="false" />
+<c:out value="${formulaEntry.parents[0].xml}" escapeXml="false" />
                                 </div>
                             </div>
                             <div class="tab-pane" id="diff">

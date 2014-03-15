@@ -39,7 +39,7 @@
                 <c:forEach items="${revisionList}" var="entry">
                     <tr>
                         <td><c:out value="${entry.id}" /></td>
-                        <td><a href="https://github.com/michal-ruzicka/MathMLCanEval/commit/<c:out value="${entry.revisionHash}" />"><c:out value="${entry.revisionHash}" /></a></td>
+                        <td><a href="http://github.com/formanek/MathMLCan/commit/<c:out value="${entry.revisionHash}" />"><c:out value="${entry.revisionHash}" /></a></td>
                         <td><c:out value="${entry.note}" /></td>
                         <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                             <td>

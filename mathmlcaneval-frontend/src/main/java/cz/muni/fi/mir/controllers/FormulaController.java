@@ -4,26 +4,32 @@
  */
 package cz.muni.fi.mir.controllers;
 
+import cz.muni.fi.mir.db.domain.ApplicationRun;
+import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
+
+import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.db.service.ProgramService;
+import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserService;
+
 import cz.muni.fi.mir.forms.FormulaForm;
 import cz.muni.fi.mir.forms.UserForm;
+
 import cz.muni.fi.mir.services.FormulaCreator;
+import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +45,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -67,7 +75,14 @@ public class FormulaController
     @Autowired
     private FormulaCreator formulaCreator;
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(UserController.class);
+    @Autowired
+    private MathCanonicalizerLoader mathCanonicalizerLoader;
+    @Autowired
+    private ConfigurationService configurationService;
+    @Autowired
+    private RevisionService revisionService;    
+
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaController.class);
 
     @RequestMapping(value = {"/create", "/create/"}, method = RequestMethod.GET)
     public ModelAndView createFormula()
@@ -182,15 +197,21 @@ public class FormulaController
         return new ModelAndView("formula_view", mm);
     }
 
-    //TODO: threaded
     @Secured("ROLE_USER")
-    @RequestMapping(value = {"/run/{id}", "/run/{id}/"}, method = RequestMethod.GET)
-    public ModelAndView canonicalizeFormula(@PathVariable Long id)
+    @RequestMapping(value = {"/run", "/run/"}, method = RequestMethod.GET)
+    public @ResponseBody void canonicalizeFormula(@RequestParam(value = "id") String id) throws Exception
     {
-        ModelMap mm = new ModelMap();
-        mm.addAttribute("formulaEntry", formulaService.getFormulaByID(id));
+        // TODO: selectable revision & configuration
+        Formula formula = formulaService.getFormulaByID(Long.parseLong(id));
+        Configuration configuration = configurationService.getConfigurationByID(1L);
+        Revision revision = revisionService.getRevisionByID(1L);
 
-        return new ModelAndView("formula_view", mm);
+        ApplicationRun applicationRun = new ApplicationRun();
+        applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
+        applicationRun.setConfiguration(configuration);
+        applicationRun.setRevision(revision);
+
+        mathCanonicalizerLoader.execute(formula, applicationRun);
     }
 
     @Secured("ROLE_USER")

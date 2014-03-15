@@ -75,5 +75,32 @@ $(document).ready(function() {
     }).trigger("keyup");
 });
 </script>
+<script>
+function showTooltip(data)
+{
+$('#btnCanon')
+    .tooltip({
+        title: data,
+        trigger: 'manual',
+        placement: 'top'
+    }).tooltip('show');
+    setTimeout(function() {
+        $('#btnCanon').tooltip('hide');
+        $('#myModal').modal('hide');
+    }, 2000);
+}
+$(document).ready(function() { $("#btnCanon").click(function(){
+ $.ajax({
+     type : "Get",
+     url : "${pageContext.request.contextPath}/formula/run/",   
+     data : "id=${formulaEntry.id}",
+     dataType: 'text',
+     success : function(response) {  
+         showTooltip("<spring:message code="entity.formula.started" />");
+     }
+  });
+});
+});
+</script>
 </body>
 </html>

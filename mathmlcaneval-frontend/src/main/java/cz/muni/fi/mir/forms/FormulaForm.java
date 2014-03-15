@@ -31,6 +31,8 @@ public class FormulaForm
 
     private List<MultipartFile> uploadedFiles;
 
+    private boolean canonicalize;
+
     public Long getId()
     {
         return id;
@@ -121,12 +123,24 @@ public class FormulaForm
         this.similarFormulaForms = similarFormulaForms;
     }
 
-    public List<MultipartFile> getUploadedFiles() {
+    public List<MultipartFile> getUploadedFiles()
+    {
         return uploadedFiles;
     }
 
-    public void setUploadedFiles(List<MultipartFile> uploadedFiles) {
+    public void setUploadedFiles(List<MultipartFile> uploadedFiles)
+    {
         this.uploadedFiles = uploadedFiles;
+    }
+
+    public boolean isCanonicalize()
+    {
+        return canonicalize;
+    }
+
+    public void setCanonicalize(boolean canonicalize)
+    {
+        this.canonicalize = canonicalize;
     }
 
     @Override

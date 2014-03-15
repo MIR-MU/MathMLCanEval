@@ -4,8 +4,11 @@
  */
 package cz.muni.fi.mir.controllers;
 
+import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.tools.EntityFactory;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -41,7 +44,7 @@ public class CanonicOutputController
     @RequestMapping(value={"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
     public ModelAndView deleteCanonicOutput(@PathVariable Long id)
     {
-        canonicOutputService.deleteCanonicOutput(EntityFactory.createCanonicOutput(id));
+        canonicOutputService.deleteCanonicOutput(canonicOutputService.getCanonicOutputByID(id));
         return new ModelAndView("redirect:/");
     }
 }

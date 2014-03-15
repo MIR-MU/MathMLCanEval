@@ -1,8 +1,10 @@
 <div class="container content">
     <h1><spring:message code="entity.formula.entry" /></h1>
     <div class="btn-group pull-right space-bottom-10">
-        <a href="${pageContext.request.contextPath}/formula/run/${formulaEntry.id}" class="btn btn-warning"><spring:message code="entity.formula.run" /></a>
         <sec:authentication var="user" property="principal" />
+        <sec:authorize access="hasRole('ROLE_USER')">
+        <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#myModal"><spring:message code="entity.formula.run" /></button>
+        </sec:authorize>
         <!-- superuser -->
         <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
         <a href="${pageContext.request.contextPath}/formula/delete/${formulaEntry.id}" class="btn btn-danger"><spring:message code="general.label.delete" /></a>
@@ -13,6 +15,26 @@
         </sec:authorize>
         
     </div>
+
+    <!-- Modal dialog -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Select canonicalizer</h4>
+          </div>
+          <div class="modal-body">
+                revision: default (id=1)<br/>
+                configuration: default (id=1)<br/>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">!Close</button>
+            <button id="btnCanon" type="button" class="btn btn-warning"><spring:message code="entity.formula.run" /></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="row pull-top-50">
         <div class="col-lg-12">
             <div class="panel panel-primary">
@@ -80,7 +102,7 @@
                             <tr>
                                 <td><c:out value="${entry.applicationRun.startTime}" /></td>
                                 <td><a href="${pageContext.request.contextPath}/canonicoutput/view/${entry.id}">${entry.id}</a></td>
-                                <td><a href="https://github.com/michal-ruzicka/MathMLCanEval/commit/<c:out value="${entry.applicationRun.revision.revisionHash}" />"><c:out value="${entry.applicationRun.revision.revisionHash}" /></a></td>
+                                <td><a href="https://github.com/formanek/MathMLCan/commit/<c:out value="${entry.applicationRun.revision.revisionHash}" />"><c:out value="${entry.applicationRun.revision.revisionHash}" /></a></td>
                                 <td><a href="${pageContext.request.contextPath}/configuration/view/${entry.applicationRun.configuration.id}">${entry.applicationRun.configuration.id}</a></td>
                                 <td>${entry.runningTime}</td>
                             </tr>

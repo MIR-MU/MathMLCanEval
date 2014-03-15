@@ -93,17 +93,23 @@
     <bean id="documentBuilder" class="javax.xml.parsers.DocumentBuilder" factory-bean="documentBuilderFactory" factory-method="newDocumentBuilder" />
     
     <bean id="mathCanonicalizerLoader" class="cz.muni.fi.mir.services.MathCanonicalizerLoaderImpl" factory-method="newInstance">
-        <constructor-arg name="version" value="${mathml-canonicalizer.default.version}"/>
-        <constructor-arg name="path" value="${mathml-canonicalizer.default.path}"/>
-        <constructor-arg name="jarFileNamePrefix" value="${mathml-canonicalizer.default.filename.prefix}"/>
-        <constructor-arg name="jarFileNameSuffix" value="${mathml-canonicalizer.default.filename.suffix}"/>
+        <constructor-arg name="repository" value="${mathml-canonicalizer.default.repository}"/>
+        <constructor-arg name="revision" value="${mathml-canonicalizer.default.revision}"/>
         <constructor-arg name="mainClassName" value="${mathml-canonicalizer.default.mainclass}"/>
+        <constructor-arg name="jarFolder" value="${mathml-canonicalizer.default.jarFolder}"/>
         <constructor-arg name="tempFolder" value="${temp.folder}"/>
+        <constructor-arg ref="taskExecutor" />
     </bean>
     
     <!-- todo nastudovat vlakna ... -->
     <bean id="formulaCreator" class="cz.muni.fi.mir.services.FormulaCreator" scope="prototype"/>
     
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5" />
+        <property name="maxPoolSize" value="10" />
+        <property name="queueCapacity" value="25" />
+    </bean>
+
 <!--    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
         <property name="caches">
             <set>

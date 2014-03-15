@@ -16,6 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 
 /**
  *
@@ -44,9 +48,11 @@ public class CanonicOutput implements Serializable
     private long runningTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.ALL)
     private ApplicationRun applicationRun;
 
     @OneToMany(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.ALL)
     private List<Annotation> annotations;
 
     public Long getId()
@@ -146,5 +152,14 @@ public class CanonicOutput implements Serializable
     public String toString()
     {
         return "CanonicOutput{" + "id=" + id + ", outputForm=" + outputForm + ", similarForm=" + similarForm + ", parents=" + parents + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
+    }
+
+    @PreRemove
+    private void removeOutputFromParents()
+    {
+        for (Formula f : parents)
+        {
+            f.getOutputs().remove(this);
+        }
     }
 }

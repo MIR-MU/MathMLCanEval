@@ -25,9 +25,7 @@ public interface MathCanonicalizerLoader
      * <li>we create new URL Class loader and append file to it</li>
      * <li>we load main class from jar file which was specified when creating instance of this class</li>
      * <li>we obtain main method</li>
-     * <li>from current time we create temp directory and convert formula from database into temp file</li>
-     * <li>from ApplicationRun we do the same with configuration file</li>
-     * <li>we pass these two temp files as arguments to main method together with <b>-c</b> argument</li>
+     * <li>we pass formula and configuration as arguments to main method</li>
      * <li>we invoke method</li>
      * <li>we collect result and create canonic output which is stored into formula</li>
      * <li>we delete temp files</li>
@@ -36,5 +34,5 @@ public interface MathCanonicalizerLoader
      * @param applicationRun wrapper containing some information required for run
      * @throws IOException If any error occurs during execution
      */
-    void execute(Formula formula, ApplicationRun applicationRun) throws IOException;
+    void execute(Formula formula, ApplicationRun applicationRun);
 }
