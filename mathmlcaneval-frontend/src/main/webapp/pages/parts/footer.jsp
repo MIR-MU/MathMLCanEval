@@ -76,27 +76,32 @@ $(document).ready(function() {
 });
 </script>
 <script>
-function showTooltip(data)
+function showTooltip(data, close)
 {
 $('#btnCanon')
     .tooltip({
-        title: data,
+        title : data,
         trigger: 'manual',
         placement: 'top'
-    }).tooltip('show');
+    }).attr('data-original-title', data).tooltip('fixTitle').tooltip('show');
     setTimeout(function() {
         $('#btnCanon').tooltip('hide');
-        $('#myModal').modal('hide');
+        if (close) {
+            $('#canonModal').modal('hide');
+        }
     }, 2000);
 }
 $(document).ready(function() { $("#btnCanon").click(function(){
  $.ajax({
      type : "Get",
-     url : "${pageContext.request.contextPath}/formula/run/",   
-     data : "id=${formulaEntry.id}",
+     url : $('#canonicalizeForm').attr('action'),  
+     data : $('#canonicalizeForm').serialize(),
      dataType: 'text',
      success : function(response) {  
-         showTooltip("<spring:message code="entity.formula.started" />");
+         showTooltip("<spring:message code="entity.formula.started" />", true);
+     },
+     error : function(response) {  
+         showTooltip("<spring:message code="entity.formula.crashed" />", false);
      }
   });
 });

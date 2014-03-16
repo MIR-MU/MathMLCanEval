@@ -5,6 +5,7 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.ApplicationRun;
+import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Revision;
@@ -17,6 +18,7 @@ import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserService;
 
+import cz.muni.fi.mir.forms.ApplicationRunForm;
 import cz.muni.fi.mir.forms.FormulaForm;
 import cz.muni.fi.mir.forms.UserForm;
 
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -80,7 +83,7 @@ public class FormulaController
     @Autowired
     private ConfigurationService configurationService;
     @Autowired
-    private RevisionService revisionService;    
+    private RevisionService revisionService;
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaController.class);
 
@@ -91,6 +94,8 @@ public class FormulaController
         mm.addAttribute("formulaForm", new FormulaForm());
         mm.addAttribute("programFormList", programService.getAllPrograms());
         mm.addAttribute("sourceDocumentFormList", sourceDocumentService.getAllDocuments());
+        mm.addAttribute("revisionList", revisionService.getAllRevisions());
+        mm.addAttribute("configurationList", configurationService.getAllCofigurations());
 
         return new ModelAndView("formula_create", mm);
     }
@@ -105,6 +110,8 @@ public class FormulaController
             mm.addAttribute("formulaForm", formulaForm);
             mm.addAttribute("programFormList", programService.getAllPrograms());
             mm.addAttribute("sourceDocumentFormList", sourceDocumentService.getAllDocuments());
+            mm.addAttribute("revisionList", revisionService.getAllRevisions());
+            mm.addAttribute("configurationList", configurationService.getAllCofigurations());
             mm.addAttribute(model);
 
             return new ModelAndView("formula_create", mm);
@@ -116,7 +123,20 @@ public class FormulaController
             formulaForm.setInsertTime(DateTime.now());
             if (!StringUtils.isBlank(formulaForm.getXml()))
             {
-                formulaService.createFormula(mapper.map(formulaForm, Formula.class));
+                Formula f = mapper.map(formulaForm, Formula.class);
+                f.setOutputs(new ArrayList<CanonicOutput>());
+                formulaService.createFormula(f);
+
+                // canonicalize on import
+                if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
+                {
+                    ApplicationRun applicationRun = new ApplicationRun();
+                    applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
+                    applicationRun.setRevision(mapper.map(formulaForm.getRevisionForm(), Revision.class));
+                    applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
+
+                    mathCanonicalizerLoader.execute(f, applicationRun);
+                }
             }
 
             for (MultipartFile file : formulaForm.getUploadedFiles())
@@ -128,7 +148,20 @@ public class FormulaController
                     {
                         formulaForm.setXml(new String(file.getBytes(), "UTF-8"));
                         formulaForm.setInsertTime(DateTime.now());
-                        formulaService.createFormula(mapper.map(formulaForm, Formula.class));
+                        Formula f = mapper.map(formulaForm, Formula.class);
+                        f.setOutputs(new ArrayList<CanonicOutput>());
+                        formulaService.createFormula(f);
+
+                        // canonicalize on import
+                        if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
+                        {
+                            ApplicationRun applicationRun = new ApplicationRun();
+                            applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
+                            applicationRun.setRevision(mapper.map(formulaForm.getRevisionForm(), Revision.class));
+                            applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
+
+                            mathCanonicalizerLoader.execute(f, applicationRun);
+                        }
                     }
                 } catch (IOException ex)
                 {
@@ -193,23 +226,23 @@ public class FormulaController
     {
         ModelMap mm = new ModelMap();
         mm.addAttribute("formulaEntry", formulaService.getFormulaByID(id));
+        mm.addAttribute("applicationRunForm", new ApplicationRunForm());
+        mm.addAttribute("revisionList", revisionService.getAllRevisions());
+        mm.addAttribute("configurationList", configurationService.getAllCofigurations());
 
         return new ModelAndView("formula_view", mm);
     }
 
     @Secured("ROLE_USER")
     @RequestMapping(value = {"/run", "/run/"}, method = RequestMethod.GET)
-    public @ResponseBody void canonicalizeFormula(@RequestParam(value = "id") String id) throws Exception
+    public @ResponseBody void canonicalizeFormula(@RequestParam("formulaId") String formulaId, @ModelAttribute("applicationRunForm") ApplicationRunForm applicationRunForm) throws Exception
     {
-        // TODO: selectable revision & configuration
-        Formula formula = formulaService.getFormulaByID(Long.parseLong(id));
-        Configuration configuration = configurationService.getConfigurationByID(1L);
-        Revision revision = revisionService.getRevisionByID(1L);
+        Formula formula = formulaService.getFormulaByID(new Long(formulaId));
 
         ApplicationRun applicationRun = new ApplicationRun();
         applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
-        applicationRun.setConfiguration(configuration);
-        applicationRun.setRevision(revision);
+        applicationRun.setRevision(mapper.map(applicationRunForm.getRevisionForm(), Revision.class));
+        applicationRun.setConfiguration(mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class));
 
         mathCanonicalizerLoader.execute(formula, applicationRun);
     }

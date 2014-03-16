@@ -7,6 +7,7 @@ package cz.muni.fi.mir.db.domain;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,8 +18,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 
 /**
@@ -47,12 +46,10 @@ public class CanonicOutput implements Serializable
     @Column(name = "runtime")
     private long runningTime;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade(CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private ApplicationRun applicationRun;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Cascade(CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Annotation> annotations;
 
     public Long getId()

@@ -38,6 +38,10 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
     static final Logger logger = Logger.getLogger(MathCanonicalizerLoaderImpl.class);
     private Class mainClass;
     private Path path;
+    private final String repository;
+    private final String revision;
+    private final String mainClassName;
+    private final String jarFolder;
 
     private AsyncTaskExecutor taskExecutor;
 
@@ -79,7 +83,22 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
             AsyncTaskExecutor taskExecutor)
     {
         this.taskExecutor = taskExecutor;
-        this.path = FileSystems.getDefault().getPath(jarFolder, revision + ".jar");
+        this.repository = repository;
+        this.mainClassName = mainClassName;
+        this.jarFolder = jarFolder;
+        this.revision = revision;
+        this.setRevision(revision);
+
+    }
+
+    private String getRevision()
+    {
+        return this.revision;
+    }
+
+    private void setRevision(String revision)
+    {
+        this.path = FileSystems.getDefault().getPath(this.jarFolder, revision + ".jar");
         if (!Files.exists(this.path))
         {
             //logger.fatal(me);
@@ -88,7 +107,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
         URL jarFile = null;
         try
         {
-            jarFile = path.toUri().toURL();
+            jarFile = this.path.toUri().toURL();
         }
         catch (MalformedURLException me)
         {
@@ -101,7 +120,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
         this.mainClass = null;
         try
         {
-            this.mainClass = cl.loadClass("cz.muni.fi.mir.mathmlcanonicalization." + mainClassName);
+            this.mainClass = cl.loadClass("cz.muni.fi.mir.mathmlcanonicalization." + this.mainClassName);
         }
         catch (ClassNotFoundException cnfe)
         {
@@ -125,7 +144,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
      * applicationContextCore!</b>
      *
      * @param repository git repository with MathMLCan canonicalizer
-     * @param revision hash of commit
+     * @param revision hash of default commit
      * @param mainClassName name of class in jar file that holds main method.
      * which is executed
      * @param jarFolder the folder where the jar files are located
@@ -150,6 +169,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
     @Override
     public void execute(Formula formula, ApplicationRun applicationRun)
     {
+        this.setRevision(applicationRun.getRevision().getRevisionHash());
         CanonicalizationTask task = new CanonicalizationTask(formulaService, formula, this.mainClass, applicationRun);
         Future<TaskStatus> future = taskExecutor.submit(task);
     }

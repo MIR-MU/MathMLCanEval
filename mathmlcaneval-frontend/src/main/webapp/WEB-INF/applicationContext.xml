@@ -66,6 +66,8 @@
                 <bean class="cz.muni.fi.mir.convertors.StringToProgram"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToSourceDocument"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToUserRole"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToRevision"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToConfiguration"/>
             </list>
         </property>
     </bean>

@@ -14,9 +14,9 @@ import org.joda.time.DateTime;
 public class ApplicationRunForm
 {
     private Long id;
-    private String note;  
-    private DateTime startTime;    
-    private DateTime stopTime;    
+    private String note;
+    private DateTime startTime;
+    private DateTime stopTime;
     private UserForm user;
     private ConfigurationForm configurationForm;
     private RevisionForm revisionForm;
@@ -81,12 +81,12 @@ public class ApplicationRunForm
         this.configurationForm = configurationForm;
     }
 
-    public RevisionForm getRevision()
+    public RevisionForm getRevisionForm()
     {
         return revisionForm;
     }
 
-    public void setRevision(RevisionForm revision)
+    public void setRevisionForm(RevisionForm revision)
     {
         this.revisionForm = revision;
     }

@@ -31,7 +31,8 @@ public class FormulaForm
 
     private List<MultipartFile> uploadedFiles;
 
-    private boolean canonicalize;
+    private RevisionForm revisionForm;
+    private ConfigurationForm configurationForm;
 
     public Long getId()
     {
@@ -133,14 +134,20 @@ public class FormulaForm
         this.uploadedFiles = uploadedFiles;
     }
 
-    public boolean isCanonicalize()
-    {
-        return canonicalize;
+    public ConfigurationForm getConfigurationForm() {
+        return configurationForm;
     }
 
-    public void setCanonicalize(boolean canonicalize)
-    {
-        this.canonicalize = canonicalize;
+    public void setConfigurationForm(ConfigurationForm configurationForm) {
+        this.configurationForm = configurationForm;
+    }
+
+    public RevisionForm getRevisionForm() {
+        return revisionForm;
+    }
+
+    public void setRevisionForm(RevisionForm revisionForm) {
+        this.revisionForm = revisionForm;
     }
 
     @Override
