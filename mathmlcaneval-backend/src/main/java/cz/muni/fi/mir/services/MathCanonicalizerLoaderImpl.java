@@ -5,11 +5,12 @@
  */
 package cz.muni.fi.mir.services;
 
-import cz.muni.fi.mir.tasks.TaskStatus;
 import cz.muni.fi.mir.tasks.CanonicalizationTask;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.FormulaService;
+import cz.muni.fi.mir.tasks.TaskStatus;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -47,6 +48,8 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
 
     @Autowired
     private FormulaService formulaService;
+    @Autowired
+    private ApplicationRunService applicationRunService;
 
     /**
      * Default and the only protected constructor for this class. 
@@ -170,7 +173,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
     public void execute(Formula formula, ApplicationRun applicationRun)
     {
         this.setRevision(applicationRun.getRevision().getRevisionHash());
-        CanonicalizationTask task = new CanonicalizationTask(formulaService, formula, this.mainClass, applicationRun);
+        CanonicalizationTask task = new CanonicalizationTask(formulaService, formula, this.mainClass, applicationRunService, applicationRun);
         Future<TaskStatus> future = taskExecutor.submit(task);
     }
 }

@@ -11,6 +11,7 @@ import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 
+import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.db.service.ProgramService;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -84,6 +86,8 @@ public class FormulaController
     private ConfigurationService configurationService;
     @Autowired
     private RevisionService revisionService;
+    @Autowired
+    private ApplicationRunService applicationRunService;
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaController.class);
 
@@ -131,6 +135,7 @@ public class FormulaController
                 if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
                 {
                     ApplicationRun applicationRun = new ApplicationRun();
+                    applicationRunService.createApplicationRun(applicationRun);
                     applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
                     applicationRun.setRevision(mapper.map(formulaForm.getRevisionForm(), Revision.class));
                     applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
@@ -156,6 +161,7 @@ public class FormulaController
                         if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
                         {
                             ApplicationRun applicationRun = new ApplicationRun();
+                            applicationRunService.createApplicationRun(applicationRun);
                             applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
                             applicationRun.setRevision(mapper.map(formulaForm.getRevisionForm(), Revision.class));
                             applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
@@ -243,6 +249,7 @@ public class FormulaController
         applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
         applicationRun.setRevision(mapper.map(applicationRunForm.getRevisionForm(), Revision.class));
         applicationRun.setConfiguration(mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class));
+        applicationRunService.createApplicationRun(applicationRun);
 
         mathCanonicalizerLoader.execute(formula, applicationRun);
     }

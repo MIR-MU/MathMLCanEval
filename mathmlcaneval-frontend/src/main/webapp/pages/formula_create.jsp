@@ -21,7 +21,7 @@
             <form:errors path="sourceDocumentForm" element="div" class="col-sm-3 alert alert-danger"/>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">!revision: </label>
+            <label class="col-sm-2 control-label"><spring:message code="entity.formula.program" /></label>
             <div class="col-sm-7">
                 <form:select path="programForm" multiple="false" class="form-control">
                     <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
