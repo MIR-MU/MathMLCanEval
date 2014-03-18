@@ -15,7 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.PreRemove;
 
 
@@ -45,7 +45,7 @@ public class CanonicOutput implements Serializable
     @Column(name = "runtime")
     private long runningTime;
 
-    @OneToOne
+    @ManyToOne
     private ApplicationRun applicationRun;
 
     @OneToMany(fetch = FetchType.EAGER)
