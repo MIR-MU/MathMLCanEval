@@ -24,6 +24,7 @@
         <link href="<c:url value="/resources/css/shCore.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/shThemeDefault.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/jquery.fileupload.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/diffview.css" />" rel="stylesheet" type="text/css" />
 
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

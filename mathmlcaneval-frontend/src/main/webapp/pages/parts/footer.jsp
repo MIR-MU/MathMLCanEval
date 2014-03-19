@@ -19,6 +19,8 @@
 <script type="text/javascript"
         src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
+<script type="text/javascript" src="<c:url value="/resources/js/diffview.js" />"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/difflib.js" />"></script>
 <script>
     SyntaxHighlighter.autoloader(
             'xml  <c:url value="/resources/js/shBrushXml.js" />'
@@ -106,6 +108,26 @@ $(document).ready(function() { $("#btnCanon").click(function(){
   });
 });
 });
+</script>
+<script type="text/javascript">
+function diffView() {
+    var byId = function (id) { return document.getElementById(id); },
+        base = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-2")).originalText),
+        newtxt = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-1")).originalText),
+        sm = new difflib.SequenceMatcher(base, newtxt),
+        opcodes = sm.get_opcodes(),
+        diffoutputdiv = byId("diff");
+
+    diffoutputdiv.innerHTML = "";
+    diffoutputdiv.appendChild(diffview.buildView({
+        baseTextLines: base,
+        newTextLines: newtxt,
+        opcodes: opcodes,
+        baseTextName: " ",
+        newTextName: " ",
+        viewType: 0
+    }));
+}
 </script>
 </body>
 </html>

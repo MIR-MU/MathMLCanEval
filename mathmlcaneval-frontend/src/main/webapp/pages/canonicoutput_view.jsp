@@ -76,12 +76,6 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="diff">
-                                <div class="col-lg-12">
-                                    <pre class="brush: xml">
-    <%----%>
-                                    </pre>
-                                </div>
-                            </div>
                             </div>
                         </div>
                     </div>
