@@ -37,8 +37,24 @@
                     <div class="panel panel-primary">
                        <!-- Annotations (view & add) -->
                        <div class="panel-heading"><spring:message code="entity.canonicOutput.annotations" /></div>
-                       <table class="table table-bordered table-striped">
-                       </table>
+                       <form:form method="post" action="${pageContext.request.contextPath}/canonicoutput/annotate/" commandName="annotationForm" cssClass="form-horizontal">
+                       <input type="hidden" name="canonicOutputId" value="${formulaEntry.id}" />
+                       <table class="table table-bordered table-striped"><tbody>
+                       <c:forEach items="${annotationFlagList}" var="flag">
+                           <tr><td><sec:authorize access="hasRole('ROLE_USER')">
+                               <form:radiobutton path="annotationFlagForm" value="${flag.id}" />
+                               </sec:authorize> ${flag.flagValue}</td>
+                               <td><div class="progress-bar" style="width: <c:out value="${annotationFlagHits[flag.id] * 100 / totalAnnotations}" default="0" />%;" title="${annotationFlagHits[flag.id]}">&nbsp;</div></td>
+                           </tr>
+                       </c:forEach>
+                       </tbody></table>
+                       <sec:authorize access="hasRole('ROLE_USER')">
+                       <div class="panel-footer">
+                           <form:input style="width: 80%;" path="note" placeholder="Note" />
+                           <button type="submit" class="btn btn-primary btn-sm pull-right"><spring:message code="general.button.submit" /></button>
+                       </div>
+                       </sec:authorize>
+                       </form:form>
                    </div>
                 </div>
             </div>

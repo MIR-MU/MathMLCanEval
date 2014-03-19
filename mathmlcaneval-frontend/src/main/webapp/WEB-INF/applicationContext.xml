@@ -68,6 +68,7 @@
                 <bean class="cz.muni.fi.mir.convertors.StringToUserRole"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToRevision"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToConfiguration"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToAnnotationFlag"/>
             </list>
         </property>
     </bean>
