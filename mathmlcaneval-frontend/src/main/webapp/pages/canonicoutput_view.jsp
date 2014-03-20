@@ -39,12 +39,12 @@
                        <div class="panel-heading"><spring:message code="entity.canonicOutput.annotations" /></div>
                        <form:form method="post" action="${pageContext.request.contextPath}/canonicoutput/annotate/" commandName="annotationForm" cssClass="form-horizontal">
                        <input type="hidden" name="canonicOutputId" value="${formulaEntry.id}" />
-                       <table class="table table-bordered table-striped"><tbody>
+                       <table class="table table-bordered table-striped" style="table-layout: fixed;"><tbody>
                        <c:forEach items="${annotationFlagList}" var="flag">
                            <tr><td><sec:authorize access="hasRole('ROLE_USER')">
                                <form:radiobutton path="annotationFlagForm" value="${flag.id}" />
                                </sec:authorize> ${flag.flagValue}</td>
-                               <td><div class="progress-bar" style="width: <c:out value="${annotationFlagHits[flag.id] * 100 / totalAnnotations}" default="0" />%;" title="${annotationFlagHits[flag.id]}">&nbsp;</div></td>
+                               <td><div class="progress-bar" style="width: <c:out value="${annotationFlagHits[flag.id] * 100.0 / totalAnnotations}" default="0" />%;" title="${annotationFlagHits[flag.id]}">&nbsp;</div></td>
                            </tr>
                        </c:forEach>
                        </tbody></table>

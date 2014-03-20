@@ -14,16 +14,11 @@ import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.AnnotationForm;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import org.dozer.Mapper;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -67,16 +62,20 @@ public class CanonicOutputController
         mm.addAttribute("formulaEntry", canonicOutput);
         mm.addAttribute("annotationForm", new AnnotationForm());
         mm.addAttribute("annotationFlagList", annotationFlagService.getAllAnnotationFlags());
+
         long totalAnnotations = 0;
         Map<Long, Long> annotationFlagHits = new HashMap<>();
-        for (Annotation annotation : canonicOutput.getAnnotations())
+        if (canonicOutput != null) 
         {
-            Long index = annotation.getAnnotationFlag().getId();
+            for (Annotation annotation : canonicOutput.getAnnotations())
+            {
+                Long index = annotation.getAnnotationFlag().getId();
 
-            if (!annotationFlagHits.containsKey(index))
-                annotationFlagHits.put(index, 0L);
-            annotationFlagHits.put(index, annotationFlagHits.get(index) + 1);
-            totalAnnotations += 1;
+                if (!annotationFlagHits.containsKey(index))
+                    annotationFlagHits.put(index, 0L);
+                annotationFlagHits.put(index, annotationFlagHits.get(index) + 1);
+                totalAnnotations += 1;
+            }
         }
         mm.addAttribute("totalAnnotations", totalAnnotations);
         mm.addAttribute("annotationFlagHits", annotationFlagHits);

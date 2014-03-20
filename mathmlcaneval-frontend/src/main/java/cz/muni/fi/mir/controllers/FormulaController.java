@@ -25,6 +25,7 @@ import cz.muni.fi.mir.forms.UserForm;
 
 import cz.muni.fi.mir.services.FormulaCreator;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
+import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -34,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -134,11 +134,11 @@ public class FormulaController
                 // canonicalize on import
                 if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
                 {
-                    ApplicationRun applicationRun = new ApplicationRun();
-                    applicationRunService.createApplicationRun(applicationRun);
+                    ApplicationRun applicationRun = EntityFactory.createApplicationRun();
                     applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
                     applicationRun.setRevision(mapper.map(formulaForm.getRevisionForm(), Revision.class));
                     applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
+                    applicationRunService.createApplicationRun(applicationRun);
 
                     mathCanonicalizerLoader.execute(f, applicationRun);
                 }
@@ -160,11 +160,11 @@ public class FormulaController
                         // canonicalize on import
                         if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
                         {
-                            ApplicationRun applicationRun = new ApplicationRun();
-                            applicationRunService.createApplicationRun(applicationRun);
+                            ApplicationRun applicationRun = EntityFactory.createApplicationRun();
                             applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
                             applicationRun.setRevision(mapper.map(formulaForm.getRevisionForm(), Revision.class));
                             applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
+                            applicationRunService.createApplicationRun(applicationRun);
 
                             mathCanonicalizerLoader.execute(f, applicationRun);
                         }

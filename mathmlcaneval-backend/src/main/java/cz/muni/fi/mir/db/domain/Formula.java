@@ -48,9 +48,9 @@ public class Formula implements Serializable
     private Program program;                    // konverzni program
     @ManyToOne
     private User user;                          // kto ju vlozil
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy="parents", cascade = CascadeType.REMOVE)
     private List<CanonicOutput> outputs;         // 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Formula> similarFormulas;
 
     public Long getId()

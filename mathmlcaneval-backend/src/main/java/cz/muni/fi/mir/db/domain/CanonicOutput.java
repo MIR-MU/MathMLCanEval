@@ -7,15 +7,18 @@ package cz.muni.fi.mir.db.domain;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostRemove;
 import javax.persistence.PreRemove;
 
 
@@ -39,7 +42,8 @@ public class CanonicOutput implements Serializable
     @Column(name = "similarForm")
     private String similarForm;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="parents_id")
     private List<Formula> parents;
 
     @Column(name = "runtime")
@@ -48,7 +52,7 @@ public class CanonicOutput implements Serializable
     @ManyToOne
     private ApplicationRun applicationRun;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
     private List<Annotation> annotations;
 
     public Long getId()

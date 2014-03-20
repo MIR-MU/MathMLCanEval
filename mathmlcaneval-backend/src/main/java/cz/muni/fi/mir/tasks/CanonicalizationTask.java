@@ -8,6 +8,7 @@ import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
+import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.FormulaService;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,18 +32,20 @@ public class CanonicalizationTask implements Callable<TaskStatus>
     private Formula formula;
     private ApplicationRun applicationRun;
     private Class mainClass;
+    private CanonicOutputService canonicOutputService;
 
     private FormulaService formulaService;
     private ApplicationRunService applicationRunService;
 
     private static final Logger logger = Logger.getLogger(CanonicalizationTask.class);
 
-    public CanonicalizationTask(FormulaService formulaService, Formula formula, Class mainClass, ApplicationRunService applicationRunService, ApplicationRun applicationRun)
+    public CanonicalizationTask(CanonicOutputService canonicOutputService, FormulaService formulaService, Formula formula, Class mainClass, ApplicationRunService applicationRunService, ApplicationRun applicationRun)
     {
         this.formulaService = formulaService;
         this.applicationRunService = applicationRunService;
         this.formula = formula;
         this.applicationRun = applicationRun;
+        this.canonicOutputService = canonicOutputService;
         this.mainClass = mainClass;
     }
 
@@ -93,6 +96,8 @@ public class CanonicalizationTask implements Callable<TaskStatus>
         canonicOutput.setRunningTime(stopTime.getMillis() - startTime.getMillis());
 
         canonicOutput.setParents(Arrays.asList(formula));
+        canonicOutputService.createCanonicOutput(canonicOutput);
+
         formula.getOutputs().add(canonicOutput);
 
         formulaService.updateFormula(formula);
