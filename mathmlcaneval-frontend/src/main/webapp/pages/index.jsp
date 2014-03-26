@@ -1,67 +1,39 @@
 
 <div class="content">
-    <sec:authorize access="hasRole('ROLE_ANONYMOUS')">
-        <!-- Main jumbotron for a primary marketing message or call to action -->
-        <div class="jumbotron">
-            <div class="container">
-                <h1>Hello, world!</h1>
-                <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-                <p>
-
-
-
-                </p>
-                <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
-            </div>
-        </div>
-    </sec:authorize>
-
     <div class="container">
-        <!-- Example row of columns -->
         <div class="row">
-            <div class="col-md-4">
-                <h2>Heading</h2>
-                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+            <div class="col-md-3">
+                <div class="row blocks">
+                    <sec:authorize access="hasRole('ROLE_USER')">
+                    <a href="${pageContext.request.contextPath}/formula/create/" class="thumbnail well well-sm">
+                        <div class="caption">
+                            <h2><spring:message code="index.page.button.import" /></h2>
+                            <p>Upload and canonicalize new formulas.</p>
+                        </div>
+                    </a>
+                    </sec:authorize>
+                    <a href="#" class="thumbnail well well-sm">
+                        <div class="caption">
+                            <h2><spring:message code="index.page.button.explore" /></h2>
+                            <p>Browse formulas others have been uploading or search for specific formula.</p>
+                        </div>
+                    </a>
+                    <a href="#" class="thumbnail well well-sm">
+                        <div class="caption">
+                            <h2><spring:message code="index.page.button.statistics" /></h2>
+                            <p>See the evaluation and statistics about performance and correctness of canonicalizer.</p>
+                       </div>
+                    </a>
+                </div>
             </div>
-            <div class="col-md-4">
-                <h2>Heading</h2>
-                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-            </div>
-            <div class="col-md-4">
-                <h2>Test highlighteru</h2>
-                <pre class="brush: xml">
-&lt;?xml version="1.0" encoding="utf-8" ?> 
-      
-      &lt;!-- comments -->
-      &lt;rootNode>
-      	&lt;childNodes>
-      		&lt;childNode attribute = "value" namespace:attribute='value' attribute=/>
-      		&lt;childNode />
-      		&lt;childNode />
-      		&lt;childNode />
-      		&lt;childNode 
-      			attr1="value"
-      			attr2="10"
-      			attr3="hello"
-      			>
-      				value
-      			&lt;/childNode>
-      		&lt;namespace:childNode>
-      			&lt;![CDATA[
-      				this is some CDATA content
-      				&lt;!-- comments inside cdata -->
-      				&lt;b alert='false'>tags inside cdata&lt;/b>
-      			]]>
-      			
-      			value = "plain string outside"
-      			hello = world
-      		&lt;/namespace:childNode>
-      	&lt;/childNodes>
-      &lt;/rootNode>
-                </pre>
-                <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+
+            <div class="col-md-9" role="main">
+                <h2><spring:message code="index.page.about" /></h2>
+                <p>Goal of this project is to create an application in Java language which performs canonicalization of mathematical expressions written in MathML (Mathematical Markup Language).</p>
+                <p>The output should be canonical form of given MathML document. This canonicalized form of MathML can then be used for easy decision if two differently written MathML formulae represent the same expression, or by MathML search and comparison engines.</p>
+                <p><a class="btn btn-default" href="${pageContext.request.contextPath}/about/" role="button">View details &raquo;</a></p>
+
+                <h2><spring:message code="index.page.recent" /></h2>
             </div>
         </div>
     </div>

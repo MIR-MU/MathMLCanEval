@@ -1,5 +1,5 @@
 <div class="container content">
-    <h1><spring:message code="entity.revision.create" /></h1>
+    <h1><spring:message code="entity.configuration.create" /></h1>
     <form:form method="post" action="${pageContext.request.contextPath}/configuration/create/" commandName="configurationForm" cssClass="form-horizontal pull-top-50">
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.configuration.name" /></label>

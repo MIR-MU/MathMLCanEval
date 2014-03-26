@@ -49,8 +49,7 @@
                 </div>
                 <div class="navbar-collapse collapse">                    
                     <ul class="nav navbar-nav">
-                        <li><a href="${pageContext.request.contextPath}/about/"><spring:message code="navigation.section.about" /></a></li>
-                            <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                        <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="navigation.section.management" /><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
@@ -65,9 +64,6 @@
                                     <li class="divider"></li>
                                     <li><a href="${pageContext.request.contextPath}/configuration/create/"><spring:message code="navigation.configuration.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/configuration/list/"><spring:message code="navigation.configuration.list" /></a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="${pageContext.request.contextPath}/formula/create/"><spring:message code="navigation.formula.create" /></a></li>
-                                    <li class="divider"></li>
                                 </ul>
                             </li>
                         </sec:authorize>
@@ -75,12 +71,12 @@
                     <sec:authorize access="hasRole('ROLE_ANONYMOUS')">
                         <form class="navbar-form navbar-right" role="form" action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
                             <div class="form-group">
-                                <input type="text" name="j_username" placeholder="Email" class="form-control">
+                                <input type="text" name="j_username" placeholder="<spring:message code="login.label.username" />" class="form-control">
                             </div>
                             <div class="form-group">
-                                <input type="password" name="j_password" placeholder="Password" class="form-control">
+                                <input type="password" name="j_password" placeholder="<spring:message code="login.label.password" />" class="form-control">
                             </div>
-                            <button type="submit" class="btn btn-success">Sign in</button>
+                            <button type="submit" class="btn btn-success"><spring:message code="login.label.signin" /></button>
                         </form>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_USER')">
@@ -90,17 +86,17 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="${pageContext.request.contextPath}/user/profile/"><spring:message code="navigation.user.myprofile" /></a></li>
                                     <li class="divider"></li>
+                                    <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                                     <li><a href="${pageContext.request.contextPath}/user/create/"><spring:message code="navigation.user.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/user/list/"><spring:message code="navigation.user.list" /></a></li>
                                     <li class="divider"></li>
                                     <li><a href="${pageContext.request.contextPath}/userrole/create/"><spring:message code="navigation.userrole.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/userrole/list/"><spring:message code="navigation.userrole.list" /></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="${pageContext.request.contextPath}/formula/create/"><spring:message code="navigation.formula.create" /></a></li>
-                                    <li class="divider"></li>
+                                    </sec:authorize>
                                     <li><a href="${pageContext.request.contextPath}/user/logout/"><spring:message code="navigation.section.logout" /></a></li>
                                 </ul>
-                            </li>                            
+                            </li>
                         </ul>
                     </sec:authorize>
 

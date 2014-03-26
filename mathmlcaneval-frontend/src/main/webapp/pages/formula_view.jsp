@@ -3,7 +3,7 @@
     <div class="btn-group pull-right space-bottom-10">
         <sec:authentication var="user" property="principal" />
         <sec:authorize access="hasRole('ROLE_USER')">
-        <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#canonModal"><spring:message code="entity.formula.run" /></button>
+        <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#canonModal"><spring:message code="entity.formula.canonicalizer.run" /></button>
         </sec:authorize>
         <!-- superuser -->
         <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
@@ -48,7 +48,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="general.label.close" /></button>
-            <button id="btnCanon" type="button" class="btn btn-warning"><spring:message code="entity.formula.run" /></button>
+            <button id="btnCanon" type="button" class="btn btn-warning"><spring:message code="entity.formula.canonicalizer.run" /></button>
           </div>
         </div>
       </div>

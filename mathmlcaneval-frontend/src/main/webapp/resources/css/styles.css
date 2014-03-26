@@ -44,3 +44,8 @@ and open the template in the editor.
     font-weight: bold;
     margin-bottom: 15px;
 }
+
+.blocks a
+{
+    text-decoration: none;
+}

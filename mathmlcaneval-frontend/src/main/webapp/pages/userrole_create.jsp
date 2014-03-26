@@ -1,20 +1,17 @@
 <div class="container content">
-    <h1>!user role create</h1>
-    <form:form commandName="userRoleForm" class="form-signin" role="form" action="${pageContext.request.contextPath}/userrole/create/" method="post">
-        <spring:hasBindErrors name="programForm">
-            <div class="error">
-                <c:forEach var="error" items="${errors.allErrors}">
-                    <p>Errors ${error.defaultMessage}</p>
-                </c:forEach>
-            </div>
-        </spring:hasBindErrors>
-
+    <h1><spring:message code="entity.userrole.create" /></h1>
+    <form:form commandName="userRoleForm" class="form-signin" role="form" action="${pageContext.request.contextPath}/userrole/create/" method="post" cssClass="form-horizontal pull-top-50">
         <div class="form-group">
-            <label class="col-sm-2 control-label">!role name</label>
-            <div class="col-sm-10">
-                <form:input path="roleName" class="form-control" placeholder="!User name"/>
+            <label class="col-sm-2 control-label"><spring:message code="entity.userrole.name" /></label>
+            <div class="col-sm-7">
+                <form:input path="roleName" class="form-control" />
+            </div>
+            <form:errors path="roleName" element="div" class="col-sm-3 alert alert-danger"/>            
+        </div>
+        <div class="form-group">
+            <div class="col-xm-7 col-sm-offset-2">
+                <button type="submit" class="btn btn-primary"><spring:message code="general.button.submit" /></button>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">!submit</button>
     </form:form>
-</div>     
+</div>

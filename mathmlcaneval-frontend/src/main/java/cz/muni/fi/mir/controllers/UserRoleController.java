@@ -63,7 +63,7 @@ public class UserRoleController
             mm.addAttribute(model);
             mm.addAttribute("userRoleForm", userRoleForm);
             
-            return new ModelAndView("user_create",mm);
+            return new ModelAndView("userrole_create",mm);
         }
         else
         {

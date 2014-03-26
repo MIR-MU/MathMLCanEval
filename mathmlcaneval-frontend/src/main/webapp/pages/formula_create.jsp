@@ -24,8 +24,15 @@
             <label class="col-sm-2 control-label"><spring:message code="entity.formula.program" /></label>
             <div class="col-sm-7">
                 <form:select path="programForm" multiple="false" class="form-control">
-                    <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
-                    <form:options items="${programFormList}" itemLabel="name" itemValue="id" />
+                    <c:choose>
+                        <c:when test="${fn:length(programFormList) eq 1}">
+                            <form:option value="${programFormList[0].id}"><c:out value="${programFormList[0].name}" /></form:option>
+                        </c:when>
+                        <c:otherwise>
+                            <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
+                            <form:options items="${programFormList}" itemLabel="name" itemValue="id" />
+                        </c:otherwise>
+                    </c:choose>
                 </form:select>
             </div>
             <form:errors path="programForm" element="div" class="col-sm-3 alert alert-danger"/>
@@ -72,7 +79,7 @@
             </div>
         </div>
         <div class="form-group">
-            <button class="btn btn-default col-xm-7 col-sm-offset-2" data-toggle="modal" data-target="#canonModal"><spring:message code="entity.formula.run" /></button>
+            <button class="btn btn-default col-xm-7 col-sm-offset-2" data-toggle="modal" data-target="#canonModal"><spring:message code="entity.formula.canonicalizer.configure" /></button>
         </div>
         <div class="modal fade" id="canonModal" tabindex="-1" role="dialog" aria-labelledby="canonModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -103,7 +110,7 @@
                   </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="general.label.close" /></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="general.label.ok" /></button>
               </div>
             </div>
           </div>
