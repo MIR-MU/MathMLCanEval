@@ -17,7 +17,7 @@
 <script type='text/javascript' src="<c:url value="/resources/js/jquery-fileupload/jquery.fileupload.js" />"></script><script type="text/javascript" src="<c:url value="/resources/js/shCore.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/shAutoloader.js" />"></script>
 <script type="text/javascript"
-        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 <script type="text/javascript" src="<c:url value="/resources/js/diffview.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/difflib.js" />"></script>
