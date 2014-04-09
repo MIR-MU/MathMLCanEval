@@ -108,7 +108,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
         this.path = FileSystems.getDefault().getPath(this.jarFolder, revision + ".jar");
         if (!Files.exists(this.path))
         {
-            //logger.fatal(me);
+            logger.fatal("File doesn't exist: " + this.path);
         }
 
         URL jarFile = null;
@@ -118,7 +118,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
         }
         catch (MalformedURLException me)
         {
-            //logger.fatal(me);
+            logger.fatal(me);
         }
         URLClassLoader cl = URLClassLoader.newInstance(new URL[]
         {
@@ -131,7 +131,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
         }
         catch (ClassNotFoundException cnfe)
         {
-            //logger.fatal(cnfe);
+            logger.fatal(cnfe);
         }
     }
 
