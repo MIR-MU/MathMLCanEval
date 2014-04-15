@@ -21,6 +21,7 @@ import cz.muni.fi.mir.db.service.UserService;
 
 import cz.muni.fi.mir.forms.ApplicationRunForm;
 import cz.muni.fi.mir.forms.FormulaForm;
+import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.forms.UserForm;
 
 import cz.muni.fi.mir.services.FormulaCreator;
@@ -267,5 +268,15 @@ public class FormulaController
             logger.info(String.format("Blocked unauthorized deletion of formula %d triggered by user %s.", id, securityContext.getLoggedUser()));
         }
         return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping(value = {"/list","/list/"},method = RequestMethod.GET)
+    public ModelAndView listPage(@ModelAttribute("pagination") Pagination pagination, Model model)
+    {
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("pagination", pagination);
+        mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination.getPageSize() * (pagination.getPageNumber() - 1), pagination.getPageSize()));
+
+        return new ModelAndView("formula_list",mm);
     }
 }

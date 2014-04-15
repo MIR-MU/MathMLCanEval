@@ -48,7 +48,7 @@ public class Formula implements Serializable
     private Program program;                    // konverzni program
     @ManyToOne
     private User user;                          // kto ju vlozil
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy="parents", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy="parents")
     private List<CanonicOutput> outputs;         // 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Formula> similarFormulas;

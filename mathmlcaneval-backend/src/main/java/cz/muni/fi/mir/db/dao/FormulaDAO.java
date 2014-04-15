@@ -24,6 +24,9 @@ public interface FormulaDAO
 
     Formula getFormulaByID(Long id);
 
+    List<Formula> getAllFormulas();
+    List<Formula> getAllFormulas(int skip, int number);
+
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
     List<Formula> getFormulasByProgram(Program program);
     List<Formula> getFormulasByUser(User user);

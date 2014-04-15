@@ -9,6 +9,7 @@ import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
@@ -254,6 +255,25 @@ public class DataTestTools
         result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 2", "/home/empt/input/data/test2.xhtml"));
         result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 3", "/home/empt/input/fata/test3.xhtml"));
         result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 4", "/home/empt/input/data/test4.xhtml"));
+
+        return result;
+    }
+
+    /**
+     * Method provides List of formulas with following order and values:
+     *
+     * @param users
+     * @param sourceDocuments
+     * @return
+     */
+    public static List<Formula> provideFormulas(List<User> users, List<SourceDocument> sourceDocuments)
+    {
+        List<Formula> result = new ArrayList<>();
+
+        result.add(EntityFactory.createFormula(getFirstXML(), DateTime.now(), users.get(0), sourceDocuments.get(0)));
+        result.add(EntityFactory.createFormula(getFirstXML(), DateTime.now(), users.get(1), sourceDocuments.get(1)));
+        result.add(EntityFactory.createFormula(getSecondXML(), DateTime.now(), users.get(0), sourceDocuments.get(0)));
+        result.add(EntityFactory.createFormula(getSecondXML(), DateTime.now(), users.get(1), sourceDocuments.get(1)));
 
         return result;
     }

@@ -7,7 +7,9 @@ package cz.muni.fi.mir.tests;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
+import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
@@ -130,6 +132,42 @@ public class TestTools
         public int compare(ApplicationRun ar1,ApplicationRun ar2)
         {
             return ar2.getId().compareTo(ar1.getId());
+        }
+    };
+
+    public static Comparator<Formula> formulaComparator = new Comparator<Formula>()
+    {
+        @Override
+        public int compare(Formula f1, Formula f2)
+        {
+            return f1.getId().compareTo(f2.getId());
+        }
+    };
+
+    public static Comparator<Formula> formulaComparatorInverted = new Comparator<Formula>()
+    {
+        @Override
+        public int compare(Formula f1, Formula f2)
+        {
+            return f2.getId().compareTo(f1.getId());
+        }
+    };
+
+    public static Comparator<CanonicOutput> canonicOutputComparator = new Comparator<CanonicOutput>()
+    {
+        @Override
+        public int compare(CanonicOutput co1, CanonicOutput co2)
+        {
+            return co1.getId().compareTo(co2.getId());
+        }
+    };
+
+    public static Comparator<CanonicOutput> canonicOutputComparatorInverted = new Comparator<CanonicOutput>()
+    {
+        @Override
+        public int compare(CanonicOutput co1, CanonicOutput co2)
+        {
+            return co2.getId().compareTo(co1.getId());
         }
     };
 }

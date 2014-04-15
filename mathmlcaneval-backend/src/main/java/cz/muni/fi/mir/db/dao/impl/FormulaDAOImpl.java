@@ -108,6 +108,41 @@ public class FormulaDAOImpl implements FormulaDAO
         {
             logger.debug(nre);
         }
+
+        return resultList;
+    }
+
+    @Override
+    public List<Formula> getAllFormulas()
+    {
+        List<Formula> resultList = Collections.emptyList();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT f FROM formula f ORDER BY id DESC", Formula.class).getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+
+        return resultList;
+    }
+ 
+    @Override
+    public List<Formula> getAllFormulas(int skip, int number)
+    {
+        List<Formula> resultList = Collections.emptyList();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT f FROM formula f ORDER BY id DESC", Formula.class)
+                    .setFirstResult(skip)
+                    .setMaxResults(number)
+                    .getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
         
         return resultList;
     }

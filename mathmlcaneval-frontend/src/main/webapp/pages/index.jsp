@@ -12,7 +12,7 @@
                         </div>
                     </a>
                     </sec:authorize>
-                    <a href="#" class="thumbnail well well-sm">
+                    <a href="${pageContext.request.contextPath}/formula/list/" class="thumbnail well well-sm">
                         <div class="caption">
                             <h2><spring:message code="index.page.button.explore" /></h2>
                             <p>Browse formulas others have been uploading or search for specific formula.</p>

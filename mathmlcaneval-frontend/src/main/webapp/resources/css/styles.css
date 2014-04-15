@@ -49,3 +49,16 @@ and open the template in the editor.
 {
     text-decoration: none;
 }
+
+.preview
+{
+    width: 200px;
+    height: 50px;
+    overflow: hidden;
+    color: black;
+}
+
+.preview a
+{
+    text-decoration: none;
+}

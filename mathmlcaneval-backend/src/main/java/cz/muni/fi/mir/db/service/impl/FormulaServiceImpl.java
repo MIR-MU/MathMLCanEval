@@ -7,7 +7,6 @@
 package cz.muni.fi.mir.db.service.impl;
 
 import cz.muni.fi.mir.db.dao.FormulaDAO;
-import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
@@ -74,5 +73,19 @@ public class FormulaServiceImpl implements FormulaService
     public List<Formula> getFormulasByUser(User user)
     {
         return formulaDAO.getFormulasByUser(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Formula> getAllFormulas()
+    {
+        return formulaDAO.getAllFormulas();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Formula> getAllFormulas(int skip, int number)
+    {
+        return formulaDAO.getAllFormulas(skip, number);
     }
 }

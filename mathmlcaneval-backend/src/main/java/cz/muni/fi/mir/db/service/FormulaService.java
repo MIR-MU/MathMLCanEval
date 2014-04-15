@@ -6,7 +6,6 @@
 
 package cz.muni.fi.mir.db.service;
 
-import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
@@ -24,6 +23,9 @@ public interface FormulaService
     void deleteFormula(Formula formula);
 
     Formula getFormulaByID(Long id);
+
+    List<Formula> getAllFormulas();
+    List<Formula> getAllFormulas(int skip, int number);
 
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
     List<Formula> getFormulasByProgram(Program program);
