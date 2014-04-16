@@ -112,6 +112,18 @@
                 </configuration>   
             </plugin>
             <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat6-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <!-- Refer to the server settings in your ~/.m2/settings.xml -->
+                    <server>mir.fi.muni.cz-tomcat</server>
+                    <url>https://mir.fi.muni.cz/tomcat/manager</url>
+                    <path>/mathmlcaneval-frontend</path>
+                    <!-- <path>/apps/MathCalEval</path> -->
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>

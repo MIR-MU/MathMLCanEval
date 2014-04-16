@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Deploy to mir.fi.muni.cz</actionName>
+            <displayName>Deploy to mir.fi.muni.cz</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>tomcat6:deploy</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Redeploy to mir.fi.muni.cz</actionName>
+            <displayName>Redeploy to mir.fi.muni.cz</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>tomcat6:redeploy</goal>
+            </goals>
+        </action>
+    </actions>
