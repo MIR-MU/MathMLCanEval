@@ -10,6 +10,7 @@ import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.FormulaService;
+import cz.muni.fi.mir.tools.SimilarityFormConverter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -32,20 +34,18 @@ public class CanonicalizationTask implements Callable<TaskStatus>
     private Formula formula;
     private ApplicationRun applicationRun;
     private Class mainClass;
-    private CanonicOutputService canonicOutputService;
 
-    private FormulaService formulaService;
-    private ApplicationRunService applicationRunService;
+    @Autowired private CanonicOutputService canonicOutputService;
+    @Autowired private FormulaService formulaService;
+    @Autowired private ApplicationRunService applicationRunService;
+    @Autowired private SimilarityFormConverter similarityFormConverter;
 
     private static final Logger logger = Logger.getLogger(CanonicalizationTask.class);
 
-    public CanonicalizationTask(CanonicOutputService canonicOutputService, FormulaService formulaService, Formula formula, Class mainClass, ApplicationRunService applicationRunService, ApplicationRun applicationRun)
+    public CanonicalizationTask(Formula formula, ApplicationRun applicationRun, Class mainClass)
     {
-        this.formulaService = formulaService;
-        this.applicationRunService = applicationRunService;
         this.formula = formula;
         this.applicationRun = applicationRun;
-        this.canonicOutputService = canonicOutputService;
         this.mainClass = mainClass;
     }
 
@@ -93,6 +93,7 @@ public class CanonicalizationTask implements Callable<TaskStatus>
         CanonicOutput canonicOutput = new CanonicOutput();
         canonicOutput.setApplicationRun(applicationRun);
         canonicOutput.setOutputForm(output.toString());
+        canonicOutput.setSimilarForm(similarityFormConverter.convert(canonicOutput.getOutputForm()));
         canonicOutput.setRunningTime(stopTime.getMillis() - startTime.getMillis());
 
         canonicOutput.setParents(Arrays.asList(formula));

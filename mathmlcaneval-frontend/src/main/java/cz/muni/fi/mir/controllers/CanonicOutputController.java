@@ -12,6 +12,7 @@ import cz.muni.fi.mir.db.service.AnnotationService;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.AnnotationForm;
+import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -109,5 +111,18 @@ public class CanonicOutputController
         canonicOutputService.updateCanonicOutput(canonicOutput);
 
         return new ModelAndView("redirect:/canonicoutput/view/" + canonicOutputId);
+    }
+
+    @RequestMapping(value = {"/similar/{id}","/similar/{id}/"},method = RequestMethod.GET)
+    public ModelAndView searchResults(@ModelAttribute("pagination") Pagination pagination, @PathVariable Long id, Model model)
+    {
+        CanonicOutput canonicOutput = canonicOutputService.getCanonicOutputByID(id);        
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("pagination", pagination);
+        mm.addAttribute("reference", canonicOutput);
+        mm.addAttribute("outputList", canonicOutputService.getSimilarCanonicOutputs(canonicOutput, 
+                (pagination.getPageNumber() - 1) * pagination.getPageSize(), pagination.getPageSize()));
+
+        return new ModelAndView("canonicoutput_list",mm);
     }
 }

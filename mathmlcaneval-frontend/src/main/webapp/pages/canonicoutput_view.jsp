@@ -1,6 +1,7 @@
 <div class="container content">
     <h1><spring:message code="entity.output.entry" /></h1>
     <div class="btn-group pull-right space-bottom-10">
+        <a href="${pageContext.request.contextPath}/canonicoutput/similar/${formulaEntry.id}" class="btn btn-primary"><spring:message code="entity.canonicOutput.findSimilar" /></a>
         <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
         <a href="${pageContext.request.contextPath}/canonicoutput/delete/${formulaEntry.id}" class="btn btn-danger"><spring:message code="general.label.delete" /></a>
         </sec:authorize>
