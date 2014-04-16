@@ -7,10 +7,8 @@ package cz.muni.fi.mir.db.domain;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -50,7 +48,7 @@ public class Formula implements Serializable
     private User user;                          // kto ju vlozil
     @ManyToMany(mappedBy="parents")
     private List<CanonicOutput> outputs;         // 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany
     private List<Formula> similarFormulas;
 
     public Long getId()

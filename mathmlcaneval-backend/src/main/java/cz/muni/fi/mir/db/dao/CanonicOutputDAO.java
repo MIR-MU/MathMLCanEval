@@ -28,6 +28,7 @@ public interface CanonicOutputDAO
     List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun);
     List<CanonicOutput> getCanonicOutputByFormula(Formula formula);
     List<CanonicOutput> getCanonicOutputByParentFormula(Formula formula);
-    List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput);
+
+    List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput, int skip, int maxResults);
     
 }

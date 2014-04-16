@@ -84,8 +84,8 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
 
     @Override
     @Transactional(readOnly = true)
-    public List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput)
+    public List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput, int skip, int maxResults)
     {
-        return canonicOutputDAO.getSimilarCanonicOutputs(canonicOutput);
+        return canonicOutputDAO.getSimilarCanonicOutputs(canonicOutput, skip, maxResults);
     }
 }

@@ -8,9 +8,6 @@ package cz.muni.fi.mir.services;
 import cz.muni.fi.mir.tasks.CanonicalizationTask;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Formula;
-import cz.muni.fi.mir.db.service.ApplicationRunService;
-import cz.muni.fi.mir.db.service.CanonicOutputService;
-import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.tasks.TaskStatus;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,6 +19,7 @@ import java.util.concurrent.Future;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -49,11 +47,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
     private AsyncTaskExecutor taskExecutor;
 
     @Autowired
-    private FormulaService formulaService;
-    @Autowired
-    private ApplicationRunService applicationRunService;
-    @Autowired
-    private CanonicOutputService canonicOutputService;
+    private ApplicationContext applicationContext;
 
     /**
      * Default and the only protected constructor for this class. 
@@ -177,8 +171,14 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
     public void execute(Formula formula, ApplicationRun applicationRun)
     {
         this.setRevision(applicationRun.getRevision().getRevisionHash());
-        CanonicalizationTask task = new CanonicalizationTask(canonicOutputService, formulaService, formula, this.mainClass, applicationRunService, applicationRun);
-        Hibernate.initialize(formula.getOutputs()); // we need to force-fetch lazy collections. ugly..
+
+        CanonicalizationTask task = new CanonicalizationTask(formula, applicationRun, this.mainClass);
+        // inject beans into the task
+        applicationContext.getAutowireCapableBeanFactory().autowireBean(task);
+
+        // we need to force-fetch lazy collections. ugly..
+        Hibernate.initialize(formula.getOutputs()); 
+
         Future<TaskStatus> future = taskExecutor.submit(task);
     }
 }

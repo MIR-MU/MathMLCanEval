@@ -18,8 +18,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.PostRemove;
 import javax.persistence.PreRemove;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
 
 /**
@@ -27,6 +28,7 @@ import javax.persistence.PreRemove;
  * @author Empt
  */
 @Entity(name = "canonicOutput")
+@Indexed
 public class CanonicOutput implements Serializable
 {
 
@@ -37,9 +39,11 @@ public class CanonicOutput implements Serializable
     private Long id;
 
     @Column(name = "outputForm",columnDefinition = "TEXT",length = 10000)
+    @Field
     private String outputForm;
 
     @Column(name = "similarForm")
+    @Field
     private String similarForm;
 
     @ManyToMany(fetch = FetchType.LAZY)

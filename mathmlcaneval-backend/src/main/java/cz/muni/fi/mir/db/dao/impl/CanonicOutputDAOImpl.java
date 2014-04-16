@@ -15,6 +15,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -131,20 +135,29 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     }
 
     @Override
-    public List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput)
+    public List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput, int skip, int maxResults)
     {
-        List<CanonicOutput> resultList = Collections.emptyList();
+        QueryBuilder qb = getFullTextEntityManager().getSearchFactory().buildQueryBuilder().forEntity(CanonicOutput.class).get();
         
-        try
+        org.apache.lucene.search.Query luceneQuery = qb.keyword()
+                .fuzzy()
+                    .withThreshold(.8f)
+                    .withPrefixLength(1)
+                .onField("similarForm").matching(canonicOutput.getSimilarForm())
+                .createQuery();
+
+        FullTextQuery fullTextQuery = getFullTextEntityManager().createFullTextQuery(luceneQuery, CanonicOutput.class);
+        fullTextQuery.setFirstResult(skip);
+        if (maxResults > 0)
         {
-            resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.similarForm = :form", CanonicOutput.class)
-                    .setParameter("form", canonicOutput.getSimilarForm()).getResultList();
+            fullTextQuery.setMaxResults(maxResults);
         }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return resultList;
+
+        return fullTextQuery.getResultList();
+    }
+
+    private FullTextEntityManager getFullTextEntityManager()
+    {
+        return Search.getFullTextEntityManager(entityManager);
     }
 }

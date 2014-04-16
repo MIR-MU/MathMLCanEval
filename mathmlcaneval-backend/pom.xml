@@ -181,13 +181,13 @@
             <!--  HibernateSearch used for indexing -->
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-orm</artifactId>
-            <version>4.4.0.Final</version>
+            <version>4.5.1.Final</version>
         </dependency>
         <dependency>
             <!--  HibernateSearch used for indexing -->
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-analyzers</artifactId>
-            <version>4.4.0.Final</version>
+            <version>4.5.1.Final</version>
         </dependency>
         <dependency>
             <!-- postgresql jdbc driver -->
