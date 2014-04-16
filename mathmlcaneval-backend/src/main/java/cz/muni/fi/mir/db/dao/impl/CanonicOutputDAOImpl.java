@@ -139,12 +139,15 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     {
         QueryBuilder qb = getFullTextEntityManager().getSearchFactory().buildQueryBuilder().forEntity(CanonicOutput.class).get();
         
-        org.apache.lucene.search.Query luceneQuery = qb.keyword()
-                .fuzzy()
+        org.apache.lucene.search.Query luceneQuery = qb.bool()
+                .must(qb.keyword().fuzzy()
                     .withThreshold(.8f)
                     .withPrefixLength(1)
-                .onField("similarForm").matching(canonicOutput.getSimilarForm())
-                .createQuery();
+                    .onField("similarForm").matching(canonicOutput.getSimilarForm())
+                    .createQuery())
+                .must(qb.keyword()
+                    .onField("id").matching(canonicOutput.getId()).createQuery()).not()
+        .createQuery();
 
         FullTextQuery fullTextQuery = getFullTextEntityManager().createFullTextQuery(luceneQuery, CanonicOutput.class);
         fullTextQuery.setFirstResult(skip);
