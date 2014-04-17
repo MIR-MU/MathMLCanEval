@@ -78,7 +78,9 @@
                 <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
                 <prop key="hibernate.hbm2ddl.import_files">${hibernate.hbm2ddl.import_files}</prop>
                 <prop key="hibernate.cacheable">${hibernate.cacheable}</prop>
-                <prop key="hibernate.search.lucene_version">${hibernate.search.lucene_version}</prop>                
+                <prop key="hibernate.search.lucene_version">${hibernate.search.lucene_version}</prop> 
+                <prop key="hibernate.search.default.directory_provider">${hibernate.search.default.directory_provider}</prop>               
+                <prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>               
             </props>
         </property>
     </bean>
