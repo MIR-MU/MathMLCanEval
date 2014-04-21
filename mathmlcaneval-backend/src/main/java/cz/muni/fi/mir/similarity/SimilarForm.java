@@ -19,6 +19,7 @@ import javax.persistence.Table;
  */
 @Table(name = "canonicOutput")
 @Entity
+@Deprecated
 public class SimilarForm implements Serializable
 {
     private static final long serialVersionUID = 3861587013945745864L;

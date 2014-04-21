@@ -7,7 +7,6 @@ package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
-import cz.muni.fi.mir.db.domain.UserRole;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
@@ -16,26 +15,30 @@ import cz.muni.fi.mir.services.FileDirectoryService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.apache.log4j.Logger;
 import org.dozer.Mapper;
+import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.apache.log4j.Logger;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -72,27 +75,55 @@ public class InstallController
         }
         else
         {
-            return new ModelAndView("redirect:/");
+            return new ModelAndView("redirect:/reset/");
         }
     }
 
     @RequestMapping(value = "/step2/", method = RequestMethod.POST)
-    public ModelAndView step2(@ModelAttribute("userForm") @Valid UserForm user,
-            BindingResult result,
-            Model model)
+    public ModelAndView step2(HttpServletRequest request)
     {
-        if (result.hasErrors())
+        String username = null;
+        String email = null;
+        String pass1 = null;
+        String passVerify = null;
+        try
+        {
+            username = ServletRequestUtils.getStringParameter(request, "username");
+            email = ServletRequestUtils.getStringParameter(request, "email");
+            pass1 = ServletRequestUtils.getStringParameter(request, "password");
+            passVerify = ServletRequestUtils.getStringParameter(request, "passwordVerify");
+        }
+        catch (ServletRequestBindingException ex)
+        {
+            logger.error(ex);
+        }
+        
+        if(Tools.getInstance().stringIsEmpty(username))
         {
             ModelMap mm = new ModelMap();
-            mm.addAttribute("userForm", user);
-            mm.addAttribute(model);
+            mm.addAttribute("email", email);
+            
+            return new ModelAndView("setup/step1", mm);
+        }
+        else if(Tools.getInstance().stringIsEmpty(email))
+        {
+            ModelMap mm = new ModelMap();
+            mm.addAttribute("username", username);
+            
+            return new ModelAndView("setup/step1", mm);
+        }
+        else if(pass1 != null && !pass1.equals(passVerify))
+        {
+            ModelMap mm = new ModelMap();
+            mm.addAttribute("email", email);
+            mm.addAttribute("username", username);
             
             return new ModelAndView("setup/step1", mm);
         }
         else
         {
-            User u = mapper.map(user, User.class);
-            u.setUserRoles(userRoleService.getAllUserRoles());
+            User u = EntityFactory.createUser(username, pass1, username, email, userRoleService.getAllUserRoles());
+            
             try
             {
                 u.setPassword(Tools.getInstance().SHA1(u.getPassword()));
@@ -104,40 +135,48 @@ public class InstallController
             }
             userService.createUser(u);
             
-            return new ModelAndView("setup/step2");
+            return new ModelAndView("redirect:/");
         }
     }
     
-    @RequestMapping(value="/step3/",method = RequestMethod.POST)
-    public ModelAndView step3(@RequestParam("path") String path,@RequestParam("filename") String filename)
+//    @RequestMapping(value="/step3/",method = RequestMethod.POST)
+//    public ModelAndView step3(@RequestParam("path") String path,@RequestParam("filename") String filename)
+//    {
+//        if(!Tools.getInstance().stringIsEmpty(path))
+//        {
+//            FileDirectoryService fds = new FileDirectoryService();
+//            List<SourceDocument> list = null;
+////            try
+////            {
+////                list = fds.exploreDirectory(path, Tools.getInstance().stringIsEmpty(filename) ? "*.xml" : filename);
+////            }
+////            catch(FileNotFoundException ex)
+////            {
+////                logger.fatal(ex);
+////            }
+//            if(list != null)
+//            {
+//                for(SourceDocument sd : list)
+//                {
+//                    logger.info("Init import of : "+sd);
+//                    sourceDocumentService.createSourceDocument(sd);
+//                }
+//            }
+//            
+//            return new ModelAndView("setup/step3");
+//        }
+//        else
+//        {
+//            return null;
+//        }
+//    }
+    
+    @Secured("ROLE_ADMINISTRATOR")
+    @RequestMapping(value = "/reset/",method = RequestMethod.GET)
+    public ModelAndView handleReset()
     {
-        if(!Tools.getInstance().stringIsEmpty(path))
-        {
-            FileDirectoryService fds = new FileDirectoryService();
-            List<SourceDocument> list = null;
-            try
-            {
-                list = fds.exploreDirectory(path, Tools.getInstance().stringIsEmpty(filename) ? "*.xml" : filename);
-            }
-            catch(FileNotFoundException ex)
-            {
-                logger.fatal(ex);
-            }
-            if(list != null)
-            {
-                for(SourceDocument sd : list)
-                {
-                    logger.info("Init import of : "+sd);
-                    sourceDocumentService.createSourceDocument(sd);
-                }
-            }
-            
-            return new ModelAndView("setup/step3");
-        }
-        else
-        {
-            return null;
-        }
+//        Configuration cfg = new Configuration();
+//        cfg.setProperty(null, null)
+        return new ModelAndView("redirect:/");
     }
-
 }

@@ -6,6 +6,8 @@ package cz.muni.fi.mir.tools;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -31,10 +33,61 @@ import org.xml.sax.SAXException;
 @Component(value = "similarityFormConverter")
 public class SimilarityFormConverter
 {
-
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(SimilarityFormConverter.class);
+    
     @Autowired
     private DocumentBuilder documentBuilder; // wired bean used for creating documents
+    
+    
+    
+    /**
+     * Method parses given input String which is expected to be in form XML into Document object. If any error
+     * occurs exception is suppressed and null is returned.
+     * @param input String representation of XML file
+     * @return parsed XML String in form of Document
+     */
+    public Document parse(String input)
+    {
+        Document doc = null;
+        try
+        {
+            doc = documentBuilder.parse(new InputSource(new StringReader(input)));
+        } 
+        catch (SAXException | IOException ex)
+        {
+            logger.error(ex);
+        }
+        
+        return doc;
+    }
+    
+    
+    
+    public String distanceMethodForm(Document document)
+    {
+        StringBuilder sb = new StringBuilder();
 
+        if (document != null)
+        {
+            distanceTravel(document.getDocumentElement(), sb);
+        }
+
+        return sb.toString();
+    }
+    
+    public Map<String,Integer> countElementMethod(Document document)
+    {
+        Map<String,Integer> map = new HashMap<>();      
+        
+        countElementTravel(document.getDocumentElement(), map);        
+        
+        MapValueComparator<String,Integer> mvc = new MapValueComparator<>();
+        
+        Map<String,Integer> sortedMap = mvc.sortByValues(map);   
+        
+        return sortedMap;
+    }
+    
     /**
      * Method used for obtaining similar form for given MathML input. The main
      * goal is to obtain some kind of canonic form of canonic form obtained via
@@ -74,7 +127,6 @@ public class SimilarityFormConverter
         }
 
         return convert(doc);
-
     }
 
     /**
@@ -89,7 +141,7 @@ public class SimilarityFormConverter
 
         if (doc != null)
         {
-            travel(doc.getDocumentElement(), sb);
+            distanceTravel(doc.getDocumentElement(), sb);
         }
 
         return sb.toString();
@@ -104,7 +156,7 @@ public class SimilarityFormConverter
      * @param node to be examined
      * @param sb into which is output text appended
      */
-    private void travel(Node node, StringBuilder sb)
+    private void distanceTravel(Node node, StringBuilder sb)
     {
         if (node == null)
         {
@@ -116,16 +168,46 @@ public class SimilarityFormConverter
         {
             Node currentNode = nodeList.item(i);
             if (currentNode.getNodeType() == Node.ELEMENT_NODE)
-            {   //last node has 1 chiled ~> text value
+            {   //last node has 1 child ~> text value
                 if (currentNode.getChildNodes().getLength() == 1)
                 {
                     sb.append(StringUtils.trimAllWhitespace(currentNode.getTextContent()));
                 } 
                 else
                 {   // there is something more so we continue in greater depth
-                    travel(currentNode, sb);
+                    distanceTravel(currentNode, sb);
                 }
             }
+        }
+    }
+    
+    
+    private void countElementTravel(Node node, Map<String,Integer> map)
+    {
+        if(node == null)
+        {
+            return;
+        }
+        
+        NodeList nodeList = node.getChildNodes();
+        
+        for(int i = 0 ; i < nodeList.getLength();i++)
+        {
+            Node currentNode = nodeList.item(i);
+            if(currentNode.getNodeType() == Node.ELEMENT_NODE)
+            {
+                if(map.containsKey(currentNode.getNodeName()))
+                {
+                    Integer value = map.get(currentNode.getNodeName());
+                    value++;
+                    map.put(currentNode.getNodeName(),value);
+                }
+                else
+                {
+                    map.put(currentNode.getNodeName(),1);
+                }
+                countElementTravel(currentNode, map);
+            }            
         }
     }
 }

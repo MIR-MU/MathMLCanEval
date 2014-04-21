@@ -5,9 +5,12 @@
 package cz.muni.fi.mir.db.domain;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,8 +30,11 @@ public class SourceDocument implements Serializable
     private Long id;
     @Column(name = "note")
     private String note;
-    @Column(name = "documentPath")
-    private String documentPath;    //path sql99
+    @Column(name="name")
+    private String documentName;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Column(name = "documentPaths",nullable = true)
+    private List<String> documentPaths;    //path sql99
 
     public Long getId()
     {
@@ -50,14 +56,24 @@ public class SourceDocument implements Serializable
         this.note = note;
     }
 
-    public String getDocumentPath()
+    public List<String> getDocumentPaths()
     {
-        return documentPath;
+        return documentPaths;
     }
 
-    public void setDocumentPath(String documentPath)
+    public void setDocumentPaths(List<String> documentPaths)
     {
-        this.documentPath = documentPath;
+        this.documentPaths = documentPaths;
+    }
+
+    public String getDocumentName()
+    {
+        return documentName;
+    }
+
+    public void setDocumentName(String documentName)
+    {
+        this.documentName = documentName;
     }
 
     @Override
@@ -86,6 +102,6 @@ public class SourceDocument implements Serializable
     @Override
     public String toString()
     {
-        return "SourceDocument{" + "id=" + id + ", note=" + note + ", documentPath=" + documentPath + '}';
+        return "SourceDocument{" + "id=" + id + ", note=" + note + ", documentName=" + documentName + ", documentPaths=" + documentPaths + '}';
     }
 }

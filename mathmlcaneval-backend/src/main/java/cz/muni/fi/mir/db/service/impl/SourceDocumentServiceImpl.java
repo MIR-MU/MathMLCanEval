@@ -51,7 +51,7 @@ public class SourceDocumentServiceImpl implements SourceDocumentService
 
     @Override
     @Transactional(readOnly = true)
-    public SourceDocument getSourceDocumentByPath(String path)
+    public List<SourceDocument> getSourceDocumentByPath(String path)
     {
         return sourceDocumentDAO.getSourceDocumentByPath(path);
     }
@@ -62,12 +62,4 @@ public class SourceDocumentServiceImpl implements SourceDocumentService
     {
         return sourceDocumentDAO.getAllDocuments();
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<SourceDocument> getDocumentsOnSubPath(String subPath)
-    {
-        return sourceDocumentDAO.getDocumentsOnSubPath(subPath);
-    }
-    
 }

@@ -24,8 +24,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -42,45 +45,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class FormulaCreator
 {
 
+    private static final Logger logger = Logger.getLogger(FileDirectoryService.class);
     @Autowired
     private SecurityContextFacade securityContext;
     @Autowired
     private UserService userService;
-    
-    
+
     /**
-     * Following method converts SourceDocument into Formula. From
-     * SourceDocument we obtain path, already stored inside database, Then we
-     * check whether file exists. If not Exception is thrown, otherwise we read
-     * the file. If file is empty, thus has no lines Exception is thrown again.
-     * If file is not empty it's content is set to newly created Formula. We
-     * also set inserTime to it based on current time, we set SourceDocument
-     * which has been passed as method argument and from
+     * Following method converts SourceDocument into Formulas. From
+     * SourceDocument we obtain paths. Then we check whether file exists. If not
+     * its skipped, otherwise we read the file. If file is empty, thus has no
+     * lines proper message with path is logged at <i>error</i> level. If file
+     * is not empty it's content is set to newly created Formula. We also set
+     * inserTime to it based on current time, we set SourceDocument which has
+     * been passed as method argument and from
      * {@link cz.muni.fi.mir.wrappers.SecurityContextFacade} we obtain currently
      * logged user which is set as person who created this formula from it's
-     * SourceDocument. Formula is not saved inside database, the purpose of this
-     * method is just to extract it from path.
+     * SourceDocument. Formula <b>is not saved</b> inside database, the purpose
+     * of this method is just to extract it from paths.
      *
-     * @param sourceDocument containing path to Formula
-     * @return Formula obtained from SourceDocument passed as method argument
+     * @param sourceDocument containing paths to Formulas
+     * @return Formulas obtained from SourceDocument passed as method argument
      * @throws FileNotFoundException if file on given path does not exist
      * @throws IOException if any exception occurs during reading of file, or
      * when File is empty
      */
-    public Formula extractFormula(SourceDocument sourceDocument) throws FileNotFoundException, IOException
+    public List<Formula> extractFormula(SourceDocument sourceDocument) throws FileNotFoundException, IOException
     {
-        Path path = Paths.get(sourceDocument.getDocumentPath());
-        if (!Files.exists(path))
-        {
-            throw new FileNotFoundException();
-        }
-        String content = FileUtils.readFileToString(path.toFile());
+        List<Formula> result = new ArrayList<>();
 
-        if (Tools.getInstance().stringIsEmpty(content))
+        for (String docPath : sourceDocument.getDocumentPaths())
         {
-            throw new IOException("Empty formula");
+            Path tmp = Paths.get(docPath);
+            if (Files.exists(tmp))
+            {
+                String content = FileUtils.readFileToString(tmp.toFile());
+                if (Tools.getInstance().stringIsEmpty(content))
+                {
+                    logger.error("Content of file: [" + tmp.toString() + "] is empty.");
+                }
+                else
+                {
+                    result.add(EntityFactory.createFormula(content, new DateTime(), userService.getUserByUsername(securityContext.getLoggedUser()), sourceDocument));
+                }
+            }
         }
 
-        return EntityFactory.createFormula(content, new DateTime(), userService.getUserByUsername(securityContext.getLoggedUser()), sourceDocument);
+        return result;
     }
 }
