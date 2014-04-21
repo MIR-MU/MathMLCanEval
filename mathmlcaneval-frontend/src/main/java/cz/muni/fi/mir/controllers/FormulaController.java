@@ -185,47 +185,21 @@ public class FormulaController
     public ModelAndView createFormulaFromSourceDocument(@PathVariable Long sourceID)
     {
         SourceDocument sd = sourceDocumentService.getSourceDocumentByID(sourceID);
-        Formula f = null;
+        List<Formula> formulas = null;
         try
         {
-            f = formulaCreator.extractFormula(sd);
+            formulas = formulaCreator.extractFormula(sd);
         }
         catch (IOException ex)
         {
             logger.error(ex);
         }
         
-        FormulaForm ff = new FormulaForm();
-        List<String> contents = Collections.emptyList();
-        StringBuilder sb = new StringBuilder();
-        try
+        for(Formula f : formulas)
         {
-            contents = Files.readAllLines(FileSystems.getDefault().getPath(sd.getDocumentPath()), Charset.forName("UTF-8"));
+            formulaService.createFormula(f);
         }
-        catch (IOException ex)
-        {
-            logger.error(ex);
-            sb.append(ex);
-        }
-        
-        if(sb.length() == 0)
-        {
-            for(String s : contents)
-            {
-                sb.append(s);
-            }
-        }
-        
-        
-        ff.setXml(sb.toString());
-        ModelMap mm = new ModelMap();
-        
-        mm.addAttribute("programFormList", programService.getAllPrograms());
-        mm.addAttribute("sourceDocumentFormList", Arrays.asList(sd));
-        
-        mm.addAttribute("formulaForm", ff);
-        
-        return new ModelAndView("formula_create", mm);
+        return new ModelAndView("redirect:/list/");
     }
 
     @RequestMapping(value = {"/view/{id}", "/view/{id}/"}, method = RequestMethod.GET)

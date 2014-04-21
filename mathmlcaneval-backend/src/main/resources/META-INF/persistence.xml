@@ -12,7 +12,7 @@
     <class>cz.muni.fi.mir.db.domain.Program</class>
     <class>cz.muni.fi.mir.db.domain.Formula</class>
     <class>cz.muni.fi.mir.db.domain.Annotation</class>
-    <class>cz.muni.fi.mir.similarity.SimilarForm</class>
+    <class>cz.muni.fi.mir.index.IndexedOutput</class>
     <properties/>
   </persistence-unit>
 </persistence>

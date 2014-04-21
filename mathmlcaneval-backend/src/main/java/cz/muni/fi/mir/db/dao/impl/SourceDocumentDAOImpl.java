@@ -58,20 +58,20 @@ public class SourceDocumentDAOImpl implements SourceDocumentDAO
     }
 
     @Override
-    public SourceDocument getSourceDocumentByPath(String path)
+    public List<SourceDocument> getSourceDocumentByPath(String path)
     {
-        SourceDocument sd = null;
+        List<SourceDocument> result = Collections.emptyList();
         try
         {
-            sd = entityManager.createQuery("SELECT sd FROM sourceDocument sd where sd.documentPath = :documentPath", SourceDocument.class)
-                    .setParameter("documentPath", path).getSingleResult();
+            result = entityManager.createQuery("SELECT sd FROM sourceDocument sd WHERE sd.documentPaths LIKE :documentPath ", SourceDocument.class)
+                    .setParameter("documentPath", "%"+path+"%").getResultList();
         }
         catch(NoResultException nre)
         {
             logger.debug(nre);
         }
         
-        return sd;
+        return result;
     }
 
     @Override
@@ -82,23 +82,6 @@ public class SourceDocumentDAOImpl implements SourceDocumentDAO
         {
             resultList = entityManager.createQuery("SELECT sd FROM sourceDocument sd", SourceDocument.class)
                     .getResultList();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return resultList;
-    }
-
-    @Override
-    public List<SourceDocument> getDocumentsOnSubPath(String subPath)
-    {
-        List<SourceDocument> resultList = Collections.emptyList();
-        try
-        {
-            resultList = entityManager.createQuery("SELECT sd FROM sourceDocument sd WHERE sd.documentPath LIKE :documentPath", SourceDocument.class)
-                    .setParameter("documentPath", subPath+"%").getResultList();
         }
         catch(NoResultException nre)
         {

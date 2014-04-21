@@ -16,8 +16,8 @@ import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import org.joda.time.DateTime;
 
 /**
@@ -223,7 +223,7 @@ public class EntityFactory
     {
         SourceDocument sc = createSourceDocument();
         sc.setNote(note);
-        sc.setDocumentPath(path);
+        sc.setDocumentPaths(Arrays.asList(path));
 
         return sc;
     }

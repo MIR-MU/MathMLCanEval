@@ -34,37 +34,32 @@
     <!-- http://forum.spring.io/forum/spring-projects/data/29626-how-to-turn-off-hibernate-cache-for-query-jpa -->
     <!-- http://stackoverflow.com/questions/13956224/spring-3-2-and-cache-abstraction-missing-ehcache-implementation -->
     <!-- http://stackoverflow.com/questions/13083987/spring3-1-and-hibernate4-eh-cache -->
+    <!-- http://jsoftbiz.wordpress.com/2013/03/14/hibernate-4-and-ehcache-higher-than-2-4-3/-->
+    <!-- http://stackoverflow.com/questions/11905722/java-lang-noclassdeffounderror-org-hibernate-cache-entityregion-configuring-ehc -->
     <!-- TODO zistit ako to funguje je to daka novinka .. -->
+    <!-- cache works but outside servlet, which closes SessionFactory app hangs -->
     
 <!--    <bean id="ehCacheManager"
         class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
         p:configLocation="classpath:META-INF/ehcache.xml"
-        p:shared="false" />
+        p:shared="false" 
+        destroy-method="destroy"
+    />
 
     <bean id="cacheManager"
         class="org.springframework.cache.ehcache.EhCacheCacheManager"
-        p:cacheManager-ref="ehCacheManager" />
-    -->
-<!--    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:config/jdbc.properties</value>
-            </list>
-        </property>
-        <property name="ignoreUnresolvablePlaceholders" value="true" />
-    </bean>--> 
-
+        p:cacheManager-ref="ehCacheManager" />-->
+    
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${hibernate.connection.driver_class}"/>
         <property name="jdbcUrl" value="${hibernate.connection.url}"/>
         <property name="user" value="${hibernate.connection.username}"/>
-        <property name="password" value="${hibernate.connection.password}"/>
-            <!-- tieto properties nejdu .... -->
-<!--        <property name="hibernate.c3p0.min_size" value="${hibernate.c3p0.min_size}" />
-        <property name="hibernate.c3p0.max_size" value="${hibernate.c3p0.max_size}"/>
-        <property name="hibernate.c3p0.timeout" value="${hibernate.c3p0.timeout}"/>
-        <property name="hibernate.c3p0.max_statements" value="${hibernate.c3p0.max_statements}"/>
-        <property name="hibernate.c3p0.idle_test_period" value="${hibernate.c3p0.idle_test_period}"/>-->
+        <property name="password" value="${hibernate.connection.password}"/>            
+        <property name="minPoolSize" value="${hibernate.c3p0.min_size}" />
+        <property name="maxPoolSize" value="${hibernate.c3p0.max_size}"/>
+        <property name="checkoutTimeout" value="${hibernate.c3p0.timeout}"/>
+        <property name="maxStatements" value="${hibernate.c3p0.max_statements}"/>
+        <property name="idleConnectionTestPeriod" value="${hibernate.c3p0.idle_test_period}"/>
     </bean>
     
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -80,7 +75,11 @@
                 <prop key="hibernate.cacheable">${hibernate.cacheable}</prop>
                 <prop key="hibernate.search.lucene_version">${hibernate.search.lucene_version}</prop> 
                 <prop key="hibernate.search.default.directory_provider">${hibernate.search.default.directory_provider}</prop>               
-                <prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>               
+                <prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>
+                <!-- still does not work even after 10 hours of googling how to make it done... -->
+<!--                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+                <prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
+                <prop key="net.sf.ehcache.configurationResourceName">META-INF/ehcache.xml</prop>-->
             </props>
         </property>
     </bean>

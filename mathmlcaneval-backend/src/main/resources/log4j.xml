@@ -51,6 +51,10 @@
     <logger name="org.dozer">
         <level value="debug"/>
     </logger>
+    
+    <logger name="org.hibernate.search">
+        <level value="debug" />
+    </logger>
 	
     <logger name="org.hibernate">
         <level value="fatal"/>  

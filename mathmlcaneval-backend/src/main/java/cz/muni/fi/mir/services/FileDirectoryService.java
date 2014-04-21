@@ -14,9 +14,9 @@
 package cz.muni.fi.mir.services;
 
 import cz.muni.fi.mir.db.domain.SourceDocument;
-import cz.muni.fi.mir.tools.EntityFactory;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,16 +44,17 @@ public class FileDirectoryService
      * which is used for walking, to see the structure of fileName
      *
      * @param path root path in which are desired files
+     * @param sdName name of the sourceDocument
      * @param fileName name of file to be matched
      * @return List of SourceDocuments on given path, empty List if no documents
      * are found.
      * @throws FileNotFoundException if root path does not exist
      */
-    public List<SourceDocument> exploreDirectory(String path, String fileName) throws FileNotFoundException
+    public SourceDocument exploreDirectory(String path, String sdName, String fileName) throws FileNotFoundException
     {
         Path p = Paths.get(path);
 
-        return exploreDirectory(p, fileName);
+        return exploreDirectory(p, sdName, fileName);
     }
 
     /**
@@ -62,18 +63,20 @@ public class FileDirectoryService
      * which is used for walking, to see the structure of fileName
      *
      * @param path root path in which are desired files
+     * @param sdName name of the Source document
      * @param fileName name of file to be matched
      * @return List of SourceDocuments on given path, empty List if no documents
      * are found.
      * @throws FileNotFoundException if root path does not exist
      */
-    public List<SourceDocument> exploreDirectory(Path path, String fileName) throws FileNotFoundException
+    public SourceDocument exploreDirectory(Path path, String sdName,String fileName) throws FileNotFoundException
     {
         if (!Files.exists(path))
         {
             throw new FileNotFoundException("Root directory " + path + " not found.");
         }
-        List<SourceDocument> resultList = new ArrayList<>();
+        SourceDocument sd = new SourceDocument();
+        sd.setDocumentName(sdName);
 
         MathFileVisitor mfv = new MathFileVisitor(fileName, MathFileVisitor.MathFileVisitorType.GLOB);
         try
@@ -84,12 +87,44 @@ public class FileDirectoryService
         {
             logger.error(ex);
         }
+        
+        List<String> paths = new ArrayList<>();
 
         for (Path p : mfv.done())
         {
-            resultList.add(EntityFactory.createSourceDocument(null, p.toString()));
+            paths.add(p.toString());
         }
 
-        return resultList;
+        sd.setDocumentPaths(paths);
+        
+        return sd;
+    }
+    
+    @Deprecated
+    public List<Path> getFoldersFromPath(Path path)
+    {
+        // vysledok
+        List<Path> result = new ArrayList<>();
+        try (DirectoryStream<Path> ds = Files.newDirectoryStream(path))
+        {
+            // prebehneme vsetky podsubory
+            for (Path p : ds)
+            {
+                result.add(p);
+            }
+
+        }
+        catch (IOException io)
+        {
+            logger.error(io);
+        }
+
+        return result;
+    }
+    
+    @Deprecated
+    public List<Path> getFoldersFromPath(String path)
+    {
+        return getFoldersFromPath(Paths.get(path));
     }
 }
