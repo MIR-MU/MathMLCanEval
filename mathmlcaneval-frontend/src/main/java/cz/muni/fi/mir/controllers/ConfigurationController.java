@@ -9,6 +9,7 @@ package cz.muni.fi.mir.controllers;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.forms.ConfigurationForm;
+import cz.muni.fi.mir.tools.EntityFactory;
 import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,44 @@ public class ConfigurationController
         }
     }
     
+    @RequestMapping(value ={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
+    public ModelAndView editConfiguration(@PathVariable Long id)
+    {
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("configurationForm", mapper.map(configurationService.getConfigurationByID(id), ConfigurationForm.class));
+
+        return new ModelAndView("configuration_edit", mm);
+    }
+
+    @Secured("ROLE_ADMINISTRATOR")
+    @RequestMapping(value={"/edit/","/edit/"}, method = RequestMethod.POST)
+    public ModelAndView editConfigurationSubmit(@Valid @ModelAttribute("configurationForm") ConfigurationForm configurationForm, BindingResult result, Model model)
+    {
+        if(result.hasErrors())
+        {
+            ModelMap mm = new ModelMap();
+            mm.addAttribute("configurationForm", configurationForm);
+            mm.addAttribute(model);
+
+            return new ModelAndView("configuration_edit",mm);
+        }
+        else
+        {
+            configurationService.updateConfiguration(mapper.map(configurationForm, Configuration.class));
+
+            return new ModelAndView("redirect:/configuration/list/");
+        }
+    }
+
+    @Secured("ROLE_ADMINISTRATOR")
+    @RequestMapping(value={"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
+    public ModelAndView deleteConfiguration(@PathVariable Long id)
+    {
+        configurationService.deleteConfiguration(EntityFactory.createConfiguration(id));
+
+        return new ModelAndView("redirect:/configuration/list/");
+    }
+
     @RequestMapping(value={"/view/{id}","/view/{id}/"},method = RequestMethod.GET)
     public ModelAndView viewConfiguration(@PathVariable Long id)
     {

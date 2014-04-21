@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -168,5 +169,14 @@ public class Formula implements Serializable
     public String toString()
     {
         return "Formula{" + "id=" + id + ", xml=" + xml + ", note=" + note + ", sourceDocument=" + sourceDocument + ", insertTime=" + insertTime + ", program=" + program + ", user=" + user + ", outputs=" + outputs + ", similarFormulas=" + similarFormulas + '}';
+    }
+
+    @PreRemove
+    private void removeFormulaFromOutputs()
+    {
+        for (CanonicOutput co : outputs)
+        {
+            co.getParents().remove(this);
+        }
     }
 }

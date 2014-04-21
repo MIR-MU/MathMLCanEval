@@ -177,7 +177,7 @@ public class FormulaController
                 }
             }
 
-            return new ModelAndView("redirect:/");
+            return new ModelAndView("redirect:/formula/list");
         }
     }
     
@@ -267,7 +267,7 @@ public class FormulaController
         {
             logger.info(String.format("Blocked unauthorized deletion of formula %d triggered by user %s.", id, securityContext.getLoggedUser()));
         }
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/formula/list");
     }
 
     @RequestMapping(value = {"/list","/list/"},method = RequestMethod.GET)

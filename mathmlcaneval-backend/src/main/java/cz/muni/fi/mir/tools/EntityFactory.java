@@ -338,6 +338,27 @@ public class EntityFactory
     }
 
     /**
+     * Method used for creating Configuration with given id
+     *
+     * @param id of configuration
+     * @return configuration with given id
+     */
+    public static Configuration createConfiguration(Long id)
+    {
+        if (id == null)
+        {
+            return createConfiguration();
+        } 
+        else
+        {
+            Configuration c = createConfiguration();
+            c.setId(id);
+
+            return c;
+        }
+    }
+
+    /**
      * Method used for creating Configuration out of given input
      *
      * @param config String representation of XML configuration file
