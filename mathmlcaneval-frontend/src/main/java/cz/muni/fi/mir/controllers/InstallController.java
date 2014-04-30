@@ -5,39 +5,26 @@
  */
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.UserForm;
-import cz.muni.fi.mir.services.FileDirectoryService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
-import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.Properties;
-import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
-import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -138,38 +125,6 @@ public class InstallController
             return new ModelAndView("redirect:/");
         }
     }
-    
-//    @RequestMapping(value="/step3/",method = RequestMethod.POST)
-//    public ModelAndView step3(@RequestParam("path") String path,@RequestParam("filename") String filename)
-//    {
-//        if(!Tools.getInstance().stringIsEmpty(path))
-//        {
-//            FileDirectoryService fds = new FileDirectoryService();
-//            List<SourceDocument> list = null;
-////            try
-////            {
-////                list = fds.exploreDirectory(path, Tools.getInstance().stringIsEmpty(filename) ? "*.xml" : filename);
-////            }
-////            catch(FileNotFoundException ex)
-////            {
-////                logger.fatal(ex);
-////            }
-//            if(list != null)
-//            {
-//                for(SourceDocument sd : list)
-//                {
-//                    logger.info("Init import of : "+sd);
-//                    sourceDocumentService.createSourceDocument(sd);
-//                }
-//            }
-//            
-//            return new ModelAndView("setup/step3");
-//        }
-//        else
-//        {
-//            return null;
-//        }
-//    }
     
     @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value = "/reset/",method = RequestMethod.GET)

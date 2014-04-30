@@ -13,10 +13,10 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class SourceDocumentForm
 {
-    private Long id;    
-    private String note;
-    @NotEmpty(message = "{validator.sourceDocument.documentPath.empty}")
-    private String documentPath; 
+    private Long id; 
+    @NotEmpty
+    private String name;
+    private String note; 
 
     public Long getId()
     {
@@ -38,16 +38,16 @@ public class SourceDocumentForm
         this.note = note;
     }
 
-    public String getDocumentPath()
+    public String getName()
     {
-        return documentPath;
+        return name;
     }
 
-    public void setDocumentPath(String documentPath)
+    public void setName(String name)
     {
-        this.documentPath = documentPath;
+        this.name = name;
     }
-
+    
     @Override
     public int hashCode()
     {
@@ -74,6 +74,6 @@ public class SourceDocumentForm
     @Override
     public String toString()
     {
-        return "SourceDocument{" + "id=" + id + ", note=" + note + ", documentPath=" + documentPath + '}';
+        return "SourceDocumentForm{" + "id=" + id + ", name=" + name + ", note=" + note + '}';
     }
 }

@@ -9,6 +9,7 @@ import cz.muni.fi.mir.tasks.CanonicalizationTask;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.tasks.TaskStatus;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -128,6 +129,28 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
             logger.fatal(cnfe);
         }
     }
+    
+    /**
+     * Method checks whether file at given path exists. If file does not exist 
+     * exception is thrown instead of returning false value. The reason is that 
+     * we can later show message with missing path (part of exception message)
+     * in page view.
+     * @return true if jar file exists
+     * @throws FileNotFoundException if file does not exist
+     */
+    @Override
+    public boolean jarFileExists() throws FileNotFoundException
+    {
+        Path temp = FileSystems.getDefault().getPath(this.jarFolder, revision + ".jar");
+        if(Files.exists(temp))
+        {
+            return true;
+        }
+        else
+        {
+            throw new FileNotFoundException("There is no .jar file at defined path: "+temp.toString());
+        }
+    }
 
     /**
      * The only method via which we can obtain instance of this class. Same
@@ -155,6 +178,8 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
      *
      * @author siska
      * @version 1.0
+     * @param taskExecutor
+     * @return 
      * @since 1.0
      */
     public static MathCanonicalizerLoaderImpl newInstance(String repository,

@@ -24,7 +24,7 @@
             <thead>
                 <tr>
                     <th><spring:message code="general.field.id" /></th>
-                    <th><spring:message code="entity.sourceDocument.documentPath" /></th>
+                    <th><spring:message code="entity.sourceDocument.name" /></th>
                     <th><spring:message code="entity.sourceDocument.note" /></th>
                     <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                         <th><spring:message code="general.table.option" /></th>
@@ -36,13 +36,10 @@
                     <c:forEach items="${sourceDocumentList}" var="entry">
                         <tr>
                             <td><c:out value="${entry.id}" /></td>
-                            <td><c:out value="${entry.documentPath}" /></td>
-                            <td><a href="${pageContext.request.contextPath}/sourcedocument/view/<c:out value="${entry.id}" />"><c:out value="${entry.note}" /></a></td>                            
+                            <td><c:out value="${entry.name}" /></td>
+                            <td><c:out value="${entry.note}" /></td>                            
                             <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                                 <td>
-                                    <a href="${pageContext.request.contextPath}/formula/create/sourcedocument/<c:out value="${entry.id}/" />">
-                                        <span class="glyphicon glyphicon-plus-sign"></span>
-                                    </a>
                                     <a href="${pageContext.request.contextPath}/sourcedocument/edit/<c:out value="${entry.id}" />/">
                                         <span class="glyphicon glyphicon-wrench"></span>
                                     </a>
@@ -57,10 +54,10 @@
                 <c:otherwise>
                     <tr>
                         <sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
-                            <td colspan="5" class="text-center"><spring:message code="general.table.norecords" /></td>
+                            <td colspan="3" class="text-center"><spring:message code="general.table.norecords" /></td>
                         </sec:authorize>
                         <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-                            <td colspan="6" class="text-center"><spring:message code="general.table.norecords" /></td>
+                            <td colspan="4" class="text-center"><spring:message code="general.table.norecords" /></td>
                         </sec:authorize>
                     </tr>
                 </c:otherwise>

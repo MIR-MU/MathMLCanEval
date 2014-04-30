@@ -83,7 +83,7 @@ public class ConfigurationController
     }
 
     @Secured("ROLE_ADMINISTRATOR")
-    @RequestMapping(value={"/edit/","/edit/"}, method = RequestMethod.POST)
+    @RequestMapping(value={"/edit","/edit/"}, method = RequestMethod.POST)
     public ModelAndView editConfigurationSubmit(@Valid @ModelAttribute("configurationForm") ConfigurationForm configurationForm, BindingResult result, Model model)
     {
         if(result.hasErrors())

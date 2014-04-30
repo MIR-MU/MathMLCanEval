@@ -251,10 +251,10 @@ public class DataTestTools
     {
         List<SourceDocument> result = new ArrayList<>();
 
-        result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 1", "/home/empt/input/test1.xhtml"));
-        result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 2", "/home/empt/input/data/test2.xhtml"));
-        result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 3", "/home/empt/input/fata/test3.xhtml"));
-        result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 4", "/home/empt/input/data/test4.xhtml"));
+        result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 1"));
+        result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 2"));
+        result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 3"));
+        result.add(EntityFactory.createSourceDocument("poznamka testovacia cislo 4"));
 
         return result;
     }

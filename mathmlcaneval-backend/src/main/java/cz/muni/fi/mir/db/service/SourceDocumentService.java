@@ -18,8 +18,6 @@ public interface SourceDocumentService
     void deleteSourceDocument(SourceDocument sourceDocument);
     
     SourceDocument getSourceDocumentByID(Long id);
-    List<SourceDocument> getSourceDocumentByPath(String path);
-    
     
     List<SourceDocument> getAllDocuments();
 }

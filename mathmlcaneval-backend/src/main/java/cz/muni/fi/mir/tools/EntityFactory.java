@@ -216,14 +216,12 @@ public class EntityFactory
      * on input.
      *
      * @param note note for new SourceDocument
-     * @param path path for new SourceDocument
      * @return SourceDocument with given parameters
      */
-    public static SourceDocument createSourceDocument(String note, String path)
+    public static SourceDocument createSourceDocument(String note)
     {
         SourceDocument sc = createSourceDocument();
         sc.setNote(note);
-        sc.setDocumentPaths(Arrays.asList(path));
 
         return sc;
     }

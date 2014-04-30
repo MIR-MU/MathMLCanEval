@@ -17,9 +17,7 @@ public interface SourceDocumentDAO
     void updateSourceDocument(SourceDocument sourceDocument);
     void deleteSourceDocument(SourceDocument sourceDocument);
     
-    SourceDocument getSourceDocumentByID(Long id);
-    List<SourceDocument> getSourceDocumentByPath(String path);
-    
+    SourceDocument getSourceDocumentByID(Long id);   
     
     List<SourceDocument> getAllDocuments();
 }

@@ -77,14 +77,12 @@ public class SourceDocumentTest
         assertNotNull("SourceDocument object was not created.", result);
 
         result.setNote("zmenena poznamka");
-        result.setDocumentPaths(Arrays.asList("/home/root/input/doc.xml"));
 
         sourceDocumentService.updateSourceDocument(result);
 
         SourceDocument updatedResult = sourceDocumentService.getSourceDocumentByID(ID);
 
         assertEquals("SourceDocument object does not have proper note after update.", "zmenena poznamka", updatedResult.getNote());
-        assertEquals("SourceDocument object does not have proper path after update.", Arrays.asList("/home/root/input/doc.xml"), updatedResult.getDocumentPaths());
     }
 
     @Test
@@ -101,22 +99,6 @@ public class SourceDocumentTest
         sourceDocumentService.deleteSourceDocument(result);
 
         assertNull("SourceDocument object was not deleted.", sourceDocumentService.getSourceDocumentByID(ID));
-    }
-
-    @Test
-    public void testGetSourceDocumentByPath()
-    {
-        // TODO in the future... not crucial nao
-//        logger.info("Running SourceDocumentTest#createAndGetUser()");
-//        for (SourceDocument sd : docs)
-//        {
-//            sourceDocumentService.createSourceDocument(sd);
-//        }
-//
-//        assertEquals(TestTools.ERROR_LIST_SIZE, 4, sourceDocumentService.getAllDocuments().size());
-//        SourceDocument result = sourceDocumentService.getSourceDocumentByPath("/home/empt/input/data/test2.xhtml");
-//
-//        deepCompare(docs.get(1), result);
     }
 
     @Test

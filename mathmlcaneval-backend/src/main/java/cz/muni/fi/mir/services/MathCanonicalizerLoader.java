@@ -8,6 +8,7 @@ package cz.muni.fi.mir.services;
 
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Formula;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -35,4 +36,15 @@ public interface MathCanonicalizerLoader
      * @throws IOException If any error occurs during execution
      */
     void execute(Formula formula, ApplicationRun applicationRun);
+    
+    
+     /**
+     * Method checks whether file at given path exists. If file does not exist 
+     * exception is thrown instead of returning false value. The reason is that 
+     * we can later show message with missing path (part of exception message)
+     * in page view.
+     * @return true if jar file exists
+     * @throws FileNotFoundException if file does not exist
+     */
+    boolean jarFileExists() throws FileNotFoundException;
 }

@@ -51,13 +51,6 @@ public class SourceDocumentServiceImpl implements SourceDocumentService
 
     @Override
     @Transactional(readOnly = true)
-    public List<SourceDocument> getSourceDocumentByPath(String path)
-    {
-        return sourceDocumentDAO.getSourceDocumentByPath(path);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<SourceDocument> getAllDocuments()
     {
         return sourceDocumentDAO.getAllDocuments();

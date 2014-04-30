@@ -101,10 +101,7 @@
         <constructor-arg name="tempFolder" value="${temp.folder}"/>
         <constructor-arg ref="taskExecutor" />
     </bean>
-    
-    <!-- todo nastudovat vlakna ... -->
-    <bean id="formulaCreator" class="cz.muni.fi.mir.services.FormulaCreator" scope="prototype"/>
-    
+        
     <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <property name="corePoolSize" value="5" />
         <property name="maxPoolSize" value="10" />

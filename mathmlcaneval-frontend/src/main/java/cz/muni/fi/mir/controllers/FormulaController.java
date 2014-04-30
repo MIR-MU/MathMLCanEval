@@ -9,7 +9,6 @@ import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Revision;
-import cz.muni.fi.mir.db.domain.SourceDocument;
 
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.ConfigurationService;
@@ -24,18 +23,12 @@ import cz.muni.fi.mir.forms.FormulaForm;
 import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.forms.UserForm;
 
-import cz.muni.fi.mir.services.FormulaCreator;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -77,10 +70,6 @@ public class FormulaController
     private SecurityContextFacade securityContext;
     @Autowired
     private Mapper mapper;
-    
-    @Autowired
-    private FormulaCreator formulaCreator;
-
     @Autowired
     private MathCanonicalizerLoader mathCanonicalizerLoader;
     @Autowired
@@ -101,6 +90,15 @@ public class FormulaController
         mm.addAttribute("sourceDocumentFormList", sourceDocumentService.getAllDocuments());
         mm.addAttribute("revisionList", revisionService.getAllRevisions());
         mm.addAttribute("configurationList", configurationService.getAllCofigurations());
+        try
+        {
+            mathCanonicalizerLoader.jarFileExists();
+        }
+        catch(FileNotFoundException fnfe)
+        {
+            mm.addAttribute("jarFileErrorMessage", fnfe.getMessage());
+        }
+        
 
         return new ModelAndView("formula_create", mm);
     }
@@ -179,27 +177,6 @@ public class FormulaController
 
             return new ModelAndView("redirect:/formula/list");
         }
-    }
-    
-    @RequestMapping(value={"/create/sourcedocument/{sourceID}","/create/sourcedocument/{sourceID}/"},method = RequestMethod.GET)
-    public ModelAndView createFormulaFromSourceDocument(@PathVariable Long sourceID)
-    {
-        SourceDocument sd = sourceDocumentService.getSourceDocumentByID(sourceID);
-        List<Formula> formulas = null;
-        try
-        {
-            formulas = formulaCreator.extractFormula(sd);
-        }
-        catch (IOException ex)
-        {
-            logger.error(ex);
-        }
-        
-        for(Formula f : formulas)
-        {
-            formulaService.createFormula(f);
-        }
-        return new ModelAndView("redirect:/list/");
     }
 
     @RequestMapping(value = {"/view/{id}", "/view/{id}/"}, method = RequestMethod.GET)

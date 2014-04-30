@@ -31,10 +31,7 @@ public class SourceDocument implements Serializable
     @Column(name = "note")
     private String note;
     @Column(name="name")
-    private String documentName;
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Column(name = "documentPaths",nullable = true)
-    private List<String> documentPaths;    //path sql99
+    private String name;
 
     public Long getId()
     {
@@ -56,24 +53,14 @@ public class SourceDocument implements Serializable
         this.note = note;
     }
 
-    public List<String> getDocumentPaths()
+    public String getName()
     {
-        return documentPaths;
+        return name;
     }
 
-    public void setDocumentPaths(List<String> documentPaths)
+    public void setName(String name)
     {
-        this.documentPaths = documentPaths;
-    }
-
-    public String getDocumentName()
-    {
-        return documentName;
-    }
-
-    public void setDocumentName(String documentName)
-    {
-        this.documentName = documentName;
+        this.name = name;
     }
 
     @Override
@@ -102,6 +89,6 @@ public class SourceDocument implements Serializable
     @Override
     public String toString()
     {
-        return "SourceDocument{" + "id=" + id + ", note=" + note + ", documentName=" + documentName + ", documentPaths=" + documentPaths + '}';
+        return "SourceDocument{" + "id=" + id + ", note=" + note + ", documentName=" + name + '}';
     }
 }

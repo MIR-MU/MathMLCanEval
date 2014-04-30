@@ -56,24 +56,7 @@ public class SourceDocumentDAOImpl implements SourceDocumentDAO
     {
         return entityManager.find(SourceDocument.class, id);
     }
-
-    @Override
-    public List<SourceDocument> getSourceDocumentByPath(String path)
-    {
-        List<SourceDocument> result = Collections.emptyList();
-        try
-        {
-            result = entityManager.createQuery("SELECT sd FROM sourceDocument sd WHERE sd.documentPaths LIKE :documentPath ", SourceDocument.class)
-                    .setParameter("documentPath", "%"+path+"%").getResultList();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return result;
-    }
-
+    
     @Override
     public List<SourceDocument> getAllDocuments()
     {
