@@ -70,7 +70,7 @@
                     </tr>
                     <tr>
                         <td><spring:message code="entity.formula.sourceDocument" /></td>
-                        <td><a href="${pageContext.request.contextPath}/sourcedocument/view/${formulaEntry.sourceDocument.id}"><c:out value="${formulaEntry.sourceDocument.documentPath}" /></a></td>
+                        <td><a href="${pageContext.request.contextPath}/sourcedocument/view/${formulaEntry.sourceDocument.id}"><c:out value="${formulaEntry.sourceDocument.name}" /></a></td>
                     </tr>
                     <tr>
                         <td><spring:message code="entity.formula.program" /></td>
