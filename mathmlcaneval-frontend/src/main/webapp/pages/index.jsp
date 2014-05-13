@@ -5,12 +5,18 @@
             <div class="col-md-3">
                 <div class="row blocks">
                     <sec:authorize access="hasRole('ROLE_USER')">
-                    <a href="${pageContext.request.contextPath}/formula/create/" class="thumbnail well well-sm">
-                        <div class="caption">
-                            <h2><spring:message code="index.page.button.import" /></h2>
-                            <p>Upload and canonicalize new formulas.</p>
-                        </div>
-                    </a>
+                        <a href="${pageContext.request.contextPath}/formula/create/" class="thumbnail well well-sm">
+                            <div class="caption">
+                                <h2><spring:message code="index.page.button.import" /></h2>
+                                <p>Upload and canonicalize new formulas.</p>
+                            </div>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/formula/mass/" class="thumbnail well well-sm">
+                            <div class="caption">
+                                <h2><spring:message code="index.page.button.import" /></h2>
+                                <p>Mass import</p>
+                            </div>
+                        </a>
                     </sec:authorize>
                     <a href="${pageContext.request.contextPath}/formula/list/" class="thumbnail well well-sm">
                         <div class="caption">
@@ -22,7 +28,7 @@
                         <div class="caption">
                             <h2><spring:message code="index.page.button.statistics" /></h2>
                             <p>See the evaluation and statistics about performance and correctness of canonicalizer.</p>
-                       </div>
+                        </div>
                     </a>
                 </div>
             </div>

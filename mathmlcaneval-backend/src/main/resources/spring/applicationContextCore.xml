@@ -93,13 +93,10 @@
     
     <bean id="documentBuilder" class="javax.xml.parsers.DocumentBuilder" factory-bean="documentBuilderFactory" factory-method="newDocumentBuilder" />
     
-    <bean id="mathCanonicalizerLoader" class="cz.muni.fi.mir.services.MathCanonicalizerLoaderImpl" factory-method="newInstance">
-        <constructor-arg name="repository" value="${mathml-canonicalizer.default.repository}"/>
+    <bean id="mathCanonicalizerLoader" class="cz.muni.fi.mir.services.MathCanonicalizerLoaderImpl" factory-method="newInstance">        
         <constructor-arg name="revision" value="${mathml-canonicalizer.default.revision}"/>
         <constructor-arg name="mainClassName" value="${mathml-canonicalizer.default.mainclass}"/>
         <constructor-arg name="jarFolder" value="${mathml-canonicalizer.default.jarFolder}"/>
-        <constructor-arg name="tempFolder" value="${temp.folder}"/>
-        <constructor-arg ref="taskExecutor" />
     </bean>
         
     <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
@@ -107,6 +104,9 @@
         <property name="maxPoolSize" value="10" />
         <property name="queueCapacity" value="25" />
     </bean>
+    
+    
+<!--    <bean id="canonicalizationTaskFactory" class="cz.muni.fi.mir.tasks.CanonicalizationTaskFactory" />-->
 
 <!--    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
         <property name="caches">

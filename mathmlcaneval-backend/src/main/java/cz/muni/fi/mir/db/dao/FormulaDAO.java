@@ -30,4 +30,6 @@ public interface FormulaDAO
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
     List<Formula> getFormulasByProgram(Program program);
     List<Formula> getFormulasByUser(User user);
+    
+    int getNumberOfRecords();
 }

@@ -145,6 +145,7 @@ public class CanonicOutputTest
         try
         {
             logger.info("Running CanonicOutputTest#testCreateAndGetCanonicOutput()");
+            System.out.println(canonicOutputs.get(0));
             canonicOutputService.createCanonicOutput(canonicOutputs.get(0));
 
             CanonicOutput result = canonicOutputService.getCanonicOutputByID(ID);

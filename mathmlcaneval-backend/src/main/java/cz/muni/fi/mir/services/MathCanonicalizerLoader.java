@@ -9,7 +9,7 @@ package cz.muni.fi.mir.services;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Formula;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Dominik Szalai
@@ -33,9 +33,11 @@ public interface MathCanonicalizerLoader
      * </ul>
      * @param formula to be canonicalized
      * @param applicationRun wrapper containing some information required for run
-     * @throws IOException If any error occurs during execution
      */
     void execute(Formula formula, ApplicationRun applicationRun);
+    
+    
+    void execute(List<Formula> formulas, ApplicationRun applicationRun);
     
     
      /**

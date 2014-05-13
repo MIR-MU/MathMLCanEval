@@ -134,7 +134,7 @@ public class FormulaDAOImpl implements FormulaDAO
         List<Formula> resultList = Collections.emptyList();
         try
         {
-            resultList = entityManager.createQuery("SELECT f FROM formula f ORDER BY id DESC", Formula.class)
+            resultList = entityManager.createQuery("SELECT f FROM formula f ORDER BY f.id DESC", Formula.class)
                     .setFirstResult(skip)
                     .setMaxResults(number)
                     .getResultList();
@@ -145,5 +145,21 @@ public class FormulaDAOImpl implements FormulaDAO
         }
         
         return resultList;
+    }
+
+    @Override
+    public int getNumberOfRecords()
+    {
+        int result = 0;
+        try
+        {
+            result = entityManager.createQuery("SELECT COUNT(f) FROM formula f", Long.class).getSingleResult().intValue();
+        }
+        catch(NoResultException nre)
+        {
+            logger.error(nre);
+        }
+        
+        return result;
     }
 }

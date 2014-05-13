@@ -4,7 +4,10 @@
  */
 package cz.muni.fi.mir.wrappers;
 
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.tools.Tools;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -16,6 +19,10 @@ import org.springframework.stereotype.Component;
 @Component(value = "securityContext")
 public class SecurityContextHolderFacade implements SecurityContextFacade
 {
+    private static final String NOT_FOUND = "#null";
+    @Autowired
+    private UserService userService;
+    
     @Override
     public SecurityContext getContext()
     {
@@ -37,7 +44,21 @@ public class SecurityContextHolderFacade implements SecurityContextFacade
         } 
         else
         {
-            return "#null";
+            return NOT_FOUND;
+        }
+    }
+
+    @Override
+    public User getLoggedEntityUser()
+    {
+        String current = getLoggedUser();
+        if(!current.equals(NOT_FOUND))
+        {
+            return userService.getUserByUsername(current);
+        }
+        else
+        {
+            return null;
         }
     }
 }

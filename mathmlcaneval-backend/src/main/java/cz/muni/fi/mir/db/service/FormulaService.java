@@ -6,8 +6,11 @@
 
 package cz.muni.fi.mir.db.service;
 
+import cz.muni.fi.mir.db.domain.ApplicationRun;
+import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
+import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import java.util.List;
@@ -21,6 +24,10 @@ public interface FormulaService
     void createFormula(Formula formula);
     void updateFormula(Formula formula);
     void deleteFormula(Formula formula);
+    
+    
+    void massFormulaImport(String path, String filter, User user, Revision revision, Configuration configuration,Program program, SourceDocument sourceDocument);
+    void massFormulaImport(String path, String filter, ApplicationRun applicationRun, Program program, SourceDocument sourceDocument);
 
     Formula getFormulaByID(Long id);
 
@@ -30,4 +37,7 @@ public interface FormulaService
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
     List<Formula> getFormulasByProgram(Program program);
     List<Formula> getFormulasByUser(User user);
+    
+    
+    int getNumberOfRecords();
 }

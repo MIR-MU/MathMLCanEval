@@ -7,14 +7,15 @@ package cz.muni.fi.mir.pagination;
 /**
  *
  * @author siska
+ * @author Dominik Szalai
  */
 public class Pagination {
     public static final int DEFAULT_PAGE_SIZE = 20;
     public static final int DEFAULT_PAGINATOR_SIZE = 8;
 
-    private int pageNumber;
-    private int pageSize;
-    private int pages;
+    private int pageNumber = 0;
+    private int pageSize = 0;
+    private int pages = 0;
 
     public int getPageNumber() {
         if (pageNumber < 1)
@@ -50,5 +51,34 @@ public class Pagination {
 
     public void setPages(int pages) {
         this.pages = pages;
+    }
+    
+    
+    public static Pagination newInstance(int numberOfRecords)
+    {
+        Pagination p = new Pagination();
+        if(numberOfRecords == 0)
+        {
+            p.pages = 1;
+            return p;
+        }
+        else
+        {
+            boolean isFixed = numberOfRecords % DEFAULT_PAGE_SIZE == 0;
+            if(isFixed)
+            {
+                p.pages = numberOfRecords / DEFAULT_PAGE_SIZE;
+            }
+            else
+            {
+                p.pages = (numberOfRecords / DEFAULT_PAGE_SIZE) +1;
+            }            
+            return p;
+        }
+    }
+    
+    public boolean isModified()
+    {
+        return pages != DEFAULT_PAGINATOR_SIZE;
     }
 }

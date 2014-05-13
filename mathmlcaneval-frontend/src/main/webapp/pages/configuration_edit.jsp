@@ -1,6 +1,7 @@
 <div class="container content">
     <h1><spring:message code="entity.configuration.edit" /></h1>
     <form:form method="post" action="${pageContext.request.contextPath}/configuration/edit/" commandName="configurationForm" cssClass="form-horizontal pull-top-50">
+        <form:hidden path="id" />
         <div class="form-group">
             <label class="col-sm-2 control-label"><spring:message code="entity.configuration.name" /></label>
             <div class="col-sm-7">
