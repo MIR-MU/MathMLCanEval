@@ -7,6 +7,7 @@
 
 #ignore log files
 *.log
+*.log.*
 
 #ignore build folders
 mathmlcaneval-backend/target
@@ -15,3 +16,7 @@ mathmlcaneval-frontend/target
 #ignore nb files
 nb-configuration.xml
 /target/
+
+#ignore eclipse files
+.settings/
+.project

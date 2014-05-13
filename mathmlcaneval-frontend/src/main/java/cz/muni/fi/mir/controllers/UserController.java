@@ -1,21 +1,14 @@
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.db.domain.User;
-import cz.muni.fi.mir.db.domain.UserRole;
-import cz.muni.fi.mir.forms.UserForm;
-import cz.muni.fi.mir.db.service.UserRoleService;
-import cz.muni.fi.mir.db.service.UserService;
-import cz.muni.fi.mir.forms.UserRoleForm;
-import cz.muni.fi.mir.tools.EntityFactory;
-import cz.muni.fi.mir.tools.Tools;
-import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -29,6 +22,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.UserRoleService;
+import cz.muni.fi.mir.db.service.UserService;
+import cz.muni.fi.mir.forms.UserForm;
+import cz.muni.fi.mir.forms.UserRoleForm;
+import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.Tools;
+import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 
 /**
  * This class serves for handling requests for User objects with requests starting with <b>/user</b>

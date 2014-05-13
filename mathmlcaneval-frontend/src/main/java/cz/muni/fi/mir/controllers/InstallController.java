@@ -5,16 +5,11 @@
  */
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.db.domain.User;
-import cz.muni.fi.mir.db.service.SourceDocumentService;
-import cz.muni.fi.mir.db.service.UserRoleService;
-import cz.muni.fi.mir.db.service.UserService;
-import cz.muni.fi.mir.forms.UserForm;
-import cz.muni.fi.mir.tools.EntityFactory;
-import cz.muni.fi.mir.tools.Tools;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +21,14 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.service.SourceDocumentService;
+import cz.muni.fi.mir.db.service.UserRoleService;
+import cz.muni.fi.mir.db.service.UserService;
+import cz.muni.fi.mir.forms.UserForm;
+import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.Tools;
 
 /**
  *

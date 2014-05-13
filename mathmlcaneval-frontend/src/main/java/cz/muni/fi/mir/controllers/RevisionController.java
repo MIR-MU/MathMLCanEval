@@ -6,11 +6,8 @@
 
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.db.domain.Revision;
-import cz.muni.fi.mir.db.service.RevisionService;
-import cz.muni.fi.mir.forms.RevisionForm;
-import cz.muni.fi.mir.tools.EntityFactory;
 import javax.validation.Valid;
+
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -24,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import cz.muni.fi.mir.db.domain.Revision;
+import cz.muni.fi.mir.db.service.RevisionService;
+import cz.muni.fi.mir.forms.RevisionForm;
+import cz.muni.fi.mir.tools.EntityFactory;
 
 /**
  *

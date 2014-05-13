@@ -4,21 +4,11 @@
  */
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.AnnotationFlag;
-import cz.muni.fi.mir.db.domain.CanonicOutput;
-import cz.muni.fi.mir.db.service.AnnotationFlagService;
-import cz.muni.fi.mir.db.service.AnnotationService;
-import cz.muni.fi.mir.db.service.CanonicOutputService;
-import cz.muni.fi.mir.db.service.UserService;
-import cz.muni.fi.mir.forms.AnnotationForm;
-import cz.muni.fi.mir.pagination.Pagination;
-import cz.muni.fi.mir.tools.EntityFactory;
-import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -31,6 +21,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.AnnotationFlag;
+import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.service.AnnotationFlagService;
+import cz.muni.fi.mir.db.service.AnnotationService;
+import cz.muni.fi.mir.db.service.CanonicOutputService;
+import cz.muni.fi.mir.db.service.UserService;
+import cz.muni.fi.mir.forms.AnnotationForm;
+import cz.muni.fi.mir.pagination.Pagination;
+import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 
 
 /**

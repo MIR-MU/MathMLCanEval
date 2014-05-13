@@ -1,12 +1,10 @@
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.db.domain.Program;
-import cz.muni.fi.mir.db.service.ProgramService;
-import cz.muni.fi.mir.forms.ProgramForm;
-import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.List;
 import java.util.Map;
+
 import javax.validation.Valid;
+
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -20,6 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import cz.muni.fi.mir.db.domain.Program;
+import cz.muni.fi.mir.db.service.ProgramService;
+import cz.muni.fi.mir.forms.ProgramForm;
+import cz.muni.fi.mir.tools.EntityFactory;
 
 /**
  * This class serves for handling requests for Program objects with requests starting with <b>/program</b>
