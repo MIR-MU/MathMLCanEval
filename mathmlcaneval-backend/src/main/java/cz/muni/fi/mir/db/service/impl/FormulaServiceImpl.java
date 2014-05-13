@@ -128,6 +128,7 @@ public class FormulaServiceImpl implements FormulaService
     @Transactional(readOnly = false)
     public void massFormulaImport(String path, String filter, ApplicationRun applicationRun, Program program, SourceDocument sourceDocument)
     {
+        // move to loader ? or different thread
         List<Formula> toImport = Collections.emptyList();
         try
         {

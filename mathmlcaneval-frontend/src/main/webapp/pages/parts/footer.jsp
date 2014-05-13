@@ -129,5 +129,14 @@ function diffView() {
     }));
 }
 </script>
+
+<script>
+    
+    $('#inputFilter').tooltip({
+        'title': "<spring:message code="general.hint.filter" />",
+           'placement': 'right',
+           'container' : 'body'
+       });
+</script>
 </body>
 </html>

@@ -74,15 +74,15 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">!path</label>
+            <label class="col-sm-2 control-label"><spring:message code="general.label.path" /></label>
             <div class="col-sm-7">
-                <input type="text" name="importPath" class="form-control" />
+                <input type="text" name="importPath" class="form-control" placeholder="<spring:message code="general.hint.path" />"/>
             </div>        
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">!filter</label>
+            <label class="col-sm-2 control-label"><spring:message code="general.label.filter" /></label>
             <div class="col-sm-7">
-                <input type="text" name="filter" class="form-control" />
+                <input type="text" name="filter" class="form-control" id="inputFilter"/>
             </div>        
         </div>
         
