@@ -81,4 +81,10 @@ public class Pagination {
     {
         return pages != DEFAULT_PAGINATOR_SIZE;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Pagination{" + "pageNumber=" + pageNumber + ", pageSize=" + pageSize + ", pages=" + pages + '}';
+    }
 }

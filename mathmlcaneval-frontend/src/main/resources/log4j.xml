@@ -35,7 +35,7 @@
     </logger>
 	
     <logger name="org.hibernate">
-        <level value="debug"/>  
+        <level value="info"/>  
     </logger>
     
     <logger name="org.apache.catalina">
@@ -47,7 +47,7 @@
 
     <!-- Root Logger -->
     <root>
-        <priority value="debug" />
+        <priority value="info" />
         <appender-ref ref="console" />
         <appender-ref ref="file" />
     </root>
