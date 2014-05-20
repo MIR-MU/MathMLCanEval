@@ -21,11 +21,13 @@ import cz.muni.fi.mir.tools.Tools;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -125,9 +127,11 @@ public class FileDirectoryService
         {
             Formula f = EntityFactory.createFormula();
             f.setOutputs(new ArrayList<CanonicOutput>());
+            InputStream is = null;
             try
             {
-                f.setXml(IOUtils.toString(Files.newInputStream(p)));
+                is = Files.newInputStream(p);
+                f.setXml(IOUtils.toString(is));
                 f.setInsertTime(DateTime.now());
                 f.setUser(u);
                 result.add(f);
@@ -135,6 +139,20 @@ public class FileDirectoryService
             catch (IOException ex)
             {
                 logger.error(ex);
+            }
+            finally
+            {
+                if(is != null)
+                {
+                    try
+                    {
+                        is.close();
+                    }
+                    catch (IOException ex)
+                    {
+                        logger.fatal(ex);
+                    }
+                }
             }
         }
 
