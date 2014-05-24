@@ -123,8 +123,8 @@ function diffView() {
         baseTextLines: base,
         newTextLines: newtxt,
         opcodes: opcodes,
-        baseTextName: " ",
-        newTextName: " ",
+        baseTextName: "<spring:message code="entity.canonicOutput.original" />",
+        newTextName: "<spring:message code="entity.canonicOutput.outputForm" />",
         viewType: 0
     }));
 }

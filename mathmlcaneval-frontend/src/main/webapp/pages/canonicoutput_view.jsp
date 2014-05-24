@@ -66,8 +66,8 @@
                     <div class="panel-body">
                         <div class="row">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#canonicalized" data-toggle="tab"><spring:message code="entity.canonicOutput.outputForm" /></a></li>
                                 <li><a href="#original" data-toggle="tab"><spring:message code="entity.canonicOutput.original" /></a></li>
+                                <li class="active"><a href="#canonicalized" data-toggle="tab"><spring:message code="entity.canonicOutput.outputForm" /></a></li>
                                 <li><a href="#diff" data-toggle="tab" onclick="diffView();"><spring:message code="entity.canonicOutput.diff" /></a></li>
                             </ul>
                             <div class="tab-content">
@@ -93,6 +93,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="diff">
+                                <!-- see footer for the javascript -->
                             </div>
                         </div>
                     </div>
