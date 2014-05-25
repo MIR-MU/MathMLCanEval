@@ -25,17 +25,36 @@
             </c:otherwise>
         </c:choose>
     </div>
-    <div class="text-center">
-        <ul class="pagination pagination-sm">
-          <li<c:if test="${pagination.startPage == 1}"> class="disabled"</c:if>>
-            <a href="?pageNumber=${pagination.startPage - 1}">&laquo;</a>
-          </li>
-          <c:forEach var="i" begin="${pagination.startPage}" end="${pagination.startPage + pagination.pages - 1}">
-          <li<c:if test="${pagination.pageNumber == i}"> class="active"</c:if>>
-            <a href="?pageNumber=${i}">${i}</a>
-          </li>
-          </c:forEach>
-          <li><a href="?pageNumber=${pagination.startPage + pagination.pages}">&raquo;</a></li>
-        </ul>
+    <!-- pagination -->
+    <div class="text-center"> 
+        <form:form method="get" action="${pageContext.request.contextPath}/formula/list/" commandName="pagination">
+            <ul class="pager">
+                <c:if test="${pagination.pageSize != pagination.defaultPageSize}">
+                    <c:set var="size" value="&pageSize=${pagination.pageSize}" />
+                    <form:hidden path="pageSize" />
+                </c:if>
+                <li><a href="?pageNumber=1${size}">&laquo;</a></li>
+                <c:choose>
+                    <c:when test="${pagination.pageNumber == 1}">
+                        <li class="disabled"><a href="javascript:;">&lsaquo;</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><a href="?pageNumber=${pagination.pageNumber - 1}${size}">&lsaquo;</a></li>
+                    </c:otherwise>
+                </c:choose>
+                <li><form:input type="text" path="pageNumber" size="2" /></li>
+                <li><button type="submit" class="btn btn-primary btn-sm"><spring:message code="pagination.go" /></button></li>
+                <li>/ ${pagination.pages}</li>
+                <c:choose>
+                    <c:when test="${pagination.pageNumber == pagination.pages}">
+                        <li class="disabled"><a href="javascript:;">&rsaquo;</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><a href="?pageNumber=${pagination.pageNumber + 1}${size}">&rsaquo;</a></li>
+                    </c:otherwise>
+                </c:choose>
+                <li><a href="?pageNumber=${pagination.pages}${size}">&raquo;</a></li>
+            </ul>
+        </form:form>
     </div>
 </div>

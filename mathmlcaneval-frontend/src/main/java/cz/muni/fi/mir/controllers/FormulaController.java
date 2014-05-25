@@ -216,18 +216,12 @@ public class FormulaController
     }
 
     @RequestMapping(value = {"/list","/list/"},method = RequestMethod.GET)
-    public ModelAndView listPage(@ModelAttribute("pagination") Pagination pagination, Model model, @RequestParam(value = "pageNumber",required = false) Integer pageNumber)
+    public ModelAndView listPage(@ModelAttribute("pagination") Pagination pagination, Model model)
     {
-        if(pagination.isModified())
-        {
-            pagination = Pagination.newInstance(formulaService.getNumberOfRecords());
+        if (pagination.getNumberOfRecords() == 0) {
+            pagination.setNumberOfRecords(formulaService.getNumberOfRecords());
         }
-        
-        if(pageNumber != null)
-        {
-            pagination.setPageNumber(pageNumber);
-        }
-        
+
         ModelMap mm = new ModelMap();
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination.getPageSize() * (pagination.getPageNumber() - 1), pagination.getPageSize()));
