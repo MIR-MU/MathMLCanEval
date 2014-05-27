@@ -73,4 +73,10 @@
         </property>
     </bean>
     <mvc:annotation-driven validator="validator" conversion-service="conversionService" enable-matrix-variables="true" />    
+
+
+    <bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <!-- might not work everytime: https://en.wikipedia.org/wiki/HTTP_referer#Referer_hiding -->
+        <property name="useReferer" value="true" />
+    </bean>
 </beans>
