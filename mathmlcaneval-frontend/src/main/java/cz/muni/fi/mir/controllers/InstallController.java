@@ -114,15 +114,8 @@ public class InstallController
         {
             User u = EntityFactory.createUser(username, pass1, username, email, userRoleService.getAllUserRoles());
             
-            try
-            {
-                u.setPassword(Tools.getInstance().SHA1(u.getPassword()));
+            u.setPassword(Tools.getInstance().SHA1(u.getPassword()));
 
-            }
-            catch (NoSuchAlgorithmException | UnsupportedEncodingException ex)
-            {
-                logger.info(ex);
-            }
             userService.createUser(u);
             
             return new ModelAndView("redirect:/");

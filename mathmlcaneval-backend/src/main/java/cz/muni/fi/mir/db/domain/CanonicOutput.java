@@ -16,9 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
+import javax.persistence.SequenceGenerator;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
@@ -35,7 +36,9 @@ public class CanonicOutput implements Serializable
     private static final long serialVersionUID = 6956045766345845859L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id",nullable = false)
+    @SequenceGenerator(name="canonicoutput_seq", sequenceName="canonicoutput_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "canonicoutput_seq")
     private Long id;
 
     @Column(name = "outputForm",columnDefinition = "TEXT",length = 10000)

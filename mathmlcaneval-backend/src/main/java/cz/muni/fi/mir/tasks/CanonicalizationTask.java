@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author siska
  */
+@Deprecated
 public class CanonicalizationTask implements Callable<TaskStatus>
 {
     private Formula formula;

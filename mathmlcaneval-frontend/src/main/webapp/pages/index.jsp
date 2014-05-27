@@ -24,7 +24,7 @@
                             <p>Browse formulas others have been uploading or search for specific formula.</p>
                         </div>
                     </a>
-                    <a href="#" class="thumbnail well well-sm">
+                    <a href="${pageContext.request.contextPath}/statistics/" class="thumbnail well well-sm">
                         <div class="caption">
                             <h2><spring:message code="index.page.button.statistics" /></h2>
                             <p>See the evaluation and statistics about performance and correctness of canonicalizer.</p>

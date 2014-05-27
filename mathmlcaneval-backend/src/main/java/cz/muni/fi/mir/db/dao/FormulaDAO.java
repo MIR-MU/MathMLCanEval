@@ -31,5 +31,7 @@ public interface FormulaDAO
     List<Formula> getFormulasByProgram(Program program);
     List<Formula> getFormulasByUser(User user);
     
-    int getNumberOfRecords();
+    int getNumberOfRecords();    
+    
+    Long exists(String hash);
 }

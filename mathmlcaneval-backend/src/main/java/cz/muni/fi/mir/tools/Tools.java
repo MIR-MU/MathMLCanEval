@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -186,13 +188,34 @@ public class Tools
      * @throws NoSuchAlgorithmException
      * @throws UnsupportedEncodingException
      */
-    public String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException 
+    public String SHA1(String text) 
     {
-        MessageDigest md = MessageDigest.getInstance("SHA-1");        
+        MessageDigest md = null;        
+        try
+        {
+            md = MessageDigest.getInstance("SHA-1");
+        }
+        catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(Tools.class.getName()).log(Level.SEVERE, null, ex);
+        }
         byte[] sha1hash = new byte[40];
-        md.update(text.getBytes("iso-8859-1"), 0, text.length());
-        sha1hash = md.digest();
-        return convertToHex(sha1hash);
+        if(md != null)
+        {
+            try
+            {
+                md.update(text.getBytes("iso-8859-1"), 0, text.length());
+            }
+            catch (UnsupportedEncodingException ex)
+            {
+                Logger.getLogger(Tools.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            sha1hash = md.digest();
+            return convertToHex(sha1hash);
+        }
+        
+        return null;      
     }
 
     private String convertToHex(byte[] data) 

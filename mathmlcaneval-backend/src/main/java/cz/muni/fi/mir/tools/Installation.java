@@ -39,18 +39,12 @@ public class Installation
         rolez.add(ur);
         rolez.add(ur1);
         
-        User u = null;
-        try
-        {
-            u = EntityFactory.createUser("administrator", 
+        User u = EntityFactory.createUser("administrator", 
                     Tools.getInstance ().SHA1("heslo"), 
                     "Admin adminovic",
                     "example@example.com",
                     rolez);
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex)
-        {
-            Logger.getLogger(Installation.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         
         
         userService.createUser(u);

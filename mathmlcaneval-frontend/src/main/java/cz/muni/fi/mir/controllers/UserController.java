@@ -97,13 +97,10 @@ public class UserController
 
         //UserRole userRole = userRoleService.getUserRoleByName("ROLE_USER");
         User u = mapper.map(user, User.class);
-        try {
-            u.setPassword(Tools.getInstance().SHA1(u.getPassword()));
+        
+        u.setPassword(Tools.getInstance().SHA1(u.getPassword()));
 
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex)
-        {
-            logger.info(ex);
-        }
+        
         userService.createUser(u);
 
         return new ModelAndView("redirect:/user/list/");
@@ -186,12 +183,9 @@ public class UserController
         else
         {
             User u = mapper.map(userForm,User.class);
-            try {
-                u.setPassword(Tools.getInstance ().SHA1(u.getPassword()));
-            } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex)
-            {
-                logger.fatal(null, ex);
-            }
+            
+            u.setPassword(Tools.getInstance ().SHA1(u.getPassword()));
+            
             if (request.isUserInRole("ROLE_ADMINISTRATOR"))
             {
                 //ak daco bude treba zatial neviem co.

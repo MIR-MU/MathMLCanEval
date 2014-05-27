@@ -38,6 +38,8 @@ public class Formula implements Serializable
     private String xml;                         // formulka v MathML
     @Column(name = "note")
     private String note;                        // poznamka
+    @Column(name = "hashValue", length = 40,nullable = true)
+    private String hashValue;                        //used for computation whether formula is already stored
     @ManyToOne
     private SourceDocument sourceDocument;
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -164,6 +166,18 @@ public class Formula implements Serializable
         final Formula other = (Formula) obj;
         return Objects.equals(this.id, other.id);
     }
+
+    public String getHashValue()
+    {
+        return hashValue;
+    }
+
+    public void setHash(String hashValue)
+    {
+        this.hashValue = hashValue;
+    }
+    
+    
 
     @Override
     public String toString()

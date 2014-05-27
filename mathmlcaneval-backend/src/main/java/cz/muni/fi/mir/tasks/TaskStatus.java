@@ -8,6 +8,7 @@ package cz.muni.fi.mir.tasks;
  *
  * @author siska
  */
+@Deprecated
 public class TaskStatus
 {
     private String result;

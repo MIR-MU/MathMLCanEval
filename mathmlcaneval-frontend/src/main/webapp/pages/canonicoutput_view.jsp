@@ -38,6 +38,17 @@
                     <div class="panel panel-primary">
                        <!-- Annotations (view & add) -->
                        <div class="panel-heading"><spring:message code="entity.canonicOutput.annotations" /></div>
+                       <form:form method="post" action="${pageContext.request.contextPath}/canonicoutput/annotate/" commandName="annotationForm" cssClass="form-horizontal" cssStyle="margin-top: 5px;">
+                           <form:input style="width: 80%;" path="note" placeholder="Note" />
+                           <button type="submit" class="btn btn-primary btn-sm pull-right"><spring:message code="general.button.submit" /></button>
+                           <div class="row">
+                               <div class="col-md-2"><a href="#" class="btn btn-warning"><span class="glyphicon glyphicon-ok"></span></a></div>
+                               <div class="col-md-2"><a href="#" class="btn btn-warning"><span class="glyphicon glyphicon-flag"></span></a></div>
+                               <div class="col-md-2"><a href="#" class="btn btn-warning"><span class="glyphicon glyphicon-question-sign"></span></a></div>
+                               <div class="col-md-2"><a href="#" class="btn btn-warning"><span class="glyphicon glyphicon-remove"></span></a></div>
+                           </div>
+                       </form:form>
+                       <%--
                        <form:form method="post" action="${pageContext.request.contextPath}/canonicoutput/annotate/" commandName="annotationForm" cssClass="form-horizontal">
                        <input type="hidden" name="canonicOutputId" value="${formulaEntry.id}" />
                        <table class="table table-bordered table-striped" style="table-layout: fixed;"><tbody>
@@ -55,7 +66,7 @@
                            <button type="submit" class="btn btn-primary btn-sm pull-right"><spring:message code="general.button.submit" /></button>
                        </div>
                        </sec:authorize>
-                       </form:form>
+                       </form:form>--%>
                    </div>
                 </div>
             </div>

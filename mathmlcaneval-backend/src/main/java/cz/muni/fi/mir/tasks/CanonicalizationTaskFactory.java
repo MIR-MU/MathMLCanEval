@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
  *
  * @author emptak
  */
+@Deprecated
 @Component(value = "canonicalizationTaskFactory")
 public class CanonicalizationTaskFactory
 {

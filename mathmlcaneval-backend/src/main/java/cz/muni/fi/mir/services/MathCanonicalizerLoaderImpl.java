@@ -7,10 +7,8 @@ package cz.muni.fi.mir.services;
 
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Formula;
-import cz.muni.fi.mir.tasks.CanonTask;
-import cz.muni.fi.mir.tasks.CanonicalizationTask;
-import cz.muni.fi.mir.tasks.CanonicalizationTaskFactory;
-import cz.muni.fi.mir.tasks.TaskStatus;
+import cz.muni.fi.mir.scheduling.CanonicalizationTask;
+import cz.muni.fi.mir.scheduling.CanonicalizationTaskFactory;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -196,25 +194,10 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
     }
 
     @Override
-    public void execute(Formula formula, ApplicationRun applicationRun)
-    {
-        this.setRevision(applicationRun.getRevision().getRevisionHash());
-
-        CanonicalizationTask task = new CanonicalizationTask(formula, applicationRun, this.mainClass);
-        // inject beans into the task
-        applicationContext.getAutowireCapableBeanFactory().autowireBean(task);
-
-        // we need to force-fetch lazy collections. ugly..
-        Hibernate.initialize(formula.getOutputs()); 
-
-        Future<TaskStatus> future = taskExecutor.submit(task);
-    }
-
-    @Override
     public void execute(List<Formula> formulas, ApplicationRun applicationRun)
     {
         this.setRevision(applicationRun.getRevision().getRevisionHash());
-        CanonTask ct = canonicalizationTaskFactory.provideInstance();
+        CanonicalizationTask ct = canonicalizationTaskFactory.createTask();
         
         ct.setDependencies(formulas, applicationRun, mainClass);
         

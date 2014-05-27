@@ -34,7 +34,7 @@ public interface MathCanonicalizerLoader
      * @param formula to be canonicalized
      * @param applicationRun wrapper containing some information required for run
      */
-    void execute(Formula formula, ApplicationRun applicationRun);
+    //void execute(Formula formula, ApplicationRun applicationRun);
     
     
     void execute(List<Formula> formulas, ApplicationRun applicationRun);

@@ -21,6 +21,8 @@
 </script>
 <script type="text/javascript" src="<c:url value="/resources/js/diffview.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/difflib.js" />"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.min.js" />"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.categories.min.js" />"></script>
 <script>
     SyntaxHighlighter.autoloader(
             'xml  <c:url value="/resources/js/shBrushXml.js" />'
@@ -37,6 +39,27 @@
         $(this).on('click','.addrow',function() {
             $("#userRolesRows").append(getUserRolesHTML()); 
         });
+        
+        $(function() {
+
+		var data = [ ["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9] ];
+
+		$.plot("#flot-placeholder", [ data ], {
+			series: {
+				bars: {
+					show: true,
+					barWidth: 0.6,
+					align: "center"
+				}
+			},
+			xaxis: {
+				mode: "categories",
+				tickLength: 0
+			}
+		});
+	});
+
+
     });
 
     function getUserRolesHTML()

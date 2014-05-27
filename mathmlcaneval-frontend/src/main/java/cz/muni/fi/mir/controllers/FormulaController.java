@@ -52,6 +52,7 @@ import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
+import java.util.Arrays;
 
 /**
  *
@@ -135,7 +136,7 @@ public class FormulaController
                     applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
                     applicationRunService.createApplicationRun(applicationRun);
 
-                    mathCanonicalizerLoader.execute(f, applicationRun);
+                    mathCanonicalizerLoader.execute(Arrays.asList(f), applicationRun);
                 }
             }
 
@@ -161,7 +162,7 @@ public class FormulaController
                             applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
                             applicationRunService.createApplicationRun(applicationRun);
 
-                            mathCanonicalizerLoader.execute(f, applicationRun);
+                            mathCanonicalizerLoader.execute(Arrays.asList(f), applicationRun);
                         }
                     }
                 } catch (IOException ex)
@@ -197,7 +198,7 @@ public class FormulaController
         applicationRun.setConfiguration(mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class));
         applicationRunService.createApplicationRun(applicationRun);
 
-        mathCanonicalizerLoader.execute(formula, applicationRun);
+        mathCanonicalizerLoader.execute(Arrays.asList(formula), applicationRun);
     }
 
     @Secured("ROLE_USER")

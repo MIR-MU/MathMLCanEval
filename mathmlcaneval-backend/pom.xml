@@ -236,6 +236,11 @@
             <version>2.0.0-beta</version>
         </dependency>
         <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
+        <dependency>
             <!-- testing library -->
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -13,6 +13,7 @@
     <class>cz.muni.fi.mir.db.domain.Formula</class>
     <class>cz.muni.fi.mir.db.domain.Annotation</class>
     <class>cz.muni.fi.mir.index.IndexedOutput</class>
+    <class>cz.muni.fi.mir.services.statistics.Statistics</class>
     <properties/>
   </persistence-unit>
 </persistence>

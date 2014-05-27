@@ -105,6 +105,17 @@
         <property name="queueCapacity" value="25" />
     </bean>
     
+    <bean id="canonicalizationTask" class="cz.muni.fi.mir.scheduling.CanonicalizationTask" scope="prototype" lazy-init="true" />
+    
+    <bean id="canonicalizationTaskFactory" class="cz.muni.fi.mir.scheduling.CanonicalizationTaskFactory">
+        <lookup-method name="createTask" bean="canonicalizationTask" />
+    </bean>
+    
+    
+    <bean id="statisticsService" class="cz.muni.fi.mir.services.statistics.StatisticsServiceImpl">
+        <constructor-arg name="is_valid" value="#isValid" />
+    </bean>
+    
     
 <!--    <bean id="canonicalizationTaskFactory" class="cz.muni.fi.mir.tasks.CanonicalizationTaskFactory" />-->
 

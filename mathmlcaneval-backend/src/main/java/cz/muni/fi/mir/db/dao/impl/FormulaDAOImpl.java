@@ -162,4 +162,20 @@ public class FormulaDAOImpl implements FormulaDAO
         
         return result;
     }
+
+    @Override
+    public Long exists(String hash)
+    {
+        Formula f = null;
+        try
+        {
+            f = entityManager.createQuery("SELECT f FROM formula f WHERE f.hashValue = :hashValue", Formula.class).setParameter("hashValue", hash).getSingleResult();            
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return f == null ? null : f.getId();
+    }
 }

@@ -11,7 +11,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package cz.muni.fi.mir.tasks;
+package cz.muni.fi.mir.scheduling;
 
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
@@ -33,6 +33,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * TODO SIMALIRITY FORM CONVERSION
@@ -42,57 +43,60 @@ import org.joda.time.DateTime;
  * @since 1.0
  * @version 1.0
  */
-@Deprecated
-public class CanonTask implements Runnable
+public class CanonicalizationTask implements Runnable
 {
 
     private List<Formula> formulas;
     private ApplicationRun applicationRun;
     private Class mainClass;
 
+    @Autowired
     private CanonicOutputService canonicOutputService;
+    @Autowired
     private FormulaService formulaService;
+    @Autowired
     private ApplicationRunService applicationRunService;
+    
     private SimilarityFormConverter similarityFormConverter;
 
     private static final Logger logger = Logger.getLogger(CanonicalizationTask.class);
 
-    private CanonTask(CanonicOutputService canonicOutputService, FormulaService formulaService, ApplicationRunService applicationRunService)
-    {
-        this.canonicOutputService = canonicOutputService;
-        this.formulaService = formulaService;
-        this.applicationRunService = applicationRunService;
-    }
-
-    /**
-     * Method constructs CanonTask object from input parameters. Input are
-     * runtime dependencies without which Task cannot be run later.
-     *
-     * @param canonicOutputService instance of CanonicOutputService bean
-     * @param formulaService instance of FormulaService bean
-     * @param applicationRunService instance of ApplicationRunService bean
-     * @return Instance of CanonTask
-     * @throws IllegalArgumentException if any of input parameter is null.
-     */
-    public static CanonTask newInstance(CanonicOutputService canonicOutputService, FormulaService formulaService, ApplicationRunService applicationRunService) throws IllegalArgumentException
-    {
-        if (canonicOutputService == null)
-        {
-            throw new IllegalArgumentException("CanonicService is null.");
-        }
-
-        if (formulaService == null)
-        {
-            throw new IllegalArgumentException("FormulaService is null.");
-        }
-
-        if (applicationRunService == null)
-        {
-            throw new IllegalArgumentException("ApplicationRunService is null.");
-        }
-
-        return new CanonTask(canonicOutputService, formulaService, applicationRunService);
-    }
+//    private CanonicalizationTask(CanonicOutputService canonicOutputService, FormulaService formulaService, ApplicationRunService applicationRunService)
+//    {
+//        this.canonicOutputService = canonicOutputService;
+//        this.formulaService = formulaService;
+//        this.applicationRunService = applicationRunService;
+//    }
+//
+//    /**
+//     * Method constructs CanonTask object from input parameters. Input are
+//     * runtime dependencies without which Task cannot be run later.
+//     *
+//     * @param canonicOutputService instance of CanonicOutputService bean
+//     * @param formulaService instance of FormulaService bean
+//     * @param applicationRunService instance of ApplicationRunService bean
+//     * @return Instance of CanonTask
+//     * @throws IllegalArgumentException if any of input parameter is null.
+//     */
+//    public static CanonicalizationTask newInstance(CanonicOutputService canonicOutputService, FormulaService formulaService, ApplicationRunService applicationRunService) throws IllegalArgumentException
+//    {
+//        if (canonicOutputService == null)
+//        {
+//            throw new IllegalArgumentException("CanonicService is null.");
+//        }
+//
+//        if (formulaService == null)
+//        {
+//            throw new IllegalArgumentException("FormulaService is null.");
+//        }
+//
+//        if (applicationRunService == null)
+//        {
+//            throw new IllegalArgumentException("ApplicationRunService is null.");
+//        }
+//
+//        return new CanonicalizationTask(canonicOutputService, formulaService, applicationRunService);
+//    }
 
     /**
      * Method setups data dependencies used for CanonicalizationTask.
