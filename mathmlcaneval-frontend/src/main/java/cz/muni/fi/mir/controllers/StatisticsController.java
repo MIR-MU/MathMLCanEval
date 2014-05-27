@@ -8,6 +8,7 @@ package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.services.statistics.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,5 +50,14 @@ public class StatisticsController
         new Thread(r).start();
         
         return new ModelAndView("redirect:/statistics/");
+    }
+
+    @Secured("ROLE_ADMINISTRATOR")
+    @RequestMapping(value = {"/logger/", "/logger"})
+    public ModelAndView logger()
+    {
+        ModelMap mm = new ModelMap();
+
+        return new ModelAndView("logger",mm);
     }
 }
