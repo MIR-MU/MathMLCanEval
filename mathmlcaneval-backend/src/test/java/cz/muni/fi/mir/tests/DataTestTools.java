@@ -6,7 +6,6 @@
 package cz.muni.fi.mir.tests;
 
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Formula;
@@ -27,29 +26,6 @@ import org.joda.time.DateTime;
  */
 public class DataTestTools
 {
-
-    /**
-     * Method provides List of AnnotationFlags with following values and order:
-     * <ul>
-     * <li>VALUE_PROPER_RESULT</li>
-     * <li>VALUE_MIGHT_BE_PROPER</li>
-     * <li>VALUE_WRONG</li>
-     * <li>VALUE_CHECK_PLS</li>
-     * </ul>
-     *
-     * @return List of AnnotationFlags
-     */
-    public static List<AnnotationFlag> provideAnnotationFlagList()
-    {
-        List<AnnotationFlag> result = new ArrayList<>();
-
-        result.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_PROPER_RESULT));
-        result.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_MIGHT_BE_PROPER));
-        result.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_WRONG));
-        result.add(EntityFactory.createAnnotaionFlag(AnnotationFlag.VALUE_CHECK_PLS));
-
-        return result;
-    }
 
     /**
      * Method provides List of UserRoles with following values and order:
@@ -179,15 +155,15 @@ public class DataTestTools
      * @param aFlags from which values will be selected
      * @return List of Annotations
      */
-    public static List<Annotation> provideAnnotationList(List<User> users, List<AnnotationFlag> aFlags)
+    public static List<Annotation> provideAnnotationList(List<User> users)
     {
         List<Annotation> result = new ArrayList<>();
 
-        result.add(EntityFactory.createAnnotation("poznamka", users.get(0), aFlags.get(0)));
-        result.add(EntityFactory.createAnnotation("poznamkaaa", users.get(0), aFlags.get(1)));
-        result.add(EntityFactory.createAnnotation("poznamka12313", users.get(0), aFlags.get(1)));
-        result.add(EntityFactory.createAnnotation("aha2313", users.get(1), aFlags.get(1)));
-        result.add(EntityFactory.createAnnotation("pozyuyiua12313", users.get(1), aFlags.get(1)));
+        result.add(EntityFactory.createAnnotation("poznamka", users.get(0)));
+        result.add(EntityFactory.createAnnotation("poznamkaaa", users.get(0)));
+        result.add(EntityFactory.createAnnotation("poznamka12313", users.get(0)));
+        result.add(EntityFactory.createAnnotation("aha2313", users.get(1)));
+        result.add(EntityFactory.createAnnotation("pozyuyiua12313", users.get(1)));
 
         return result;
     }

@@ -15,11 +15,6 @@
         </custom-converters>
     </configuration>
     
-    
-    <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.AnnotationFlag</class-a>
-        <class-b>cz.muni.fi.mir.forms.AnnotationFlagForm</class-b>
-    </mapping>
     <mapping>
         <class-a>cz.muni.fi.mir.db.domain.Annotation</class-a>
         <class-b>cz.muni.fi.mir.forms.AnnotationForm</class-b>

@@ -112,8 +112,11 @@
     </bean>
     
     
-    <bean id="statisticsService" class="cz.muni.fi.mir.services.statistics.StatisticsServiceImpl">
-        <constructor-arg name="is_valid" value="#isValid" />
+    <bean id="statisticsService" class="cz.muni.fi.mir.db.service.impl.StatisticsServiceImpl">
+        <constructor-arg name="IS_VALID" value="#isValid" />
+        <constructor-arg name="IS_INVALID" value="#isInvalid" />
+        <constructor-arg name="UNCERTAIN" value="#uncertain" />
+        <constructor-arg name="REMOVE_RESULT" value="#removeResult" />
     </bean>
     
     

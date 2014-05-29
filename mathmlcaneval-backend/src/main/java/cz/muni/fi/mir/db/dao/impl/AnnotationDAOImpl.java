@@ -2,7 +2,6 @@ package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.AnnotationDAO;
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.domain.User;
 import java.util.Collections;
 import java.util.List;
@@ -84,24 +83,6 @@ public class AnnotationDAOImpl implements AnnotationDAO
         {
             resultList = entityManager.createQuery("SELECT a FROM annotation a WHERE a.user = :user ORDER BY a.id DESC", Annotation.class)
                     .setParameter("user", user).getResultList();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return resultList;
-    }
-
-    @Override
-    public List<Annotation> getAnnotationByFlag(AnnotationFlag flag)
-    {
-        List<Annotation> resultList = Collections.emptyList();
-        
-        try
-        {
-            resultList = entityManager.createQuery("SELECT a FROM annotation a WHERE a.annotationFlag = :aFlag ORDER BY a.id DESC", Annotation.class)
-                    .setParameter("aFlag", flag).getResultList();
         }
         catch(NoResultException nre)
         {

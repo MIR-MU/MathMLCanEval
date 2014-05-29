@@ -17,7 +17,6 @@ public class AnnotationForm
     private Long id;
     private UserForm user;
     private String note;
-    private AnnotationFlagForm annotationFlagForm;
 
     public Long getId()
     {
@@ -49,16 +48,6 @@ public class AnnotationForm
         this.note = note;
     }
 
-    public AnnotationFlagForm getAnnotationFlagForm()
-    {
-        return annotationFlagForm;
-    }
-
-    public void setAnnotationFlagForm(AnnotationFlagForm annotationFlagForm)
-    {
-        this.annotationFlagForm = annotationFlagForm;
-    }
-
     @Override
     public int hashCode()
     {
@@ -85,6 +74,6 @@ public class AnnotationForm
     @Override
     public String toString()
     {
-        return "Annotation{" + "id=" + id + ", user=" + user + ", note=" + note + ", annotationFlag=" + annotationFlagForm + '}';
+        return "Annotation{" + "id=" + id + ", user=" + user + ", note=" + note + '}';
     }
 }

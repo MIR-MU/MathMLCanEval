@@ -5,7 +5,6 @@
 package cz.muni.fi.mir.tools;
 
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Configuration;
@@ -373,29 +372,7 @@ public class EntityFactory
 
         return c;
     }
-
-    /**
-     * Method creates empty AnnotationFlag.
-     * @return empty AnnotationFlag without any values.
-     */
-    public static AnnotationFlag createAnnotaionFlag()
-    {
-        return new AnnotationFlag();
-    }
-
-    /**
-     * Method creates AnnotationFlag with given value as argument.
-     * @param value to be set to new AnnotationFlag
-     * @return AnnotationFlag with given value passed as method argument.
-     */
-    public static AnnotationFlag createAnnotaionFlag(String value)
-    {
-        AnnotationFlag af = createAnnotaionFlag();
-        af.setFlagValue(value);
-
-        return af;
-    }
-
+    
     /**
      * Method creates empty Annotation.
      * @return empty Annotation without any values.
@@ -405,12 +382,11 @@ public class EntityFactory
         return new Annotation();
     }
 
-    public static Annotation createAnnotation(String note, User user, AnnotationFlag af)
+    public static Annotation createAnnotation(String note, User user)
     {
         Annotation a = createAnnotation();
         a.setNote(note);
         a.setUser(user);
-        a.setAnnotationFlag(af);
 
         return a;
     }

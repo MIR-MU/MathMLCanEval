@@ -35,9 +35,6 @@ public class Annotation implements Serializable
     @Column(name = "note",columnDefinition = "text")
     private String note;
 
-    @ManyToOne
-    private AnnotationFlag annotationFlag;
-
     public Long getId()
     {
         return id;
@@ -68,16 +65,6 @@ public class Annotation implements Serializable
         this.note = note;
     }
 
-    public AnnotationFlag getAnnotationFlag()
-    {
-        return annotationFlag;
-    }
-
-    public void setAnnotationFlag(AnnotationFlag annotationFlag)
-    {
-        this.annotationFlag = annotationFlag;
-    }
-
     @Override
     public int hashCode()
     {
@@ -104,6 +91,6 @@ public class Annotation implements Serializable
     @Override
     public String toString()
     {
-        return "Annotation{" + "id=" + id + ", user=" + user + ", note=" + note + ", annotationFlag=" + annotationFlag + '}';
+        return "Annotation{" + "id=" + id + ", user=" + user + ", note=" + note +  '}';
     }
 }

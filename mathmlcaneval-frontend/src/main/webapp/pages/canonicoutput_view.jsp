@@ -38,14 +38,23 @@
                     <div class="panel panel-primary">
                        <!-- Annotations (view & add) -->
                        <div class="panel-heading"><spring:message code="entity.canonicOutput.annotations" /></div>
-                       <form:form method="post" action="${pageContext.request.contextPath}/canonicoutput/annotate/" commandName="annotationForm" cssClass="form-horizontal" cssStyle="margin-top: 5px;">
-                           <form:input style="width: 80%;" path="note" placeholder="Note" />
-                           <button type="submit" class="btn btn-primary btn-sm pull-right"><spring:message code="general.button.submit" /></button>
+                       <table id="annotationTable">
+                           <c:forEach items="${formulaEntry.annotations}" var="annotationRow">
+                               <tr>
+                                   <td><c:out value="${annotationRow.user.username}" /></td>
+                                   <td class="annotation-note-cell"><c:out value="${annotationRow.note}" /></td>
+                               </tr>
+                           </c:forEach>
+                       </table>
+                       <form:form id="annotationForm" method="post" action="${pageContext.request.contextPath}/canonicoutput/annotate/" commandName="annotationForm" cssClass="form-horizontal" cssStyle="margin-top: 5px;">
+                           <input type="hidden" name="canonicOutputId" value="${formulaEntry.id}" />
+                           <form:input style="width: 80%;" path="note" placeholder="Note" id="annotation-note"/>
+                           <input type="submit" class="btn btn-primary btn-sm pull-right" value="<spring:message code="general.button.submit" />" />
                            <div class="row">
-                               <div class="col-md-2"><a href="#" class="btn btn-warning"><span class="glyphicon glyphicon-ok"></span></a></div>
-                               <div class="col-md-2"><a href="#" class="btn btn-warning"><span class="glyphicon glyphicon-flag"></span></a></div>
-                               <div class="col-md-2"><a href="#" class="btn btn-warning"><span class="glyphicon glyphicon-question-sign"></span></a></div>
-                               <div class="col-md-2"><a href="#" class="btn btn-warning"><span class="glyphicon glyphicon-remove"></span></a></div>
+                               <div class="col-md-2"><span class="btn btn-warning" id="annotate-isvalid"><span class="glyphicon glyphicon-ok"></span></span></div>
+                               <div class="col-md-2"><span class="btn btn-warning" id="annotate-isinvalid"><span class="glyphicon glyphicon-flag"></span></span></div>
+                               <div class="col-md-2"><span class="btn btn-warning" id="annotate-uncertain"><span class="glyphicon glyphicon-question-sign"></span></span></div>
+                               <div class="col-md-2"><span class="btn btn-warning" id="annotate-remove"><span class="glyphicon glyphicon-remove"></span></span></div>
                            </div>
                        </form:form>
                        <%--

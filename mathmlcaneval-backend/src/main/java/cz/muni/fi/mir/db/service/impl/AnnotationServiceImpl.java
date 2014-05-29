@@ -6,7 +6,6 @@ package cz.muni.fi.mir.db.service.impl;
 
 import cz.muni.fi.mir.db.dao.AnnotationDAO;
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.AnnotationService;
 import java.util.List;
@@ -63,13 +62,6 @@ public class AnnotationServiceImpl implements AnnotationService
     public List<Annotation> getAnnotationByUser(User user)
     {
         return annotationDAO.getAnnotationByUser(user);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Annotation> getAnnotationByFlag(AnnotationFlag flag)
-    {
-        return annotationDAO.getAnnotationByFlag(flag);
     }
 
     @Override

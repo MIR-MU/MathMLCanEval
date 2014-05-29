@@ -40,9 +40,13 @@
             $("#userRolesRows").append(getUserRolesHTML()); 
         });
         
-        $(function() {
+        <c:if test="${not empty statistics}">
+            $(function() {
 
-		var data = [ ["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9] ];
+		var data = [ ["isValid", <c:out value="${statistics.totalValid}" />], 
+                    ["isInvalid", <c:out value="${statistics.totalInvalid}" />], 
+                    ["uncertain", <c:out value="${statistics.totalUncertain}" />], 
+                    ["removeResult", <c:out value="${statistics.totalRemove}" />]];
 
 		$.plot("#flot-placeholder", [ data ], {
 			series: {
@@ -58,14 +62,50 @@
 			}
 		});
 	});
-
-
+        </c:if>
+        
+        $("#annotate-isvalid").click(function(event){
+            $("#annotation-note").val($("#annotation-note").val()+" #isValid ");            
+        });
+        
+        $("#annotate-isinvalid").click(function(){
+            $("#annotation-note").val($("#annotation-note").val()+" #isInvalid ");
+        });
+        
+        $("#annotate-uncertain").click(function(){
+            $("#annotation-note").val($("#annotation-note").val()+" #uncertain ");
+        });
+        
+        $("#annotate-remove").click(function(){
+            $("#annotation-note").val($("#annotation-note").val()+" #removeResult ");
+        });
+        
+        
+        var form = $("#annotationForm");
+        form.on("submit",function(event){
+            event.preventDefault();
+           $.ajax({
+               type: form.attr('method'),
+               url: form.attr('action'),
+               data: form.serialize(),
+               dataType: 'json',
+               success: function(data){
+                   console.log(data);
+                   $("#annotationTable > tbody:last").append("<tr><td>"+data.user+"</td><td class=\"annotation-note-cell\">"+data.note.replace(/(#\S+)/g,"<span class=\"hashtag\">$1</span>")+"</td></tr>");
+                   $("#annotation-note").val('');
+                   formatHashTags(true);
+               }
+           });
+           event.preventDefault();
+        });   
+        
+        
+        formatHashTags(false);
     });
 
     function getUserRolesHTML()
     {
         var count = $("#userRolesRows > div").length;
-        console.log(count);
         var $html = $(".userRoleTemplate").clone();
         $html.find("select").attr({
             'id': 'userRoleForms' + count,
@@ -73,6 +113,14 @@
         });
         
         return $html.html();
+    }
+    
+    function formatHashTags()
+    {
+        $("#annotationTable > tbody > tr > td:nth-child(2)").each(function(){
+           //val.replace(/#(\S)*/g,"<span class=\"hashtag\">$1</span>");
+           $(this).html($(this).html().replace(/(#\S+)/g,"<span class=\"hashtag\">$1</span>"));
+        });       
     }
 </script>
 <script>

@@ -5,7 +5,6 @@
 package cz.muni.fi.mir.db.service;
 
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.domain.User;
 import java.util.List;
 
@@ -24,6 +23,5 @@ public interface AnnotationService
     List<Annotation> getAllAnnotations();
     List<Annotation> getAllAnnotationsFromRange(int start, int end) throws IllegalArgumentException;
     List<Annotation> getAnnotationByUser(User user);
-    List<Annotation> getAnnotationByFlag(AnnotationFlag flag);
     List<Annotation> findByNote(String note);
 }

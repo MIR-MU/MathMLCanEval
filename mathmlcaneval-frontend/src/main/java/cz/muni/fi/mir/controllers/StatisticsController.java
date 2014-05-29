@@ -6,7 +6,8 @@
 
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.services.statistics.StatisticsService;
+
+import cz.muni.fi.mir.db.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;

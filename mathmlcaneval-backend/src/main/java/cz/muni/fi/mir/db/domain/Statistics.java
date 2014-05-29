@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package cz.muni.fi.mir.services.statistics;
+package cz.muni.fi.mir.db.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -29,12 +29,53 @@ public class Statistics implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    
+    /**
+     * Total count of formulas in system.
+     */
+    @Column
     private Integer totalFormulas;
+    
+    /**
+     * Total count of formulas in system that have at least 1 canonic output.
+     */
+    @Column(name = "totalFormulaswco")
+    private Integer totalFormulasWithCanonicOutput;
+    
+    /**
+     * Total count of canonic outputs.
+     */
+    @Column
     private Integer totalCanonicalized;
+    
+    
+    /**
+     * Total count of IS_VALID tags see appcontext for specific value.
+     */
+    @Column
     private Integer totalValid;
+    
+    /**
+     * Total count of IS_INVALID tags see appcontext for specific value.
+     */
+    @Column
     private Integer totalInvalid;
+    
+    /**
+     * Total count of UNCERTAIN tags see appcontext for specific value.
+     */
+    @Column
     private Integer totalUncertain;
+    
+    /**
+     * Total count of REMOVE_RESULT tags see appcontext for specific value.
+     */
+    @Column
     private Integer totalRemove;
+    
+    /**
+     * Date when statistic entity was created
+     */
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "calculationDate")
     private DateTime calculationDate;
@@ -119,8 +160,15 @@ public class Statistics implements Serializable
         this.calculationDate = calculationDate;
     }
 
-    
-    
+    public Integer getTotalFormulasWithCanonicOutput()
+    {
+        return totalFormulasWithCanonicOutput;
+    }
+
+    public void setTotalFormulasWithCanonicOutput(Integer totalFormulasWithCanonicOutput)
+    {
+        this.totalFormulasWithCanonicOutput = totalFormulasWithCanonicOutput;
+    }
 
     @Override
     public int hashCode()
@@ -142,19 +190,12 @@ public class Statistics implements Serializable
             return false;
         }
         final Statistics other = (Statistics) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString()
     {
-        return "Statistics{" + "id=" + id + ", totalFormulas=" + totalFormulas + ", totalCanonicalized=" + totalCanonicalized + ", totalValid=" + totalValid + ", totalInvalid=" + totalInvalid + ", totalUncertain=" + totalUncertain + ", totalRemove=" + totalRemove + '}';
+        return "Statistics{" + "id=" + id + ", totalFormulas=" + totalFormulas + ", totalFormulasWithCanonicOutput=" + totalFormulasWithCanonicOutput + ", totalCanonicalized=" + totalCanonicalized + ", totalValid=" + totalValid + ", totalInvalid=" + totalInvalid + ", totalUncertain=" + totalUncertain + ", totalRemove=" + totalRemove + ", calculationDate=" + calculationDate + '}';
     }
-    
-    
-    
 }

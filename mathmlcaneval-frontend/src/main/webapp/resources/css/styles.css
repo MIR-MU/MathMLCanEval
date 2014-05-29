@@ -62,3 +62,14 @@ and open the template in the editor.
 {
     text-decoration: none;
 }
+
+.hashtag
+{
+    font-weight: bolder;
+    background-color: khaki;
+}
+
+.annotation-note-cell
+{
+    padding-left: 10px;
+}

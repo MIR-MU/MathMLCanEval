@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 
-package cz.muni.fi.mir.services.statistics;
-
+package cz.muni.fi.mir.db.service ;
+import cz.muni.fi.mir.db.domain.Statistics;
 import java.util.List;
 import org.joda.time.DateTime;
 

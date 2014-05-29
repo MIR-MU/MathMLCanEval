@@ -5,7 +5,6 @@
 package cz.muni.fi.mir.tests;
 
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Configuration;
@@ -78,24 +77,6 @@ public class TestTools
         public int compare(Configuration c1, Configuration c2)
         {
             return c1.getId().compareTo(c2.getId());
-        }
-    };
-
-    public static Comparator<AnnotationFlag> annotationFlagComparator = new Comparator<AnnotationFlag>()
-    {
-        @Override
-        public int compare(AnnotationFlag af1, AnnotationFlag af2)
-        {
-            return af1.getId().compareTo(af2.getId());
-        }
-    };
-    
-    public static Comparator<AnnotationFlag> annotationFlagComparatorInverted = new Comparator<AnnotationFlag>()
-    {
-        @Override
-        public int compare(AnnotationFlag af1, AnnotationFlag af2)
-        {
-            return af2.getId().compareTo(af1.getId());
         }
     };
 

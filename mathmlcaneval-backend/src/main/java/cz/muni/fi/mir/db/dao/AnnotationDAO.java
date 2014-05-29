@@ -1,7 +1,6 @@
 package cz.muni.fi.mir.db.dao;
 
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.AnnotationFlag;
 import cz.muni.fi.mir.db.domain.User;
 import java.util.List;
 
@@ -87,16 +86,6 @@ public interface AnnotationDAO
      * Annotations made by this User empty List returned.
      */
     List<Annotation> getAnnotationByUser(User user);
-
-    /**
-     * Method fetches all Annotations from database in <b>DESCENDING</b> order
-     * based on AnnotationFlag argument passed as method argument.
-     *
-     * @param flag specifying Annotation having this flag.
-     * @return List of Annotations with given flag. If there are no such
-     * Annotations with this flag empty List is returned then.
-     */
-    List<Annotation> getAnnotationByFlag(AnnotationFlag flag);
 
     /**
      * Method obtains all Annotations with given note. Note might be full note,

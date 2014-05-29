@@ -41,6 +41,10 @@
     <logger name="org.apache.catalina">
         <level value="info" />
     </logger>
+    
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder">
+        <level value="info" />
+    </logger>
 <!--    <logger name="org.springframework.web">
         <level value="info" />
     </logger>-->
