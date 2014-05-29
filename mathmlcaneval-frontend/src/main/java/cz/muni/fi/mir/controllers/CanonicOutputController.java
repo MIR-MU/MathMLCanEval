@@ -95,8 +95,6 @@ public class CanonicOutputController
     @ResponseBody
     public String annotate(@RequestParam("canonicOutputId") Long canonicOutputId, @RequestParam("note") String note)
     {
-        System.out.println(canonicOutputId);
-        System.out.println(note);
         Annotation a = EntityFactory.createAnnotation(note, securityContext.getLoggedEntityUser());
         annotationService.createAnnotation(a);
         
@@ -109,20 +107,6 @@ public class CanonicOutputController
         canonicOutputService.updateCanonicOutput(co);
         
         return "{ \"user\": \""+securityContext.getLoggedEntityUser().getUsername()+"\", \"note\" : \""+note+"\"}";
-//        Annotation annotation = EntityFactory.createAnnotation();
-//        annotation.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
-//        //annotation.setAnnotationFlag(mapper.map(annotationForm.getAnnotationFlagForm(), AnnotationFlag.class));
-//        annotation.setNote(annotationForm.getNote());
-//        annotationService.createAnnotation(annotation);
-//
-//        CanonicOutput canonicOutput = canonicOutputService.getCanonicOutputByID(Long.valueOf(canonicOutputId));
-//        List<Annotation> annotations = new ArrayList<>(canonicOutput.getAnnotations());
-//        annotations.add(annotation);
-//        canonicOutput.setAnnotations(annotations);
-//
-//        canonicOutputService.updateCanonicOutput(canonicOutput);
-//
-//        return new ModelAndView("redirect:/canonicoutput/view/" + canonicOutputId);
     }
 
     @RequestMapping(value = {"/similar/{id}","/similar/{id}/"},method = RequestMethod.GET)
