@@ -6,21 +6,11 @@
 
 <div class="container content">
     <div class="row">
-        <div class="col-lg-10">
-            <form method="get" action="${pageContext.request.contextPath}/user/search/" class="form-inline">
-                <div class="form-group">                    
-                    <input type="text" name="keywords" class="form-control search-bar" />
-                </div>
-                <button type="submit" class=" btn btn-primary"><spring:message code="general.label.search" /></button>
-            </form>
-        </div>
-        <div class="col-lg-2">
-            <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
-                <div class="pull-right">        
-                    <a href="${pageContext.request.contextPath}/user/create/" class="btn btn-primary"><spring:message code="entity.user.create" /></a>        
-                </div>
-            </sec:authorize>
-        </div>
+        <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+            <div class="pull-right">
+                <a href="${pageContext.request.contextPath}/user/create/" class="btn btn-primary"><spring:message code="entity.user.create" /></a>        
+            </div>
+        </sec:authorize>
     </div>
     <div class="pull-top-50">
         <div class="pull-right"><a href="${pageContext.request.contextPath}/user/list/" class="btn btn-primary btn-sm"><spring:message code="general.table.refresh" /></a></div>

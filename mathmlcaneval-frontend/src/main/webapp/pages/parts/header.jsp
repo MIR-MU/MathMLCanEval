@@ -53,16 +53,12 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="navigation.section.management" /><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="${pageContext.request.contextPath}/revision/create/"><spring:message code="navigation.revision.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/revision/list/"><spring:message code="navigation.revision.list" /></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="${pageContext.request.contextPath}/program/create/"><spring:message code="navigation.program.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/program/list/"><spring:message code="navigation.program.list" /></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="${pageContext.request.contextPath}/sourcedocument/create/"><spring:message code="navigation.sourcedocument.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/sourcedocument/list/"><spring:message code="navigation.sourcedocument.list" /></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="${pageContext.request.contextPath}/configuration/create/"><spring:message code="navigation.configuration.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/configuration/list/"><spring:message code="navigation.configuration.list" /></a></li>
                                 </ul>
                             </li>
@@ -87,10 +83,8 @@
                                     <li><a href="${pageContext.request.contextPath}/user/profile/"><spring:message code="navigation.user.myprofile" /></a></li>
                                     <li class="divider"></li>
                                     <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
-                                    <li><a href="${pageContext.request.contextPath}/user/create/"><spring:message code="navigation.user.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/user/list/"><spring:message code="navigation.user.list" /></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="${pageContext.request.contextPath}/userrole/create/"><spring:message code="navigation.userrole.create" /></a></li>
                                     <li><a href="${pageContext.request.contextPath}/userrole/list/"><spring:message code="navigation.userrole.list" /></a></li>
                                     <li class="divider"></li>
                                     </sec:authorize>
