@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class Formula implements Serializable
     private String xml;                         // formulka v MathML
     @Column(name = "note")
     private String note;                        // poznamka
-    @Column(name = "hashValue", length = 40,nullable = true)
+    @Column(name = "hashValue", length = 40,nullable = true,unique = true)
     private String hashValue;                        //used for computation whether formula is already stored
     @ManyToOne
     private SourceDocument sourceDocument;
@@ -53,6 +54,9 @@ public class Formula implements Serializable
     private List<CanonicOutput> outputs;         // 
     @OneToMany
     private List<Formula> similarFormulas;
+    
+    @ManyToMany
+    private List<Element> elements;
 
     public Long getId()
     {
@@ -144,6 +148,17 @@ public class Formula implements Serializable
         this.similarFormulas = similarFormulas;
     }
 
+    public List<Element> getElements()
+    {
+        return elements;
+    }
+
+    public void setElements(List<Element> elements)
+    {
+        this.elements = elements;
+    }
+
+    
     @Override
     public int hashCode()
     {

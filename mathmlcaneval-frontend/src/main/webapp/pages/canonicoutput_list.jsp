@@ -1,4 +1,11 @@
-<div class="container content">
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<tiles:insertDefinition name="default">
+    <tiles:putAttribute name="body">
+        <div class="container content">
     <div class="row">
         <div class="col-lg-10 pull-right">
             <form method="get" action="${pageContext.request.contextPath}/canonicoutput/search/" class="form-inline">
@@ -46,3 +53,6 @@
         </ul>
     </div>
 </div>
+    </tiles:putAttribute>
+</tiles:insertDefinition>
+

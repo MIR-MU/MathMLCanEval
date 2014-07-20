@@ -8,6 +8,7 @@ import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
@@ -501,5 +502,18 @@ public class EntityFactory
         f.setSourceDocument(sourceDocument);
         
         return f;
+    }
+    
+    public static Element createElement()
+    {
+        return new Element();
+    }
+    
+    public static Element createElement(String elementName)
+    {
+        Element e = createElement();
+        e.setElementName(elementName);
+        
+        return e;
     }
 }

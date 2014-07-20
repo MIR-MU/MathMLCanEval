@@ -4,12 +4,8 @@
  */
 package cz.muni.fi.mir.tools;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,8 +13,6 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * Class responsible for converting given MathML input into some kind of value
@@ -37,6 +31,8 @@ public class SimilarityFormConverter
     
     @Autowired
     private DocumentBuilder documentBuilder; // wired bean used for creating documents
+    @Autowired
+    private XMLUtils xmlUtils;
     
     
     
@@ -48,17 +44,7 @@ public class SimilarityFormConverter
      */
     public Document parse(String input)
     {
-        Document doc = null;
-        try
-        {
-            doc = documentBuilder.parse(new InputSource(new StringReader(input)));
-        } 
-        catch (SAXException | IOException ex)
-        {
-            logger.error(ex);
-        }
-        
-        return doc;
+        return xmlUtils.parse(input);
     }
     
     
@@ -116,17 +102,7 @@ public class SimilarityFormConverter
      */
     public String convert(String input)
     {
-        Document doc = null;
-        try
-        {
-            doc = documentBuilder.parse(new InputSource(new StringReader(input)));
-        } 
-        catch (SAXException | IOException ex)
-        {
-            Logger.getLogger(SimilarityFormConverter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return convert(doc);
+        return convert(xmlUtils.parse(input));
     }
 
     /**

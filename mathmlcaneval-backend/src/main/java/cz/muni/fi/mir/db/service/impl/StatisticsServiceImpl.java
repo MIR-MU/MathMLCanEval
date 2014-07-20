@@ -8,13 +8,16 @@ package cz.muni.fi.mir.db.service.impl;
 
 import cz.muni.fi.mir.db.domain.Statistics;
 import cz.muni.fi.mir.db.service.StatisticsService;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -187,4 +190,29 @@ public class StatisticsServiceImpl implements StatisticsService
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Long, DateTime> getStatisticsMap()
+    {
+        List<Object[]> results =
+                entityManager.createQuery("SELECT s.id,s.calculationDate FROM statistics s")
+                .getResultList();
+        
+        Map<Long,DateTime> resultMap = new TreeMap<>(Collections.reverseOrder());
+        
+        for(Object[] result : results)
+        {
+            resultMap.put((Long) result[0], (DateTime) result[1]);
+        }
+        
+        return resultMap;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Statistics getStatisticsByID(Long id)
+    {
+        return entityManager.find(Statistics.class, id);
+    }    
 }

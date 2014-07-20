@@ -7,6 +7,7 @@
 package cz.muni.fi.mir.db.service ;
 import cz.muni.fi.mir.db.domain.Statistics;
 import java.util.List;
+import java.util.Map;
 import org.joda.time.DateTime;
 
 /**
@@ -18,8 +19,12 @@ public interface StatisticsService
     
     void calculate();
     
+    Statistics getStatisticsByID(Long id);
+    
     Statistics getStatistics();
     
     List<Statistics> getStatisticsFromRange(DateTime start, DateTime end);
+    
+    Map<Long,DateTime> getStatisticsMap();
     
 }

@@ -6,10 +6,12 @@
 
 package cz.muni.fi.mir.db.dao;
 
+import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,6 +25,7 @@ public interface FormulaDAO
     void deleteFormula(Formula formula);
 
     Formula getFormulaByID(Long id);
+    Formula getFormulaByHash(String hash);
 
     List<Formula> getAllFormulas();
     List<Formula> getAllFormulas(int skip, int number);
@@ -30,6 +33,11 @@ public interface FormulaDAO
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
     List<Formula> getFormulasByProgram(Program program);
     List<Formula> getFormulasByUser(User user);
+    
+    List<Formula> getAllForHashing();
+    List<Formula> getFormulasByElements(Collection<Element> collection, int start, int end);
+    
+    List<Formula> getAllFormulas(boolean force);
     
     int getNumberOfRecords();    
     

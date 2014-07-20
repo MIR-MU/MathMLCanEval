@@ -28,6 +28,14 @@
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
     
+    <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles-configuration.xml</value>
+            </list>
+        </property>
+    </bean>
+    
     
     <!--    http://stackoverflow.com/a/9401900 -->
     <mvc:interceptors>

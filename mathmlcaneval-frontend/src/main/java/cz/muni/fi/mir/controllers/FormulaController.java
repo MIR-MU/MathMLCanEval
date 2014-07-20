@@ -118,25 +118,17 @@ public class FormulaController
             return new ModelAndView("formula_create", mm);
         } 
         else
-        {   
-            formulaForm.setUserForm(mapper.map(securityContext.getLoggedEntityUser(), UserForm.class));
-            formulaForm.setInsertTime(DateTime.now());
+        {  
             if (!StringUtils.isBlank(formulaForm.getXml()))
             {
-                Formula f = mapper.map(formulaForm, Formula.class);
-                f.setOutputs(new ArrayList<CanonicOutput>());
-                formulaService.createFormula(f);
-
                 // canonicalize on import
                 if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
                 {
-                    ApplicationRun applicationRun = EntityFactory.createApplicationRun();
-                    applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
-                    applicationRun.setRevision(mapper.map(formulaForm.getRevisionForm(), Revision.class));
-                    applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
-                    applicationRunService.createApplicationRun(applicationRun);
-
-                    mathCanonicalizerLoader.execute(Arrays.asList(f), applicationRun);
+                    formulaService.simpleFormulaImport(formulaForm.getXml(), 
+                            mapper.map(formulaForm.getRevisionForm(), Revision.class), 
+                            mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
+                            mapper.map(formulaForm.getProgramForm(),Program.class), 
+                            mapper.map(formulaForm.getSourceDocumentForm(),SourceDocument.class));
                 }
             }
 
@@ -148,21 +140,16 @@ public class FormulaController
                     if (file.getSize() > 0)
                     {
                         formulaForm.setXml(new String(file.getBytes(), "UTF-8"));
-                        formulaForm.setInsertTime(DateTime.now());
-                        Formula f = mapper.map(formulaForm, Formula.class);
-                        f.setOutputs(new ArrayList<CanonicOutput>());
-                        formulaService.createFormula(f);
 
                         // canonicalize on import
                         if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
                         {
-                            ApplicationRun applicationRun = EntityFactory.createApplicationRun();
-                            applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
-                            applicationRun.setRevision(mapper.map(formulaForm.getRevisionForm(), Revision.class));
-                            applicationRun.setConfiguration(mapper.map(formulaForm.getConfigurationForm(), Configuration.class));
-                            applicationRunService.createApplicationRun(applicationRun);
-
-                            mathCanonicalizerLoader.execute(Arrays.asList(f), applicationRun);
+                            //TODO will we really ever upload more than 1 file ?
+                            formulaService.simpleFormulaImport(formulaForm.getXml(), 
+                                mapper.map(formulaForm.getRevisionForm(), Revision.class), 
+                                mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
+                                mapper.map(formulaForm.getProgramForm(),Program.class), 
+                                mapper.map(formulaForm.getSourceDocumentForm(),SourceDocument.class));
                         }
                     }
                 } catch (IOException ex)
@@ -230,6 +217,7 @@ public class FormulaController
         return new ModelAndView("formula_list",mm);
     }
     
+    @Secured("ROLE_USER")
     @RequestMapping(value={"/mass","/mass/"},method = RequestMethod.GET)
     public ModelAndView massImport()
     {
@@ -276,7 +264,6 @@ public class FormulaController
             
             
             formulaService.massFormulaImport(path, filter, 
-                    securityContext.getLoggedEntityUser(),
                     mapper.map(formulaForm.getRevisionForm(), Revision.class), 
                     mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
                     mapper.map(formulaForm.getProgramForm(), Program.class),

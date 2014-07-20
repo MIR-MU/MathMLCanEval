@@ -7,10 +7,12 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.FormulaDAO;
+import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -118,7 +120,7 @@ public class FormulaDAOImpl implements FormulaDAO
         List<Formula> resultList = Collections.emptyList();
         try
         {
-            resultList = entityManager.createQuery("SELECT f FROM formula f ORDER BY id DESC", Formula.class).getResultList();
+            resultList = entityManager.createQuery("SELECT f FROM formula f ORDER BY f.id DESC", Formula.class).getResultList();
         }
         catch(NoResultException nre)
         {
@@ -166,6 +168,14 @@ public class FormulaDAOImpl implements FormulaDAO
     @Override
     public Long exists(String hash)
     {
+        Formula f = getFormulaByHash(hash);        
+        
+        return f == null ? null : f.getId();
+    }
+
+    @Override
+    public Formula getFormulaByHash(String hash)
+    {
         Formula f = null;
         try
         {
@@ -176,6 +186,71 @@ public class FormulaDAOImpl implements FormulaDAO
             logger.debug(nre);
         }
         
-        return f == null ? null : f.getId();
+        return f;
+    }
+
+    @Override
+    public List<Formula> getAllForHashing()
+    {
+        List<Formula> resultList = Collections.emptyList();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT f FROM formula f WHERE f.hashValue IS NULL OR f.hashValue <> ''", Formula.class)
+                    .getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
+    }
+
+    @Override
+    public List<Formula> getFormulasByElements(Collection<Element> collection,int start, int end)
+    {
+        List<Formula> resultList = Collections.emptyList();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT f FROM formula f WHERE f IN ("
+                    + "SELECT ff from formula ff "
+                    + "INNER JOIN ff.elements ffe "
+                    + "WHERE ffe IN (:elements) "
+                    + "GROUP BY ff "
+                    + "HAVING COUNT(DISTINCT ff) = (:elementsSize))", Formula.class)
+                    .setParameter("elements", collection).setParameter("elementsSize", collection.size())
+                    .setFirstResult(start).setMaxResults(end)
+                    .getResultList();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return resultList;
+    }
+
+    @Override
+    public List<Formula> getAllFormulas(boolean force)
+    {
+        List<Formula> resultList = Collections.emptyList();
+        if(force)
+        {
+            resultList = getAllFormulas();
+        }
+        else
+        {
+            try
+            {
+                resultList = entityManager.createQuery("SELECT f FROM formula f WHERE f.elements IS EMPTY", Formula.class)
+                        .getResultList();
+            }
+            catch(NoResultException nre)
+            {
+                logger.debug(nre);
+            }
+        }
+        
+        return resultList;        
     }
 }

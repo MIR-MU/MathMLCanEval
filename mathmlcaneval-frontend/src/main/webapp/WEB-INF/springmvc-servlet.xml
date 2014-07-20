@@ -4,9 +4,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
         <property name="prefix" value="/pages/" />
         <property name="suffix" value=".jsp" />
+    </bean>
+    
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+          <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
     </bean>
 </beans>

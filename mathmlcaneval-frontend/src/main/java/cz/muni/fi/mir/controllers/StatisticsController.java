@@ -7,12 +7,15 @@
 package cz.muni.fi.mir.controllers;
 
 
+import cz.muni.fi.mir.db.domain.Statistics;
 import cz.muni.fi.mir.db.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -29,9 +32,8 @@ public class StatisticsController
     @RequestMapping(value = "/")
     public ModelAndView list()
     {
-        ModelMap mm = new ModelMap();
+        ModelMap mm = prepareModelMap();
         mm.addAttribute("statistics", statisticsService.getStatistics());
-        
         
         return new ModelAndView("statistics",mm);
     }
@@ -49,8 +51,21 @@ public class StatisticsController
         };
         
         new Thread(r).start();
+        ModelMap mm = prepareModelMap();
+        mm.addAttribute("statisticsMessage", "statistics.calc.started");
+        mm.addAttribute("statistics", statisticsService.getStatistics());
         
-        return new ModelAndView("redirect:/statistics/");
+        return new ModelAndView("statistics",mm);
+    }
+    
+    @RequestMapping(value = "/{id}/",method = RequestMethod.GET)
+    public ModelAndView viewStats(@PathVariable Long id)
+    {
+        Statistics stat = statisticsService.getStatisticsByID(id);
+        ModelMap mm = prepareModelMap();
+        mm.addAttribute("statistics", stat);
+        
+        return new ModelAndView("statistics", mm);
     }
 
     @Secured("ROLE_ADMINISTRATOR")
@@ -60,5 +75,13 @@ public class StatisticsController
         ModelMap mm = new ModelMap();
 
         return new ModelAndView("logger",mm);
+    }
+    
+    private ModelMap prepareModelMap()
+    {
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("statisticsList", statisticsService.getStatisticsMap());
+        
+        return mm;
     }
 }

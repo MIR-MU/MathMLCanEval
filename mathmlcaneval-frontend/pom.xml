@@ -103,6 +103,11 @@
             <artifactId>log4jwebtracker</artifactId>
             <version>1.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-extras</artifactId>
+            <version>3.0.4</version>
+        </dependency>
     </dependencies>
 
     <repositories>
