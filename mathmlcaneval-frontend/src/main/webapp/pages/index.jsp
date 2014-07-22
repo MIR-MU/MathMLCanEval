@@ -9,16 +9,16 @@
                     <div class="col-md-3">
                         <div class="row blocks">
                             <sec:authorize access="hasRole('ROLE_USER')">
-                                <a href="${pageContext.request.contextPath}/formula/create/" class="thumbnail well well-sm">
+                                <a href="${pageContext.request.contextPath}/appruns/" class="thumbnail well well-sm">
                                     <div class="caption">
-                                        <h2><spring:message code="index.page.button.import" /></h2>
-                                        <p><spring:message code="index.page.button.import.description" /></p>
+                                        <h2>!app runs</h2>
+                                        <p>!browse app runs</p>
                                     </div>
                                 </a>
-                                <a href="${pageContext.request.contextPath}/formula/mass/" class="thumbnail well well-sm">
+                                <a href="${pageContext.request.contextPath}/#" class="thumbnail well well-sm">
                                     <div class="caption">
-                                        <h2><spring:message code="index.page.button.import" /></h2>
-                                        <p><spring:message code="index.page.button.import.description.mass" /></p>
+                                        <h2>!element browser</h2>
+                                        <p>!browse formulas by elements</p>
                                     </div>
                                 </a>
                             </sec:authorize>

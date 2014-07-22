@@ -4,11 +4,13 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -40,11 +42,14 @@ public class ApplicationRun implements Serializable
     private DateTime stopTime;
     @OneToOne
     private User user;
+    
+    @Transient
+    private int canonicOutputCount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Configuration configuration;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Revision revision;
 
     public Long getId()
@@ -117,6 +122,16 @@ public class ApplicationRun implements Serializable
         this.revision = revision;
     }
 
+    public int getCanonicOutputCount()
+    {
+        return canonicOutputCount;
+    }
+
+    public void setCanonicOutputCount(int canonicOutputCount)
+    {
+        this.canonicOutputCount = canonicOutputCount;
+    }
+    
     @Override
     public int hashCode()
     {

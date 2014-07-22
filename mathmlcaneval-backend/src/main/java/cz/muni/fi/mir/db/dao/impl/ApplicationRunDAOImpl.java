@@ -5,11 +5,13 @@ import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.User;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -26,7 +28,7 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ApplicationRunDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(ApplicationRunDAOImpl.class);
 
     @Override
     public void createApplicationRun(ApplicationRun applicationRun)
@@ -57,23 +59,41 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
     @Override
     public ApplicationRun getApplicationRunByID(Long id)
     {
-        return entityManager.find(ApplicationRun.class, id);
+        ApplicationRun ar = entityManager.find(ApplicationRun.class, id);
+        int count = 0;
+        try
+        {
+            count = entityManager.createQuery("SELECT count(co) FROM canonicOutput co WHERE co.applicationRun = :apprun", Long.class)
+                    .setParameter("apprun", ar).getSingleResult().intValue();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        ar.setCanonicOutputCount(count);
+        
+        return ar;
     }
 
     @Override
     public List<ApplicationRun> getAllApplicationRuns()
     {
-        List<ApplicationRun> resultList = Collections.emptyList();
-        
-        try
-        {
-            resultList = entityManager.createQuery("SELECT apr FROM applicationRun apr", ApplicationRun.class)
+        List<ApplicationRun> resultList = new ArrayList<>();
+
+        List<Object[]> results =
+            entityManager.createQuery("SELECT apr,COUNT(co) FROM applicationRun apr, canonicOutput co WHERE co.applicationRun = apr GROUP BY apr.id")
                     .getResultList();
-        } 
-        catch (NoResultException nre)
+        
+        for(Object[] row : results)
         {
-            logger.debug(nre);
-        }
+            ApplicationRun ar = (ApplicationRun) row[0];
+            Long count = (Long) row[1];
+            
+            ar.setCanonicOutputCount(count.intValue());
+            
+            resultList.add(ar);
+        }       
 
         return resultList;
     }

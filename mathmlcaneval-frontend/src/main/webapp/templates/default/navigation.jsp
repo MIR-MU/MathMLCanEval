@@ -13,12 +13,7 @@
             </button>
             <a class="navbar-brand" href="${pageContext.request.contextPath}">MathMLCanEval</a>
         </div>
-        <div class="navbar-collapse collapse">  
-            <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
-                <ul class="nav navbar-nav">                        
-                    <li><a href="#"><spring:message code="navigation.element.browse" /></a></li>                                          
-                </ul>  
-            </sec:authorize>
+        <div class="navbar-collapse collapse"> 
             <sec:authorize access="hasRole('ROLE_ANONYMOUS')">
                 <form class="navbar-form navbar-right" role="form" action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
                     <div class="form-group">
@@ -33,6 +28,13 @@
             <sec:authorize access="hasRole('ROLE_USER')">
                 <ul class="nav navbar-nav navbar-right"> 
                     <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="navigation.import.list" /><b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="${pageContext.request.contextPath}/formula/create/"><spring:message code="navigation.import.single" /></a></li>                                    
+                                <li><a href="${pageContext.request.contextPath}/formula/mass/"><spring:message code="navigation.import.mass" /></a></li>
+                            </ul>
+                        </li> 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="navigation.section.management" /><b class="caret"></b></a>
                             <ul class="dropdown-menu">
