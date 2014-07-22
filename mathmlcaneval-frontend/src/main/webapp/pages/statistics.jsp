@@ -74,7 +74,7 @@
                         </tr>        
                     </table>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 stats-panel-body">
                     <!-- http://www.flotcharts.org/-->
                     <div id="flot-placeholder" style="width:400px;height:300px"></div> 
                 </div>

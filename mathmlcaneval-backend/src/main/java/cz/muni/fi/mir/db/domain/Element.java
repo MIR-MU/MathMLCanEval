@@ -66,7 +66,8 @@ public class Element implements Serializable
     public int hashCode()
     {
         int hash = 7;
-        hash = 23 * hash + Objects.hashCode(this.id);
+        hash = 37 * hash + Objects.hashCode(this.id);
+        hash = 37 * hash + Objects.hashCode(this.elementName);
         return hash;
     }
 
@@ -82,8 +83,18 @@ public class Element implements Serializable
             return false;
         }
         final Element other = (Element) obj;
-        return Objects.equals(this.id, other.id);
+        if(this.id == null)
+        {
+            return this.getElementName().equals(other.getElementName());
+        }
+        else
+        {
+            return Objects.equals(this.id, other.id);
+        }        
     }
+    
+    
+    
 
     @Override
     public String toString()

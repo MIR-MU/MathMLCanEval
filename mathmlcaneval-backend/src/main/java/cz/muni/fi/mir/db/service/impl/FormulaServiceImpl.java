@@ -6,6 +6,7 @@
 package cz.muni.fi.mir.db.service.impl;
 
 import cz.muni.fi.mir.db.dao.ApplicationRunDAO;
+import cz.muni.fi.mir.db.dao.ElementDAO;
 import cz.muni.fi.mir.db.dao.FormulaDAO;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
@@ -50,6 +51,8 @@ public class FormulaServiceImpl implements FormulaService
     @Autowired
     private FormulaDAO formulaDAO;
     @Autowired
+    private ElementDAO elementDAO;
+    @Autowired
     private FileDirectoryService fileDirectoryService;
     @Autowired
     private SecurityContextFacade securityContext;
@@ -65,7 +68,7 @@ public class FormulaServiceImpl implements FormulaService
     public void createFormula(Formula formula) throws IllegalArgumentException
     {
         checkNull(formula);
-        
+
         formulaDAO.createFormula(formula);
     }
 
@@ -74,12 +77,12 @@ public class FormulaServiceImpl implements FormulaService
     public void updateFormula(Formula formula) throws IllegalArgumentException
     {
         checkNull(formula);
-        
-        if(formula.getId() == null || formula.getId().compareTo(Long.valueOf("1")) < 0)
+
+        if (formula.getId() == null || formula.getId().compareTo(Long.valueOf("1")) < 0)
         {
-            throw new IllegalArgumentException("Given formula does not have valid id ["+formula.getId()+"].");
+            throw new IllegalArgumentException("Given formula does not have valid id [" + formula.getId() + "].");
         }
-        
+
         formulaDAO.updateFormula(formula);
     }
 
@@ -88,12 +91,12 @@ public class FormulaServiceImpl implements FormulaService
     public void deleteFormula(Formula formula) throws IllegalArgumentException
     {
         checkNull(formula);
-        
-        if(formula.getId() == null || formula.getId().compareTo(Long.valueOf("1")) < 0)
+
+        if (formula.getId() == null || formula.getId().compareTo(Long.valueOf("1")) < 0)
         {
-            throw new IllegalArgumentException("Given formula does not have valid ID ["+formula.getId()+"].");
+            throw new IllegalArgumentException("Given formula does not have valid ID [" + formula.getId() + "].");
         }
-        
+
         formulaDAO.deleteFormula(formula);
     }
 
@@ -101,9 +104,9 @@ public class FormulaServiceImpl implements FormulaService
     @Transactional(readOnly = true)
     public Formula getFormulaByID(Long id) throws IllegalArgumentException
     {
-        if(id == null || id.compareTo(Long.valueOf("1")) < 0)
+        if (id == null || id.compareTo(Long.valueOf("1")) < 0)
         {
-            throw new IllegalArgumentException("Given ID is not valid ["+id+"].");
+            throw new IllegalArgumentException("Given ID is not valid [" + id + "].");
         }
         return formulaDAO.getFormulaByID(id);
     }
@@ -171,12 +174,13 @@ public class FormulaServiceImpl implements FormulaService
                 Long id = formulaDAO.exists(hash);
                 if (id == null)
                 {
-                    f.setHash(hash);
+                    f.setHashValue(hash);
                     f.setProgram(program);
                     f.setSourceDocument(sourceDocument);
 
                     extractElements(f);
 
+                    attachElements(f);
                     formulaDAO.createFormula(f);
 
                     filtered.add(f);
@@ -222,7 +226,7 @@ public class FormulaServiceImpl implements FormulaService
 
         for (Formula f : formulas)
         {
-            f.setHash(Tools.getInstance().SHA1(f.getXml()));
+            f.setHashValue(Tools.getInstance().SHA1(f.getXml()));
             formulaDAO.updateFormula(f);
         }
     }
@@ -234,7 +238,7 @@ public class FormulaServiceImpl implements FormulaService
         Formula f = formulaDAO.getFormulaByID(formula.getId());
         if (f != null)
         {
-            f.setHash(Tools.getInstance().SHA1(f.getXml()));
+            f.setHashValue(Tools.getInstance().SHA1(f.getXml()));
         }
     }
 
@@ -242,11 +246,11 @@ public class FormulaServiceImpl implements FormulaService
     @Transactional(readOnly = true)
     public Formula getFormulaByHash(String hash) throws IllegalArgumentException
     {
-        if(hash == null || hash.length() < 40)
+        if (hash == null || hash.length() < 40)
         {
-            throw new IllegalArgumentException("Invalid hash value ["+hash+"].");
+            throw new IllegalArgumentException("Invalid hash value [" + hash + "].");
         }
-        
+
         return formulaDAO.getFormulaByHash(hash);
     }
 
@@ -266,12 +270,13 @@ public class FormulaServiceImpl implements FormulaService
         f.setXml(formulaXmlContent);
         f.setInsertTime(DateTime.now());
         f.setUser(securityContext.getLoggedEntityUser());
-        f.setHash(Tools.getInstance().SHA1(f.getXml()));
+        f.setHashValue(Tools.getInstance().SHA1(f.getXml()));
 
         extractElements(f);
 
         if (null == formulaDAO.getFormulaByHash(f.getHashValue()))
         {
+            attachElements(f);
             formulaDAO.createFormula(f);
 
             mathCanonicalizerLoader.execute(Arrays.asList(f), appRun);
@@ -284,9 +289,9 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = true)
-    public List<Formula> getFormulasByElements(Collection<Element> collection,int start, int end)
+    public List<Formula> getFormulasByElements(Collection<Element> collection, int start, int end)
     {
-        return formulaDAO.getFormulasByElements(collection,start,end);
+        return formulaDAO.getFormulasByElements(collection, start, end);
     }
 
     @Override
@@ -309,35 +314,26 @@ public class FormulaServiceImpl implements FormulaService
 
         if (doc != null)
         {
-            travelDocument(doc.getDocumentElement(), temp);
+            org.w3c.dom.NodeList nodeList = doc.getElementsByTagName("*");
+            for (int i = 0; i < nodeList.getLength(); i++)
+            {
+                temp.add(EntityFactory.createElement(nodeList.item(i).getNodeName()));
+            }
         }
+        List<Element> result = null;
 
-        List<Element> result = new ArrayList<>(f.getElements());
-        result.addAll(temp);
-
-        f.setElements(result);
-    }
-
-    private void travelDocument(org.w3c.dom.Node node, Set<Element> temp)
-    {
-        if (node == null)
+        if (f.getElements() == null || f.getElements().isEmpty())
         {
-            return;
+            result = new ArrayList<>(temp.size());
         }
         else
         {
-            org.w3c.dom.NodeList nodeList = node.getChildNodes();
-            for (int i = 0; i < nodeList.getLength(); i++)
-            {
-                org.w3c.dom.Node currentNode = nodeList.item(i);
-                if (currentNode.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE)
-                {
-                    temp.add(EntityFactory.createElement(currentNode.getNodeName()));
-
-                    travelDocument(node, temp);
-                }
-            }
+            result = new ArrayList<>(f.getElements());
         }
+
+        result.addAll(temp);
+
+        f.setElements(result);
     }
 
     private void checkNull(Formula f) throws IllegalArgumentException
@@ -345,6 +341,48 @@ public class FormulaServiceImpl implements FormulaService
         if (f == null)
         {
             throw new IllegalArgumentException("Given formula is null.");
+        }
+    }
+
+    /**
+     * Method takes elements from formula and matches them against already
+     * persisted list of elements. If element already exist then it has id in
+     * obtained list (from database) and id for element in formula is set.
+     * Otherwise we check temp list which contains newly created elements. If
+     * there is no match then new element is created and stored in temp list.
+     * Equals method somehow fails on CascadeType.ALL, so this is reason why we
+     * have to do manually. TODO redo in future. Possible solution would be to
+     * have all possible elements already stored inside database.
+     *
+     * @param f formula of which we attach elements.
+     */
+    private void attachElements(Formula f)
+    {
+        if (f.getElements() != null && !f.getElements().isEmpty())
+        {
+            List<Element> list = elementDAO.getAllElements();
+            List<Element> newList = new ArrayList<>();
+            for (Element e : f.getElements())
+            {
+                int index = list.indexOf(e);
+                if (index == -1)
+                {
+                    int index2 = newList.indexOf(e);
+                    if (index2 == -1)
+                    {
+                        elementDAO.createElement(e);
+                        newList.add(e);
+                    }
+                    else
+                    {
+                        e.setId(newList.get(index2).getId());
+                    }
+                }
+                else
+                {
+                    e.setId(list.get(index).getId());
+                }
+            }
         }
     }
 }

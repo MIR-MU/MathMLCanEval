@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -53,8 +52,9 @@ public class Formula implements Serializable
     @ManyToMany(mappedBy="parents")
     private List<CanonicOutput> outputs;         // 
     @OneToMany
-    private List<Formula> similarFormulas;
-    
+    private List<Formula> similarFormulas;    
+    @OneToMany
+    private List<Annotation> annotations;    
     @ManyToMany
     private List<Element> elements;
 
@@ -158,6 +158,25 @@ public class Formula implements Serializable
         this.elements = elements;
     }
 
+    public String getHashValue()
+    {
+        return hashValue;
+    }
+
+    public void setHashValue(String hashValue)
+    {
+        this.hashValue = hashValue;
+    }
+
+    public List<Annotation> getAnnotations()
+    {
+        return annotations;
+    }
+
+    public void setAnnotations(List<Annotation> annotations)
+    {
+        this.annotations = annotations;
+    }
     
     @Override
     public int hashCode()
@@ -182,24 +201,12 @@ public class Formula implements Serializable
         return Objects.equals(this.id, other.id);
     }
 
-    public String getHashValue()
-    {
-        return hashValue;
-    }
-
-    public void setHash(String hashValue)
-    {
-        this.hashValue = hashValue;
-    }
-    
-    
-
     @Override
     public String toString()
     {
-        return "Formula{" + "id=" + id + ", xml=" + xml + ", note=" + note + ", sourceDocument=" + sourceDocument + ", insertTime=" + insertTime + ", program=" + program + ", user=" + user + ", outputs=" + outputs + ", similarFormulas=" + similarFormulas + '}';
+        return "Formula{" + "id=" + id + ", xml=" + xml + ", note=" + note + ", hashValue=" + hashValue + ", sourceDocument=" + sourceDocument + ", insertTime=" + insertTime + ", program=" + program + ", user=" + user + ", outputs=" + outputs + ", similarFormulas=" + similarFormulas + ", annotations=" + annotations + ", elements=" + elements + '}';
     }
-
+    
     @PreRemove
     private void removeFormulaFromOutputs()
     {

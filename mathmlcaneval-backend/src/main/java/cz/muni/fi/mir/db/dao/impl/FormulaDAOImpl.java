@@ -18,6 +18,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -61,7 +62,11 @@ public class FormulaDAOImpl implements FormulaDAO
     @Override
     public Formula getFormulaByID(Long id)
     {
-        return entityManager.find(Formula.class, id);
+        Formula f = entityManager.find(Formula.class, id);
+        
+        Hibernate.initialize(f.getAnnotations());
+        
+        return f;
     }
 
     @Override

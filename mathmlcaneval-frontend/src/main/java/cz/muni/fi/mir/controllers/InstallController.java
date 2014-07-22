@@ -5,11 +5,20 @@
  */
 package cz.muni.fi.mir.controllers;
 
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.SourceDocumentService;
+import cz.muni.fi.mir.db.service.UserRoleService;
+import cz.muni.fi.mir.db.service.UserService;
+import cz.muni.fi.mir.forms.UserForm;
+import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.Tools;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +30,6 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import cz.muni.fi.mir.db.domain.User;
-import cz.muni.fi.mir.db.service.SourceDocumentService;
-import cz.muni.fi.mir.db.service.UserRoleService;
-import cz.muni.fi.mir.db.service.UserService;
-import cz.muni.fi.mir.forms.UserForm;
-import cz.muni.fi.mir.tools.EntityFactory;
-import cz.muni.fi.mir.tools.Tools;
 
 /**
  *
@@ -53,10 +54,9 @@ public class InstallController
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView landingPage()
     {
-        if (Tools.getInstance().isEmpty(userRoleService.getAllUserRoles()))
+        if (Tools.getInstance().isEmpty(userService.getAllUsers()))
         {
-            userRoleService.createUserRole(EntityFactory.createUserRole("ROLE_ADMINISTRATOR"));
-            userRoleService.createUserRole(EntityFactory.createUserRole("ROLE_USER"));
+            
 
             ModelMap mm = new ModelMap();
             mm.addAttribute("userForm", new UserForm());
@@ -112,7 +112,18 @@ public class InstallController
         }
         else
         {
-            User u = EntityFactory.createUser(username, pass1, username, email, userRoleService.getAllUserRoles());
+            List<UserRole> roles = userRoleService.getAllUserRoles();
+            if(Tools.getInstance().isEmpty(roles))
+            {
+                UserRole ur1 = EntityFactory.createUserRole("ROLE_ADMINISTRATOR");
+                UserRole ur2 = EntityFactory.createUserRole("ROLE_USER");
+                userRoleService.createUserRole(ur1);
+                userRoleService.createUserRole(ur2);
+                roles = new ArrayList<>();
+                roles.add(ur1);
+                roles.add(ur2);
+            }
+            User u = EntityFactory.createUser(username, pass1, username, email, roles);
             
             u.setPassword(Tools.getInstance().SHA1(u.getPassword()));
 

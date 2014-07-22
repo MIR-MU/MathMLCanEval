@@ -60,6 +60,9 @@
     <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.min.js" />"></script>
     <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.categories.min.js" />"></script>
     <script>
+        /*
+         * http://stackoverflow.com/questions/229726/using-javascript-within-a-jsp-tag
+         */
                             SyntaxHighlighter.autoloader(
                                     'xml  <c:url value="/resources/js/shBrushXml.js" />'
                                     );
