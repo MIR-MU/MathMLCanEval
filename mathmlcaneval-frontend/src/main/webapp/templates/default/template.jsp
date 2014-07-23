@@ -133,7 +133,6 @@
 
                                 var form = $("#annotationForm");
                                 form.on("submit", function(event) {
-                                    event.preventDefault();
                                     $.ajax({
                                         type: form.attr('method'),
                                         url: form.attr('action'),
@@ -143,14 +142,29 @@
                                             console.log(data);
                                             $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note.replace(/(#\S+)/g, "<span class=\"hashtag\">$1</span>") + "</td></tr>");
                                             $("#annotation-note").val('');
-                                            formatHashTags(true);
+                                            formatHashTags();
                                         }
                                     });
                                     event.preventDefault();
                                 });
-
-
-                                formatHashTags(false);
+                                
+                                var formulaForm = $("#annotationFormulaForm");
+                                formulaForm.on("submit", function(event) {
+                                    $.ajax({
+                                        type: formulaForm.attr('method'),
+                                        url: formulaForm.attr('action'),
+                                        data: formulaForm.serialize(),
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            console.log(data);
+                                            $("#formulaAnnotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note.replace(/(#\S+)/g, "<span class=\"hashtag\">$1</span>") + "</td></tr>");
+                                            $("#annotation").val('');
+                                            formatHashTags();
+                                        }
+                                    });
+                                    event.preventDefault();
+                                });
+                                formatHashTags();
                             });
 
                             function getUserRolesHTML()
@@ -168,6 +182,10 @@
                             function formatHashTags()
                             {
                                 $("#annotationTable > tbody > tr > td:nth-child(2)").each(function() {
+                                    //val.replace(/#(\S)*/g,"<span class=\"hashtag\">$1</span>");
+                                    $(this).html($(this).html().replace(/(#\S+)/g, "<span class=\"hashtag\">$1</span>"));
+                                });
+                                $("#formulaAnnotationTable > tbody > tr > td:nth-child(2)").each(function() {
                                     //val.replace(/#(\S)*/g,"<span class=\"hashtag\">$1</span>");
                                     $(this).html($(this).html().replace(/(#\S+)/g, "<span class=\"hashtag\">$1</span>"));
                                 });

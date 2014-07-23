@@ -4,16 +4,37 @@
  */
 package cz.muni.fi.mir.controllers;
 
+import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.ApplicationRun;
+import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.Program;
+import cz.muni.fi.mir.db.domain.Revision;
+import cz.muni.fi.mir.db.domain.SourceDocument;
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.service.AnnotationService;
+import cz.muni.fi.mir.db.service.ApplicationRunService;
+import cz.muni.fi.mir.db.service.ConfigurationService;
+import cz.muni.fi.mir.db.service.FormulaService;
+import cz.muni.fi.mir.db.service.ProgramService;
+import cz.muni.fi.mir.db.service.RevisionService;
+import cz.muni.fi.mir.db.service.SourceDocumentService;
+import cz.muni.fi.mir.db.service.UserService;
+import cz.muni.fi.mir.forms.ApplicationRunForm;
+import cz.muni.fi.mir.forms.FormulaForm;
+import cz.muni.fi.mir.pagination.Pagination;
+import cz.muni.fi.mir.services.MathCanonicalizerLoader;
+import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -30,29 +51,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import cz.muni.fi.mir.db.domain.ApplicationRun;
-import cz.muni.fi.mir.db.domain.CanonicOutput;
-import cz.muni.fi.mir.db.domain.Configuration;
-import cz.muni.fi.mir.db.domain.Formula;
-import cz.muni.fi.mir.db.domain.Program;
-import cz.muni.fi.mir.db.domain.Revision;
-import cz.muni.fi.mir.db.domain.SourceDocument;
-import cz.muni.fi.mir.db.service.ApplicationRunService;
-import cz.muni.fi.mir.db.service.ConfigurationService;
-import cz.muni.fi.mir.db.service.FormulaService;
-import cz.muni.fi.mir.db.service.ProgramService;
-import cz.muni.fi.mir.db.service.RevisionService;
-import cz.muni.fi.mir.db.service.SourceDocumentService;
-import cz.muni.fi.mir.db.service.UserService;
-import cz.muni.fi.mir.forms.ApplicationRunForm;
-import cz.muni.fi.mir.forms.FormulaForm;
-import cz.muni.fi.mir.forms.UserForm;
-import cz.muni.fi.mir.pagination.Pagination;
-import cz.muni.fi.mir.services.MathCanonicalizerLoader;
-import cz.muni.fi.mir.tools.EntityFactory;
-import cz.muni.fi.mir.wrappers.SecurityContextFacade;
-import java.util.Arrays;
 
 /**
  *
@@ -83,6 +81,8 @@ public class FormulaController
     private RevisionService revisionService;
     @Autowired
     private ApplicationRunService applicationRunService;
+    @Autowired
+    private AnnotationService annotationService;
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaController.class);
 
@@ -273,6 +273,29 @@ public class FormulaController
         }
     }
     
+    @RequestMapping(value = {"/annotate/","/annotate"},
+            method = RequestMethod.POST,
+            produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public String annotate(@RequestParam(value = "formulaID") Long formulaID, @RequestParam(value = "annotation") String annotation)
+    {
+        User u = securityContext.getLoggedEntityUser();
+        Annotation a = EntityFactory.createAnnotation(annotation, u);
+        annotationService.createAnnotation(a);
+        
+        Formula f = formulaService.getFormulaByID(formulaID);
+        List<Annotation> currentAnnotations = new ArrayList<>();
+        if(f.getAnnotations() != null)
+        {
+            currentAnnotations.addAll(f.getAnnotations());
+        }
+        currentAnnotations.add(a);
+        f.setAnnotations(currentAnnotations);
+        
+        formulaService.updateFormula(f);
+        
+        return "{ \"user\": \""+u.getUsername()+"\", \"note\" : \""+annotation+"\"}";
+    }
     
     private ModelMap prepareModelMap(boolean includeRevision, boolean includeConfiguration, boolean includeSourceDocument, boolean includePrograms)
     {

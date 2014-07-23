@@ -11,14 +11,14 @@
                             <sec:authorize access="hasRole('ROLE_USER')">
                                 <a href="${pageContext.request.contextPath}/appruns/" class="thumbnail well well-sm">
                                     <div class="caption">
-                                        <h2>!app runs</h2>
-                                        <p>!browse app runs</p>
+                                        <h2><spring:message code="index.page.button.appruns" /></h2>
+                                        <p><spring:message code="index.page.button.appruns.description" /></p>
                                     </div>
                                 </a>
                                 <a href="${pageContext.request.contextPath}/#" class="thumbnail well well-sm">
                                     <div class="caption">
-                                        <h2>!element browser</h2>
-                                        <p>!browse formulas by elements</p>
+                                        <h2><spring:message code="index.page.button.elements" /></h2>
+                                        <p><spring:message code="index.page.button.elements.description" /></p>
                                     </div>
                                 </a>
                             </sec:authorize>
@@ -42,10 +42,18 @@
                             <div clas="row">
                                 <div class="col-md-5">
                                     <div class="panel panel-default">
-                                        <div class="panel-heading">Panel heading without title</div>
-                                        <div class="panel-body">
-                                            Panel content
-                                        </div>
+                                        <div class="panel-heading"><spring:message code="index.page.tools" /></div>
+<!--                                        <div class="panel-body">
+                                            <p>...</p>
+                                        </div>-->
+
+                                        <!-- List group -->
+                                        <ul class="list-group">
+                                            <li class="list-group-item"><a href="#"><spring:message code="index.page.reindex" /></a></li>                                           
+                                            <li class="list-group-item"><a href="#"><spring:message code="index.page.recalculate.elements" /></a></li>                                           
+                                            <li class="list-group-item"><a href="#"><spring:message code="index.page.recalculate.hashes" /></a></li>                                         
+                                            <li class="list-group-item"><a href="${pageContext.request.contextPath}/statistics/calc/"><spring:message code="index.page.recalculate.statistics" /></a></li>                                           
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-md-offset-1">

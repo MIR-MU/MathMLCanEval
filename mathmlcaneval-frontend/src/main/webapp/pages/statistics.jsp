@@ -72,6 +72,14 @@
                             <td><spring:message code="statistics.total.remove" /></td>
                             <td><c:out value="${statistics.totalRemove}" /></td>
                         </tr>        
+                        <tr>
+                            <td><spring:message code="statistics.total.formula.remove" /></td>
+                            <td><c:out value="${statistics.totalFormulaRemove}" /></td>
+                        </tr>
+                        <tr>
+                            <td><spring:message code="statistics.total.formula.meaningless" /></td>
+                            <td><c:out value="${statistics.totalFormulaMeaningless}" /></td>
+                        </tr>        
                     </table>
                 </div>
                 <div class="col-md-4 stats-panel-body">

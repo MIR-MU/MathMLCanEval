@@ -66,6 +66,8 @@ public class StatisticsServiceImpl implements StatisticsService
         Long totalUncertain = null;
         Long totalRemove = null ;
         Long totalFormulasWithCO = null;
+        Long totalFormulaRemove = null;
+        Long totalFormulaMeaningless = null;
         
         try
         {
@@ -136,6 +138,25 @@ public class StatisticsServiceImpl implements StatisticsService
             logger.error(nre);
         }
         
+        try
+        {
+            totalFormulaRemove = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.note LIKE :fRemove1 OR fa.note LIKE :fRemove2", Long.class)
+                    .setParameter("fRemove1", "%#formulaRemove%").setParameter("fRemove2", "%#fRemove%").getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.error(nre);
+        }
+        
+        try
+        {
+            totalFormulaMeaningless = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.note LIKE :fMeaningles1 OR fa.note LIKE :fMeaningles2", Long.class)
+                    .setParameter("fMeaningles1", "%#formulaMeaningless%").setParameter("fMeaningles2", "%#fMeaningless%").getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.error(nre);
+        }
         
         
         if(totalFormulas != null)
@@ -165,6 +186,14 @@ public class StatisticsServiceImpl implements StatisticsService
         if(totalFormulasWithCO != null)
         {
             statistics.setTotalFormulasWithCanonicOutput(totalFormulasWithCO.intValue());
+        }
+        if(totalFormulaMeaningless != null)
+        {
+            statistics.setTotalFormulaMeaningless(totalFormulaMeaningless.intValue());
+        }
+        if(totalFormulaRemove != null)
+        {
+            statistics.setTotalFormulaRemove(totalFormulaRemove.intValue());
         }
     }
 

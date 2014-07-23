@@ -74,6 +74,18 @@ public class Statistics implements Serializable
     private Integer totalRemove;
     
     /**
+     * Total count of Formulas marked as #formulaRemove, or shortcut #fRemove
+     */
+    @Column 
+    private Integer totalFormulaRemove;
+    
+    /**
+     * Total count Formulas marked as #formulaMeaningles, or shortcut #fMeaningless
+     */
+    @Column
+    private Integer totalFormulaMeaningless;
+    
+    /**
      * Date when statistic entity was created
      */
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -170,6 +182,26 @@ public class Statistics implements Serializable
         this.totalFormulasWithCanonicOutput = totalFormulasWithCanonicOutput;
     }
 
+    public Integer getTotalFormulaRemove()
+    {
+        return totalFormulaRemove;
+    }
+
+    public void setTotalFormulaRemove(Integer totalFormulaRemove)
+    {
+        this.totalFormulaRemove = totalFormulaRemove;
+    }
+
+    public Integer getTotalFormulaMeaningless()
+    {
+        return totalFormulaMeaningless;
+    }
+
+    public void setTotalFormulaMeaningless(Integer totalFormulaMeaningless)
+    {
+        this.totalFormulaMeaningless = totalFormulaMeaningless;
+    }
+
     @Override
     public int hashCode()
     {
@@ -196,6 +228,6 @@ public class Statistics implements Serializable
     @Override
     public String toString()
     {
-        return "Statistics{" + "id=" + id + ", totalFormulas=" + totalFormulas + ", totalFormulasWithCanonicOutput=" + totalFormulasWithCanonicOutput + ", totalCanonicalized=" + totalCanonicalized + ", totalValid=" + totalValid + ", totalInvalid=" + totalInvalid + ", totalUncertain=" + totalUncertain + ", totalRemove=" + totalRemove + ", calculationDate=" + calculationDate + '}';
+        return "Statistics{" + "id=" + id + ", totalFormulas=" + totalFormulas + ", totalFormulasWithCanonicOutput=" + totalFormulasWithCanonicOutput + ", totalCanonicalized=" + totalCanonicalized + ", totalValid=" + totalValid + ", totalInvalid=" + totalInvalid + ", totalUncertain=" + totalUncertain + ", totalRemove=" + totalRemove + ", totalFormulaRemove=" + totalFormulaRemove + ", totalFormulaMeaningless=" + totalFormulaMeaningless + ", calculationDate=" + calculationDate + '}';
     }
 }

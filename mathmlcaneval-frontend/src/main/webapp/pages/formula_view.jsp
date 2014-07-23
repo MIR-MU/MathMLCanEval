@@ -65,32 +65,61 @@
 
             <div class="row pull-top-50">
                 <div class="col-lg-12">
-                    <div class="panel panel-primary">
-                        <!-- Formula details -->
-                        <div class="panel-heading"><spring:message code="entity.formula.detail" /></div>
-                        <table class="table table-bordered table-striped">
-                            <tr>
-                                <td><spring:message code="general.field.id" /></td>
-                                <td><c:out value="${formulaEntry.id}" /></td>
-                            </tr>
-                            <tr>
-                                <td><spring:message code="entity.formula.user" /></td>
-                                <td><c:out value="${formulaEntry.user.username}" /></td>
-                            </tr>
-                            <tr>
-                                <td><spring:message code="entity.formula.sourceDocument" /></td>
-                                <td><a href="${pageContext.request.contextPath}/sourcedocument/view/${formulaEntry.sourceDocument.id}"><c:out value="${formulaEntry.sourceDocument.name}" /></a></td>
-                            </tr>
-                            <tr>
-                                <td><spring:message code="entity.formula.program" /></td>
-                                <td><a href="${pageContext.request.contextPath}/program/view/${formulaEntry.program.id}"><c:out value="${formulaEntry.program.name}" /></a></td>
-                            </tr>
-                            <tr>
-                                <td><spring:message code="entity.formula.note" /></td>
-                                <td><c:out value="${formulaEntry.note}" /></td>
-                            </tr>
-                        </table>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="panel panel-primary">
+                                <!-- Formula details -->
+                                <div class="panel-heading"><spring:message code="entity.formula.detail" /></div>
+                                <table class="table table-bordered table-striped">
+                                    <tr>
+                                        <td><spring:message code="general.field.id" /></td>
+                                        <td><c:out value="${formulaEntry.id}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><spring:message code="entity.formula.user" /></td>
+                                        <td><c:out value="${formulaEntry.user.username}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><spring:message code="entity.formula.sourceDocument" /></td>
+                                        <td><a href="${pageContext.request.contextPath}/sourcedocument/view/${formulaEntry.sourceDocument.id}"><c:out value="${formulaEntry.sourceDocument.name}" /></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><spring:message code="entity.formula.program" /></td>
+                                        <td><a href="${pageContext.request.contextPath}/program/view/${formulaEntry.program.id}"><c:out value="${formulaEntry.program.name}" /></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><spring:message code="entity.formula.note" /></td>
+                                        <td><c:out value="${formulaEntry.note}" /></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <form method="POST" action="${pageContext.request.contextPath}/formula/annotate/" id="annotationFormulaForm">
+                                <input type="hidden" name="formulaID" value="<c:out value="${formulaEntry.id}" />" />
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading"><spring:message code="entity.canonicOutput.annotations" /></div>
+                                    <table class="table table-striped" id="formulaAnnotationTable">
+                                        <tbody>
+                                            <c:forEach items="${formulaEntry.annotations}" var="entry">
+                                                <tr>
+                                                    <td>${entry.user.username}</td>
+                                                    <td class="annotation-note-cell">${entry.note}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                    <div class="panel-footer">
+                                        <input type="text" name="annotation" css="form-control" style="width: 80%;"/>
+                                        <button class="btn btn-primary btn-sm">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+
 
                     <div class="panel panel-primary">
                         <!-- Formula in MathML & rendered -->

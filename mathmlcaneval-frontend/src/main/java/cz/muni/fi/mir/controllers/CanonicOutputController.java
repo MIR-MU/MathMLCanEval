@@ -99,7 +99,13 @@ public class CanonicOutputController
         annotationService.createAnnotation(a);
         
         CanonicOutput co = canonicOutputService.getCanonicOutputByID(canonicOutputId);
-        List<Annotation> annotations = new ArrayList<>(co.getAnnotations());
+        List<Annotation> annotations = new ArrayList<>();
+        
+        if(co.getAnnotations() != null)
+        {
+            annotations.addAll(co.getAnnotations());
+        }
+        
         annotations.add(a);
         
         co.setAnnotations(annotations);
