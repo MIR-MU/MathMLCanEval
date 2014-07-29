@@ -12,6 +12,7 @@
 #ignore build folders
 mathmlcaneval-backend/target
 mathmlcaneval-frontend/target
+testbase
 
 #ignore nb files
 nb-configuration.xml

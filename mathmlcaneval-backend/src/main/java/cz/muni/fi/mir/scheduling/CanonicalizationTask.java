@@ -135,12 +135,15 @@ public class CanonicalizationTask implements Runnable
     @Override
     public void run() throws IllegalStateException
     {
-        if (formulas == null || formulas.isEmpty() || applicationRun == null || mainClass == null)
-        {
-            String message = "";
+        String message = "";
             message += "formulas isSet? [" + (formulas == null) + "], ";
             message += "applicationrun isSet? [" + (applicationRun == null) + "], ";
             message += "mainClass isSet? [" + (mainClass == null) + "].";
+         
+        logger.info(message);
+        logger.info(applicationRun);
+        if (formulas == null || formulas.isEmpty() || applicationRun == null || mainClass == null)
+        {
             throw new IllegalStateException(message);
         }
         else

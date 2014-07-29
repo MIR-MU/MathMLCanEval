@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 /**
  *
@@ -23,7 +24,9 @@ public class UserRole implements Serializable
     private static final long serialVersionUID = 6057382222751855434L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "userrole_id",nullable = false)
+    @SequenceGenerator(name="userroleid_seq", sequenceName="userroleid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "userroleid_seq")
     private Long id;
 
     @Column(name = "roleName",unique = true)

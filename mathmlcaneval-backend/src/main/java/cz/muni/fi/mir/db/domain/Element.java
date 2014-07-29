@@ -34,9 +34,9 @@ public class Element implements Serializable
 {
     private static final long serialVersionUID = -7653612446719259055L;
     @Id
-    @Column(name = "id",nullable = false)
-    @SequenceGenerator(name="element_seq", sequenceName="element_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "element_seq")
+    @Column(name = "element_id",nullable = false)
+    @SequenceGenerator(name="elementid_seq", sequenceName="elementid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "elementid_seq")
     private Long id;
     
     @Column(name = "elementName")

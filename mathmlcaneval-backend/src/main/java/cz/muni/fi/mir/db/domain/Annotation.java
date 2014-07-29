@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 /**
  * The purpose of this class is to capture some comments of given Canonic
@@ -26,7 +27,9 @@ public class Annotation implements Serializable
     private static final long serialVersionUID = -8493177720663943928L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "annotation_id",nullable = false)
+    @SequenceGenerator(name="annotationid_seq", sequenceName="annotationid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "annotationid_seq")
     private Long id;
 
     @ManyToOne

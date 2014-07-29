@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -26,7 +27,9 @@ public class Statistics implements Serializable
     private static final long serialVersionUID = -4837257012984879245L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "statistics_id",nullable = false)
+    @SequenceGenerator(name="statisticsid_seq", sequenceName="statisticsid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "statisticsid_seq")
     private Long id;
     
     

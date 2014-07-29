@@ -166,7 +166,11 @@ public class FormulaServiceImpl implements FormulaService
         }
         if (!toImport.isEmpty())
         {
-            applicationRunDAO.createApplicationRun(applicationRun);
+//            applicationRunDAO.createApplicationRunWithFlush(applicationRun);
+            logger.fatal("Attempt to create Application Run with flush mode to ensure its persisted.");
+            applicationRunDAO.createApplicationRunWithFlush(applicationRun);
+            logger.fatal("Operation withFlush called.");
+            
             List<Formula> filtered = new ArrayList<>();
             for (Formula f : toImport)
             {
@@ -191,14 +195,9 @@ public class FormulaServiceImpl implements FormulaService
                 }
             }
 
-            if (filtered.isEmpty())
-            {
-                logger.info("No formulas are going to be imported because they are already presented.");
-            }
-            else
-            {
-                mathCanonicalizerLoader.execute(filtered, applicationRun);
-            }
+            logger.info("No formulas are going to be imported because they are already presented.");
+            mathCanonicalizerLoader.execute(filtered, applicationRun);
+
         }
     }
 

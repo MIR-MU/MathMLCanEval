@@ -277,8 +277,8 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <server>localhost</server>
-                    <username>admin</username>
-                    <password>password</password>
+<!--                    <username>admin</username>
+                    <password>password</password>-->
                     <update>true</update> 
                     <path>/MathMLCanEval</path>
                     <port>8082</port>   

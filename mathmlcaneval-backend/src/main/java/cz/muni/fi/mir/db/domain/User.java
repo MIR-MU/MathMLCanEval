@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 
 /**
  * @author Dominik Szalai
@@ -24,7 +25,9 @@ public class User implements Serializable
 
     private static final long serialVersionUID = -8362731814249179743L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id",nullable = false)
+    @SequenceGenerator(name="userid_seq", sequenceName="userid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "userid_seq")
     private Long id;
     @Column(name = "username", unique = true)
     private String username;

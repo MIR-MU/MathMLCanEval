@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 /**
  *
@@ -23,7 +24,9 @@ public class SourceDocument implements Serializable
     private static final long serialVersionUID = -8320292185197252228L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "sourcedocument_id",nullable = false)
+    @SequenceGenerator(name="sourcedocumentid_seq", sequenceName="sourcedocumentid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "sourcedocumentid_seq")
     private Long id;
     @Column(name = "note")
     private String note;

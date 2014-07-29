@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 /**
  *
@@ -24,7 +25,9 @@ public class Revision implements Serializable
     private static final long serialVersionUID = -2258957018668800641L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "revision_id",nullable = false)
+    @SequenceGenerator(name="revisionid_seq", sequenceName="revisionid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "revisionid_seq")
     private Long id;
 
     @Column(name = "revisionHash")

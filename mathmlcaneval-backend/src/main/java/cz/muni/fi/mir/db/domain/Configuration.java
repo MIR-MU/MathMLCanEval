@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 /**
  * The purpose of this class is to capture Configuration which was used during testing.
@@ -25,7 +26,9 @@ public class Configuration implements Serializable
     private static final long serialVersionUID = -4875490381198661605L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "configuration_id",nullable = false)
+    @SequenceGenerator(name="configurationid_seq", sequenceName="configurationid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "configurationid_seq")
     private Long id;
 
     @Column(name = "config",columnDefinition = "text",length = 10000)

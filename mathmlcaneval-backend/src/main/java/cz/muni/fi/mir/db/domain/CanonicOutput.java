@@ -37,8 +37,8 @@ public class CanonicOutput implements Serializable
 
     @Id
     @Column(name = "id",nullable = false)
-    @SequenceGenerator(name="canonicoutput_seq", sequenceName="canonicoutput_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "canonicoutput_seq")
+    @SequenceGenerator(name="canonicoutputid_seq", sequenceName="canonicoutputid_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "canonicoutputid_seq")
     private Long id;
 
     @Column(name = "outputForm",columnDefinition = "TEXT",length = 10000)

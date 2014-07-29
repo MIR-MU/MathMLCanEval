@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 /**
  *
@@ -23,7 +24,9 @@ public class Program implements Serializable
     private static final long serialVersionUID = 7394481046699929994L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "program_id",nullable = false)
+    @SequenceGenerator(name="programid_seq", sequenceName="programid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "programid_seq")
     private Long id;
 
     @Column(name = "name")

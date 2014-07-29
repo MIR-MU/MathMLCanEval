@@ -30,6 +30,13 @@ public interface ApplicationRunDAO
      * @param applicationRun ApplicationRun to be persisted.
      */
     void createApplicationRun(ApplicationRun applicationRun);
+    
+    /**
+     * Method creates ApplicationRun inside database.
+     *
+     * @param applicationRun ApplicationRun to be persisted.
+     */
+    void createApplicationRunWithFlush(ApplicationRun applicationRun);
 
     /**
      * Method updates given ApplicationRun inside database

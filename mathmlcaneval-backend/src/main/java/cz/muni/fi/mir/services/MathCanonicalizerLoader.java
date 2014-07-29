@@ -31,7 +31,7 @@ public interface MathCanonicalizerLoader
      * <li>we collect result and create canonic output which is stored into formula</li>
      * <li>we delete temp files</li>
      * </ul>
-     * @param formula to be canonicalized
+     * @param formulas
      * @param applicationRun wrapper containing some information required for run
      */
     //void execute(Formula formula, ApplicationRun applicationRun);

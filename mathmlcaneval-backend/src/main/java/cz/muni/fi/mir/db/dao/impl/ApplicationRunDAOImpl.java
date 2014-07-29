@@ -21,9 +21,22 @@ import org.springframework.stereotype.Repository;
  * @since 1.0
  *
  */
-@Repository(value = "applicationRunDAO")
+//@Repository(value = "applicationRunDAO")
 public class ApplicationRunDAOImpl implements ApplicationRunDAO
 {
+
+    private String psqlver = null;
+
+    /**
+     * Sets postgreqsql version. If value is set to 9.1 or higher then {@link #getAllApplicationRuns()
+     * } method has different behaviour.
+     *
+     * @param psqlver version of postgreqsql.
+     */
+    public void setPsqlver(String psqlver)
+    {
+        this.psqlver = psqlver;
+    }
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -76,6 +89,16 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
         return ar;
     }
 
+    /**
+     * Method is affected by {@link #setPsqlver(java.lang.String) }. If set to
+     * version (>= 9.1) then method uses calculation of outputs in single
+     * method. Otherwise two selects are required as of bug in previous versions
+     * of postgresql. See <a
+     * href="http://stackoverflow.com/a/11683182/1203690">this</a> for more
+     * details.
+     *
+     * @return List of application runs.
+     */
     @Override
     public List<ApplicationRun> getAllApplicationRuns()
     {
@@ -86,19 +109,34 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
         if (!entityManager.createQuery("SELECT COUNT(ar) FROM applicationRun ar", Long.class)
                 .getSingleResult().equals(Long.valueOf("0")))
         {
-            List<Object[]> results
-                    = entityManager.createQuery("SELECT apr,COUNT(co) FROM applicationRun apr, canonicOutput co WHERE co.applicationRun = apr GROUP BY apr.id")
-                    .getResultList();
-
-            for (Object[] row : results)
+            if(Double.valueOf(psqlver).compareTo(new Double("9.1")) < 0)
             {
-                ApplicationRun ar = (ApplicationRun) row[0];
-                Long count = (Long) row[1];
-
+                resultList = entityManager.createQuery("SELECT apr FROM applicationRun apr", ApplicationRun.class).getResultList();
+            
+            for(ApplicationRun ar : resultList)
+            {
+                Long count = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co WHERE co.applicationRun = :apprun", Long.class)
+                        .setParameter("apprun", ar).getSingleResult();
                 ar.setCanonicOutputCount(count.intValue());
-
-                resultList.add(ar);
             }
+            }
+            else
+            {
+                List<Object[]> results
+                        = entityManager.createQuery("SELECT apr,COUNT(co) FROM applicationRun apr LEFT JOIN FETCH apr.configuration, canonicOutput co WHERE co.applicationRun = apr GROUP BY apr.id")
+                        .getResultList();
+
+                for (Object[] row : results)
+                {
+                    ApplicationRun ar = (ApplicationRun) row[0];
+                    Long count = (Long) row[1];
+
+                    ar.setCanonicOutputCount(count.intValue());
+
+                    resultList.add(ar);
+                }
+            }
+
         }
 
         return resultList;
@@ -174,5 +212,13 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
         }
 
         return resultList;
+    }
+
+    @Override
+    public void createApplicationRunWithFlush(ApplicationRun applicationRun)
+    {
+        createApplicationRun(applicationRun);
+        logger.info("Attempt to flush");
+        entityManager.flush();
     }
 }

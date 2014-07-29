@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
+import javax.persistence.SequenceGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -30,7 +31,9 @@ public class Formula implements Serializable
     private static final long serialVersionUID = 7807040500942149400L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "formula_id",nullable = false)
+    @SequenceGenerator(name="formulaid_seq", sequenceName="formulaid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "formulaid_seq")
     private Long id;                            // db id
 
     //@Type(type="cz.muni.fi.mir.domain.SQLXMLType")

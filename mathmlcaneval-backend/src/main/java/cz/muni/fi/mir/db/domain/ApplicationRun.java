@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -30,7 +31,9 @@ public class ApplicationRun implements Serializable
     private static final long serialVersionUID = -6547413491097181885L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "applicationrun_id",nullable = false)
+    @SequenceGenerator(name="applicationrunid_seq", sequenceName="applicationrunid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "applicationrunid_seq")
     private Long id;
     @Column(name = "note")
     private String note;
