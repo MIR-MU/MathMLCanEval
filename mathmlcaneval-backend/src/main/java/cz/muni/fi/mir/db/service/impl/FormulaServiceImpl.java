@@ -195,7 +195,11 @@ public class FormulaServiceImpl implements FormulaService
                 }
             }
 
-            logger.info("No formulas are going to be imported because they are already presented.");
+            if(filtered.isEmpty())
+            {
+                logger.info("No formulas are going to be imported because they are already presented.");
+            }
+            
             mathCanonicalizerLoader.execute(filtered, applicationRun);
 
         }

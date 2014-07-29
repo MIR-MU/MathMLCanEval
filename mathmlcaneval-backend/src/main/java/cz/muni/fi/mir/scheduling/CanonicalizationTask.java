@@ -136,9 +136,9 @@ public class CanonicalizationTask implements Runnable
     public void run() throws IllegalStateException
     {
         String message = "";
-            message += "formulas isSet? [" + (formulas == null) + "], ";
-            message += "applicationrun isSet? [" + (applicationRun == null) + "], ";
-            message += "mainClass isSet? [" + (mainClass == null) + "].";
+            message += "formulas isSet? [" + (formulas != null) + "], ";
+            message += "applicationrun isSet? [" + (applicationRun != null) + "], ";
+            message += "mainClass isSet? [" + (mainClass != null) + "].";
          
         logger.info(message);
         logger.info(applicationRun);
