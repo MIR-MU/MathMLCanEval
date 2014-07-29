@@ -49,7 +49,7 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
         if (ap != null)
         {
             entityManager.remove(ap);
-        } 
+        }
         else
         {
             logger.info("Trying to delete ApplicationRun with ID that has not been found. The ID is [" + applicationRun.getId().toString() + "]");
@@ -66,13 +66,13 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
             count = entityManager.createQuery("SELECT count(co) FROM canonicOutput co WHERE co.applicationRun = :apprun", Long.class)
                     .setParameter("apprun", ar).getSingleResult().intValue();
         }
-        catch(NoResultException nre)
+        catch (NoResultException nre)
         {
             logger.debug(nre);
         }
-        
+
         ar.setCanonicOutputCount(count);
-        
+
         return ar;
     }
 
@@ -81,19 +81,25 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
     {
         List<ApplicationRun> resultList = new ArrayList<>();
 
-        List<Object[]> results =
-            entityManager.createQuery("SELECT apr,COUNT(co) FROM applicationRun apr, canonicOutput co WHERE co.applicationRun = apr GROUP BY apr.id")
-                    .getResultList();
-        
-        for(Object[] row : results)
+        // if there are no results yet (count is 0) do nothing and return empty resultList
+        // otherwise jump in condition and do the select
+        if (!entityManager.createQuery("SELECT COUNT(ar) FROM applicationRun ar", Long.class)
+                .getSingleResult().equals(Long.valueOf("0")))
         {
-            ApplicationRun ar = (ApplicationRun) row[0];
-            Long count = (Long) row[1];
-            
-            ar.setCanonicOutputCount(count.intValue());
-            
-            resultList.add(ar);
-        }       
+            List<Object[]> results
+                    = entityManager.createQuery("SELECT apr,COUNT(co) FROM applicationRun apr, canonicOutput co WHERE co.applicationRun = apr GROUP BY apr.id")
+                    .getResultList();
+
+            for (Object[] row : results)
+            {
+                ApplicationRun ar = (ApplicationRun) row[0];
+                Long count = (Long) row[1];
+
+                ar.setCanonicOutputCount(count.intValue());
+
+                resultList.add(ar);
+            }
+        }
 
         return resultList;
     }
@@ -107,7 +113,7 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
         {
             resultList = entityManager.createQuery("SELECT apr FROM applicationRun apr WHERE apr.user = :user", ApplicationRun.class)
                     .setParameter("user", user).getResultList();
-        } 
+        }
         catch (NoResultException nre)
         {
             logger.debug(nre);
@@ -120,12 +126,12 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
     public List<ApplicationRun> getAllApplicationRunsByRevision(Revision revision)
     {
         List<ApplicationRun> resultList = Collections.emptyList();
-        
+
         try
         {
             resultList = entityManager.createQuery("SELECT apr FROM applicationRun apr WHERE apr.revision = :revision", ApplicationRun.class)
                     .setParameter("revision", revision).getResultList();
-        } 
+        }
         catch (NoResultException nre)
         {
             logger.debug(nre);
@@ -138,12 +144,12 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
     public List<ApplicationRun> getAllApplicationRunsByConfiguration(Configuration configuration)
     {
         List<ApplicationRun> resultList = Collections.emptyList();
-        
+
         try
         {
             resultList = entityManager.createQuery("SELECT apr FROM applicationRun apr WHERE apr.configuration = :configuration", ApplicationRun.class)
                     .setParameter("configuration", configuration).getResultList();
-        } 
+        }
         catch (NoResultException nre)
         {
             logger.debug(nre);
@@ -161,7 +167,7 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
         {
             resultList = entityManager.createQuery("SELECT ar FROM applicationRun ar ORDER BY ar.id DESC", ApplicationRun.class)
                     .setFirstResult(start).setMaxResults(end - start).getResultList();
-        } 
+        }
         catch (NoResultException nre)
         {
             logger.debug(nre);
