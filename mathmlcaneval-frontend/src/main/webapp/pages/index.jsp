@@ -38,22 +38,22 @@
                         </div>
                     </div>
 
-                    <div class="col-md-9" role="main">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="alert alert-success">
-                                    <c:out value="${gitProperties.commitId}" />
-                                </div>                                
-                            </div>
-                        </div>
+                    <div class="col-md-9" role="main">                        
                         <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-success">
+                                        <c:out value="${gitProperties.commitId}" />
+                                    </div>                                
+                                </div>
+                            </div>
                             <div clas="row">
                                 <div class="col-md-5">
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><spring:message code="index.page.tools" /></div>
-<!--                                        <div class="panel-body">
-                                            <p>...</p>
-                                        </div>-->
+                                        <!--                                        <div class="panel-body">
+                                                                                    <p>...</p>
+                                                                                </div>-->
 
                                         <!-- List group -->
                                         <ul class="list-group">
