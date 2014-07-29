@@ -12,6 +12,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -190,32 +191,34 @@ public class Tools
      */
     public String SHA1(String text) 
     {
-        MessageDigest md = null;        
-        try
-        {
-            md = MessageDigest.getInstance("SHA-1");
-        }
-        catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(Tools.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        byte[] sha1hash = new byte[40];
-        if(md != null)
-        {
-            try
-            {
-                md.update(text.getBytes("iso-8859-1"), 0, text.length());
-            }
-            catch (UnsupportedEncodingException ex)
-            {
-                Logger.getLogger(Tools.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            sha1hash = md.digest();
-            return convertToHex(sha1hash);
-        }
         
-        return null;      
+        return DigestUtils.sha1Hex(text);
+//        MessageDigest md = null;        
+//        try
+//        {
+//            md = MessageDigest.getInstance("SHA-1");
+//        }
+//        catch (NoSuchAlgorithmException ex)
+//        {
+//            Logger.getLogger(Tools.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        byte[] sha1hash = new byte[40];
+//        if(md != null)
+//        {
+//            try
+//            {
+//                md.update(text.getBytes("iso-8859-1"), 0, text.length());
+//            }
+//            catch (UnsupportedEncodingException ex)
+//            {
+//                Logger.getLogger(Tools.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            
+//            sha1hash = md.digest();
+//            return convertToHex(sha1hash);
+//        }
+//        
+//        return null;      
     }
 
     private String convertToHex(byte[] data) 
