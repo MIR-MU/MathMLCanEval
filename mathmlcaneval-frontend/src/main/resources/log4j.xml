@@ -11,12 +11,12 @@
     </appender>
     
     <appender name="file" class="org.apache.log4j.RollingFileAppender"> 
-        <param name="file" value="frontend.log"/>
+        <param name="file" value="/var/log/tomcat7/mathcaneval.log"/>
         <param name="MaxFileSize" value="10MB"/>
         <!-- Keep one backup file -->
         <param name="MaxBackupIndex" value="1"/>
         <layout class="org.apache.log4j.PatternLayout"> 
-            <param name="ConversionPattern" value="%p %t %c - %m%n"/> 
+            <param name="ConversionPattern" value="%p %d %t %c - %m%n"/> 
         </layout> 
     </appender> 
 	
