@@ -33,6 +33,9 @@
     <logger name="org.dozer">
         <level value="fatal"/>
     </logger>
+    <logger name="com.mchange">
+        <level value="info"/>
+    </logger>
 	
     <logger name="org.hibernate">
         <level value="info"/>  
@@ -42,8 +45,12 @@
         <level value="info" />
     </logger>
     
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder">
+    <logger name="org.springframework">
         <level value="info" />
+    </logger>
+    
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder">
+        <level value="debug" />
     </logger>
 <!--    <logger name="org.springframework.web">
         <level value="info" />
@@ -51,7 +58,7 @@
 
     <!-- Root Logger -->
     <root>
-        <priority value="info" />
+        <priority value="debug" />
         <appender-ref ref="console" />
         <appender-ref ref="file" />
     </root>

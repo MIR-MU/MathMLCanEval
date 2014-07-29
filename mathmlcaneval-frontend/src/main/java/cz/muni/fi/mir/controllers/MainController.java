@@ -5,6 +5,7 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.service.StatisticsService;
+import cz.muni.fi.mir.tools.GitPropertiesModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,13 +21,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController
 {
     @Autowired private StatisticsService statisticsService;
-    
+    @Autowired private GitPropertiesModel gitProperties;
     
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView handleIndex()
     {
         ModelMap mm = new ModelMap();
         mm.addAttribute("statistics", statisticsService.getStatistics());
+        mm.addAttribute("gitProperties", gitProperties);
         return new ModelAndView("index",mm);
     }
     
