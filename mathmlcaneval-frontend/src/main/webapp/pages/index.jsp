@@ -43,7 +43,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="alert alert-success">
-                                        <c:out value="${gitProperties.commitId}" />
+                                        <c:out value="Application Git revision: ${gitProperties.commitId} (${gitProperties.commitTime})" />
                                     </div>                                
                                 </div>
                             </div>
