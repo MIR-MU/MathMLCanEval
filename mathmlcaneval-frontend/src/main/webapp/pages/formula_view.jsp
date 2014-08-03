@@ -110,10 +110,18 @@
                                         </tbody>
                                     </table>
                                     <div class="panel-footer">
-                                        <input type="text" name="annotation" css="form-control" style="width: 80%;"/>
-                                        <button class="btn btn-primary btn-sm">
-                                            <span class="glyphicon glyphicon-plus"></span>
-                                        </button>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="text" id="annotation" name="annotation" css="form-control" style="width: 80%;"/>
+                                                <button class="btn btn-primary btn-sm">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2"><span class="btn btn-warning" id="annotate-formularemove"><span class="glyphicon glyphicon-trash"></span></span></div>
+                                            <div class="col-md-2"><span class="btn btn-warning" id="annotate-formulameaningless"><span class="glyphicon glyphicon glyphicon-remove"></span></span></div>
+                                        </div>
                                     </div>
                                 </div>
                             </form>

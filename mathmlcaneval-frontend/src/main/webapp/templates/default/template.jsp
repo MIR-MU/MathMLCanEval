@@ -73,7 +73,6 @@
                                 
                                 $("#flot-placeholder").css('width',$(".stats-panel-body").width());
                                 $("#flot-placeholder").css('height',$(".stats-panel-body").width()*0.8);
-                                console.log($(".stats-panel-body").width());
                                 
                                 $("#statisticsForm ").on('change',function(){
                                     var val = $("option:selected", this).val();
@@ -116,18 +115,50 @@
 
                                 $("#annotate-isvalid").click(function(event) {
                                     $("#annotation-note").val($("#annotation-note").val() + " #isValid ");
+                                }).tooltip({
+                                    placement: 'bottom',
+                                    container: 'body',
+                                    title: '<spring:message code="general.label.button.annotate.hint" />'+' #isValid'
                                 });
 
                                 $("#annotate-isinvalid").click(function() {
                                     $("#annotation-note").val($("#annotation-note").val() + " #isInvalid ");
+                                }).tooltip({
+                                    placement: 'bottom',
+                                    container: 'body',
+                                    title: '<spring:message code="general.label.button.annotate.hint" />'+' #isInvalid'
                                 });
 
                                 $("#annotate-uncertain").click(function() {
                                     $("#annotation-note").val($("#annotation-note").val() + " #uncertain ");
+                                }).tooltip({
+                                    placement: 'bottom',
+                                    container: 'body',
+                                    title: '<spring:message code="general.label.button.annotate.hint" />'+' #uncertain'
                                 });
 
                                 $("#annotate-remove").click(function() {
                                     $("#annotation-note").val($("#annotation-note").val() + " #removeResult ");
+                                }).tooltip({
+                                    placement: 'bottom',
+                                    container: 'body',
+                                    title: '<spring:message code="general.label.button.annotate.hint" />'+' #removeResult'
+                                });
+                                
+                                $("#annotate-formularemove").click(function() {
+                                    $("#annotation").val($("#annotation").val() + " #formulaRemove ");
+                                }).tooltip({
+                                    placement: 'bottom',
+                                    container: 'body',
+                                    title: '<spring:message code="general.label.button.annotate.hint" />'+' #formulaRemove'
+                                });
+                                
+                                $("#annotate-formulameaningless").click(function() {
+                                    $("#annotation").val($("#annotation").val() + " #formulaMeaningless ");
+                                }).tooltip({
+                                    placement: 'bottom',
+                                    container: 'body',
+                                    title: '<spring:message code="general.label.button.annotate.hint" />'+' #formulaMeaningless'
                                 });
 
 
@@ -139,7 +170,6 @@
                                         data: form.serialize(),
                                         dataType: 'json',
                                         success: function(data) {
-                                            console.log(data);
                                             $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note.replace(/(#\S+)/g, "<span class=\"hashtag\">$1</span>") + "</td></tr>");
                                             $("#annotation-note").val('');
                                             formatHashTags();

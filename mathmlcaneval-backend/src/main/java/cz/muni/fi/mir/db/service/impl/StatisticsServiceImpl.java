@@ -26,19 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class StatisticsServiceImpl implements StatisticsService
 {
-    private final String IS_VALID;
-    private final String IS_INVALID;
-    private final String UNCERTAIN;
-    private final String REMOVE_RESULT;
-
-    public StatisticsServiceImpl(String IS_VALID, String IS_INVALID, String UNCERTAIN, String REMOVE_RESULT)
-    {
-        this.IS_VALID = IS_VALID;
-        this.IS_INVALID = IS_INVALID;
-        this.UNCERTAIN = UNCERTAIN;
-        this.REMOVE_RESULT = REMOVE_RESULT;
-    }    
-
+    private String coIsValid;
+    private String coIsInvalid;
+    private String coUncertain;
+    private String coRemove;
+    private String formulaMeaningless;
+    private String formulaRemove;
+    
     @PersistenceContext
     private EntityManager entityManager;
     
@@ -86,7 +80,7 @@ public class StatisticsServiceImpl implements StatisticsService
         try
         {
             totalValid = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.note LIKE :is_valid",Long.class)
-                    .setParameter("is_valid", "%"+IS_VALID+"%").getSingleResult();
+                    .setParameter("is_valid", "%"+coIsValid+"%").getSingleResult();
         }
         catch(NoResultException e)
         {
@@ -96,7 +90,7 @@ public class StatisticsServiceImpl implements StatisticsService
         try
         {
             totalInvalid = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.note LIKE :is_invalid",Long.class)
-                    .setParameter("is_invalid", "%"+IS_INVALID+"%").getSingleResult();
+                    .setParameter("is_invalid", "%"+coIsInvalid+"%").getSingleResult();
         }
         catch(NoResultException e)
         {
@@ -106,7 +100,7 @@ public class StatisticsServiceImpl implements StatisticsService
         try
         {
             totalUncertain = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.note LIKE :is_uncertain",Long.class)
-                    .setParameter("is_uncertain", "%"+UNCERTAIN+"%").getSingleResult();
+                    .setParameter("is_uncertain", "%"+coUncertain+"%").getSingleResult();
         }
         catch(NoResultException e)
         {
@@ -116,7 +110,7 @@ public class StatisticsServiceImpl implements StatisticsService
         try
         {
             totalRemove = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.note LIKE :toremove",Long.class)
-                    .setParameter("toremove", "%"+REMOVE_RESULT+"%").getSingleResult();
+                    .setParameter("toremove", "%"+coRemove+"%").getSingleResult();
         }
         catch(NoResultException e)
         {
@@ -145,8 +139,8 @@ public class StatisticsServiceImpl implements StatisticsService
         
         try
         {
-            totalFormulaRemove = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.note LIKE :fRemove1 OR fa.note LIKE :fRemove2", Long.class)
-                    .setParameter("fRemove1", "%#formulaRemove%").setParameter("fRemove2", "%#fRemove%").getSingleResult();
+            totalFormulaRemove = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.note LIKE :fRemove", Long.class)
+                    .setParameter("fRemove", "%"+formulaRemove+"%").getSingleResult();
         }
         catch(NoResultException nre)
         {
@@ -155,8 +149,8 @@ public class StatisticsServiceImpl implements StatisticsService
         
         try
         {
-            totalFormulaMeaningless = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.note LIKE :fMeaningles1 OR fa.note LIKE :fMeaningles2", Long.class)
-                    .setParameter("fMeaningles1", "%#formulaMeaningless%").setParameter("fMeaningles2", "%#fMeaningless%").getSingleResult();
+            totalFormulaMeaningless = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.note LIKE :fMeaningles", Long.class)
+                    .setParameter("fMeaningles", "%"+formulaMeaningless+"%").getSingleResult();
         }
         catch(NoResultException nre)
         {
@@ -249,4 +243,39 @@ public class StatisticsServiceImpl implements StatisticsService
     {
         return entityManager.find(Statistics.class, id);
     }    
+
+    public void setCoIsValid(String coIsValid)
+    {
+        this.coIsValid = coIsValid;
+    }
+
+    public void setCoIsInvalid(String coIsInvalid)
+    {
+        this.coIsInvalid = coIsInvalid;
+    }
+
+    public void setCoUncertain(String coUncertain)
+    {
+        this.coUncertain = coUncertain;
+    }
+
+    public void setCoRemove(String coRemove)
+    {
+        this.coRemove = coRemove;
+    }
+
+    public void setFormulaMeaningless(String formulaMeaningless)
+    {
+        this.formulaMeaningless = formulaMeaningless;
+    }
+
+    public void setFormulaRemove(String formulaRemove)
+    {
+        this.formulaRemove = formulaRemove;
+    }
+
+    public void setEntityManager(EntityManager entityManager)
+    {
+        this.entityManager = entityManager;
+    }
 }

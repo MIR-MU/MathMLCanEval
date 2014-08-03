@@ -124,12 +124,14 @@
     </bean>
     
     
-    <bean id="statisticsService" class="cz.muni.fi.mir.db.service.impl.StatisticsServiceImpl">
-        <constructor-arg name="IS_VALID" value="#isValid" />
-        <constructor-arg name="IS_INVALID" value="#isInvalid" />
-        <constructor-arg name="UNCERTAIN" value="#uncertain" />
-        <constructor-arg name="REMOVE_RESULT" value="#removeResult" />
-    </bean>
+    <bean id="statisticsService" class="cz.muni.fi.mir.db.service.impl.StatisticsServiceImpl"
+        p:coIsInvalid="#isInvalid"
+        p:coIsValid="#isValid"
+        p:coRemove="#removeResult"
+        p:coUncertain="#uncertain"
+        p:formulaMeaningless="#formulaMeaningless"
+        p:formulaRemove="#formulaRemove"
+    />
     
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
         p:protocol="smtp"
