@@ -60,7 +60,7 @@ public class FormulaTest
     private List<UserRole> roles = new ArrayList<>(2);
     private List<SourceDocument> sourceDocuments = new ArrayList<>(2);
 
-    private static final Long ID = new Long(1);
+    private static final Long ID = Long.valueOf("1");
     private List<Formula> formulas = new ArrayList<>(4);
 
     @Before
@@ -111,8 +111,12 @@ public class FormulaTest
         assertNotNull("Formula object was not created.", result);
 
         formulaService.deleteFormula(result);
+        
+        Formula shouldBeNull = formulaService.getFormulaByID(ID);
+        
+        logger.fatal(shouldBeNull);
 
-        assertNull("Formula object was not deleted.", formulaService.getFormulaByID(ID));
+        assertNull("Formula object was not deleted.", shouldBeNull);
 
     }
 

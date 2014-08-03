@@ -2,11 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:s="http://www.springframework.org/schema/security" 
+       xmlns:p="http://www.springframework.org/schema/p" 
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
                             http://www.springframework.org/schema/beans/spring-beans.xsd
                             http://www.springframework.org/schema/context 
@@ -15,10 +15,13 @@
                             http://www.springframework.org/schema/tx/spring-tx.xsd
                             http://www.springframework.org/schema/aop 
                             http://www.springframework.org/schema/aop/spring-aop.xsd
-                            http://www.springframework.org/schema/security
-                            http://www.springframework.org/schema/security/spring-security.xsd
                             http://www.springframework.org/schema/cache 
-                            http://www.springframework.org/schema/cache/spring-cache.xsd">
+                            http://www.springframework.org/schema/cache/spring-cache.xsd
+                            http://www.springframework.org/schema/task
+                            http://www.springframework.org/schema/task/spring-task.xsd
+                            http://www.springframework.org/schema/util 
+                            http://www.springframework.org/schema/util/spring-util.xsd"
+>
     
     
     
@@ -50,48 +53,48 @@
         class="org.springframework.cache.ehcache.EhCacheCacheManager"
         p:cacheManager-ref="ehCacheManager" />-->
     
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-        <property name="driverClass" value="${hibernate.connection.driver_class}"/>
-        <property name="jdbcUrl" value="${hibernate.connection.url}"/>
-        <property name="user" value="${hibernate.connection.username}"/>
-        <property name="password" value="${hibernate.connection.password}"/>            
-        <property name="minPoolSize" value="${hibernate.c3p0.min_size}" />
-        <property name="maxPoolSize" value="${hibernate.c3p0.max_size}"/>
-        <property name="checkoutTimeout" value="${hibernate.c3p0.timeout}"/>
-        <property name="maxStatements" value="${hibernate.c3p0.max_statements}"/>
-        <property name="idleConnectionTestPeriod" value="${hibernate.c3p0.idle_test_period}"/>
-    </bean>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" 
+        destroy-method="close"
+        p:driverClass="${hibernate.connection.driver_class}"
+        p:jdbcUrl="${hibernate.connection.url}"
+        p:user="${hibernate.connection.username}"
+        p:password="${hibernate.connection.password}"
+        p:minPoolSize="${hibernate.c3p0.min_size}"
+        p:maxPoolSize="${hibernate.c3p0.max_size}"
+        p:checkoutTimeout="${hibernate.c3p0.timeout}"
+        p:maxStatements="${hibernate.c3p0.max_statements}"
+        p:idleConnectionTestPeriod="${hibernate.c3p0.idle_test_period}"
+    />
     
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+        p:dataSource-ref="dataSource"
+    >
         <property name="persistenceUnitName" value="mathcaneval" />
-        <property name="dataSource" ref="dataSource" />
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
                 <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
                 <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
-                <prop key="hibernate.hbm2ddl.import_files">${hibernate.hbm2ddl.import_files}</prop>
-                <prop key="hibernate.cacheable">${hibernate.cacheable}</prop>
                 <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
-                <prop key="hibernate.search.lucene_version">${hibernate.search.lucene_version}</prop> 
-                <prop key="hibernate.search.default.directory_provider">${hibernate.search.default.directory_provider}</prop>               
-                <prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>
-                <!-- still does not work even after 10 hours of googling how to make it done... -->
-<!--                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
-                <prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
-                <prop key="net.sf.ehcache.configurationResourceName">META-INF/ehcache.xml</prop>-->
+                <prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop> 
+                <prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop> 
+                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>  
+                <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>  
+                <prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>                  
+                <prop key="hibernate.search.default.directory_provider">${hibernate.search.default.directory_provider}</prop>
+                <prop key="hibernate.search.lucene_version">${hibernate.search.lucene_version}</prop>
             </props>
         </property>
     </bean>
     
-    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
-    </bean>
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager"
+        p:entityManagerFactory-ref="entityManagerFactory"
+    />
     
-    <bean id="applicationRunDAO" class="cz.muni.fi.mir.db.dao.impl.ApplicationRunDAOImpl">
-        <property name="psqlver" value="${postgresql.version}"/>
-    </bean>
+    <bean id="applicationRunDAO" class="cz.muni.fi.mir.db.dao.impl.ApplicationRunDAOImpl"
+          p:psqlver="${postgresql.version}"
+    />
     
     
     <bean id="documentBuilderFactory" class="javax.xml.parsers.DocumentBuilderFactory" factory-method="newInstance" />
@@ -103,12 +106,16 @@
         <constructor-arg name="mainClassName" value="${mathml-canonicalizer.default.mainclass}"/>
         <constructor-arg name="jarFolder" value="${mathml-canonicalizer.default.jarFolder}"/>
     </bean>
+    
+    <task:scheduler id="mathScheduler" pool-size="${scheduler.pool-size}" />
+    
+    <task:annotation-driven executor="taskExecutor" scheduler="mathScheduler"/> 
         
-    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-        <property name="corePoolSize" value="5" />
-        <property name="maxPoolSize" value="10" />
-        <property name="queueCapacity" value="25" />
-    </bean>
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
+        p:corePoolSize="${taskexecutor.corePoolSize}"
+        p:maxPoolSize="${taskexecutor.maxPoolSize}"
+        p:queueCapacity="${taskexecutor.queueCapacity}"
+    />
     
     <bean id="canonicalizationTask" class="cz.muni.fi.mir.scheduling.CanonicalizationTask" scope="prototype" lazy-init="true" />
     
@@ -123,32 +130,4 @@
         <constructor-arg name="UNCERTAIN" value="#uncertain" />
         <constructor-arg name="REMOVE_RESULT" value="#removeResult" />
     </bean>
-    
-    
-<!--    <bean id="canonicalizationTaskFactory" class="cz.muni.fi.mir.tasks.CanonicalizationTaskFactory" />-->
-
-<!--    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-        <property name="caches">
-            <set>
-                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="departments"/>
-            </set>
-        </property>
-    </bean> 
-   -->
-   
-   
-<!--    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="{mail.host}" />
-    </bean>
-    
-    <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
-        <property name="from" value="{mail.from}" />
-        <property name="subject" value="{mail.subject}" />
-    </bean>
-    
-    <bean id="mailSerivce" class="cz.muni.fi.mir.services.MailServiceImpl">
-        <property name="mailsender" ref="mailSender" />
-        <property name="templateMessage" ref="templateMessage" />
-    </bean>
-    -->
 </beans>

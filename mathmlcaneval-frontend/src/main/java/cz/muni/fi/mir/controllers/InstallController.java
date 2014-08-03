@@ -7,21 +7,20 @@ package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.UserForm;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -49,7 +48,12 @@ public class InstallController
     @Autowired
     private SourceDocumentService sourceDocumentService;
     @Autowired
+    private RevisionService revisionService;
+    @Autowired
     private Mapper mapper;
+    
+    @Value("${mathml-canonicalizer.default.revision}")
+    private String revisionValue;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView landingPage()
@@ -128,6 +132,12 @@ public class InstallController
             u.setPassword(Tools.getInstance().SHA1(u.getPassword()));
 
             userService.createUser(u);
+            
+            revisionService.createRevision(
+                    EntityFactory
+                            .createRevision(revisionValue, 
+                                    "Default revision created by install process.")
+            );
             
             return new ModelAndView("redirect:/");
         }

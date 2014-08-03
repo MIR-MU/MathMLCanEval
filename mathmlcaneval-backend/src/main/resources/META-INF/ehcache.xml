@@ -17,10 +17,32 @@
     </defaultCache>
     
     
-    <cache name="sampleCache1"
-           maxElementsInMemory="10000"
+    <cache name="permissions"
+           maxElementsInMemory="100"
            eternal="false"
            overflowToDisk="true"
            timeToIdleSeconds="300"
            timeToLiveSeconds="600" />
+    
+    <cache
+        name="org.hibernate.cache.StandardQueryCache"
+        maxEntriesLocalHeap="5"
+        eternal="false"
+        timeToLiveSeconds="120"
+        overflowToDisk="true"/>
+
+    <cache
+        name="org.hibernate.cache.UpdateTimestampsCache"
+        maxEntriesLocalHeap="5000"
+        eternal="true"
+        overflowToDisk="true"/>
+
+    <cache
+        name="cz.muni.fi.editor.backend.authors.Author"
+        maxEntriesLocalHeap="10000"
+        eternal="false"
+        timeToIdleSeconds="300"
+        timeToLiveSeconds="600">
+        <persistence strategy="localTempSwap"/>
+    </cache>
 </ehcache>

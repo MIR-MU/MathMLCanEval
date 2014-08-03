@@ -9,7 +9,6 @@ package cz.muni.fi.mir.db.service.impl;
 import cz.muni.fi.mir.db.domain.Statistics;
 import cz.muni.fi.mir.db.service.StatisticsService;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -18,7 +17,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -46,13 +45,19 @@ public class StatisticsServiceImpl implements StatisticsService
     private static final Logger logger = Logger.getLogger(StatisticsServiceImpl.class);
     
     @Override
-    @Transactional(readOnly = false,propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = false)
     public void calculate()
     {
         Statistics statistics = new Statistics();
         
         calc(statistics);
         entityManager.persist(statistics);        
+    }
+    
+    @Scheduled(cron = "${statistics.generate.cron}" )
+    public void executeAtMidnight()
+    {
+        calculate();
     }
     
     

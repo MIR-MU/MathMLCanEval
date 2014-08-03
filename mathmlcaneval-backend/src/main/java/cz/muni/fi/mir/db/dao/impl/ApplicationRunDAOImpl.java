@@ -73,18 +73,21 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
     public ApplicationRun getApplicationRunByID(Long id)
     {
         ApplicationRun ar = entityManager.find(ApplicationRun.class, id);
-        int count = 0;
-        try
+        if(ar != null)
         {
-            count = entityManager.createQuery("SELECT count(co) FROM canonicOutput co WHERE co.applicationRun = :apprun", Long.class)
-                    .setParameter("apprun", ar).getSingleResult().intValue();
-        }
-        catch (NoResultException nre)
-        {
-            logger.debug(nre);
-        }
+            int count = 0;
+            try
+            {
+                count = entityManager.createQuery("SELECT count(co) FROM canonicOutput co WHERE co.applicationRun = :apprun", Long.class)
+                        .setParameter("apprun", ar).getSingleResult().intValue();
+            }
+            catch (NoResultException nre)
+            {
+                logger.debug(nre);
+            }
 
-        ar.setCanonicOutputCount(count);
+            ar.setCanonicOutputCount(count);            
+        }        
 
         return ar;
     }
@@ -109,16 +112,16 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
         if (!entityManager.createQuery("SELECT COUNT(ar) FROM applicationRun ar", Long.class)
                 .getSingleResult().equals(Long.valueOf("0")))
         {
-            if(Double.valueOf(psqlver).compareTo(new Double("9.1")) < 0)
+            if(psqlver.equals("9") || psqlver.equals("none"))
             {
                 resultList = entityManager.createQuery("SELECT apr FROM applicationRun apr", ApplicationRun.class).getResultList();
             
-            for(ApplicationRun ar : resultList)
-            {
-                Long count = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co WHERE co.applicationRun = :apprun", Long.class)
-                        .setParameter("apprun", ar).getSingleResult();
-                ar.setCanonicOutputCount(count.intValue());
-            }
+                for(ApplicationRun ar : resultList)
+                {
+                    Long count = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co WHERE co.applicationRun = :apprun", Long.class)
+                            .setParameter("apprun", ar).getSingleResult();
+                    ar.setCanonicOutputCount(count.intValue());
+                }
             }
             else
             {

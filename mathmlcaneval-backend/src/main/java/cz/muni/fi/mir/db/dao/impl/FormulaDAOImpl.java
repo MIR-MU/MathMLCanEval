@@ -63,8 +63,10 @@ public class FormulaDAOImpl implements FormulaDAO
     public Formula getFormulaByID(Long id)
     {
         Formula f = entityManager.find(Formula.class, id);
-        
-        Hibernate.initialize(f.getAnnotations());
+        if(f != null)
+        {
+            Hibernate.initialize(f.getAnnotations());
+        }       
         
         return f;
     }

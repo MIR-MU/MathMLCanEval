@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"             
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"             
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-        <property name="prefix" value="/pages/" />
-        <property name="suffix" value=".jsp" />
-    </bean>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+        p:viewClass="org.springframework.web.servlet.view.JstlView"
+        p:prefix="/pages/"
+        p:suffix=".jsp"
+    />
     
     <bean id="viewResolver"
-          class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-          <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
-    </bean>
+          class="org.springframework.web.servlet.view.UrlBasedViewResolver"
+          p:viewClass="org.springframework.web.servlet.view.tiles3.TilesView"
+    />
 </beans>
