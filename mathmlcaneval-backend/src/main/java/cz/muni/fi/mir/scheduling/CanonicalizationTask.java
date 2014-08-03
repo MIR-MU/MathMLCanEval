@@ -19,6 +19,7 @@ import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.FormulaService;
+import cz.muni.fi.mir.services.MailService;
 import cz.muni.fi.mir.tools.SimilarityFormConverter;
 import cz.muni.fi.mir.tools.Tools;
 import java.io.ByteArrayInputStream;
@@ -56,47 +57,13 @@ public class CanonicalizationTask implements Runnable
     private FormulaService formulaService;
     @Autowired
     private ApplicationRunService applicationRunService;
+    @Autowired
+    private MailService mailService;
     
     private SimilarityFormConverter similarityFormConverter;
 
     private static final Logger logger = Logger.getLogger(CanonicalizationTask.class);
 
-//    private CanonicalizationTask(CanonicOutputService canonicOutputService, FormulaService formulaService, ApplicationRunService applicationRunService)
-//    {
-//        this.canonicOutputService = canonicOutputService;
-//        this.formulaService = formulaService;
-//        this.applicationRunService = applicationRunService;
-//    }
-//
-//    /**
-//     * Method constructs CanonTask object from input parameters. Input are
-//     * runtime dependencies without which Task cannot be run later.
-//     *
-//     * @param canonicOutputService instance of CanonicOutputService bean
-//     * @param formulaService instance of FormulaService bean
-//     * @param applicationRunService instance of ApplicationRunService bean
-//     * @return Instance of CanonTask
-//     * @throws IllegalArgumentException if any of input parameter is null.
-//     */
-//    public static CanonicalizationTask newInstance(CanonicOutputService canonicOutputService, FormulaService formulaService, ApplicationRunService applicationRunService) throws IllegalArgumentException
-//    {
-//        if (canonicOutputService == null)
-//        {
-//            throw new IllegalArgumentException("CanonicService is null.");
-//        }
-//
-//        if (formulaService == null)
-//        {
-//            throw new IllegalArgumentException("FormulaService is null.");
-//        }
-//
-//        if (applicationRunService == null)
-//        {
-//            throw new IllegalArgumentException("ApplicationRunService is null.");
-//        }
-//
-//        return new CanonicalizationTask(canonicOutputService, formulaService, applicationRunService);
-//    }
 
     /**
      * Method setups data dependencies used for CanonicalizationTask.
@@ -193,6 +160,19 @@ public class CanonicalizationTask implements Runnable
                 applicationRun.setStartTime(startTime);
                 applicationRun.setStopTime(stopTime);
                 applicationRunService.updateApplicationRun(applicationRun);
+                
+                String mailMessage = "Canonicalization started at %s has finished. The running time was "
+                        +" %s ms and %d formulas were canonicalized. Task finished at %s";
+                
+                mailService.sendMail(null,
+                        applicationRun.getUser().getEmail(),
+                        "Canonicalization has finished.", 
+                        String.format(mailMessage, 
+                                applicationRun.getStartTime().toString(),
+                                (applicationRun.getStopTime().getMillis()-applicationRun.getStartTime().getMillis()),
+                                formulas.size(),
+                                applicationRun.getStopTime().toString())
+                        );
             }
         }
     }

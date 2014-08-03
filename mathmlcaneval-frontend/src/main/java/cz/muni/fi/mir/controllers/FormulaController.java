@@ -262,7 +262,7 @@ public class FormulaController
                 logger.error(sre);
             }
             
-            
+            // @Async call
             formulaService.massFormulaImport(path, filter, 
                     mapper.map(formulaForm.getRevisionForm(), Revision.class), 
                     mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 

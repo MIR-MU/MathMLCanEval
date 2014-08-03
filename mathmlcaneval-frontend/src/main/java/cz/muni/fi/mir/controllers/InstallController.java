@@ -5,18 +5,24 @@
  */
 package cz.muni.fi.mir.controllers;
 
+import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.UserForm;
+import cz.muni.fi.mir.services.MailService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +52,12 @@ public class InstallController
     @Autowired
     private UserRoleService userRoleService;
     @Autowired
-    private SourceDocumentService sourceDocumentService;
+    private ConfigurationService configurationService;
+    @Autowired
+    private MailService mailService;
     @Autowired
     private RevisionService revisionService;
-    @Autowired
-    private Mapper mapper;
+    
     
     @Value("${mathml-canonicalizer.default.revision}")
     private String revisionValue;
@@ -139,6 +146,48 @@ public class InstallController
                                     "Default revision created by install process.")
             );
             
+            
+            // config should be outside controller, but its run only once per
+            // aplication setup so it does not matter somehow
+            InputStream is = InstallController.class.getClassLoader().getResourceAsStream("other/sample-config-1.1SNAP.xml");
+            
+            Configuration config = null;
+            try
+            {
+                String xmlContent = IOUtils.toString(is);
+                config = EntityFactory.createConfiguration(xmlContent, 
+                        "sample-config-1.1SNAP", 
+                        "Default configuration created by install process.");
+                logger.info("Loaded sample config");
+                logger.info(xmlContent);
+            }
+            catch(IOException ex)
+            {
+                logger.error(ex);
+            }
+            finally
+            {
+                if(is != null)
+                {
+                    try
+                    {
+                        is.close();
+                    }
+                    catch(IOException ex)
+                    {
+                        logger.error(ex);
+                    }
+                }
+            }
+            
+            if(config != null)
+            {
+                configurationService.createConfiguration(config);
+            }
+            
+            mailService.sendMail(null, email, "Installation is now complete.", 
+                    "Installation of MathCanEval application has ended. Below are user credentials submited in setup process.\n"
+            +"Username: "+username+"\nPassword: "+passVerify);
             return new ModelAndView("redirect:/");
         }
     }
