@@ -15,7 +15,4 @@ public interface MailService
      * @throws IllegalArgumentException if receiver, subject or message is null or empty.
      */
     void sendMail(String from, String receiver, String subject, String message) throws IllegalArgumentException;
-    
-    
-    void example();
 }

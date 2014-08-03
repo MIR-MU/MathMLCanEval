@@ -91,20 +91,4 @@ public class MailServiceImpl implements MailService
             mailSender.send(mailMessage);
         }
     }
-
-    @Override
-    public void example()
-    {
-        logger.info("MailService is enabled? ["+isEnabled()+"]");
-        if(isEnabled())
-        {
-            SimpleMailMessage smm = new SimpleMailMessage();
-            smm.setFrom("emptulik@gmail.com");
-            smm.setTo("emptulik@gmail.com");
-            smm.setSubject("yolo-test");
-            smm.setText("yolo-teszstastast");
-            
-            mailSender.send(smm);
-        }
-    }
 }
