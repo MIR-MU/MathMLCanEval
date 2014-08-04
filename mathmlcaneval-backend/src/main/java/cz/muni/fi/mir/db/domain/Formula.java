@@ -4,6 +4,7 @@
  */
 package cz.muni.fi.mir.db.domain;
 
+import cz.muni.fi.mir.similarity.CanonicOutputBridge;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +18,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.joda.time.DateTime;
 
 /**
@@ -25,6 +31,8 @@ import org.joda.time.DateTime;
  * @author Empt
  */
 @Entity(name = "formula")
+@Indexed
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Formula implements Serializable
 {
 
@@ -34,9 +42,8 @@ public class Formula implements Serializable
     @Column(name = "formula_id",nullable = false)
     @SequenceGenerator(name="formulaid_seq", sequenceName="formulaid_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "formulaid_seq")
-    private Long id;                            // db id
-
-    //@Type(type="cz.muni.fi.mir.domain.SQLXMLType")
+    private Long id;                         
+    
     @Column(name = "xml", columnDefinition = "text", length = 100000)
     private String xml;                         // formulka v MathML
     @Column(name = "note")
@@ -53,6 +60,7 @@ public class Formula implements Serializable
     @ManyToOne
     private User user;                          // kto ju vlozil
     @ManyToMany(mappedBy="parents")
+    @IndexedEmbedded
     private List<CanonicOutput> outputs;         // 
     @OneToMany
     private List<Formula> similarFormulas;    
@@ -207,7 +215,7 @@ public class Formula implements Serializable
     @Override
     public String toString()
     {
-        return "Formula{" + "id=" + id + ", xml=" + xml + ", note=" + note + ", hashValue=" + hashValue + ", sourceDocument=" + sourceDocument + ", insertTime=" + insertTime + ", program=" + program + ", user=" + user + ", outputs=" + outputs + ", similarFormulas=" + similarFormulas + ", annotations=" + annotations + ", elements=" + elements + '}';
+        return "Formula{" + "id=" + id + " hashValue=" + hashValue + '}';
     }
     
     @PreRemove

@@ -390,4 +390,11 @@ public class FormulaServiceImpl implements FormulaService
             }
         }
     }
+
+    @Override
+    @Transactional
+    public void reindex()
+    {
+        formulaDAO.reindex();
+    }
 }

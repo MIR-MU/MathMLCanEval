@@ -66,29 +66,12 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     }
 
     @Override
-    public List<CanonicOutput> getCanonicOutputBySimilarForm(String form)
-    {
-        List<CanonicOutput> resultList = Collections.emptyList();
-        try
-        {
-            resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.similarForm = :similarForm", CanonicOutput.class)
-                    .setParameter("similarForm", form).getResultList();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return resultList;
-    }
-
-    @Override
     public List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun)
     {
         List<CanonicOutput> resultList = Collections.emptyList();
         try
         {
-            resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun := appRun", CanonicOutput.class)
+            resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :appRun", CanonicOutput.class)
                     .setParameter("appRun", applicationRun).getResultList();
         }
         catch(NoResultException nre)
@@ -105,8 +88,8 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
         List<CanonicOutput> resultList = Collections.emptyList();
         try
         {
-            resultList = entityManager.createQuery("SELECT f.outputs FROM formula f WHERE f.id = :formulaID", CanonicOutput.class)
-                    .setParameter("formulaID", formula.getId()).getResultList();
+            resultList = entityManager.createQuery("SELECT f FROM formula f JOIN FETCH f.outputs WHERE f.id = :formulaID", Formula.class)
+                    .setParameter("formulaID", formula.getId()).getSingleResult().getOutputs();
         }
         catch(NoResultException nre)
         {
@@ -139,24 +122,26 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
     {
         QueryBuilder qb = getFullTextEntityManager().getSearchFactory().buildQueryBuilder().forEntity(CanonicOutput.class).get();
         
-        org.apache.lucene.search.Query luceneQuery = qb.bool()
-                .must(qb.keyword().fuzzy()
-                    .withThreshold(.8f)
-                    .withPrefixLength(1)
-                    .onField("similarForm").matching(canonicOutput.getSimilarForm())
-                    .createQuery())
-                .must(qb.keyword()
-                    .onField("id").matching(canonicOutput.getId()).createQuery()).not()
-        .createQuery();
+//        org.apache.lucene.search.Query luceneQuery = qb.bool()
+//                .must(qb.keyword().fuzzy()
+//                    .withThreshold(.8f)
+//                    .withPrefixLength(1)
+//                    .onField("similarForm").matching(canonicOutput.getSimilarForm())
+//                    .createQuery())
+//                .must(qb.keyword()
+//                    .onField("id").matching(canonicOutput.getId()).createQuery()).not()
+//        .createQuery();
 
-        FullTextQuery fullTextQuery = getFullTextEntityManager().createFullTextQuery(luceneQuery, CanonicOutput.class);
-        fullTextQuery.setFirstResult(skip);
-        if (maxResults > 0)
-        {
-            fullTextQuery.setMaxResults(maxResults);
-        }
-
-        return fullTextQuery.getResultList();
+//        FullTextQuery fullTextQuery = getFullTextEntityManager().createFullTextQuery(luceneQuery, CanonicOutput.class);
+//        fullTextQuery.setFirstResult(skip);
+//        if (maxResults > 0)
+//        {
+//            fullTextQuery.setMaxResults(maxResults);
+//        }
+//
+//        return fullTextQuery.getResultList();
+        
+        return null;
     }
 
     private FullTextEntityManager getFullTextEntityManager()

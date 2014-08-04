@@ -10,7 +10,6 @@ import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
-import cz.muni.fi.mir.index.IndexDAO;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +25,6 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
 
     @Autowired
     private CanonicOutputDAO canonicOutputDAO;
-    @Autowired
-    private IndexDAO indexDAO;
 
     @Override
     @Transactional(readOnly = false)
@@ -55,13 +52,6 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     public CanonicOutput getCanonicOutputByID(Long id)
     {
         return canonicOutputDAO.getCanonicOutputByID(id);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<CanonicOutput> getCanonicOutputBySimilarForm(String form)
-    {
-        return canonicOutputDAO.getCanonicOutputBySimilarForm(form);
     }
 
     @Override

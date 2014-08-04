@@ -19,6 +19,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.hibernate.Hibernate;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -259,5 +261,20 @@ public class FormulaDAOImpl implements FormulaDAO
         }
         
         return resultList;        
+    }
+
+    @Override
+    public void reindex()
+    {
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+        try
+        {
+            logger.info("Reindexing has started");
+            fullTextEntityManager.createIndexer(Formula.class).startAndWait();
+        }
+        catch (InterruptedException ex)
+        {
+            logger.fatal(ex);
+        }
     }
 }

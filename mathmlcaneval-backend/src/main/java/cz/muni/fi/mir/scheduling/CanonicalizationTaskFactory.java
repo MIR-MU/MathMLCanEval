@@ -6,14 +6,6 @@
 
 package cz.muni.fi.mir.scheduling;
 
-import cz.muni.fi.mir.scheduling.CanonicalizationTask;
-import cz.muni.fi.mir.db.service.ApplicationRunService;
-import cz.muni.fi.mir.db.service.CanonicOutputService;
-import cz.muni.fi.mir.db.service.FormulaService;
-import cz.muni.fi.mir.tools.SimilarityFormConverter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 /**
  *
  * @author emptak

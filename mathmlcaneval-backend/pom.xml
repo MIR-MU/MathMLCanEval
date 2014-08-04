@@ -120,6 +120,14 @@
             <artifactId>spring-aop</artifactId>
             <version>${org.springframework-version}</version>
         </dependency> 
+        <!-- Cannot find class [org.springframework.beans.factory.aspectj.AnnotationBeanConfigurerAspect] 
+        for bean with name 'org.springframework.context.config.internalBeanConfigurerAspect' defined in null
+        -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
         <dependency>
             <!-- aop -->
             <groupId>org.aspectj</groupId>

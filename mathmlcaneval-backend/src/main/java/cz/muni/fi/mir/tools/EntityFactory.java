@@ -419,7 +419,6 @@ public class EntityFactory
     {
         CanonicOutput co = createCanonicOutput();
         co.setOutputForm(outputForm);
-        co.setSimilarForm(similarForm);
         co.setParents(parents);
         co.setRunningTime(runningTime);
         co.setApplicationRun(ar);

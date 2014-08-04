@@ -23,8 +23,6 @@ public interface CanonicOutputService
     
     CanonicOutput getCanonicOutputByID(Long id);
     
-    
-    List<CanonicOutput> getCanonicOutputBySimilarForm(String form);
     List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun);
     List<CanonicOutput> getCanonicOutputByFormula(Formula formula);
     List<CanonicOutput> getCanonicOutputByParentFormula(Formula formula);

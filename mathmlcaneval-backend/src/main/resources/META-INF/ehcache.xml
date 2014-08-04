@@ -38,7 +38,7 @@
         overflowToDisk="true"/>
 
     <cache
-        name="cz.muni.fi.editor.backend.authors.Author"
+        name="cz.muni.fi.mir.db.domain.Formula"
         maxEntriesLocalHeap="10000"
         eternal="false"
         timeToIdleSeconds="300"

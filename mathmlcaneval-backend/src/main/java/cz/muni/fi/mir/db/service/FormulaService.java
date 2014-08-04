@@ -172,4 +172,6 @@ public interface FormulaService
      * @return number of formulas.
      */
     int getNumberOfRecords();
+    
+    void reindex();
 }

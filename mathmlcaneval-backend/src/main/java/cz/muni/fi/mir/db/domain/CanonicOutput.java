@@ -4,6 +4,7 @@
  */
 package cz.muni.fi.mir.db.domain;
 
+import cz.muni.fi.mir.similarity.CanonicOutputBridge;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -20,8 +21,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
+import org.hibernate.search.annotations.ClassBridge;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
 
 
 /**
@@ -29,10 +32,11 @@ import org.hibernate.search.annotations.Indexed;
  * @author Empt
  */
 @Entity(name = "canonicOutput")
-@Indexed
+@ClassBridge(
+        store = Store.YES,
+        impl=CanonicOutputBridge.class)
 public class CanonicOutput implements Serializable
 {
-
     private static final long serialVersionUID = 6956045766345845859L;
 
     @Id
@@ -42,12 +46,7 @@ public class CanonicOutput implements Serializable
     private Long id;
 
     @Column(name = "outputForm",columnDefinition = "TEXT",length = 10000)
-    @Field
     private String outputForm;
-
-    @Column(name = "similarForm")
-    @Field
-    private String similarForm;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="parents_id")
@@ -122,16 +121,6 @@ public class CanonicOutput implements Serializable
         this.annotations = annotations;
     }
 
-    public String getSimilarForm()
-    {
-        return similarForm;
-    }
-
-    public void setSimilarForm(String similarForm)
-    {
-        this.similarForm = similarForm;
-    }
-
     @Override
     public int hashCode()
     {
@@ -158,7 +147,7 @@ public class CanonicOutput implements Serializable
     @Override
     public String toString()
     {
-        return "CanonicOutput{" + "id=" + id + ", outputForm=" + outputForm + ", similarForm=" + similarForm + ", parents=" + parents + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
+        return "CanonicOutput{" + "id=" + id + ", outputForm=" + outputForm + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
     }
 
     @PreRemove

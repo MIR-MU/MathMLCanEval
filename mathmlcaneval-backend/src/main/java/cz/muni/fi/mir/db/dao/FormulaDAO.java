@@ -58,4 +58,6 @@ public interface FormulaDAO
     int getNumberOfRecords();
 
     Long exists(String hash);
+    
+    void reindex();
 }

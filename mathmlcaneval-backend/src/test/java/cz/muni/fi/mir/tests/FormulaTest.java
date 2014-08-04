@@ -218,6 +218,5 @@ public class FormulaTest
     {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getOutputForm(), actual.getOutputForm());
-        assertEquals(expected.getSimilarForm(), actual.getSimilarForm());
     }
 }

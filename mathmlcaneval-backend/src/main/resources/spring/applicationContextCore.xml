@@ -30,8 +30,12 @@
 <!--    <cache:annotation-driven cache-manager="cacheManager"/>-->
                     
     <context:component-scan base-package="cz.muni.fi.mir" />
+    <context:spring-configured />
     
+    <!--<context:load-time-weaver weaver-class="org.springframework.instrument.classloading.ReflectiveLoadTimeWeaver" aspesctj-weaving="on"/>-->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
+    
+    <bean id="similarityFormWrapper" class="cz.muni.fi.mir.similarity.SimilarityFormConverterWrapper" factory-method="newInstance" />
     
     
     <!-- http://forum.spring.io/forum/spring-projects/data/29626-how-to-turn-off-hibernate-cache-for-query-jpa -->

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package cz.muni.fi.mir.tools;
 
+import cz.muni.fi.mir.similarity.SimilarityFormConverter;
 import java.io.IOException;
 import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
@@ -33,32 +33,34 @@ import org.xml.sax.SAXException;
 @Component(value = "xmlUtils")
 public class XMLUtils
 {
+
     private static final Logger logger = Logger.getLogger(SimilarityFormConverter.class);
-    
+
     @Autowired
     private DocumentBuilder documentBuilder; // wired bean used for creating documents
-    
-    
-    
+
     /**
-     * Method parses given input String which is expected to be in form XML into Document object. If any error
-     * occurs exception is suppressed and null is returned.
+     * Method parses given input String which is expected to be in form XML into
+     * Document object. If any error occurs exception is suppressed and null is
+     * returned. Method has to be synchronized due to <a
+     * href="http://stackoverflow.com/q/12455602/1203690">this</a>
+     *
      * @param input String representation of XML file
      * @return parsed XML String in form of Document
      */
-    public Document parse(String input)
+    public synchronized Document parse(String input)
     {
         Document doc = null;
         try
         {
             doc = documentBuilder.parse(new InputSource(new StringReader(input)));
-        } 
+        }
         catch (SAXException | IOException ex)
         {
             logger.error(ex);
         }
-        
+
         return doc;
     }
-    
+
 }
