@@ -5,6 +5,7 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.service.StatisticsService;
+import cz.muni.fi.mir.similarity.SimilarityFormConverterWrapper;
 import cz.muni.fi.mir.tools.GitPropertiesModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ public class MainController
 {
     @Autowired private StatisticsService statisticsService;
     @Autowired private GitPropertiesModel gitProperties;
+    @Autowired private SimilarityFormConverterWrapper wrapper;
     
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView handleIndex()

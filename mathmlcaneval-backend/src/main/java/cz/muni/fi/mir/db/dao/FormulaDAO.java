@@ -12,6 +12,7 @@ import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -60,4 +61,8 @@ public interface FormulaDAO
     Long exists(String hash);
     
     void reindex();
+    
+    List<Formula> findSimilar(Formula formula,Map<String,String> properties);
+    
+    void findSimilarMass(Map<String,String> properties);
 }

@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -396,5 +397,19 @@ public class FormulaServiceImpl implements FormulaService
     public void reindex()
     {
         formulaDAO.reindex();
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public List<Formula> findSimilar(Formula formula,Map<String,String> properties)
+    {
+        return formulaDAO.findSimilar(formula,properties);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void findSimilarMass(Map<String,String> properties)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -5,7 +5,6 @@
 package cz.muni.fi.mir.forms;
 
 import java.util.Objects;
-import java.util.Set;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import org.joda.time.DateTime;

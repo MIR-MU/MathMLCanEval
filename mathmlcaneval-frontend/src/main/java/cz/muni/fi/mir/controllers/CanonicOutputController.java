@@ -10,6 +10,7 @@ import cz.muni.fi.mir.db.service.AnnotationService;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.AnnotationForm;
+import cz.muni.fi.mir.forms.FindSimilarForm;
 import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
@@ -60,6 +61,7 @@ public class CanonicOutputController
 
         mm.addAttribute("formulaEntry", canonicOutput);
         mm.addAttribute("annotationForm", new AnnotationForm());
+        mm.addAttribute("findSimilarForm", new FindSimilarForm());
         //mm.addAttribute("annotationFlagList", annotationFlagService.getAllAnnotationFlags());
 
         long totalAnnotations = 0;

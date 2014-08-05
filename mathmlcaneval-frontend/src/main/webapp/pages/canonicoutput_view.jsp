@@ -6,11 +6,112 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <tiles:insertDefinition name="default">
-    <tiles:putAttribute name="body">        
+    <tiles:putAttribute name="body">  
+        <div class="modal fade" id="findSimilarModal" tabindex="-1" role="dialog" aria-labelledby="findSimilarModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form:form modelAttribute="findSimilarForm" action="${pageContext.request.contextPath}/formula/similar/" method="POST">
+                        <input type="hidden" value="<c:out value="${formulaEntry.parents[0].id}" />" name="formulaID" />
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2>Distance method</h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input id="similarityFuzzySlider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="1" data-slider-step="0.1" data-slider-value="0.5" name="distanceMethodValue" />
+                                    <!--<input type="hidden" name="distanceTreshold" id="distanceTreshold"/>name="distanceTreshold"-->
+                                </div>
+                                <div class="col-md-4">
+                                    <span id="similarityFuzzySliderVal">0.5</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    !Use this method: <form:checkbox path="useDistance" />
+                                </div>
+                                <div class="col-md-4">
+                                    <form:select path="distanceCondition" cssClass="form-control">
+                                        <form:option value="AND" label="and" />
+                                        <form:option value="OR" label="or" />
+                                    </form:select>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2>Element count method</h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    !mode
+                                </div>
+                                <div class="col-md-6">
+                                    <form:select path="countElementMethodValue" cssClass="form-control">
+                                        <form:option value="EXACT" label="exact" />
+                                        <form:option value="MIXED" label="mixed" />
+                                    </form:select>
+                                </div>
+                            </div>   
+                            <div class="row">
+                                <div class="col-md-8">
+                                    !Use this method: <form:checkbox path="useCount" />
+                                </div>
+                                <div class="col-md-4">
+                                    <form:select path="countCondition" cssClass="form-control">
+                                        <form:option value="AND" label="and" />
+                                        <form:option value="OR" label="or" />
+                                    </form:select>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2>Branch method</h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    !mode
+                                </div>
+                                <div class="col-md-6">
+                                    <form:input cssClass="form-control" path="branchMethodValue" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    !Use this method: <form:checkbox path="useBranch" />
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-8">
+                                    !replace old similar forms: <form:checkbox path="override" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" />
+                            <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                        </div>
+                    </div>
+                </form:form>
+            </div>
+        </div>
         <div class="container content">
             <h1><spring:message code="entity.output.entry" /></h1>
             <div class="btn-group pull-right space-bottom-10">
-                <a href="${pageContext.request.contextPath}/canonicoutput/similar/${formulaEntry.id}" class="btn btn-primary"><spring:message code="entity.canonicOutput.findSimilar" /></a>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#findSimilarModal">
+                    <spring:message code="entity.canonicOutput.findSimilar" />
+                </button>
+                <!--                <a href="${pageContext.request.contextPath}/canonicoutput/similar/${formulaEntry.id}" class="btn btn-primary"><spring:message code="entity.canonicOutput.findSimilar" /></a>-->
                 <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                     <a href="${pageContext.request.contextPath}/canonicoutput/delete/${formulaEntry.id}" class="btn btn-danger"><spring:message code="general.label.delete" /></a>
                 </sec:authorize>

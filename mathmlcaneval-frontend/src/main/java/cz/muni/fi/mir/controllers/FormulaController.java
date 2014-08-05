@@ -21,6 +21,7 @@ import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.ApplicationRunForm;
+import cz.muni.fi.mir.forms.FindSimilarForm;
 import cz.muni.fi.mir.forms.FormulaForm;
 import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
@@ -30,7 +31,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -321,5 +324,64 @@ public class FormulaController
         }
         
         return mm;
+    }
+    
+    @RequestMapping(value = {"/reindex/","/reindex"},method = RequestMethod.GET)
+    public ModelAndView reindex()
+    {
+        formulaService.reindex();
+        
+        return new ModelAndView("redirect:/");
+    }
+    
+    
+//    @RequestMapping(value = {"/similar/{id}/{treshold}/","/similar/{id}/{treshold}"},method = RequestMethod.GET)
+//    public ModelAndView findSimilar(@PathVariable Long id,@PathVariable(value = "treshold") String treshold)
+//    {
+//        //logger.info(formulaService.findSimilar(formulaService.getFormulaByID(id)));
+//        float defaultTreshold = 0.8f;
+//        if(treshold != null && treshold.length() > 0)
+//        {
+//            defaultTreshold = Long.valueOf(treshold);
+//        }
+//        
+//        logger.info(formulaService.findSimilar(formulaService.getFormulaByID(id), defaultTreshold));
+//        
+//        return new ModelAndView("redirect:/");
+//    }
+    
+    @RequestMapping(value = {"/similar/","/similar"},method = RequestMethod.POST)
+    public ModelAndView submitFindSimilar(@ModelAttribute(value = "findSimilarForm") FindSimilarForm form)
+    {
+        logger.info(form);
+        
+        formulaService.findSimilar(
+                formulaService.getFormulaByID(form.getFormulaID()), 
+                generateSimilarityProperties(form)
+        );
+        
+        return new ModelAndView("redirect:/formula/view/"+form.getFormulaID());
+    }
+    
+    
+    
+    private Map<String,String> generateSimilarityProperties(FindSimilarForm findSimilarForm)
+    {
+        Map<String,String> properties = new HashMap<>();
+        //booleans
+        properties.put(FormulaService.USE_DISTANCE, Boolean.toString(findSimilarForm.isUseDistance()));
+        properties.put(FormulaService.USE_COUNT,Boolean.toString(findSimilarForm.isUseCount()));
+        properties.put(FormulaService.USE_BRANCH, Boolean.toString(findSimilarForm.isUseBranch()));
+        properties.put(FormulaService.USE_OVERRIDE,Boolean.toString(findSimilarForm.isOverride()));
+        // conditions
+        properties.put(FormulaService.CONDITION_DISTANCE, findSimilarForm.getDistanceCondition());
+        properties.put(FormulaService.CONDITION_COUNT, findSimilarForm.getCountCondition());
+        properties.put(FormulaService.CONDITION_BRANCH,findSimilarForm.getBranchCondition());
+        // actual evaluation values
+        properties.put(FormulaService.VALUE_DISTANCEMETHOD,findSimilarForm.getDistanceMethodValue());
+        properties.put(FormulaService.VALUE_COUNTELEMENTMETHOD,findSimilarForm.getCountElementMethodValue());
+        properties.put(FormulaService.VALUE_BRANCHMETHOD,findSimilarForm.getBranchMethodValue());
+        
+        return properties;
     }
 }

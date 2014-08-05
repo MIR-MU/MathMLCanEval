@@ -1,10 +1,13 @@
 package cz.muni.fi.mir.similarity;
 
 import cz.muni.fi.mir.db.domain.CanonicOutput;
+import java.io.StringReader;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.util.Version;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.ParameterizedBridge;
@@ -23,40 +26,16 @@ public class CanonicOutputBridge implements FieldBridge, ParameterizedBridge
     {
         SimilarityFormConverter sfc = SimilarityFormConverterWrapper.getConverter();
         
-        SimilarityForms sf = sfc.process((CanonicOutput) value);
+        SimilarityForms sf = sfc.process((CanonicOutput) value);        
         
-        Field outputForm = new Field("outputForm", sf.getDefaultForm(),
-                luceneOptions.getStore(),
-                luceneOptions.getIndex(),
-                luceneOptions.getTermVector()
-        );
-        outputForm.setBoost(luceneOptions.getBoost());
         
-        Field distanceForm = new Field("distanceForm",sf.getDistanceForm(),
-                luceneOptions.getStore(),
-                luceneOptions.getIndex(),
-                luceneOptions.getTermVector()
-        );
-        distanceForm.setBoost(luceneOptions.getBoost());
         
-        Field countElementForm = new Field("countElementForm",sf.getCountForm(),
-                luceneOptions.getStore(),
-                luceneOptions.getIndex(),
-                luceneOptions.getTermVector()
-        );
-        countElementForm.setBoost(luceneOptions.getBoost());
+        document.add(newField("outputForm", sf.getDefaultForm(),luceneOptions,null));
+        document.add(newField("distanceForm",sf.getDistanceForm(),luceneOptions,null));
+        document.add(newField("countElementForm",sf.getCountForm(),luceneOptions,
+                new ElementCountAnalyzer(Version.LUCENE_36)));
+        document.add(newField("longestBranch",String.valueOf(sf.getLongestBranch()),luceneOptions,null));
         
-        Field longestBranch = new Field("longestBranch",String.valueOf(sf.getLongestBranch()),
-                luceneOptions.getStore(),
-                luceneOptions.getIndex(),
-                luceneOptions.getTermVector()
-        );
-        longestBranch.setBoost(luceneOptions.getBoost());
-        
-        document.add(outputForm);
-        document.add(distanceForm);
-        document.add(countElementForm);
-        document.add(longestBranch);
         logger.debug("outputForm added " + sf);
     }
 
@@ -64,5 +43,24 @@ public class CanonicOutputBridge implements FieldBridge, ParameterizedBridge
     public void setParameterValues(Map<String, String> parameters)
     {
         logger.debug(parameters);
+    }
+    
+    
+    private Field newField(String name, String value, LuceneOptions luceneOptions,Analyzer analyzer)
+    {
+        Field f =new Field(name,value,
+                luceneOptions.getStore(),
+                luceneOptions.getIndex(),
+                luceneOptions.getTermVector()
+        );
+        
+        f.setBoost(luceneOptions.getBoost());
+        
+        if(analyzer != null)
+        {
+            f.setTokenStream(analyzer.tokenStream(name, new StringReader(value)));
+        }
+        
+        return f;
     }
 }

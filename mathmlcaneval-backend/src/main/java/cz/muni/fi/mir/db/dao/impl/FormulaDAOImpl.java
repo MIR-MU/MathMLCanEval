@@ -7,20 +7,32 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.FormulaDAO;
+import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.service.FormulaService;
+import cz.muni.fi.mir.similarity.SimilarityFormConverter;
+import cz.muni.fi.mir.similarity.SimilarityForms;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import org.apache.lucene.search.Explanation;
 import org.hibernate.Hibernate;
 import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -32,6 +44,8 @@ public class FormulaDAOImpl implements FormulaDAO
 {
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
+    private SimilarityFormConverter similarityFormConverter;
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaDAOImpl.class);
     
@@ -276,5 +290,60 @@ public class FormulaDAOImpl implements FormulaDAO
         {
             logger.fatal(ex);
         }
+    }
+
+    @Override
+    public List<Formula> findSimilar(Formula formula,Map<String,String> properties)
+    {
+        Set<Formula> resultSet = new HashSet<>();
+        List<SimilarityForms> sFormsList = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        for(CanonicOutput co : formula.getOutputs())
+        {
+            SimilarityForms sf = similarityFormConverter.process(co);
+            sb.append(sf.getDistanceForm()).append(" ");
+            sFormsList.add(sf);
+        }
+        
+        
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+        
+        QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder()
+                .forEntity(Formula.class)
+                .get();
+        
+        org.apache.lucene.search.Query luceneQuery = qb
+                .keyword().fuzzy().withThreshold(Float.valueOf(properties.get(FormulaService.VALUE_DISTANCEMETHOD)))
+                .withPrefixLength(1)
+                .onField("distanceForm")
+                //.ignoreAnalyzer()
+                .ignoreFieldBridge()                //https://forum.hibernate.org/viewtopic.php?f=9&t=1008943
+                .matching(sb.toString())
+                .createQuery();
+        
+        org.hibernate.search.jpa.FullTextQuery ftq = fullTextEntityManager
+                .createFullTextQuery(luceneQuery, Formula.class);
+        
+        
+        
+        resultSet.addAll(ftq.getResultList());
+        List<Object[]> explains = ftq.setProjection("distanceForm",FullTextQuery.EXPLANATION).getResultList();
+        
+        for(Object[] o :explains)
+        {
+            String form = (String) o[0];
+            Explanation e = (Explanation) o[1];
+            
+            logger.info(form+"\n"+e);
+        }
+     
+        
+        return new ArrayList<>(resultSet);                
+    }
+
+    @Override
+    public void findSimilarMass(Map<String,String> properties)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

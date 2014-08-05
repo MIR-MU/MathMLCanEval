@@ -26,6 +26,7 @@ import cz.muni.fi.mir.services.FileDirectoryService;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -33,6 +34,22 @@ import java.util.List;
  */
 public interface FormulaService
 {
+    // following values are used for property map in similar form
+    // searches
+    
+    //TODO jdoc
+    public static final String USE_DISTANCE = "useDistance";
+    public static final String USE_COUNT = "useCount";
+    public static final String USE_BRANCH = "useBranch";
+    public static final String USE_OVERRIDE = "useOverride";
+    
+    public static final String CONDITION_DISTANCE = "distanceCondition";
+    public static final String CONDITION_COUNT = "countCondition";
+    public static final String CONDITION_BRANCH ="branchCondition";
+    
+    public static final String VALUE_DISTANCEMETHOD = "distanceMethodValue";
+    public static final String VALUE_COUNTELEMENTMETHOD = "countElementMethodValue";
+    public static final String VALUE_BRANCHMETHOD = "branchMethodValue";
 
     /**
      * Method creates given formula inside database.
@@ -174,4 +191,8 @@ public interface FormulaService
     int getNumberOfRecords();
     
     void reindex();
+    
+    List<Formula> findSimilar(Formula formula,Map<String,String> properties);
+    
+    void findSimilarMass(Map<String,String> properties);
 }
