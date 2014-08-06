@@ -4,10 +4,11 @@
  */
 package cz.muni.fi.mir.db.domain;
 
-import cz.muni.fi.mir.similarity.CanonicOutputBridge;
+import cz.muni.fi.mir.similarity.ElementCountTokenizerFactory;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,12 +19,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
+import org.apache.solr.analysis.StandardTokenizerFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.hibernate.search.annotations.AnalyzerDef;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.TokenizerDef;
 import org.joda.time.DateTime;
 
 /**
@@ -33,6 +37,8 @@ import org.joda.time.DateTime;
 @Entity(name = "formula")
 @Indexed
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@AnalyzerDef(name="countElementFormAnalyzer",
+        tokenizer = @TokenizerDef(factory = ElementCountTokenizerFactory.class))
 public class Formula implements Serializable
 {
 
@@ -62,7 +68,7 @@ public class Formula implements Serializable
     @ManyToMany(mappedBy="parents")
     @IndexedEmbedded
     private List<CanonicOutput> outputs;         // 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REFRESH)
     private List<Formula> similarFormulas;    
     @OneToMany
     private List<Annotation> annotations;    

@@ -17,6 +17,7 @@ public class FindSimilarForm
     private boolean useBranch;
     
     private boolean override;
+    private boolean directWrite;
     
     private String distanceCondition;
     private String countCondition;
@@ -138,6 +139,18 @@ public class FindSimilarForm
     {
         this.branchMethodValue = branchMethodValue;
     }
+
+    public boolean isDirectWrite()
+    {
+        return directWrite;
+    }
+
+    public void setDirectWrite(boolean directWrite)
+    {
+        this.directWrite = directWrite;
+    }
+    
+    
 
     @Override
     public String toString()

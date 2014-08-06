@@ -25,7 +25,8 @@
         <link href="<c:url value="/resources/css/shThemeDefault.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/jquery.fileupload.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/diffview.css" />" rel="stylesheet" type="text/css" />
-        <link href="<c:url value="/resources/css/bootstrap.slider.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/simple-slider.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/simple-slider-volume.css" />" rel="stylesheet" type="text/css" />
 
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -60,7 +61,7 @@
         <script type="text/javascript" src="<c:url value="/resources/js/difflib.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.categories.min.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/resources/js/bootstrap.slider.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/simple-slider.min.js" />"></script>
         <script>
                     /*
                      * http://stackoverflow.com/questions/229726/using-javascript-within-a-jsp-tag
@@ -198,13 +199,17 @@
                         });
                         formatHashTags();
 
-                        $("#similarityFuzzySlider").slider({
-                            tooltip: 'always'
-                        }).on('slide', function(slideEvt) {
+//                        $("#similarityFuzzySlider").slider({
+//                            tooltip: 'always'
+//                        }).on('slide', function(slideEvt) {
+//                            $("#similarityFuzzySlider").val(slideEvt.value);
+//                        });
+                        $("#similarityFuzzySlider").bind("slider:changed",function(event,data){
+                            var number = data.value.toFixed(2); //does not work ie<= 8.0
                             
-                            $("#similarityFuzzySliderVal").text(slideEvt.value);
-                            $("#similarityFuzzySlider").val(slideEvt.value);
-                            console.log($("#similarityFuzzySlider").val());
+                            $(this).val(number);
+                            console.log(number);
+                            $("#tresholdOutput").text(number);
                         });
                     });
 

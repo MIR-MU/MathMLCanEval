@@ -50,6 +50,7 @@ public interface FormulaService
     public static final String VALUE_DISTANCEMETHOD = "distanceMethodValue";
     public static final String VALUE_COUNTELEMENTMETHOD = "countElementMethodValue";
     public static final String VALUE_BRANCHMETHOD = "branchMethodValue";
+    public static final String DIRECT_WRITE = "directWrite";
 
     /**
      * Method creates given formula inside database.
@@ -192,7 +193,9 @@ public interface FormulaService
     
     void reindex();
     
-    List<Formula> findSimilar(Formula formula,Map<String,String> properties);
+    List<Formula> findSimilar(Formula formula,Map<String,String> properties,boolean override,boolean directWrite);
     
     void findSimilarMass(Map<String,String> properties);
+    
+    void attachSimilarFormulas(Formula formula, Long[] similarIDs,boolean override) throws IllegalArgumentException;
 }

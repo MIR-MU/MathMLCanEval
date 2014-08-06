@@ -74,11 +74,4 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     {
         return canonicOutputDAO.getCanonicOutputByParentFormula(formula);
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput, int skip, int maxResults)
-    {
-        return canonicOutputDAO.getSimilarCanonicOutputs(canonicOutput, skip, maxResults);
-    }
 }

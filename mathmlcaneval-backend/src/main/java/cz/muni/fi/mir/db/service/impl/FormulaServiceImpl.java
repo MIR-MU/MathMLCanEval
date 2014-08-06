@@ -401,9 +401,9 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = false)
-    public List<Formula> findSimilar(Formula formula,Map<String,String> properties)
+    public List<Formula> findSimilar(Formula formula,Map<String,String> properties,boolean override,boolean directWrite)
     {
-        return formulaDAO.findSimilar(formula,properties);
+        return formulaDAO.findSimilar(formula,properties,override,directWrite);
     }
 
     @Override
@@ -411,5 +411,61 @@ public class FormulaServiceImpl implements FormulaService
     public void findSimilarMass(Map<String,String> properties)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void attachSimilarFormulas(Formula formula, Long[] similarIDs, boolean override) throws IllegalArgumentException
+    {
+        if(formula == null)
+        {
+            throw new IllegalArgumentException("Input formula is null");
+        }
+        if(formula.getId() == null)
+        {
+            throw new IllegalArgumentException("Input formula does not have set its ID");
+        }
+        if(similarIDs == null)
+        {
+            throw new IllegalArgumentException("Input similarIDs is null");
+        }
+        
+        if(similarIDs.length > 0)
+        {
+            d("Size is > 0. Starting attaching.");
+            List<Formula> similarsToAdd = new ArrayList<>();
+            if(!override && formula.getSimilarFormulas() != null)
+            {
+                d("Override disabled, adding previous similar forms.");
+                similarsToAdd.addAll(formula.getSimilarFormulas());
+            } 
+            
+            for(Long id : similarIDs)
+            {   // because similar formulas are set
+                // as cascade refresh hibernate needs only IDs
+                Formula f  = EntityFactory.createFormula(id);
+                d("Adding following formula: "+f);
+                similarsToAdd.add(f);
+            }
+            
+            formula.setSimilarFormulas(similarsToAdd);
+            
+            d("Task done with following output to be set:" 
+                    + formula.getSimilarFormulas());
+            //todo x sublist addition
+            //so if A{w,x,y} where w,x,y are similar then set
+            // x{w,y,A} w{A,x,y} and y{w,x,A} as similar
+            formulaDAO.updateFormula(formula);
+        }
+    }
+    
+    
+    /**
+     * Method logs input with debug level into logger
+     * @param s to be logged
+     */
+    private void d(String s)
+    {
+        logger.debug(s);
     }
 }

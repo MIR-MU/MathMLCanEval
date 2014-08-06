@@ -62,7 +62,7 @@ public interface FormulaDAO
     
     void reindex();
     
-    List<Formula> findSimilar(Formula formula,Map<String,String> properties);
+    List<Formula> findSimilar(Formula formula,Map<String,String> properties,boolean override,boolean directWrite);
     
     void findSimilarMass(Map<String,String> properties);
 }

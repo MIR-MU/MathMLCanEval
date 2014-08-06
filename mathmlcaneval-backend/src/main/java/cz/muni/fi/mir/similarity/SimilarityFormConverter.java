@@ -113,7 +113,7 @@ public class SimilarityFormConverter
      * @param input
      * @return
      */
-    private int getBranchMethod(String input)
+    private String getBranchMethod(String input)
     {
         Document doc = stringToDoc(input);
 
@@ -124,7 +124,9 @@ public class SimilarityFormConverter
             branchTravel(doc.getDocumentElement(), depth, mv);
         }
 
-        return mv.getValue();
+        // lucene works only with strings and numbers should be padded
+        // at least by reference manual
+        return org.apache.commons.lang3.StringUtils.leftPad(Integer.toString(mv.getValue()), 4, "0");
     }
 
     /**

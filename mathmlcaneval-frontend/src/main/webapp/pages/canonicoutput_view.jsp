@@ -8,98 +8,117 @@
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">  
         <div class="modal fade" id="findSimilarModal" tabindex="-1" role="dialog" aria-labelledby="findSimilarModal" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form:form modelAttribute="findSimilarForm" action="${pageContext.request.contextPath}/formula/similar/" method="POST">
                         <input type="hidden" value="<c:out value="${formulaEntry.parents[0].id}" />" name="formulaID" />
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            <h4 class="modal-title" id="myModalLabel"><spring:message code="general.label.title.similarity.match" /></h4>
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <h2>Distance method</h2>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-8">
-                                    <input id="similarityFuzzySlider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="1" data-slider-step="0.1" data-slider-value="0.5" name="distanceMethodValue" />
-                                    <!--<input type="hidden" name="distanceTreshold" id="distanceTreshold"/>name="distanceTreshold"-->
+                                    <h3 class="disable-top-margin"><spring:message code="similarity.method.distance" /></h3>
+
                                 </div>
                                 <div class="col-md-4">
-                                    <span id="similarityFuzzySliderVal">0.5</span>
+                                    <div class="pull-right">
+                                        <spring:message code="general.label.method.use" /> <form:checkbox path="useDistance" cssClass="form-control-checkbox"/> 
+                                    </div>                                    
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-8">
-                                    !Use this method: <form:checkbox path="useDistance" />
+                                <div class="col-md-8 col-md-offset-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4 class="disable-top-margin"><spring:message code="similarity.method.distance.treshold" /></h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input 
+                                                id="similarityFuzzySlider"
+                                                name="distanceMethodValue" 
+                                                data-slider="true"
+                                                data-slider-range="0,1"
+                                                data-slider-step="0.05"
+                                                data-slider-theme="volume"
+                                                />
+                                        </div>
+                                        <div class="col-md-2" id="tresholdOutput">
+                                            0.00
+                                        </div>
+                                    </div>                                    
                                 </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h3 class="disable-top-margin"><spring:message code="similarity.method.count" /></h3>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="pull-right">
+                                        <spring:message code="general.label.method.use" /> <form:checkbox path="useCount" cssClass="form-control-checkbox"/> 
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-4">
                                     <form:select path="distanceCondition" cssClass="form-control">
-                                        <form:option value="AND" label="and" />
-                                        <form:option value="OR" label="or" />
-                                    </form:select>
+                                        <form:option value="must"><spring:message code="general.label.logic.and" /></form:option>
+                                        <form:option value="should"><spring:message code="general.label.logic.or" /></form:option>
+                                    </form:select>                                                                   
+                                </div>
+                                <div class="col-md-8">                                  
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4 class="disable-top-margin"><spring:message code="similarity.method.count.profile" /></h4>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <form:select path="countElementMethodValue" cssClass="form-control">
+                                                <form:option value="must"><spring:message code="similarity.method.count.must" /></form:option>
+                                                <form:option value="should"><spring:message code="similarity.method.count.should" /></form:option>
+                                            </form:select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <hr />
                             <div class="row">
-                                <div class="col-md-12">
-                                    <h2>Element count method</h2>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    !mode
-                                </div>
-                                <div class="col-md-6">
-                                    <form:select path="countElementMethodValue" cssClass="form-control">
-                                        <form:option value="EXACT" label="exact" />
-                                        <form:option value="MIXED" label="mixed" />
-                                    </form:select>
-                                </div>
-                            </div>   
-                            <div class="row">
                                 <div class="col-md-8">
-                                    !Use this method: <form:checkbox path="useCount" />
+                                    <h3 class="disable-top-margin"><spring:message code="similarity.method.branch" /></h3>
                                 </div>
                                 <div class="col-md-4">
+                                    <div class="pull-right">
+                                        <spring:message code="general.label.method.use" /> <form:checkbox path="useBranch" cssClass="form-control-checkbox" /> 
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
                                     <form:select path="countCondition" cssClass="form-control">
-                                        <form:option value="AND" label="and" />
-                                        <form:option value="OR" label="or" />
-                                    </form:select>
+                                        <form:option value="must"><spring:message code="general.label.logic.and" /></form:option>
+                                        <form:option value="should"><spring:message code="general.label.logic.or" /></form:option>
+                                    </form:select>                                                                                                             
                                 </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h2>Branch method</h2>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    !mode
-                                </div>
-                                <div class="col-md-6">
-                                    <form:input cssClass="form-control" path="branchMethodValue" />
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-8">
-                                    !Use this method: <form:checkbox path="useBranch" />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4 class="disable-top-margin"><spring:message code="similarity.method.branch.value" /></h4>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <form:input cssClass="form-control" path="branchMethodValue" />
+                                        </div>
+                                    </div>                                    
                                 </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-8">
-                                    !replace old similar forms: <form:checkbox path="override" />
+                                <div class="row">
+                                    <div class="col-md-6"><spring:message code="similarity.override" /> <form:checkbox path="override" /></div>
+                                    <div class="col-md-6"><spring:message code="similarity.direct.import" /><form:checkbox path="directWrite" /></div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit" />
-                            <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="general.label.close" /></button>
+                            <input type="submit" class="btn btn-default" value="<spring:message code="general.button.submit" />"/>
                         </div>
                     </div>
                 </form:form>
@@ -111,7 +130,6 @@
                 <button class="btn btn-primary" data-toggle="modal" data-target="#findSimilarModal">
                     <spring:message code="entity.canonicOutput.findSimilar" />
                 </button>
-                <!--                <a href="${pageContext.request.contextPath}/canonicoutput/similar/${formulaEntry.id}" class="btn btn-primary"><spring:message code="entity.canonicOutput.findSimilar" /></a>-->
                 <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                     <a href="${pageContext.request.contextPath}/canonicoutput/delete/${formulaEntry.id}" class="btn btn-danger"><spring:message code="general.label.delete" /></a>
                 </sec:authorize>
@@ -169,25 +187,6 @@
                                         <div class="col-md-2"><span class="btn btn-warning" id="annotate-remove"><span class="glyphicon glyphicon-remove"></span></span></div>
                                     </div>
                                 </form:form>
-                                <%--
-                                <form:form method="post" action="${pageContext.request.contextPath}/canonicoutput/annotate/" commandName="annotationForm" cssClass="form-horizontal">
-                                <input type="hidden" name="canonicOutputId" value="${formulaEntry.id}" />
-                                <table class="table table-bordered table-striped" style="table-layout: fixed;"><tbody>
-                                <c:forEach items="${annotationFlagList}" var="flag">
-                                    <tr><td><sec:authorize access="hasRole('ROLE_USER')">
-                                        <form:radiobutton path="annotationFlagForm" value="${flag.id}" />
-                                        </sec:authorize> ${flag.flagValue}</td>
-                                        <td><div class="progress-bar" style="width: <c:out value="${annotationFlagHits[flag.id] * 100.0 / totalAnnotations}" default="0" />%;" title="${annotationFlagHits[flag.id]}">&nbsp;</div></td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody></table>
-                                <sec:authorize access="hasRole('ROLE_USER')">
-                                <div class="panel-footer">
-                                    <form:input style="width: 80%;" path="note" placeholder="Note" />
-                                    <button type="submit" class="btn btn-primary btn-sm pull-right"><spring:message code="general.button.submit" /></button>
-                                </div>
-                                </sec:authorize>
-                                </form:form>--%>
                             </div>
                         </div>
                     </div>

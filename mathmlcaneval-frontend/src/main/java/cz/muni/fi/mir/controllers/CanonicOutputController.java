@@ -116,17 +116,4 @@ public class CanonicOutputController
         
         return "{ \"user\": \""+securityContext.getLoggedEntityUser().getUsername()+"\", \"note\" : \""+note+"\"}";
     }
-
-    @RequestMapping(value = {"/similar/{id}","/similar/{id}/"},method = RequestMethod.GET)
-    public ModelAndView searchResults(@ModelAttribute("pagination") Pagination pagination, @PathVariable Long id, Model model)
-    {
-        CanonicOutput canonicOutput = canonicOutputService.getCanonicOutputByID(id);        
-        ModelMap mm = new ModelMap();
-        mm.addAttribute("pagination", pagination);
-        mm.addAttribute("reference", canonicOutput);
-        mm.addAttribute("outputList", canonicOutputService.getSimilarCanonicOutputs(canonicOutput, 
-                (pagination.getPageNumber() - 1) * pagination.getPageSize(), pagination.getPageSize()));
-
-        return new ModelAndView("canonicoutput_list",mm);
-    }
 }

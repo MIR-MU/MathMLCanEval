@@ -116,36 +116,4 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
         
         return resultList;
     }
-
-    @Override
-    public List<CanonicOutput> getSimilarCanonicOutputs(CanonicOutput canonicOutput, int skip, int maxResults)
-    {
-        QueryBuilder qb = getFullTextEntityManager().getSearchFactory().buildQueryBuilder().forEntity(CanonicOutput.class).get();
-        
-//        org.apache.lucene.search.Query luceneQuery = qb.bool()
-//                .must(qb.keyword().fuzzy()
-//                    .withThreshold(.8f)
-//                    .withPrefixLength(1)
-//                    .onField("similarForm").matching(canonicOutput.getSimilarForm())
-//                    .createQuery())
-//                .must(qb.keyword()
-//                    .onField("id").matching(canonicOutput.getId()).createQuery()).not()
-//        .createQuery();
-
-//        FullTextQuery fullTextQuery = getFullTextEntityManager().createFullTextQuery(luceneQuery, CanonicOutput.class);
-//        fullTextQuery.setFirstResult(skip);
-//        if (maxResults > 0)
-//        {
-//            fullTextQuery.setMaxResults(maxResults);
-//        }
-//
-//        return fullTextQuery.getResultList();
-        
-        return null;
-    }
-
-    private FullTextEntityManager getFullTextEntityManager()
-    {
-        return Search.getFullTextEntityManager(entityManager);
-    }
 }

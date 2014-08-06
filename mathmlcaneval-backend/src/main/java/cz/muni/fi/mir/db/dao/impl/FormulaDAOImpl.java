@@ -23,6 +23,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -31,6 +33,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.BooleanJunction;
+import org.hibernate.search.query.dsl.MustJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -48,6 +52,7 @@ public class FormulaDAOImpl implements FormulaDAO
     private SimilarityFormConverter similarityFormConverter;
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaDAOImpl.class);
+    private static final Pattern p = Pattern.compile("\\d+");
     
     @Override
     public void createFormula(Formula formula)
@@ -293,50 +298,214 @@ public class FormulaDAOImpl implements FormulaDAO
     }
 
     @Override
-    public List<Formula> findSimilar(Formula formula,Map<String,String> properties)
+    public List<Formula> findSimilar(Formula formula,Map<String,String> properties,boolean override, boolean directWrite)
     {
-        Set<Formula> resultSet = new HashSet<>();
-        List<SimilarityForms> sFormsList = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        for(CanonicOutput co : formula.getOutputs())
-        {
-            SimilarityForms sf = similarityFormConverter.process(co);
-            sb.append(sf.getDistanceForm()).append(" ");
-            sFormsList.add(sf);
-        }
+        // worst method i have ever written
+        // this one might need lot of rework later.
+        // because all values are stored in index rework into projection might be nice
+        // so we dont have to access db (like at the end of this method)
         
+//       {countCondition=AND, useBranch=false, 
+//       branchCondition=null, useOverride=false, 
+//       useDistance=true, branchMethodValue=, 
+//       countElementMethodValue=EXACT, 
+//       distanceCondition=AND, useCount=false, distanceMethodValue=0.8}
         
+        logger.info(properties);
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+        org.hibernate.search.jpa.FullTextQuery ftq = null;  // actual query hitting database
+        Set<Formula> resultSet = new HashSet<>();   
+        
+        List<Formula> distanceResult = new ArrayList<>();
+        List<Formula> countResult = new ArrayList<>();
+        List<Formula> branchResult = new ArrayList<>();
+        
+        SimilarityForms sf = similarityFormConverter.process(formula.getOutputs().get(0));
         
         QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder()
                 .forEntity(Formula.class)
+                .overridesForField("countElementForm", "countElementFormAnalyzer")          //we have to override default analyzer
                 .get();
         
-        org.apache.lucene.search.Query luceneQuery = qb
-                .keyword().fuzzy().withThreshold(Float.valueOf(properties.get(FormulaService.VALUE_DISTANCEMETHOD)))
-                .withPrefixLength(1)
-                .onField("distanceForm")
-                //.ignoreAnalyzer()
-                .ignoreFieldBridge()                //https://forum.hibernate.org/viewtopic.php?f=9&t=1008943
-                .matching(sb.toString())
-                .createQuery();
-        
-        org.hibernate.search.jpa.FullTextQuery ftq = fullTextEntityManager
-                .createFullTextQuery(luceneQuery, Formula.class);
-        
-        
-        
-        resultSet.addAll(ftq.getResultList());
-        List<Object[]> explains = ftq.setProjection("distanceForm",FullTextQuery.EXPLANATION).getResultList();
-        
-        for(Object[] o :explains)
+        org.apache.lucene.search.Query distanceFormQuery = null;
+        org.apache.lucene.search.Query countElementQuery = null;
+        org.apache.lucene.search.Query branchQuery = null;        
+      
+        // user selected that he wants use DISTANCE method
+        if(Boolean.valueOf(properties.get(FormulaService.USE_DISTANCE)))
         {
-            String form = (String) o[0];
-            Explanation e = (Explanation) o[1];
+            distanceFormQuery = qb
+                .keyword().fuzzy()
+                    .withThreshold(Float.valueOf(properties.get(FormulaService.VALUE_DISTANCEMETHOD)))
+                    .withPrefixLength(1)
+                    .onField("distanceForm")
+                    //.ignoreAnalyzer()
+                    .ignoreFieldBridge()                //https://forum.hibernate.org/viewtopic.php?f=9&t=1008943
+                    .matching(sf.getDistanceForm())
+                    .createQuery();
             
-            logger.info(form+"\n"+e);
+            logger.debug("Distance query:"+distanceFormQuery.toString());
+            
+            ftq = fullTextEntityManager
+                .createFullTextQuery(distanceFormQuery, Formula.class);
+            
+            distanceResult.addAll(ftq.getResultList());
         }
+        
+        
+        // user selected that he wants COUNT method
+        if(Boolean.valueOf(properties.get(FormulaService.USE_COUNT)))
+        {
+            // TODO exact / partial match from FormulaService.VALUE_COUNTELEMENTMETHOD
+            // need rework because tokens are treated  should instead of must
+            countElementQuery = 
+                qb.keyword().onField("countElementForm")
+                        .ignoreFieldBridge()
+                        .matching(sf.getCountForm()).createQuery();
+            
+            logger.debug("Count element query:" + countElementQuery.toString());
+            
+            ftq = fullTextEntityManager
+                .createFullTextQuery(countElementQuery, Formula.class);
+            
+            countResult.addAll(ftq.getResultList());
+        }
+        
+        
+        // user selected that he wants BRANCH method
+        if(Boolean.valueOf(properties.get(FormulaService.USE_BRANCH)))
+        {
+            // we obtain user input from form which might be variable A
+            // case A = exact length
+            // case -A = [currentLength-A;currentLength]
+            // cae +A = [currentLength;currentLength+A]
+            // case +-A = [currentLength-A;currentLength+A]
+            // case -+A = same as above
+            String input = properties.get(FormulaService.VALUE_BRANCHMETHOD);
+            //we substract number from input
+            Matcher m = p.matcher(input);
+            m.find();
+            int difference = Integer.parseInt(m.group()); // the difference from inpitu
+            
+            boolean from = input.contains("-");                                 // flag for case -A
+            boolean to = input.contains("+");                                   // flag for case +A
+            int branchLength = Integer.parseInt(sf.getLongestBranch());         // current length of formula
+            
+            // case +- A || -+ A
+            if(from && to)
+            {
+                branchQuery = qb.range().onField("longestBranch")
+                        .from(branchLength-difference)
+                        .to(branchLength+difference)
+                        .createQuery();
+            }
+            // case -A
+            else if(from && !to)
+            {
+                branchQuery = qb.range().onField("longestBranch")
+                        .from(branchLength-difference)
+                        .to(branchLength)
+                        .createQuery();
+            }
+            
+            // case +A
+            else if(!from && to)
+            {
+                branchQuery = qb.range().onField("longestBranch")
+                        .from(branchLength)
+                        .to(branchLength+difference)
+                        .createQuery();
+            }
+            // case A
+            else
+            {
+                branchQuery = qb.keyword().onField("longestBranch")
+                        .matching(branchLength)
+                        .createQuery();
+            }   
+            
+            logger.debug("Branch query: "+branchQuery.toString());
+            
+            ftq = fullTextEntityManager
+                .createFullTextQuery(branchQuery, Formula.class);
+            
+            branchResult.addAll(ftq.getResultList());
+            
+        }
+        
+        
+        if(!distanceResult.isEmpty() && "AND".equalsIgnoreCase(properties.get(FormulaService.CONDITION_DISTANCE)))
+        {
+            resultSet.addAll(distanceResult);
+        }
+        
+        if(!countResult.isEmpty())
+        {
+            if("AND".equalsIgnoreCase(properties.get(FormulaService.CONDITION_COUNT)))
+            {
+                resultSet.retainAll(countResult);
+            }
+            else
+            {
+                resultSet.addAll(countResult);
+            }
+        }
+        
+        if(!branchResult.isEmpty())
+        {
+            if("AND".equalsIgnoreCase(properties.get(FormulaService.CONDITION_BRANCH)))
+            {
+                resultSet.retainAll(branchResult);
+            }
+            else
+            {
+                resultSet.addAll(branchResult);
+            }
+        }
+        
+        
+        //resultSet.addAll(ftq.getResultList());
+//        List<Object[]> explains = ftq.setProjection("distanceForm","countElementForm",FullTextQuery.EXPLANATION).getResultList();
+//        
+//        for(Object[] o :explains)
+//        {
+//            String form = (String) o[0];
+//            String form2 = (String) o[1];
+//            Explanation e = (Explanation) o[2];
+//            
+//            logger.info(form+"$"+form2+"\n"+e);
+//        }
      
+        // formula itself shouldnt be between results
+        resultSet.remove(formula);
+        
+        // we would like to write results immediately
+        if(directWrite)
+        {   // override old results ?
+            if(override)
+            {
+                formula.setSimilarFormulas(new ArrayList<>(resultSet));
+            }
+            else
+            {   // check if null and append to earlier
+                List<Formula> similars = new ArrayList<>();
+                if(formula.getSimilarFormulas() != null)
+                {
+                    similars.addAll(formula.getSimilarFormulas());
+                    similars.addAll(resultSet);
+                    
+                    formula.setSimilarFormulas(similars);
+                }
+                else
+                {
+                    similars.addAll(resultSet);
+                    
+                    formula.setSimilarFormulas(similars);
+                }
+            }
+            // update
+            updateFormula(formula);
+        }
         
         return new ArrayList<>(resultSet);                
     }

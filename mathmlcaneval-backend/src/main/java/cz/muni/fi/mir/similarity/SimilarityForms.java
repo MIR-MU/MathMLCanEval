@@ -9,14 +9,14 @@ public class SimilarityForms
     private String defaultForm;
     private String distanceForm;
     private String countForm;
-    private int longestBranch;
+    private String longestBranch;
 
-    public int getLongestBranch()
+    public String getLongestBranch()
     {
         return longestBranch;
     }
 
-    public void setLongestBranch(int longestBranch)
+    public void setLongestBranch(String longestBranch)
     {
         this.longestBranch = longestBranch;
     }

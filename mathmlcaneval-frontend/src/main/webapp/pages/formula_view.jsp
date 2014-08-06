@@ -176,15 +176,25 @@
                             </table>
                         </c:if>
                     </div>
-
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><spring:message code="entity.formula.equivalent" /></div>
-                        <div class="panel-body">
-                            <!-- Equivalent formulae -->
-                            <div class="row">
-                            </div>
+                    <c:if test="${fn:length(formulaEntry.similarFormulas) > 0}">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><spring:message code="entity.formula.equivalent" /></div>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th><spring:message code="general.field.id" /></th>
+                                        <th><spring:message code="entity.formula.rendered" /></th>
+                                    </tr>
+                                </thead>
+                                <c:forEach items="${formulaEntry.similarFormulas}" var="entry">
+                                    <tr>
+                                        <td><a href="${pageContext.request.contextPath}/formula/view/<c:out value="${entry.id}" />/"><c:out value="${entry.id}" /></a></td>
+                                        <td><c:out value="${entry.xml}" escapeXml="false" /></td>
+                                    </tr>
+                                </c:forEach>
+                            </table>
                         </div>
-                    </div>
+                    </c:if>
                 </div>
             </div>
 

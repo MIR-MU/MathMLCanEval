@@ -334,33 +334,50 @@ public class FormulaController
         return new ModelAndView("redirect:/");
     }
     
-    
-//    @RequestMapping(value = {"/similar/{id}/{treshold}/","/similar/{id}/{treshold}"},method = RequestMethod.GET)
-//    public ModelAndView findSimilar(@PathVariable Long id,@PathVariable(value = "treshold") String treshold)
-//    {
-//        //logger.info(formulaService.findSimilar(formulaService.getFormulaByID(id)));
-//        float defaultTreshold = 0.8f;
-//        if(treshold != null && treshold.length() > 0)
-//        {
-//            defaultTreshold = Long.valueOf(treshold);
-//        }
-//        
-//        logger.info(formulaService.findSimilar(formulaService.getFormulaByID(id), defaultTreshold));
-//        
-//        return new ModelAndView("redirect:/");
-//    }
-    
     @RequestMapping(value = {"/similar/","/similar"},method = RequestMethod.POST)
     public ModelAndView submitFindSimilar(@ModelAttribute(value = "findSimilarForm") FindSimilarForm form)
     {
         logger.info(form);
         
-        formulaService.findSimilar(
-                formulaService.getFormulaByID(form.getFormulaID()), 
-                generateSimilarityProperties(form)
+        Formula requestFormula = formulaService.getFormulaByID(form.getFormulaID());
+        List<Formula> similars = formulaService.findSimilar(
+                requestFormula, 
+                generateSimilarityProperties(form),
+                form.isOverride(),
+                form.isDirectWrite()
         );
         
-        return new ModelAndView("redirect:/formula/view/"+form.getFormulaID());
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("similarForms", similars);
+        mm.addAttribute("requestFormula", requestFormula);
+        
+        logger.info(similars);
+        if(form.isDirectWrite())
+        {
+            return new ModelAndView("redirect:/formula/view/"+requestFormula.getId());
+        }
+        else
+        {
+            return new ModelAndView("find_similar_checkout",mm);
+        }        
+    }
+    
+    
+    @RequestMapping(value = {"/submitsimilar/","/submitsimilar"},method = RequestMethod.POST)
+    public ModelAndView submitSimilarFormulas(@RequestParam(value = "similarFormulaID") String[] similarIds,
+            @RequestParam(value = "requestFormula") String formulaID,
+            @RequestParam(value = "overrideCurrent",defaultValue = "off") String overrideCurrent
+    )
+    {
+        Long[] ids = new Long[similarIds.length];
+        for(int i =0; i < similarIds.length;i++)
+        {
+            ids[i] = Long.valueOf(similarIds[i]);
+        }
+        
+        formulaService.attachSimilarFormulas(formulaService.getFormulaByID(Long.valueOf(formulaID)), ids,checkBoxToBool(overrideCurrent));
+        
+        return new ModelAndView("redirect:/formula/view/"+formulaID);
     }
     
     
@@ -381,7 +398,29 @@ public class FormulaController
         properties.put(FormulaService.VALUE_DISTANCEMETHOD,findSimilarForm.getDistanceMethodValue());
         properties.put(FormulaService.VALUE_COUNTELEMENTMETHOD,findSimilarForm.getCountElementMethodValue());
         properties.put(FormulaService.VALUE_BRANCHMETHOD,findSimilarForm.getBranchMethodValue());
+        properties.put(FormulaService.DIRECT_WRITE,Boolean.toString(findSimilarForm.isDirectWrite()));
         
         return properties;
+    }
+    
+    
+    /**
+     * Method converts checkbox default html value into boolean. if value is on then 
+     * output is true, otherwise input should be off which is false
+     * @param value to be converted
+     * @return boolean value mapped as follows {on->true, off->false}
+     * @throws IllegalArgumentException if input is neither <i>on</i> or <i>off</i>
+     */
+    private boolean checkBoxToBool(String value) throws IllegalArgumentException
+    {
+        switch (value)
+        {
+            case "on":
+                return true;
+            case "off":
+                return false;
+            default:
+                throw new IllegalArgumentException("Wrong input expecting [on/off] was ["+value+"]");
+        }
     }
 }
