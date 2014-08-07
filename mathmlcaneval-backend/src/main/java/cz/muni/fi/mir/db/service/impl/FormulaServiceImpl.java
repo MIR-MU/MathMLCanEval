@@ -151,10 +151,15 @@ public class FormulaServiceImpl implements FormulaService
     @Override
     @Transactional(readOnly = false)
     @Async
-    public void massFormulaImport(String path, String filter, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument)
+    public void massFormulaImport(String path, String filter, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument, User user)
     {
+        if(user == null)
+        {
+            throw new IllegalArgumentException("User is null");
+        }
         ApplicationRun applicationRun = EntityFactory.createApplicationRun();
-        applicationRun.setUser(securityContext.getLoggedEntityUser());
+        applicationRun.setUser(user);
+        logger.info(applicationRun.getUser());
         applicationRun.setRevision(revision);
         applicationRun.setConfiguration(configuration);
 
@@ -169,7 +174,6 @@ public class FormulaServiceImpl implements FormulaService
         }
         if (!toImport.isEmpty())
         {
-//            applicationRunDAO.createApplicationRunWithFlush(applicationRun);
             logger.fatal("Attempt to create Application Run with flush mode to ensure its persisted.");
             applicationRunDAO.createApplicationRunWithFlush(applicationRun);
             logger.fatal("Operation withFlush called.");
@@ -183,6 +187,7 @@ public class FormulaServiceImpl implements FormulaService
                 {
                     f.setHashValue(hash);
                     f.setProgram(program);
+                    f.setUser(user);
                     f.setSourceDocument(sourceDocument);
 
                     extractElements(f);
@@ -200,7 +205,7 @@ public class FormulaServiceImpl implements FormulaService
 
             if(filtered.isEmpty())
             {
-                logger.info("No formulas are going to be imported because they are already presented.");
+                logger.warn("No formulas are going to be imported because they are already presented.");
             }
             
             mathCanonicalizerLoader.execute(filtered, applicationRun);
@@ -262,10 +267,14 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = false)
-    public void simpleFormulaImport(String formulaXmlContent, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument)
+    public void simpleFormulaImport(String formulaXmlContent, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument,User user)
     {
+        if(user == null)
+        {
+            throw new IllegalArgumentException("User is null");
+        }
         ApplicationRun appRun = EntityFactory.createApplicationRun();
-        appRun.setUser(securityContext.getLoggedEntityUser());
+        appRun.setUser(user);
         appRun.setRevision(revision);
         appRun.setConfiguration(configuration);
 
@@ -275,7 +284,7 @@ public class FormulaServiceImpl implements FormulaService
         f.setOutputs(new ArrayList<CanonicOutput>());
         f.setXml(formulaXmlContent);
         f.setInsertTime(DateTime.now());
-        f.setUser(securityContext.getLoggedEntityUser());
+        f.setUser(user);
         f.setHashValue(Tools.getInstance().SHA1(f.getXml()));
 
         extractElements(f);

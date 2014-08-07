@@ -135,9 +135,9 @@
                 </sec:authorize>
             </div>
             <div class="row pull-top-50">
-                <div class="col-lg-12">
+                <div class="col-md-12">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="panel panel-primary">
                                 <!-- Formula details -->
                                 <div class="panel-heading"><spring:message code="general.label.details" /></div>
@@ -162,7 +162,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="panel panel-primary">
                                 <!-- Annotations (view & add) -->
                                 <div class="panel-heading"><spring:message code="entity.canonicOutput.annotations" /></div>
@@ -203,23 +203,23 @@
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="canonicalized">
-                                            <div class="col-lg-6">
+                                            <div class="col-md-6">
                                                 <pre class="brush: xml">
                                                     <c:out value="${formulaEntry.outputForm}" />
                                                 </pre>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-md-6">
                                                 <c:out value="${formulaEntry.outputForm}" escapeXml="false" />
                                             </div>
                                         </div>
 
                                         <div class="tab-pane" id="original">
-                                            <div class="col-lg-6">
+                                            <div class="col-md-6">
                                                 <pre class="brush: xml">
                                                     <c:out value="${formulaEntry.parents[0].xml}" />
                                                 </pre>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-md-6">
                                                 <c:out value="${formulaEntry.parents[0].xml}" escapeXml="false" />
                                             </div>
                                         </div>

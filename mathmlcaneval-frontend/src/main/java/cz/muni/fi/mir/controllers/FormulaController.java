@@ -112,6 +112,7 @@ public class FormulaController
     @RequestMapping(value = {"/create", "/create/"}, method = RequestMethod.POST)
     public ModelAndView createFormulaSubmit(@Valid @ModelAttribute("formulaForm") FormulaForm formulaForm, BindingResult result, Model model) throws IOException
     {
+        logger.info(securityContext.getLoggedEntityUser());
         if (result.hasErrors())
         {
             ModelMap mm = prepareModelMap(true, true, true, true);            
@@ -131,7 +132,8 @@ public class FormulaController
                             mapper.map(formulaForm.getRevisionForm(), Revision.class), 
                             mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
                             mapper.map(formulaForm.getProgramForm(),Program.class), 
-                            mapper.map(formulaForm.getSourceDocumentForm(),SourceDocument.class));
+                            mapper.map(formulaForm.getSourceDocumentForm(),SourceDocument.class),
+                            securityContext.getLoggedEntityUser());
                 }
             }
 
@@ -152,7 +154,8 @@ public class FormulaController
                                 mapper.map(formulaForm.getRevisionForm(), Revision.class), 
                                 mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
                                 mapper.map(formulaForm.getProgramForm(),Program.class), 
-                                mapper.map(formulaForm.getSourceDocumentForm(),SourceDocument.class));
+                                mapper.map(formulaForm.getSourceDocumentForm(),SourceDocument.class),
+                                securityContext.getLoggedEntityUser());
                         }
                     }
                 } catch (IOException ex)
@@ -264,13 +267,14 @@ public class FormulaController
             {
                 logger.error(sre);
             }
-            
+            logger.info(securityContext.getLoggedEntityUser());
             // @Async call
             formulaService.massFormulaImport(path, filter, 
                     mapper.map(formulaForm.getRevisionForm(), Revision.class), 
                     mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
                     mapper.map(formulaForm.getProgramForm(), Program.class),
-                    mapper.map(formulaForm.getSourceDocumentForm(), SourceDocument.class));
+                    mapper.map(formulaForm.getSourceDocumentForm(), SourceDocument.class),
+                    securityContext.getLoggedEntityUser());
             
             return new ModelAndView("redirect:/formula/list/");
         }

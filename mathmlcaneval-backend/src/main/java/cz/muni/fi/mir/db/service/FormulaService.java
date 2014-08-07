@@ -92,7 +92,9 @@ public interface FormulaService
      * with level INFO is logged. Method creates ApplicationRun out of revision
      * and configuration and then calls 
      * {@link #massFormulaImport(java.lang.String, java.lang.String, cz.muni.fi.mir.db.domain.ApplicationRun, cz.muni.fi.mir.db.domain.Program, cz.muni.fi.mir.db.domain.SourceDocument)
-     * }.
+     * }. Because method is annotated by @Async security context is not propagated
+     * into any newly created sub threads we need to pass logged user (Obtained
+     * one via SecurityContext fascade would be null)
      *
      * @param path root directory of mass import.
      * @param filter regular expression against which files will be matched.
@@ -101,8 +103,9 @@ public interface FormulaService
      * @param configuration configuration for canonicalizer.
      * @param program program by which formula was created.
      * @param sourceDocument source document of formula..
+     * @param user that started the import
      */
-    void massFormulaImport(String path, String filter, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument);
+    void massFormulaImport(String path, String filter, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument, User user);
 
     /**
      * Method does the same as {@link #massFormulaImport(java.lang.String, java.lang.String, cz.muni.fi.mir.db.domain.Revision, cz.muni.fi.mir.db.domain.Configuration, cz.muni.fi.mir.db.domain.Program, cz.muni.fi.mir.db.domain.SourceDocument)
@@ -114,8 +117,9 @@ public interface FormulaService
      * @param configuration configuration for canonicalizer.
      * @param program program by which formula was created.
      * @param sourceDocument source document of formula..
+     * @param user user that started the import
      */
-    void simpleFormulaImport(String formulaXmlContent, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument);
+    void simpleFormulaImport(String formulaXmlContent, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument,User user);
 
     /**
      * Method fetches all Formulas from database and extracts all

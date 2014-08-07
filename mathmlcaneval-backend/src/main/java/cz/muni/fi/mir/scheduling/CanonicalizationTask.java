@@ -59,8 +59,6 @@ public class CanonicalizationTask implements Runnable
     private ApplicationRunService applicationRunService;
     @Autowired
     private MailService mailService;
-    
-    private SimilarityFormConverter similarityFormConverter;
 
     private static final Logger logger = Logger.getLogger(CanonicalizationTask.class);
 

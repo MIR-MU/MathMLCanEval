@@ -7,6 +7,8 @@ package cz.muni.fi.mir.controllers;
 import cz.muni.fi.mir.db.service.StatisticsService;
 import cz.muni.fi.mir.similarity.SimilarityFormConverterWrapper;
 import cz.muni.fi.mir.tools.GitPropertiesModel;
+import cz.muni.fi.mir.wrappers.SecurityContextFacade;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,13 +23,18 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController
 {
+    private static final Logger logger = Logger.getLogger(MainController.class);
     @Autowired private StatisticsService statisticsService;
+    @Autowired
+    private SecurityContextFacade securityContext;
     
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView handleIndex()
     {
         ModelMap mm = new ModelMap();
         mm.addAttribute("statistics", statisticsService.getStatistics());
+        logger.fatal(securityContext.getLoggedUser());
+        logger.fatal(securityContext.getLoggedEntityUser());
         return new ModelAndView("index",mm);
     }
     

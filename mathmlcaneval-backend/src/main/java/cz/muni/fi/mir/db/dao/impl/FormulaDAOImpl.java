@@ -7,7 +7,6 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.FormulaDAO;
-import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
@@ -28,13 +27,9 @@ import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import org.apache.lucene.search.Explanation;
 import org.hibernate.Hibernate;
 import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
-import org.hibernate.search.query.dsl.BooleanJunction;
-import org.hibernate.search.query.dsl.MustJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -85,8 +80,8 @@ public class FormulaDAOImpl implements FormulaDAO
     {
         Formula f = entityManager.find(Formula.class, id);
         if(f != null)
-        {
-            Hibernate.initialize(f.getAnnotations());
+        {            
+            Hibernate.initialize(f);
         }       
         
         return f;
