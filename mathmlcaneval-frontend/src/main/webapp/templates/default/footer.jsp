@@ -5,7 +5,7 @@
     <hr />
     <footer>
         <div class="row">
-            <div class="col-lg-6"><p>&copy; MIR&#64;MU 2013-2014</p></div>
+            <div class="col-lg-6"><p>&copy; MIR&#64;MU 2013-2014 &#64;Rev: <c:out value="${gitPropertiesModel.commitIdAbbrev}" /></p></div>
             <div class="col-lg-6">
                 <form id="language" method="GET" class="pull-right">
                     <select name="lang" onchange="this.form.submit()" class="form-control">

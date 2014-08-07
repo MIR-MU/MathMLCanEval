@@ -22,15 +22,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController
 {
     @Autowired private StatisticsService statisticsService;
-    @Autowired private GitPropertiesModel gitProperties;
-    @Autowired private SimilarityFormConverterWrapper wrapper;
     
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView handleIndex()
     {
         ModelMap mm = new ModelMap();
         mm.addAttribute("statistics", statisticsService.getStatistics());
-        mm.addAttribute("gitProperties", gitProperties);
         return new ModelAndView("index",mm);
     }
     

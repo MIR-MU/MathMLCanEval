@@ -50,6 +50,7 @@
         <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
             p:paramName="lang"
         />
+        <bean id="customInterceptor" class="cz.muni.fi.mir.tools.CustomPageInterceptor" />
     </mvc:interceptors>
    
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
