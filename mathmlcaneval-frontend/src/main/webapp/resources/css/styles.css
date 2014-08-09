@@ -52,7 +52,7 @@ and open the template in the editor.
 
 .preview
 {
-    width: 200px;
+/*    width: 200px;*/
     height: 50px;
     overflow: hidden;
     color: black;
@@ -96,4 +96,17 @@ footer
   -moz-transform: scale(1.2); /* FF */
   -webkit-transform: scale(1.2); /* Safari and Chrome */
   -o-transform: scale(1.2); /* Opera */
+}
+
+/* default override */
+.img-thumbnail
+{
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.formula-delete-checked
+{
+    border-color: black;
+    border-width: 2px;
 }

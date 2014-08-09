@@ -244,7 +244,11 @@ public class FormulaController
     }
     
     @RequestMapping(value={"/mass","/mass/"},method = RequestMethod.POST)
-    public ModelAndView submitMassImport(HttpServletRequest request,@Valid @ModelAttribute("formulaForm") FormulaForm formulaForm, BindingResult result, Model model)
+    public ModelAndView submitMassImport(@RequestParam(value = "importPath") String path,
+            @RequestParam(value = "filter") String filter,
+            @Valid @ModelAttribute("formulaForm") FormulaForm formulaForm, 
+            BindingResult result, 
+            Model model)
     {
         if(result.hasErrors())
         {
@@ -256,18 +260,6 @@ public class FormulaController
         }
         else
         {
-            String path = null;
-            String filter = null;
-            try
-            {
-                path = ServletRequestUtils.getStringParameter(request, "importPath");
-                filter = ServletRequestUtils.getStringParameter(request, "filter");
-            }
-            catch(ServletRequestBindingException sre)
-            {
-                logger.error(sre);
-            }
-            logger.info(securityContext.getLoggedEntityUser());
             // @Async call
             formulaService.massFormulaImport(path, filter, 
                     mapper.map(formulaForm.getRevisionForm(), Revision.class), 
@@ -382,6 +374,36 @@ public class FormulaController
         formulaService.attachSimilarFormulas(formulaService.getFormulaByID(Long.valueOf(formulaID)), ids,checkBoxToBool(overrideCurrent));
         
         return new ModelAndView("redirect:/formula/view/"+formulaID);
+    }
+    
+    @RequestMapping(value = {"/massdelete","/massdelete/"},method = RequestMethod.GET)
+    public ModelAndView massDelete(@ModelAttribute("pagination") Pagination pagination, Model model)
+    {
+        if (pagination.getNumberOfRecords() == 0) {
+            pagination.setNumberOfRecords(formulaService.getNumberOfRecords());
+        }
+
+        ModelMap mm = new ModelMap();
+        mm.addAttribute("pagination", pagination);
+        mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination.getPageSize() * (pagination.getPageNumber() - 1), pagination.getPageSize()));
+        mm.addAttribute("massDelete", true);
+
+        return new ModelAndView("formula_mass_delete",mm);
+    }
+    
+    @RequestMapping(value={"/massdelete","/massdelete/"},method = RequestMethod.POST)
+    public ModelAndView massDelete(@RequestParam(value = "formulaDeleteID") String[] formulaDeleteIDs)
+    {
+        List<Formula> toDelete = new ArrayList<>();
+        for(String s : formulaDeleteIDs)
+        {
+            toDelete.add(EntityFactory.createFormula(Long.valueOf(s)));
+        }
+        
+        formulaService.massRemove(toDelete);
+        
+        
+        return new ModelAndView("redirect:/formula/massdelete/");        
     }
     
     

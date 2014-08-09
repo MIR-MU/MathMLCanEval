@@ -70,7 +70,7 @@ public interface FormulaService
     void updateFormula(Formula formula) throws IllegalArgumentException;
 
     /**
-     * Method deletes formula from database.
+     * Method deletes formula from database. 
      *
      * @param formula to be deleted
      * @throws IllegalArgumentException if formula is null, or does not have
@@ -202,4 +202,6 @@ public interface FormulaService
     void findSimilarMass(Map<String,String> properties);
     
     void attachSimilarFormulas(Formula formula, Long[] similarIDs,boolean override) throws IllegalArgumentException;
+    
+    void massRemove(List<Formula> toBeRemoved);
 }

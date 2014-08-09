@@ -3,7 +3,6 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">
         <div class="container content">
@@ -18,38 +17,43 @@
                 </div>
             </div>
             <div class="row pull-top-50">
-                <div class="col-md-12">
-                    <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
-                        <div class="pull-right">
-                            <a href="${pageContext.request.contextPath}/formula/massdelete/" class="btn btn-warning"><spring:message code="general.label.massdelete" /></a>
-                        </div>
-                    </sec:authorize>
+
+            </div>
+            <form method="POST" action="${pageContext.request.contextPath}/formula/massdelete/">
+                <div class="row">               
+                    <c:choose>
+                        <c:when test="${fn:length(formulaList) gt 0}">
+                            <c:forEach items="${formulaList}" var="entry" varStatus="i">
+                                <c:if test="${not i.first and i.index % 4 == 0}">
+                                </div>
+                                <div class="row">
+                                </c:if>
+                                <div class="col-md-3 img-thumbnail">
+                                    <input type="checkbox" value="${entry.id}" style="display:none" name="formulaDeleteID" />
+                                    <a href="${pageContext.request.contextPath}/formula/view/${entry.id}">
+                                        <div class="preview text-center">
+                                            <c:out value="${entry.xml}" escapeXml="false" />
+                                        </div>
+                                    </a>
+                                </div>
+                            </c:forEach>
+
+                        </c:when>
+                        <c:otherwise>
+                            <div class="col-md-12 text-center">
+                                <h2 class="text-center"><spring:message code="general.table.norecords" /></h2>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
-            </div>
-            <div class="row">
-                <c:choose>
-                    <c:when test="${fn:length(formulaList) gt 0}">
-                        <c:forEach items="${formulaList}" var="entry" varStatus="i">
-                            <c:if test="${not i.first and i.index % 4 == 0}">
-                            </div>
-                            <div class="row">
-                            </c:if>
-                            <div class="col-md-3 img-thumbnail">
-                                <a href="${pageContext.request.contextPath}/formula/view/${entry.id}">
-                                    <div class="preview text-center">
-                                        <c:out value="${entry.xml}" escapeXml="false" />
-                                    </div>
-                                </a>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="col-md-12 text-center">
-                            <h2 class="text-center"><spring:message code="general.table.norecords" /></h2>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-center pull-top-50"> 
+                            <input type="submit" value="<spring:message code="entity.formula.button.massdelete"/>" class="btb btn-warning btn-lg"/>
                         </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                    </div>
+                </div>
+            </form>
             <!-- pagination -->
             <div class="text-center"> 
                 <form:form method="get" action="${pageContext.request.contextPath}/formula/list/" commandName="pagination">

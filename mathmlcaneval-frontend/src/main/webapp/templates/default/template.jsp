@@ -150,8 +150,8 @@
                                         $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note + "</td></tr>");
                                         $("#annotation-value").val('');
                                         formatHashTags(false);
-                                        if($("#annotationTable > tbody > tr:first").attr('class')==="empty-table")
-                                        {                                            
+                                        if ($("#annotationTable > tbody > tr:first").attr('class') === "empty-table")
+                                        {
                                             $("#annotationTable > tbody > tr:first").fadeOut(1200, function() {
                                                 $(this).remove();
                                             });
@@ -177,6 +177,23 @@
                             $(this).val(number);
                             $("#tresholdOutput").text(number);
                         });
+
+
+            <c:if test="${massDelete eq true}">
+                        $(".img-thumbnail").on('click', function(e) {
+
+                            if ($(this).hasClass('formula-delete-checked')) {
+                                $(this).removeClass('formula-delete-checked');
+                                $(this).children(':checkbox').first().attr('checked', false);
+
+                            } else {
+                                $(this).addClass('formula-delete-checked');
+                                $(this).children(':checkbox').first().attr('checked', true);
+                            }
+
+                            e.preventDefault();
+                        });
+            </c:if>
                     });
 
                     function getUserRolesHTML()

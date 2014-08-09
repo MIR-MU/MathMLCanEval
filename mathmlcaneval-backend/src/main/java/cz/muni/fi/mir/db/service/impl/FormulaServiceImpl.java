@@ -98,6 +98,10 @@ public class FormulaServiceImpl implements FormulaService
         {
             throw new IllegalArgumentException("Given formula does not have valid ID [" + formula.getId() + "].");
         }
+        for(CanonicOutput co : formula.getOutputs())
+        {
+            co.setApplicationRun(null);
+        }
 
         formulaDAO.deleteFormula(formula);
     }
@@ -476,5 +480,15 @@ public class FormulaServiceImpl implements FormulaService
     private void d(String s)
     {
         logger.debug(s);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void massRemove(List<Formula> toBeRemoved)
+    {
+        for(Formula f : toBeRemoved)
+        {            
+            formulaDAO.deleteFormula(f);
+        }
     }
 }

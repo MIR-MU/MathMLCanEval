@@ -25,6 +25,11 @@ public interface FormulaDAO
 
     void updateFormula(Formula formula);
 
+    /**
+     * Method deletes given formula from database. 
+     *
+     * @param formula to be deleted
+     */
     void deleteFormula(Formula formula);
 
     /**
@@ -59,10 +64,10 @@ public interface FormulaDAO
     int getNumberOfRecords();
 
     Long exists(String hash);
-    
+
     void reindex();
-    
-    List<Formula> findSimilar(Formula formula,Map<String,String> properties,boolean override,boolean directWrite);
-    
-    void findSimilarMass(Map<String,String> properties);
+
+    List<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite);
+
+    void findSimilarMass(Map<String, String> properties);
 }
