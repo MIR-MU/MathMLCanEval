@@ -10,6 +10,7 @@ import cz.muni.fi.mir.db.service.ApplicationRunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,6 +35,16 @@ public class ApplicationRunController
         
         
         return new ModelAndView("apprun_list",mm);
+    }
+    
+    
+    @RequestMapping(value = {"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
+    public ModelAndView deleteApplicationRun(@PathVariable Long id)
+    {
+        applicationRunService.deleteApplicationRun(applicationRunService.getApplicationRunByID(id),true,true);
+        
+        
+        return new ModelAndView("redirect:/appruns/");
     }
     
     

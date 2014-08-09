@@ -8,7 +8,7 @@ package cz.muni.fi.mir.services;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.scheduling.CanonicalizationTask;
-import cz.muni.fi.mir.scheduling.CanonicalizationTaskFactory;
+import cz.muni.fi.mir.scheduling.LongRunningTaskFactory;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -51,7 +51,7 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
     private AsyncTaskExecutor taskExecutor;
     
     @Autowired
-    private CanonicalizationTaskFactory canonicalizationTaskFactory;
+    private LongRunningTaskFactory canonicalizationTaskFactory;
 
     @Autowired
     private ApplicationContext applicationContext;

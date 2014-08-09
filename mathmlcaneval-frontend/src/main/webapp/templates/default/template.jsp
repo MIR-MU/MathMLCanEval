@@ -116,99 +116,65 @@
                         });
             </c:if>
 
-                        $("#annotate-isvalid").click(function(event) {
-                            $("#annotation-note").val($("#annotation-note").val() + " #isValid ");
+                        $(".annotation-option").click(function(e) {
+                            var currentValue = $("#annotation-value").val();
+                            var spacer = '';
+                            if (currentValue.trim().length > 0) {
+                                spacer = ' ';
+                            }
+
+                            $("#annotation-value").val(currentValue + spacer + $(this).attr('data-annotation'));
+                            e.preventDefault();
                         }).tooltip({
-                            placement: 'bottom',
+                            placement: 'right',
                             container: 'body',
-                            title: '<spring:message code="general.label.button.annotate.hint" />' + ' #isValid'
+                            title: '<spring:message code="general.label.button.annotate.hint" />' + ' ' + $(this).attr('data-annotation')
                         });
 
-                        $("#annotate-isinvalid").click(function() {
-                            $("#annotation-note").val($("#annotation-note").val() + " #isInvalid ");
-                        }).tooltip({
-                            placement: 'bottom',
-                            container: 'body',
-                            title: '<spring:message code="general.label.button.annotate.hint" />' + ' #isInvalid'
-                        });
 
-                        $("#annotate-uncertain").click(function() {
-                            $("#annotation-note").val($("#annotation-note").val() + " #uncertain ");
-                        }).tooltip({
-                            placement: 'bottom',
-                            container: 'body',
-                            title: '<spring:message code="general.label.button.annotate.hint" />' + ' #uncertain'
+                        $("#clear-form").on('click', function(e) {
+                            $("#annotation-value").val('');
+                            e.preventDefault();
                         });
-
-                        $("#annotate-remove").click(function() {
-                            $("#annotation-note").val($("#annotation-note").val() + " #removeResult ");
-                        }).tooltip({
-                            placement: 'bottom',
-                            container: 'body',
-                            title: '<spring:message code="general.label.button.annotate.hint" />' + ' #removeResult'
-                        });
-
-                        $("#annotate-formularemove").click(function() {
-                            $("#annotation").val($("#annotation").val() + " #formulaRemove ");
-                        }).tooltip({
-                            placement: 'bottom',
-                            container: 'body',
-                            title: '<spring:message code="general.label.button.annotate.hint" />' + ' #formulaRemove'
-                        });
-
-                        $("#annotate-formulameaningless").click(function() {
-                            $("#annotation").val($("#annotation").val() + " #formulaMeaningless ");
-                        }).tooltip({
-                            placement: 'bottom',
-                            container: 'body',
-                            title: '<spring:message code="general.label.button.annotate.hint" />' + ' #formulaMeaningless'
-                        });
-
 
                         var form = $("#annotationForm");
                         form.on("submit", function(event) {
-                            $.ajax({
-                                type: form.attr('method'),
-                                url: form.attr('action'),
-                                data: form.serialize(),
-                                dataType: 'json',
-                                success: function(data) {
-                                    $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note.replace(/(#\S+)/g, "<span class=\"hashtag\">$1</span>") + "</td></tr>");
-                                    $("#annotation-note").val('');
-                                    formatHashTags();
-                                }
-                            });
+                            if ($("#annotation-value").val().trim().length != 0)
+                            {
+                                $.ajax({
+                                    type: form.attr('method'),
+                                    url: form.attr('action'),
+                                    data: form.serialize(),
+                                    dataType: 'json',
+                                    success: function(data) {
+                                        $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note + "</td></tr>");
+                                        $("#annotation-value").val('');
+                                        formatHashTags(false);
+                                        if($("#annotationTable > tbody > tr:first").attr('class')==="empty-table")
+                                        {                                            
+                                            $("#annotationTable > tbody > tr:first").fadeOut(1200, function() {
+                                                $(this).remove();
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                alert('<spring:message code="validator.general.noinput" />');
+                                console.log('input empty');
+                            }
+
                             event.preventDefault();
                         });
 
-                        var formulaForm = $("#annotationFormulaForm");
-                        formulaForm.on("submit", function(event) {
-                            $.ajax({
-                                type: formulaForm.attr('method'),
-                                url: formulaForm.attr('action'),
-                                data: formulaForm.serialize(),
-                                dataType: 'json',
-                                success: function(data) {
-                                    console.log(data);
-                                    $("#formulaAnnotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note.replace(/(#\S+)/g, "<span class=\"hashtag\">$1</span>") + "</td></tr>");
-                                    $("#annotation").val('');
-                                    formatHashTags();
-                                }
-                            });
-                            event.preventDefault();
-                        });
-                        formatHashTags();
 
-//                        $("#similarityFuzzySlider").slider({
-//                            tooltip: 'always'
-//                        }).on('slide', function(slideEvt) {
-//                            $("#similarityFuzzySlider").val(slideEvt.value);
-//                        });
-                        $("#similarityFuzzySlider").bind("slider:changed",function(event,data){
+                        formatHashTags(true);
+
+                        $("#similarityFuzzySlider").bind("slider:changed", function(event, data) {
                             var number = data.value.toFixed(2); //does not work ie<= 8.0
-                            
+
                             $(this).val(number);
-                            console.log(number);
                             $("#tresholdOutput").text(number);
                         });
                     });
@@ -225,16 +191,59 @@
                         return $html.html();
                     }
 
-                    function formatHashTags()
+                    function formatHashTags(onload)
                     {
-                        $("#annotationTable > tbody > tr > td:nth-child(2)").each(function() {
-                            //val.replace(/#(\S)*/g,"<span class=\"hashtag\">$1</span>");
-                            $(this).html($(this).html().replace(/(#\S+)/g, "<span class=\"hashtag\">$1</span>"));
-                        });
-                        $("#formulaAnnotationTable > tbody > tr > td:nth-child(2)").each(function() {
-                            //val.replace(/#(\S)*/g,"<span class=\"hashtag\">$1</span>");
-                            $(this).html($(this).html().replace(/(#\S+)/g, "<span class=\"hashtag\">$1</span>"));
-                        });
+                        var regEx = /#[a-zA-Z0-9]*/g;   // if used b is number
+                        var regEx2 = /(#\S+)/g;         // if used b is string
+                        function appendLabel(a, b)
+                        {
+                            var labelType;
+                            var icon;
+                            switch (b)
+                            {
+                                case "#isValid":
+                                    labelType = 'success';
+                                    icon = 'ok';
+                                    break;
+                                case "#isInvalid":
+                                    labelType = 'warning';
+                                    icon = 'flag';
+                                    break;
+                                case "#uncertain":
+                                    labelType = 'info';
+                                    icon = 'question-sign';
+                                    break;
+                                case "#removeResult":
+                                    labelType = 'danger';
+                                    icon = 'remove';
+                                    break;
+                                case "#formulaRemove":
+                                    labelType = 'danger';
+                                    icon = 'remove';
+                                    break;
+                                case "#formulaMeaningless":
+                                    labelType = 'danger';
+                                    icon = 'trash'
+                                    break;
+                                default:
+                                    labelType = 'default';
+                                    icon = 'comment';
+                            }
+
+                            return '<span class="label label-' + labelType + '">' + b + ' <span class="glyphicon glyphicon-' + icon + '"></span></span>';
+                        }
+                        if (onload)
+                        {
+                            $("#annotationTable > tbody > tr > td:nth-child(2)").each(function() {
+                                $(this).html($(this).html().replace(regEx2, appendLabel));
+                            });
+                        }
+                        else
+                        {
+                            $("#annotationTable > tbody > tr:last > td:nth-child(2)").each(function() {
+                                $(this).html($(this).html().replace(regEx2, appendLabel));
+                            });
+                        }
                     }
         </script>
         <script>

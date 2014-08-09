@@ -7,19 +7,22 @@
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">        
         <div class="container content">
-
-
             <table class="table table-bordered table-striped pull-top-50">
                 <thead>
                     <tr>
                         <th><spring:message code="general.field.id" /></th>
-                        <th>start</th>
-                        <th>stop</th>
-                        <th>note</th>
-                        <th>user</th>
-                        <th>config</th>
-                        <th>revision</th>
-                        <th>!outputs</th>
+                        <th><spring:message code="entity.applicationrun.start" /></th>
+                        <th><spring:message code="entity.applicationrun.stop" /></th>
+                        <th><spring:message code="entity.applicationrun.note" /></th>
+                        <th><spring:message code="entity.applicationrun.user" /></th>
+                        <th><spring:message code="entity.applicationrun.configuration" /></th>
+                        <th><spring:message code="entity.applicationrun.revision" /></th>
+                        <th><spring:message code="entity.applicationrun.outputs" /></th>
+                        <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                        <th>
+                            <spring:message code="general.table.option" />
+                        </th>
+                        </sec:authorize>
                     </tr>
                 </thead>
                 <c:choose>
@@ -34,6 +37,11 @@
                                 <td><a href="${pageContext.request.contextPath}/configuration/view/<c:out value="${entry.configuration.id}" />/"><c:out value="${entry.configuration.name}" /></a></td>
                                 <td><c:out value="${entry.revision.revisionHash}" /></td>
                                 <td><c:out value="${entry.canonicOutputCount}" /></td>
+                                <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/appruns/delete/<c:out value="${entry.id}" />/">X</a>
+                                    </td>                                    
+                                </sec:authorize>
                             </tr>
                         </c:forEach>
                     </c:when>

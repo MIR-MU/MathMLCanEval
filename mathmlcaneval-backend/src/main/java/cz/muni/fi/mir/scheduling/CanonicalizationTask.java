@@ -20,7 +20,6 @@ import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.services.MailService;
-import cz.muni.fi.mir.similarity.SimilarityFormConverter;
 import cz.muni.fi.mir.tools.Tools;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

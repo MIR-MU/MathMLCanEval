@@ -10,7 +10,8 @@ package cz.muni.fi.mir.scheduling;
  *
  * @author emptak
  */
-public abstract class CanonicalizationTaskFactory
+public abstract class LongRunningTaskFactory
 {
     public abstract CanonicalizationTask createTask();
+    public abstract ApplicationRunRemovalTask createAppTask();
 }

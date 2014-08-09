@@ -149,7 +149,7 @@ public class ApplicationRunTest
 
         assertNotNull("ApplicationRun was not created", result);
 
-        applicationRunService.deleteApplicationRun(result);
+        applicationRunService.deleteApplicationRun(result,false,false);
 
         assertNull("ApplicationRun was not deleted", applicationRunService.getApplicationRunByID(ID));
     }

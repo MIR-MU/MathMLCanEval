@@ -11,7 +11,6 @@ import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.AnnotationForm;
 import cz.muni.fi.mir.forms.FindSimilarForm;
-import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.util.ArrayList;
@@ -22,9 +21,7 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,8 +42,6 @@ public class CanonicOutputController
     private CanonicOutputService canonicOutputService;
     @Autowired
     private AnnotationService annotationService;
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private Mapper mapper;
@@ -59,27 +54,10 @@ public class CanonicOutputController
         ModelMap mm = new ModelMap();
         CanonicOutput canonicOutput = canonicOutputService.getCanonicOutputByID(id);
 
-        mm.addAttribute("formulaEntry", canonicOutput);
+        mm.addAttribute("canonicOutput", canonicOutput);
         mm.addAttribute("annotationForm", new AnnotationForm());
         mm.addAttribute("findSimilarForm", new FindSimilarForm());
-        //mm.addAttribute("annotationFlagList", annotationFlagService.getAllAnnotationFlags());
-
-        long totalAnnotations = 0;
-        Map<Long, Long> annotationFlagHits = new HashMap<>();
-        if (canonicOutput != null) 
-        {
-            for (Annotation annotation : canonicOutput.getAnnotations())
-            {
-                Long index = 1L;
-
-                if (!annotationFlagHits.containsKey(index))
-                    annotationFlagHits.put(index, 0L);
-                annotationFlagHits.put(index, annotationFlagHits.get(index) + 1);
-                totalAnnotations += 1;
-            }
-        }
-        mm.addAttribute("totalAnnotations", totalAnnotations);
-        mm.addAttribute("annotationFlagHits", annotationFlagHits);
+        
 
         return new ModelAndView("canonicoutput_view", mm);
     }
@@ -95,7 +73,7 @@ public class CanonicOutputController
     @Secured("ROLE_USER")
     @RequestMapping(value={"/annotate","/annotate/"},method = RequestMethod.POST)
     @ResponseBody
-    public String annotate(@RequestParam("canonicOutputId") Long canonicOutputId, @RequestParam("note") String note)
+    public String annotate(@RequestParam("canonicOutputId") Long canonicOutputId, @RequestParam("note") String note)//note lebo form ma path =" note"
     {
         Annotation a = EntityFactory.createAnnotation(note, securityContext.getLoggedEntityUser());
         annotationService.createAnnotation(a);

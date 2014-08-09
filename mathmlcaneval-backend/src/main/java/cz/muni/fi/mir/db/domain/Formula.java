@@ -19,12 +19,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
-import org.apache.solr.analysis.StandardTokenizerFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.AnalyzerDef;
-import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.TokenizerDef;
@@ -65,12 +63,12 @@ public class Formula implements Serializable
     private Program program;                    // konverzni program
     @ManyToOne
     private User user;                          // kto ju vlozil
-    @ManyToMany(mappedBy="parents")
+    @ManyToMany(mappedBy="parents",cascade = CascadeType.REMOVE)
     @IndexedEmbedded
     private List<CanonicOutput> outputs;         // 
-    @OneToMany(cascade = CascadeType.REFRESH)
-    private List<Formula> similarFormulas;    
     @OneToMany
+    private List<Formula> similarFormulas;    
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<Annotation> annotations;    
     @ManyToMany
     private List<Element> elements;

@@ -284,7 +284,7 @@ public class FormulaController
             method = RequestMethod.POST,
             produces = "application/json; charset=utf-8")
     @ResponseBody
-    public String annotate(@RequestParam(value = "formulaID") Long formulaID, @RequestParam(value = "annotation") String annotation)
+    public String annotate(@RequestParam(value = "formulaID") Long formulaID, @RequestParam(value = "annotation-value") String annotation)
     {
         User u = securityContext.getLoggedEntityUser();
         Annotation a = EntityFactory.createAnnotation(annotation, u);

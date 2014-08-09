@@ -66,7 +66,7 @@
             <div class="row pull-top-50">
                 <div class="col-lg-12">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-5">
                             <div class="panel panel-primary">
                                 <!-- Formula details -->
                                 <div class="panel-heading"><spring:message code="entity.formula.detail" /></div>
@@ -94,56 +94,95 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <form method="POST" action="${pageContext.request.contextPath}/formula/annotate/" id="annotationFormulaForm">
-                                <input type="hidden" name="formulaID" value="<c:out value="${formulaEntry.id}" />" />
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading"><spring:message code="entity.canonicOutput.annotations" /></div>
-                                    <table class="table table-striped" id="formulaAnnotationTable">
-                                        <tbody>
-                                            <c:forEach items="${formulaEntry.annotations}" var="entry">
-                                                <tr>
-                                                    <td>${entry.user.username}</td>
-                                                    <td class="annotation-note-cell">${entry.note}</td>
+                        <div class="col-md-7">                            
+                            <div class="panel panel-success">
+                                <div class="panel-heading"><spring:message code="entity.canonicOutput.annotations" /></div>
+                                <table class="table table-striped" id="annotationTable">
+                                    <tbody>
+                                        <c:choose>
+                                            <c:when test="${fn:length(formulaEntry.annotations)  == 0}">
+                                                <tr class="empty-table">
+                                                    <td>
+                                                        <spring:message code="general.table.norecords" />
+                                                    </td>
                                                 </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                    <div class="panel-footer">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <input type="text" id="annotation" name="annotation" css="form-control" style="width: 80%;"/>
-                                                <button class="btn btn-primary btn-sm">
-                                                    <span class="glyphicon glyphicon-plus"></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-2"><span class="btn btn-warning" id="annotate-formularemove"><span class="glyphicon glyphicon-trash"></span></span></div>
-                                            <div class="col-md-2"><span class="btn btn-warning" id="annotate-formulameaningless"><span class="glyphicon glyphicon glyphicon-remove"></span></span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:forEach items="${formulaEntry.annotations}" var="entry">
+                                                    <tr>
+                                                        <td>${entry.user.username}</td>
+                                                        <td class="annotation-note-cell">${entry.note}</td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </tbody>
+                                </table>
+                                <sec:authorize access="hasRole('ROLE_USER')">
+                                    <form method="POST" action="${pageContext.request.contextPath}/formula/annotate/" id="annotationForm">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group">
+                                                        <div class="input-group-btn">
+                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                <spring:message code="general.label.annotate" /> <span class="caret"></span>
+                                                            </button>
+
+                                                            <ul class="dropdown-menu" role="menu">
+                                                                <li>
+                                                                    <a href="#" class="annotation-option" data-annotation="#formulaRemove">
+                                                                        <span class="glyphicon glyphicon-trash"></span> #formulaRemove
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="annotation-option" data-annotation="#formulaMeaningless">
+                                                                        <span class="glyphicon glyphicon glyphicon-remove"></span> #formulaMeaningless
+                                                                    </a>
+                                                                </li>
+                                                                <li class="divider"></li>
+                                                                <li>
+                                                                    <a href="#" id="clear-form">
+                                                                        <spring:message code="general.label.clear.input" />
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div> <!--/input-group-btn --> 
+
+                                                        <input type="hidden" name="canonicOutputId" value="${canonicOutput.id}" />
+                                                        <input type="hidden" name="formulaID" value="<c:out value="${formulaEntry.id}" />" />
+                                                        <input type="text" id="annotation-value" name="annotation-value" class="form-control" />
+                                                        <span class="input-group-btn">
+                                                            <input type="submit" class="btn btn-primary" value="<spring:message code="general.button.submit" />" />
+                                                        </span>
+                                                    </div> <!--/input-group -->
+                                                </div> <!-- /col-md-12-->
+                                            </div> <!-- /row -->
+                                        </div> <!-- /panel-body -->
+                                    </form>
+                                </sec:authorize>
+                            </div>
                         </div>
                     </div>
 
 
                     <div class="panel panel-primary">
                         <!-- Formula in MathML & rendered -->
-                        <div class="panel-heading"><spring:message code="entity.formula.xml" /></div>
+                        <div class="panel-heading">
+                            <spring:message code="entity.formula.xml" />
+                        </div>
                         <div class="panel-body">
-
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-md-6">
                                     <pre class="brush: xml">
                                         <c:out value="${formulaEntry.xml}" />
                                     </pre>
                                 </div>
-                                <div class="col-lg-6">
-                                    <c:out value="${formulaEntry.xml}" escapeXml="false" />
+                                <div class="col-md-6">
+                                    <div class="well-sm">
+                                        <c:out value="${formulaEntry.xml}" escapeXml="false" />
+                                    </div>                                    
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -165,11 +204,11 @@
                                 <c:forEach items="${formulaEntry.outputs}" var="entry">
                                     <tbody>
                                         <tr>
-                                            <td><c:out value="${entry.applicationRun.startTime}" /></td>
+                                            <td><joda:format value="${entry.applicationRun.startTime}" style="SS" /></td>
                                             <td><a href="${pageContext.request.contextPath}/canonicoutput/view/${entry.id}">${entry.id}</a></td>
                                             <td><a href="https://github.com/formanek/MathMLCan/commit/<c:out value="${entry.applicationRun.revision.revisionHash}" />"><c:out value="${entry.applicationRun.revision.revisionHash}" /></a></td>
                                             <td><a href="${pageContext.request.contextPath}/configuration/view/${entry.applicationRun.configuration.id}">${entry.applicationRun.configuration.id}</a></td>
-                                            <td>${entry.runningTime}</td>
+                                            <td>${entry.runningTime} ms</td>
                                         </tr>
                                     </tbody>
                                 </c:forEach>

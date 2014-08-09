@@ -121,10 +121,12 @@
         p:queueCapacity="${taskexecutor.queueCapacity}"
     />
     
-    <bean id="canonicalizationTask" class="cz.muni.fi.mir.scheduling.CanonicalizationTask" scope="prototype" lazy-init="true" />
+    <bean id="canonicalizationTask" class="cz.muni.fi.mir.scheduling.CanonicalizationTask" scope="prototype"/>
+    <bean id="applicationRunRemovalTask" class="cz.muni.fi.mir.scheduling.ApplicationRunRemovalTask" scope="prototype" />
     
-    <bean id="canonicalizationTaskFactory" class="cz.muni.fi.mir.scheduling.CanonicalizationTaskFactory">
+    <bean id="longRunningTaskFactory" class="cz.muni.fi.mir.scheduling.LongRunningTaskFactory">
         <lookup-method name="createTask" bean="canonicalizationTask" />
+        <lookup-method name="createAppTask" bean="applicationRunRemovalTask" />
     </bean>
     
     

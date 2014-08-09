@@ -25,16 +25,12 @@ public class MainController
 {
     private static final Logger logger = Logger.getLogger(MainController.class);
     @Autowired private StatisticsService statisticsService;
-    @Autowired
-    private SecurityContextFacade securityContext;
     
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView handleIndex()
     {
         ModelMap mm = new ModelMap();
         mm.addAttribute("statistics", statisticsService.getStatistics());
-        logger.fatal(securityContext.getLoggedUser());
-        logger.fatal(securityContext.getLoggedEntityUser());
         return new ModelAndView("index",mm);
     }
     
