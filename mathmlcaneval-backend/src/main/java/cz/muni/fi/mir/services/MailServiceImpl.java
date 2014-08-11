@@ -16,8 +16,9 @@ import org.springframework.mail.SimpleMailMessage;
  */
 public class MailServiceImpl implements MailService
 {
+
     private static final Logger logger = Logger.getLogger(MailServiceImpl.class);
-    
+
     private MailSender mailSender;
     private String sender;
     private String subjectPrefix;
@@ -89,6 +90,33 @@ public class MailServiceImpl implements MailService
             mailMessage.setText(message);
 
             mailSender.send(mailMessage);
+        }
+    }
+
+    @Override
+    public void sendMail(String subject, String message) throws IllegalArgumentException
+    {
+        if (isEnabled())
+        {
+            if (StringUtils.isEmpty(message))
+            {
+                throw new IllegalArgumentException("Mail message (text) cannot be empty");
+            }
+            SimpleMailMessage mess = new SimpleMailMessage();
+            mess.setFrom(sender);
+            mess.setTo(sender);
+            if (subjectPrefix != null)
+            {
+                mess.setSubject(subjectPrefix + subject);
+            }
+            else
+            {
+                mess.setSubject(subject);
+            }
+
+            mess.setText(message);
+
+            mailSender.send(mess);
         }
     }
 }

@@ -161,4 +161,6 @@
         p:sender="${mail.from}"
         p:subjectPrefix="${mail.subject.prefix}"
     />
+    
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 </beans>

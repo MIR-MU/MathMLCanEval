@@ -8,13 +8,12 @@
         <put-attribute name="navigation" value="/templates/default/navigation.jsp" />
         <put-attribute name="footer" value="/templates/default/footer.jsp" />
     </definition>
-    
+
+    <definition name="errorTemplate" template="/templates/error/errortemplate.jsp">
+        <put-attribute name="navigation" value="/templates/default/navigation.jsp" />
+    </definition>
 <!--    <definition name="login" template="/templates/login/login-template.jsp" />-->
     
 <!--    <definition name="error" template="/templates/error/error-template.jsp" />-->
     
-    
-    
-    
-  
 </tiles-definitions>

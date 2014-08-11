@@ -15,4 +15,13 @@ public interface MailService
      * @throws IllegalArgumentException if receiver, subject or message is null or empty.
      */
     void sendMail(String from, String receiver, String subject, String message) throws IllegalArgumentException;
+    
+    
+    /**
+     * Method sends mail to address specified by key <b>mail.from</b> in configuration file.
+     * @param subject of message
+     * @param message text of message
+     * @throws IllegalArgumentException if message is empty.
+     */
+    void sendMail(String subject, String message) throws IllegalArgumentException;
 }

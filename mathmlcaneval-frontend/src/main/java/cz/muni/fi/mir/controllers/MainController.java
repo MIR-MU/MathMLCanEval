@@ -5,9 +5,6 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.service.StatisticsService;
-import cz.muni.fi.mir.similarity.SimilarityFormConverterWrapper;
-import cz.muni.fi.mir.tools.GitPropertiesModel;
-import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
