@@ -49,7 +49,8 @@ public class StatisticsServiceImpl implements StatisticsService
     }
     
     @Scheduled(cron = "${statistics.generate.cron}" )
-    public void executeAtMidnight()
+    @Transactional(readOnly = false)
+    public void scheduledCalculation()
     {
         calculate();
     }
