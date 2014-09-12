@@ -72,12 +72,12 @@
 
                     SyntaxHighlighter.all();
 
-                    $(document).ready(function() {
+                    $(document).ready(function () {
 
                         $("#flot-placeholder").css('width', $(".stats-panel-body").width());
                         $("#flot-placeholder").css('height', $(".stats-panel-body").width() * 0.8);
 
-                        $("#statisticsForm ").on('change', function() {
+                        $("#statisticsForm ").on('change', function () {
                             var val = $("option:selected", this).val();
 
                             window.location.href = "${pageContext.request.contextPath}/statistics/" + val + "/";
@@ -88,12 +88,12 @@
                             $("#userRolesRows").append(getUserRolesHTML());
                         }
 
-                        $(this).on('click', '.addrow', function() {
+                        $(this).on('click', '.addrow', function () {
                             $("#userRolesRows").append(getUserRolesHTML());
                         });
 
             <c:if test="${not empty statistics}">
-                        $(function() {
+                        $(function () {
 
                             var data = [["isValid", <c:out value="${statistics.totalValid}" />],
                                 ["isInvalid", <c:out value="${statistics.totalInvalid}" />],
@@ -116,7 +116,7 @@
                         });
             </c:if>
 
-                        $(".annotation-option").click(function(e) {
+                        $(".annotation-option").click(function (e) {
                             var currentValue = $("#annotation-value").val();
                             var spacer = '';
                             if (currentValue.trim().length > 0) {
@@ -128,39 +128,43 @@
                         }).tooltip({
                             placement: 'right',
                             container: 'body',
-                            title: function() {
+                            title: function () {
                                 var val = $(this).attr('data-annotation');
-                                return '<spring:message code="general.label.button.annotate.hint" />' + ' '+val;
+                                return '<spring:message code="general.label.button.annotate.hint" />' + ' ' + val;
                             }
                         });
 
 
-                        $("#clear-form").on('click', function(e) {
+                        $("#clear-form").on('click', function (e) {
                             $("#annotation-value").val('');
                             e.preventDefault();
                         });
 
                         var form = $("#annotationForm");
-                        form.on("submit", function(event) {
+                        form.on("submit", function (event) {
                             if ($("#annotation-value").val().trim().length != 0)
                             {
-                                $.ajax({
-                                    type: form.attr('method'),
-                                    url: form.attr('action'),
-                                    data: form.serialize(),
-                                    dataType: 'json',
-                                    success: function(data) {
-                                        $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note + "</td></tr>");
-                                        $("#annotation-value").val('');
-                                        formatHashTags(false);
-                                        if ($("#annotationTable > tbody > tr:first").attr('class') === "empty-table")
-                                        {
-                                            $("#annotationTable > tbody > tr:first").fadeOut(1200, function() {
-                                                $(this).remove();
-                                            });
+                                var confValue = confirm('<spring:message code="general.annotation.submit" />\n' + $(this).find("#annotation-value").val());
+                                
+                                if (confValue)
+                                {
+                                    $.ajax({
+                                        type: form.attr('method'),
+                                        url: form.attr('action'),
+                                        data: form.serialize(),
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note + "</td></tr>");
+                                            $("#annotation-value").val('');
+                                            formatHashTags(false);
+                                            if ($("#annotationTable > tbody > tr:first").attr('class') === "empty-table")
+                                            {
+                                                $("#annotationTable > tbody > tr:first").remove();
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
+                                event.preventDefault();
                             }
                             else
                             {
@@ -174,7 +178,7 @@
 
                         formatHashTags(true);
 
-                        $("#similarityFuzzySlider").bind("slider:changed", function(event, data) {
+                        $("#similarityFuzzySlider").bind("slider:changed", function (event, data) {
                             var number = data.value.toFixed(2); //does not work ie<= 8.0
 
                             $(this).val(number);
@@ -183,7 +187,7 @@
 
 
             <c:if test="${massDelete eq true}">
-                        $(".img-thumbnail").on('click', function(e) {
+                        $(".img-thumbnail").on('click', function (e) {
 
                             if ($(this).hasClass('formula-delete-checked')) {
                                 $(this).removeClass('formula-delete-checked');
@@ -254,13 +258,13 @@
                         }
                         if (onload)
                         {
-                            $("#annotationTable > tbody > tr > td:nth-child(2)").each(function() {
+                            $("#annotationTable > tbody > tr > td:nth-child(2)").each(function () {
                                 $(this).html($(this).html().replace(regEx2, appendLabel));
                             });
                         }
                         else
                         {
-                            $("#annotationTable > tbody > tr:last > td:nth-child(2)").each(function() {
+                            $("#annotationTable > tbody > tr:last > td:nth-child(2)").each(function () {
                                 $(this).html($(this).html().replace(regEx2, appendLabel));
                             });
                         }
@@ -275,11 +279,11 @@
                 }
             }
             ;
-            $(document).ready(function() {
-                $("#fileinput").change(function() {
+            $(document).ready(function () {
+                $("#fileinput").change(function () {
                     refreshTable();
                 });
-                $("#filereset").click(function(e) {
+                $("#filereset").click(function (e) {
                     e.preventDefault();
                     $(this).parents("form:first")[0].reset();
                     refreshTable();
@@ -287,8 +291,8 @@
             });
         </script>
         <script>
-            $(document).ready(function() {
-                $("#xml").on('load keyup keypress paste', function() {
+            $(document).ready(function () {
+                $("#xml").on('load keyup keypress paste', function () {
                     $("#mathml-preview").html($(this).val());
                     MathJax.Hub.Queue(["Typeset", MathJax.Hub, "mathml-preview"]);
                 }).trigger("keyup");
@@ -303,24 +307,24 @@
                             trigger: 'manual',
                             placement: 'top'
                         }).attr('data-original-title', data).tooltip('fixTitle').tooltip('show');
-                setTimeout(function() {
+                setTimeout(function () {
                     $('#btnCanon').tooltip('hide');
                     if (close) {
                         $('#canonModal').modal('hide');
                     }
                 }, 2000);
             }
-            $(document).ready(function() {
-                $("#btnCanon").click(function() {
+            $(document).ready(function () {
+                $("#btnCanon").click(function () {
                     $.ajax({
                         type: "Get",
                         url: $('#canonicalizeForm').attr('action'),
                         data: $('#canonicalizeForm').serialize(),
                         dataType: 'text',
-                        success: function(response) {
+                        success: function (response) {
                             showTooltip("<spring:message code="entity.formula.started" />", true);
                         },
-                        error: function(response) {
+                        error: function (response) {
                             showTooltip("<spring:message code="entity.formula.crashed" />", false);
                         }
                     });
@@ -329,7 +333,7 @@
         </script>
         <script type="text/javascript">
             function diffView() {
-                var byId = function(id) {
+                var byId = function (id) {
                     return document.getElementById(id);
                 },
                         base = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-2")).originalText),
