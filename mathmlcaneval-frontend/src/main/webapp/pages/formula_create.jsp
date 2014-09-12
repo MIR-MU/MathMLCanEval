@@ -24,36 +24,50 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label"><spring:message code="entity.formula.sourceDocument" /></label>
                     <div class="col-sm-7">
-                        <form:select path="sourceDocumentForm" multiple="false" class="form-control">
-                            <c:choose>
-                                <c:when test="${fn:length(sourceDocumentFormList) eq 1}">
-                                    <form:option value="${sourceDocumentFormList[0].id}"><c:out value="${sourceDocumentFormList[0].name}" /></form:option>
-                                </c:when>
-                                <c:otherwise>
+                        <c:choose>
+                            <c:when test="${fn:length(sourceDocumentList) eq 0}">
+                                <c:set var="hasError" value="true" />
+                                <form:select path="sourceDocumentForm" multiple="false" class="form-control" disabled="true">
+                                    <form:option value="-1"><spring:message code="general.label.form.select.empty" /></form:option>
+                                </form:select>
+                            </c:when>
+                            <c:otherwise>
+                                <form:select path="sourceDocumentForm" multiple="false" class="form-control">
                                     <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
-                                    <form:options items="${sourceDocumentFormList}" itemLabel="name" itemValue="id" />
-                                </c:otherwise>
-                            </c:choose>
-                        </form:select>
+                                    <form:options items="${sourceDocumentList}" itemLabel="name" itemValue="id" />
+                                </form:select>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
-                    <form:errors path="sourceDocumentForm" element="div" class="col-sm-3 alert alert-danger"/>
+                    <c:if test="${fn:length(sourceDocumentList) eq 0}">
+                        <div class="col-sm-3 alert alert-danger">
+                            <spring:message code="general.label.form.select.empty.error" />
+                        </div>
+                    </c:if>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label"><spring:message code="entity.formula.program" /></label>
                     <div class="col-sm-7">
-                        <form:select path="programForm" multiple="false" class="form-control">
-                            <c:choose>
-                                <c:when test="${fn:length(programFormList) eq 1}">
-                                    <form:option value="${programFormList[0].id}"><c:out value="${programFormList[0].name}" /></form:option>
-                                </c:when>
-                                <c:otherwise>
+                        <c:choose>
+                            <c:when test="${fn:length(programList) eq 0}">
+                                <c:set var="hasError" value="true" />
+                                <form:select path="programForm" multiple="false" class="form-control" disabled="true">
+                                    <form:option value="-1"><spring:message code="general.label.form.select.empty" /></form:option>
+                                </form:select>
+                            </c:when>
+                            <c:otherwise>
+                                <form:select path="programForm" multiple="false" class="form-control">
                                     <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
-                                    <form:options items="${programFormList}" itemLabel="name" itemValue="id" />
-                                </c:otherwise>
-                            </c:choose>
-                        </form:select>
+                                    <form:options items="${programList}" itemLabel="name" itemValue="id" />
+                                </form:select>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
-                    <form:errors path="programForm" element="div" class="col-sm-3 alert alert-danger"/>
+                    <c:if test="${fn:length(programList) eq 0}">
+                        <div class="col-sm-3 alert alert-danger">
+                            <spring:message code="general.label.form.select.empty.error" />
+                        </div>
+                    </c:if>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label"><spring:message code="entity.formula.note" /></label>
