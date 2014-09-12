@@ -128,7 +128,10 @@
                         }).tooltip({
                             placement: 'right',
                             container: 'body',
-                            title: '<spring:message code="general.label.button.annotate.hint" />' + ' ' + $(this).attr('data-annotation')
+                            title: function() {
+                                var val = $(this).attr('data-annotation');
+                                return '<spring:message code="general.label.button.annotate.hint" />' + ' '+val;
+                            }
                         });
 
 
