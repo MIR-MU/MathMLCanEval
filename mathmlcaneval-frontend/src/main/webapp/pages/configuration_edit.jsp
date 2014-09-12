@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label"><spring:message code="entity.configuration.config" /></label>
                     <div class="col-sm-7">
-                        <form:textarea path="config" cssClass="form-control" />
+                        <form:textarea path="config" cssClass="form-control" readonly="true"/>
                     </div>
                     <form:errors path="config" element="div" class="col-sm-3 alert alert-danger"/>
                 </div>
