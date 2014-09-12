@@ -41,6 +41,7 @@
     <modules>
         <module>mathmlcaneval-backend</module>
         <module>mathmlcaneval-frontend</module>
+        <module>mathmlcaneval-dependencies</module>
     </modules>
     
     <properties>

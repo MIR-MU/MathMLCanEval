@@ -18,6 +18,11 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>mathmlcaneval-dependencies</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mathmlcaneval-backend</artifactId>
             <version>${project.version}</version>
         </dependency>

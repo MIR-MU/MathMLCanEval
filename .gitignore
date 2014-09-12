@@ -22,3 +22,4 @@ nb-configuration.xml
 .settings/
 .project
 git.properties
+/mathmlcaneval-dependencies/target/
