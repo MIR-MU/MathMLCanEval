@@ -9,6 +9,7 @@ package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.Statistics;
 import cz.muni.fi.mir.db.service.StatisticsService;
+import cz.muni.fi.mir.tools.SiteTitle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -24,12 +25,14 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping(value = "/statistics")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class StatisticsController
 {
     @Autowired StatisticsService statisticsService;
     
     
     @RequestMapping(value = "/")
+    @SiteTitle("{statistics.title}")
     public ModelAndView list()
     {
         ModelMap mm = prepareModelMap();
@@ -39,6 +42,7 @@ public class StatisticsController
     }
     
     @RequestMapping(value = "/calc/")
+    @SiteTitle("{statistics.title}")
     public ModelAndView calc()
     {
         Runnable r = new Runnable()
@@ -59,6 +63,7 @@ public class StatisticsController
     }
     
     @RequestMapping(value = "/{id}/",method = RequestMethod.GET)
+    @SiteTitle("{statistics.title}")
     public ModelAndView viewStats(@PathVariable Long id)
     {
         Statistics stat = statisticsService.getStatisticsByID(id);

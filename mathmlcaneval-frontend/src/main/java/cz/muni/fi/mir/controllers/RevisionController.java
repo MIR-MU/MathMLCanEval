@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.forms.RevisionForm;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.SiteTitle;
 
 /**
  *
@@ -33,12 +33,14 @@ import cz.muni.fi.mir.tools.EntityFactory;
  */
 @Controller
 @RequestMapping(value ="/revision")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class RevisionController
 {
     @Autowired private RevisionService revisionService;
     @Autowired private Mapper mapper;
     
     @RequestMapping(value = {"/","/list/","/list"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.revision.list}")
     public ModelAndView list()
     {
         ModelMap mm = new ModelMap();
@@ -49,6 +51,7 @@ public class RevisionController
     
     
     @RequestMapping(value = {"/create/","/create"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.revision.create}")
     public ModelAndView createRevision()
     {
         ModelMap mm = new ModelMap();
@@ -59,6 +62,7 @@ public class RevisionController
     
     @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value = {"/create/","/create"},method = RequestMethod.POST)
+    @SiteTitle("{navigation.revision.create}")
     public ModelAndView createRevisionSubmit(@Valid @ModelAttribute("revisionForm") RevisionForm revisionForm, BindingResult result, Model model)
     {
         if(result.hasErrors())
@@ -89,6 +93,7 @@ public class RevisionController
     
     
     @RequestMapping(value ={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.revision.edit}")
     public ModelAndView editRevision(@PathVariable Long id)
     {
         ModelMap mm = new ModelMap();
@@ -99,6 +104,7 @@ public class RevisionController
     
     @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/edit/","/edit/"}, method = RequestMethod.POST)
+    @SiteTitle("{entity.revision.edit}")
     public ModelAndView editRevisionSubmit(@Valid @ModelAttribute("revisionForm") RevisionForm revisionForm, BindingResult result, Model model)
     {
         if(result.hasErrors())
@@ -115,15 +121,5 @@ public class RevisionController
             
             return new ModelAndView("redirect:/revision/list/");
         }
-    }
-    
-    @RequestMapping(value="/search/",params = "keywords",method = RequestMethod.GET)
-    public ModelAndView executeSearch(@RequestParam String keywords)
-    {
-        ModelMap mm = new ModelMap();
-        mm.addAttribute("revisionList", revisionService.findRevisionByNote(keywords));
-        mm.addAttribute("keywords",keywords);
-        
-        return new ModelAndView("revision_list",mm);
     }
 }

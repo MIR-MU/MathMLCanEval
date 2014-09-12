@@ -25,6 +25,7 @@ import cz.muni.fi.mir.db.domain.UserRole;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.forms.UserRoleForm;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.SiteTitle;
 
 /**
  *
@@ -32,12 +33,14 @@ import cz.muni.fi.mir.tools.EntityFactory;
  */
 @Controller
 @RequestMapping(value ="/userrole")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class UserRoleController
 {
     @Autowired private UserRoleService userRoleService;
     @Autowired private Mapper mapper;
     
     @RequestMapping(value={"/","/list","/list/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.userrole.list}")
     public ModelAndView list()
     {
         ModelMap mm = new ModelMap();
@@ -47,6 +50,7 @@ public class UserRoleController
     }
     
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.userrole.create}")
     public ModelAndView createUserRole()
     {
         ModelMap mm = new ModelMap();
@@ -57,6 +61,7 @@ public class UserRoleController
     
     @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.POST)
+    @SiteTitle("{navigation.userrole.create}")
     public ModelAndView createUserRoleSubimt(@Valid @ModelAttribute("userRoleForm") UserRoleForm userRoleForm,BindingResult result, Model model)
     {
         if(result.hasErrors())
@@ -95,6 +100,7 @@ public class UserRoleController
     
     @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/edit","/edit/"},method = RequestMethod.POST)
+    @SiteTitle("{entity.userrole.edit}")
     public ModelAndView editUserRoleSubimt(@Valid @ModelAttribute("userRoleForm") UserRoleForm userRoleForm,BindingResult result, Model model)
     {
         if(result.hasErrors())
@@ -111,6 +117,5 @@ public class UserRoleController
             
             return new ModelAndView("redirect:/userrole/list/");
         }
-    }
-    
+    }    
 }

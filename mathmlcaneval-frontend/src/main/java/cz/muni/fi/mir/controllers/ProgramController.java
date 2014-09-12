@@ -23,6 +23,7 @@ import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.service.ProgramService;
 import cz.muni.fi.mir.forms.ProgramForm;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.SiteTitle;
 
 /**
  * This class serves for handling requests for Program objects with requests starting with <b>/program</b>
@@ -30,16 +31,17 @@ import cz.muni.fi.mir.tools.EntityFactory;
  * @author Dominik Szalai
  * @version 1.0
  * @since 1.0
- * TODO null handling
  */
 @Controller
 @RequestMapping(value ="/program")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class ProgramController
 {
     @Autowired private ProgramService programService;
     @Autowired private Mapper mapper;
     
     @RequestMapping(value={"/","/list","/list/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.program.list}")
     public ModelAndView list()
     {
         ModelMap mm = new ModelMap();
@@ -49,6 +51,7 @@ public class ProgramController
     }
     
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.program.create}")
     public ModelAndView createProgram()
     {
         ModelMap mm = new ModelMap();
@@ -59,6 +62,7 @@ public class ProgramController
     
     @Secured("ROLE_USER")
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.POST)
+    @SiteTitle("{navigation.program.create}")
     public ModelAndView createProgramSubmit(@Valid @ModelAttribute("programForm") ProgramForm programForm, BindingResult result, Model model)
     {
         if(result.hasErrors())
@@ -87,6 +91,7 @@ public class ProgramController
     }
     
     @RequestMapping(value ={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.program.edit}")
     public ModelAndView editProgram(@PathVariable Long id)
     {
         ModelMap mm = new ModelMap();
@@ -97,6 +102,7 @@ public class ProgramController
     
     @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/edit/","/edit/"}, method = RequestMethod.POST)
+    @SiteTitle("{entity.program.edit}")
     public ModelAndView editProgramSubmit(@Valid @ModelAttribute("programForm") ProgramForm programForm, BindingResult result, Model model)
     {
         if(result.hasErrors())
@@ -116,10 +122,10 @@ public class ProgramController
     }
     
     @RequestMapping(value = {"/list/{filters}","/list/{filters}/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.program.list}")
     public ModelAndView filterList(@MatrixVariable(pathVar = "filters") Map<String,List<String>> filters)
     {
         ModelMap mm = new ModelMap();
-        System.out.println(filters);
         if(filters.containsKey("name") && filters.containsKey("version"))
         {
             mm.addAttribute("programList", 

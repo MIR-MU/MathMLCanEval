@@ -22,43 +22,61 @@
     <import resource="classpath*:/spring/applicationContext.xml" />
     
     <bean id="gitProperties" class="cz.muni.fi.mir.tools.GitPropertiesModel"
-        p:branch="${git.branch}" 
-        p:describe="${git.commit.id.describe}"
-        p:commitId="${git.commit.id}"
-        p:commitIdAbbrev="${git.commit.id.abbrev}"
-        p:commitTime="${git.commit.time}"
-        p:buildTime="${git.build.time}"
-        p:buildUserName="${git.build.user.name}"
-        p:buildUserEmail="${git.build.user.email}"
-        p:commitMessageFull="${git.commit.message.full}"
-        p:commitMessageShort="${git.commit.message.short}"
-        p:commitUserName="${git.commit.user.name}"
-        p:commitUserEmail="${git.commit.user.email}"
+          p:branch="${git.branch}" 
+          p:describe="${git.commit.id.describe}"
+          p:commitId="${git.commit.id}"
+          p:commitIdAbbrev="${git.commit.id.abbrev}"
+          p:commitTime="${git.commit.time}"
+          p:buildTime="${git.build.time}"
+          p:buildUserName="${git.build.user.name}"
+          p:buildUserEmail="${git.build.user.email}"
+          p:commitMessageFull="${git.commit.message.full}"
+          p:commitMessageShort="${git.commit.message.short}"
+          p:commitUserName="${git.commit.user.name}"
+          p:commitUserEmail="${git.commit.user.email}"
     />
      
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
-        p:defaultEncoding="UTF-8"
-        p:basenames="classpath:i18n/messages,classpath:i18n/validator"
+          p:defaultEncoding="UTF-8"
+          p:basenames="classpath:i18n/messages,classpath:i18n/validator"
     />
     
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"
-        p:definitions="/WEB-INF/tiles-configuration.xml"
+          p:definitions="/WEB-INF/tiles-configuration.xml"
     />    
     
     <!--    http://stackoverflow.com/a/9401900 -->
     <mvc:interceptors>
-        <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
-            p:paramName="lang"
-        />
-        <bean id="customInterceptor" class="cz.muni.fi.mir.tools.CustomPageInterceptor" />
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="localeChangeInterceptor" 
+                  class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
+                  p:paramName="lang"
+            />
+        </mvc:interceptor>
+        
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="customInterceptor" 
+                  class="cz.muni.fi.mir.tools.CustomPageInterceptor" 
+            />
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="siteTitleInterceptor"
+                class="cz.muni.fi.mir.tools.SiteTitleInterceptor"
+                p:i18nEnabled="true"
+                p:messageSource-ref="messageSource"
+            />
+        </mvc:interceptor>
     </mvc:interceptors>
    
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-        p:maxUploadSize="2000000000"
+          p:maxUploadSize="2000000000"
     />
     
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
-        p:defaultLocale="en"
+          p:defaultLocale="en"
     />
     
     <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
@@ -74,7 +92,7 @@
     </bean>
     
     <bean name="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
-        p:validationMessageSource-ref="messageSource"
+          p:validationMessageSource-ref="messageSource"
     />   
     
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
@@ -92,6 +110,6 @@
 
     <!-- might not work everytime: https://en.wikipedia.org/wiki/HTTP_referer#Referer_hiding -->
     <bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler"
-        p:useReferer="true"
+          p:useReferer="true"
     />
 </beans>

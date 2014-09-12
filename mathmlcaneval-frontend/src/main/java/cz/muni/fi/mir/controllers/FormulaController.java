@@ -26,6 +26,7 @@ import cz.muni.fi.mir.forms.FormulaForm;
 import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -44,8 +45,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,6 +60,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping(value = "/formula")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class FormulaController
 {
 
@@ -90,6 +90,7 @@ public class FormulaController
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaController.class);
 
     @RequestMapping(value = {"/create", "/create/"}, method = RequestMethod.GET)
+    @SiteTitle("{entity.formula.create}")
     public ModelAndView createFormula()
     {
         ModelMap mm = prepareModelMap(true, true, true, true);        
@@ -110,9 +111,11 @@ public class FormulaController
 
     @Secured("ROLE_USER")
     @RequestMapping(value = {"/create", "/create/"}, method = RequestMethod.POST)
-    public ModelAndView createFormulaSubmit(@Valid @ModelAttribute("formulaForm") FormulaForm formulaForm, BindingResult result, Model model) throws IOException
+    @SiteTitle("{entity.formula.create}")
+    public ModelAndView createFormulaSubmit(@Valid @ModelAttribute("formulaForm") FormulaForm formulaForm, 
+            BindingResult result, 
+            Model model) throws IOException
     {
-        logger.info(securityContext.getLoggedEntityUser());
         if (result.hasErrors())
         {
             ModelMap mm = prepareModelMap(true, true, true, true);            
@@ -170,6 +173,7 @@ public class FormulaController
     }
 
     @RequestMapping(value = {"/view/{id}", "/view/{id}/"}, method = RequestMethod.GET)
+    @SiteTitle("{entity.formula.view}")
     public ModelAndView viewFormula(@PathVariable Long id)
     {
         ModelMap mm = prepareModelMap(true, true, false, false);
@@ -210,6 +214,7 @@ public class FormulaController
     }
 
     @RequestMapping(value = {"/list","/list/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.formula.list}")
     public ModelAndView listPage(@ModelAttribute("pagination") Pagination pagination, Model model)
     {
         if (pagination.getNumberOfRecords() == 0) {
@@ -225,6 +230,7 @@ public class FormulaController
     
     @Secured("ROLE_USER")
     @RequestMapping(value={"/mass","/mass/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.import.mass}")
     public ModelAndView massImport()
     {
         ModelMap mm = prepareModelMap(true,true,true,true);
@@ -244,6 +250,7 @@ public class FormulaController
     }
     
     @RequestMapping(value={"/mass","/mass/"},method = RequestMethod.POST)
+    @SiteTitle("{navigation.import.mass}")
     public ModelAndView submitMassImport(@RequestParam(value = "importPath") String path,
             @RequestParam(value = "filter") String filter,
             @Valid @ModelAttribute("formulaForm") FormulaForm formulaForm, 
@@ -331,10 +338,9 @@ public class FormulaController
     }
     
     @RequestMapping(value = {"/similar/","/similar"},method = RequestMethod.POST)
+    @SiteTitle("{entity.canonicOutput.findSimilar}")
     public ModelAndView submitFindSimilar(@ModelAttribute(value = "findSimilarForm") FindSimilarForm form)
-    {
-        logger.info(form);
-        
+    {        
         Formula requestFormula = formulaService.getFormulaByID(form.getFormulaID());
         List<Formula> similars = formulaService.findSimilar(
                 requestFormula, 
@@ -347,7 +353,6 @@ public class FormulaController
         mm.addAttribute("similarForms", similars);
         mm.addAttribute("requestFormula", requestFormula);
         
-        logger.info(similars);
         if(form.isDirectWrite())
         {
             return new ModelAndView("redirect:/formula/view/"+requestFormula.getId());
@@ -360,6 +365,7 @@ public class FormulaController
     
     
     @RequestMapping(value = {"/submitsimilar/","/submitsimilar"},method = RequestMethod.POST)
+    @SiteTitle("{entity.canonicOutput.findSimilar}")
     public ModelAndView submitSimilarFormulas(@RequestParam(value = "similarFormulaID") String[] similarIds,
             @RequestParam(value = "requestFormula") String formulaID,
             @RequestParam(value = "overrideCurrent",defaultValue = "off") String overrideCurrent
@@ -377,6 +383,7 @@ public class FormulaController
     }
     
     @RequestMapping(value = {"/massdelete","/massdelete/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.formula.massdelete}")
     public ModelAndView massDelete(@ModelAttribute("pagination") Pagination pagination, Model model)
     {
         if (pagination.getNumberOfRecords() == 0) {

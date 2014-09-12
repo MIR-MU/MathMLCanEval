@@ -25,19 +25,22 @@ import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.forms.ConfigurationForm;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.SiteTitle;
 
 /**
  *
- * @author Empt
+ * @author Domini Szalai - emptulik at gmail.com
  */
 @Controller
 @RequestMapping(value ="/configuration")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class ConfigurationController
 {
     @Autowired private ConfigurationService configurationService;
     @Autowired private Mapper mapper;
     
     @RequestMapping(value = {"/","/list","/list/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.configuration.list}")
     public ModelAndView list()
     {
         ModelMap mm = new ModelMap();
@@ -47,6 +50,7 @@ public class ConfigurationController
     }
     
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.configuration.create}")
     public ModelAndView createConfiguration()
     {
         ModelMap mm = new ModelMap();
@@ -57,6 +61,7 @@ public class ConfigurationController
     
     @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.POST)
+    @SiteTitle("{entity.configuration.create}")
     public ModelAndView createConfigurationSubmit(@Valid @ModelAttribute("configurationForm") ConfigurationForm configurationForm, BindingResult result, Model model)
     {
         if(result.hasErrors())
@@ -76,6 +81,7 @@ public class ConfigurationController
     }
     
     @RequestMapping(value ={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.configuration.edit}")
     public ModelAndView editConfiguration(@PathVariable Long id)
     {
         ModelMap mm = new ModelMap();
@@ -86,6 +92,7 @@ public class ConfigurationController
 
     @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value={"/edit","/edit/"}, method = RequestMethod.POST)
+    @SiteTitle("{entity.configuration.edit}")
     public ModelAndView editConfigurationSubmit(@Valid @ModelAttribute("configurationForm") ConfigurationForm configurationForm, BindingResult result, Model model)
     {
         if(result.hasErrors())
@@ -114,6 +121,7 @@ public class ConfigurationController
     }
 
     @RequestMapping(value={"/view/{id}","/view/{id}/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.configuration.view}")
     public ModelAndView viewConfiguration(@PathVariable Long id)
     {
         ModelMap mm = new ModelMap();

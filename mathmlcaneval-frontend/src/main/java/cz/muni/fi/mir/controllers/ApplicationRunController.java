@@ -7,6 +7,7 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.service.ApplicationRunService;
+import cz.muni.fi.mir.tools.SiteTitle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/appruns")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class ApplicationRunController
 {
     
@@ -28,6 +30,7 @@ public class ApplicationRunController
     private ApplicationRunService applicationRunService;
     
     @RequestMapping(value = {"/","/list","/list/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.applicationrun.list}")
     public ModelAndView list()
     {
         ModelMap mm = prepareModelMap();

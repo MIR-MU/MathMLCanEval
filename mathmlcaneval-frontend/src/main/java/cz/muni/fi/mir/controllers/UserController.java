@@ -1,7 +1,5 @@
 package cz.muni.fi.mir.controllers;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +28,7 @@ import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.UserForm;
 import cz.muni.fi.mir.forms.UserRoleForm;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.tools.Tools;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 
@@ -41,6 +40,7 @@ import cz.muni.fi.mir.wrappers.SecurityContextFacade;
  */
 @Controller
 @RequestMapping(value ="/user")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class UserController
 {
     @Autowired private UserService userService;
@@ -52,6 +52,7 @@ public class UserController
     
     
     @RequestMapping(value = {"/","/list","/list/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.user.list}")
     public ModelAndView list()
     {        
         ModelMap mm = new ModelMap();
@@ -67,6 +68,7 @@ public class UserController
     }
     
     @Secured("ROLE_ADMINISTRATOR")
+    @SiteTitle("{navigation.user.create}")
     @RequestMapping(value = {"/create","/create/"}, method = RequestMethod.GET)
     public ModelAndView handleRegister()
     {
@@ -78,6 +80,7 @@ public class UserController
     }
 
     @Secured("ROLE_ADMINISTRATOR")
+    @SiteTitle("{navigation.user.create}")
     @RequestMapping(value = {"/create","/create/"}, method = RequestMethod.POST)
     public ModelAndView createUser(
             @ModelAttribute("userForm") @Valid UserForm user,
@@ -116,6 +119,7 @@ public class UserController
     }
     
     @RequestMapping(value= {"/profile","/profile/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.user.myprofile}")
     public ModelAndView showProfile()
     {
         ModelMap mm = new ModelMap();
@@ -135,6 +139,7 @@ public class UserController
     }
     
     @Secured("ROLE_ADMINISTRATOR")
+    @SiteTitle("{entity.user.edit}")
     @RequestMapping(value={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
     public ModelAndView editUser(@PathVariable Long id)
     {
@@ -142,17 +147,7 @@ public class UserController
         User u = userService.getUserByID(id);
         UserForm uf = mapper.map(u,UserForm.class);
         mm.addAttribute("userForm", uf);
-        
-        
-        // nastudovat ako funguje cache
-        //http://docs.spring.io/spring/docs/4.0.0.RC1/spring-framework-reference/html/cache.html
-        // userrole sa totiz nemeni casto a je dobre to mat v cache ako furt selectit z db
-//        List<UserRoleForm> userRolesFormList = new ArrayList<>();
-//        List<UserRole> temp = userRoleService.getAllUserRoles();
-//        for(UserRole ur : temp)
-//        {
-//            userRolesFormList.add(mapper.map(ur,UserRoleForm.class));
-//        }
+
         // roles does not have to be converted into forms
         mm.addAttribute("userRolesFormList",userRoleService.getAllUserRoles());
         
@@ -167,8 +162,10 @@ public class UserController
      * @return 
      */
     @Secured("ROLE_USER")
+    @SiteTitle("{entity.user.edit}")
     @RequestMapping(value={"/edit","/edit/"},method = RequestMethod.POST)
-    public ModelAndView editUserSubmit(@Valid @ModelAttribute("userForm") UserForm userForm, BindingResult result, Model model, HttpServletRequest request)
+    public ModelAndView editUserSubmit(@Valid @ModelAttribute("userForm") UserForm userForm, 
+            BindingResult result, Model model, HttpServletRequest request)
     {
         if(result.hasErrors())
         {
@@ -227,6 +224,7 @@ public class UserController
     
     
     @RequestMapping(value={"/list/{filters}","/list/{filters}/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.user.list}")
     public ModelAndView filterList(@MatrixVariable(pathVar = "filters") Map<String,List<String>> filters)
     {
         ModelMap mm = new ModelMap();

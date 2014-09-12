@@ -16,7 +16,7 @@
         <meta name="author" content="">
         <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
 
-        <title>MathMLCanEval</title>
+        <title><c:out value="${websiteTitle}" /></title>
 
         <!-- Bootstrap core CSS -->
         <link href="<c:url value="/resources/css/bootstrap.min.cosmo.css" />" rel="stylesheet">

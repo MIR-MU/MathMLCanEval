@@ -25,6 +25,7 @@ import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.forms.SourceDocumentForm;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.SiteTitle;
 
 /**
  *
@@ -32,12 +33,14 @@ import cz.muni.fi.mir.tools.EntityFactory;
  */
 @Controller
 @RequestMapping(value = "/sourcedocument")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class SourceDocumentController
 {
     @Autowired private SourceDocumentService sourceDocumentService;
     @Autowired private Mapper mapper;
     
     @RequestMapping(value={"/","/list","/list/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.sourcedocument.list}")
     public ModelAndView list()
     {
         ModelMap mm = new ModelMap();
@@ -47,6 +50,7 @@ public class SourceDocumentController
     }
     
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.GET)
+    @SiteTitle("{navigation.sourcedocument.create}")
     public ModelAndView create()
     {
         ModelMap mm = new ModelMap();
@@ -57,6 +61,7 @@ public class SourceDocumentController
     
     @Secured("ROLE_USER")
     @RequestMapping(value={"/create","/create/"},method = RequestMethod.POST)
+    @SiteTitle("{navigation.sourcedocument.create}")
     public ModelAndView createSubmit(@Valid @ModelAttribute("sourceDocumentForm") SourceDocumentForm sourceDocumentForm, BindingResult result, Model model)
     {
         if(result.hasErrors())
@@ -84,6 +89,7 @@ public class SourceDocumentController
     }
 
     @RequestMapping(value ={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.sourceDocument.edit}")
     public ModelAndView editSourceDocument(@PathVariable Long id)
     {
         ModelMap mm = new ModelMap();
@@ -93,6 +99,7 @@ public class SourceDocumentController
     }
 
     @Secured("ROLE_ADMINISTRATOR")
+    @SiteTitle("{entity.sourceDocument.edit}")
     @RequestMapping(value={"/edit","/edit/"}, method = RequestMethod.POST)
     public ModelAndView editSourceDocumentSubmit(@Valid @ModelAttribute("sourceDocumentForm") SourceDocumentForm sourceDocumentForm, BindingResult result, Model model)
     {
