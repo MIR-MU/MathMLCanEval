@@ -199,8 +199,20 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><spring:message code="entity.canonicOutput.runningTime" /></td>
-                                <td><c:out value="${canonicOutput.runningTime}" /> ms</td>
+                                <td><spring:message code="entity.formula.configuration" /></td>
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/configuration/view/${canonicOutput.applicationRun.configuration.id}/">
+                                        <c:out value="${canonicOutput.applicationRun.configuration.name}" />
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><spring:message code="entity.revision.hash" /></td>
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/revision/view/${canonicOutput.applicationRun.revision.id}/">
+                                        <c:out value="${canonicOutput.applicationRun.revision.revisionHash}" />
+                                    </a>
+                                </td>
                             </tr>
                         </table>
                     </div> <!-- /panel -->                
