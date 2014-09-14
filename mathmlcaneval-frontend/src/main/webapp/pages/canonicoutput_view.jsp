@@ -300,13 +300,16 @@
                 </div> <!-- /col-md-6 -->
             </div> <!-- /row -->
 
-            <div class="row">
+            <div class="row" id="formulaWindow">
                 <div class="col-md-12">
 
 
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <spring:message code="entity.formula.xml" />
+                            <div class="pull-right">
+                                <span class="glyphicon glyphicon-resize-full" id="resizeWindow"></span>
+                            </div>
                         </div> <!-- /panel-heading -->
                         <div class="panel-body">
                             <ul class="nav nav-tabs">
@@ -329,31 +332,41 @@
 
                             <div class="tab-content">
                                 <div class="tab-pane active" id="canonicalized">
-                                    <div class="col-md-6">
-                                        <pre class="brush: xml">
-                                            <c:out value="${canonicOutput.outputForm}" />
-                                        </pre>
-                                    </div> <!-- /col-md-6 -->
-
-                                    <div class="col-md-6">
-                                        <div class="well-sm">
-                                            <c:out value="${canonicOutput.outputForm}" escapeXml="false" />
-                                        </div>        <!-- /well-sm -->                                
-                                    </div> <!-- /col-md-6 -->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><spring:message code="entity.formula.rendered" /></div>
+                                        <div class="panel-body">
+                                            <div class="well-sm">
+                                                <c:out value="${canonicOutput.outputForm}" escapeXml="false" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><spring:message code="entity.formula.xml" /></div>
+                                        <div class="panel-body">
+                                            <pre class="brush: xml">
+                                                <c:out value="${canonicOutput.outputForm}" />
+                                            </pre>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="tab-pane" id="original">
-                                    <div class="col-md-6">                                        
-                                        <pre class="brush: xml">
-                                            <c:out value="${canonicOutput.parents[0].xml}" />
-                                        </pre>
-                                    </div><!-- /col-md-6 -->
-
-                                    <div class="col-md-6">
-                                        <div class="well-sm">
-                                            <c:out value="${canonicOutput.parents[0].xml}" escapeXml="false" />
-                                        </div><!-- /well-sm -->
-                                    </div> <!--/col-md-6-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><spring:message code="entity.formula.rendered" /></div>
+                                        <div class="panel-body">
+                                            <div class="well-sm">
+                                                <c:out value="${canonicOutput.parents[0].xml}" escapeXml="false" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><spring:message code="entity.formula.xml" /></div>
+                                        <div class="panel-body">
+                                            <pre class="brush: xml">
+                                                <c:out value="${canonicOutput.parents[0].xml}" />
+                                            </pre>
+                                        </div>
+                                    </div>
                                 </div> <!-- /tab-pane -->
 
                                 <div class="tab-pane" id="diff">
@@ -364,6 +377,10 @@
                     </div><!-- /panel -->
                 </div> <!--/col-md-12 -->
             </div> <!-- /row -->
+            
+            <!-- moveMe is for javascript to find next element which is moved when
+                            xml preview is set to page wide-->
+            <div class="moveMe"></div>
         </div> <!-- /container -->
     </tiles:putAttribute>
 </tiles:insertDefinition>

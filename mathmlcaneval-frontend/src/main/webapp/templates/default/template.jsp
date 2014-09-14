@@ -201,6 +201,18 @@
                             e.preventDefault();
                         });
             </c:if>
+                
+                $("#resizeWindow").click(function(){
+                    var windowVar = $("#formulaWindow");
+                    if(windowVar.hasClass('page-wide-window'))
+                    {
+                        windowVar.removeClass('page-wide-window').next('.moveMe').css('margin-top','0');
+                    }
+                    else
+                    {                        
+                        windowVar.addClass('page-wide-window').next(".moveMe").css('margin-top',windowVar.height()+15);
+                    }   
+                });
                     });
 
                     function getUserRolesHTML()

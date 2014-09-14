@@ -115,3 +115,12 @@ footer
     border-color: black;
     border-width: 2px;
 }
+
+.page-wide-window
+{
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left:0px;
+    margin-right:0px;
+}
