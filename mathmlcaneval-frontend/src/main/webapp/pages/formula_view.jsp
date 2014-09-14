@@ -162,6 +162,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-primary" >
@@ -177,16 +178,18 @@
                     </div>
                 </div>
             </div>
-
             <div class="row" id="formulaWindow">
                 <div class="col-md-12">
-                    <div class="panel panel-primary" >
+                    <div class="panel panel-primary">
+
                         <!-- Formula in MathML & rendered -->
                         <div class="panel-heading">
                             <spring:message code="entity.formula.xml" />
+
                             <div class="pull-right">
                                 <span class="glyphicon glyphicon-resize-full" id="resizeWindow"></span>
                             </div>
+
                         </div>
                         <div class="panel-body">
                             <pre class="brush: xml">
@@ -197,8 +200,8 @@
                 </div>
             </div>
 
-                            <!-- moveMe is for javascript to find next element which is moved when
-                            xml preview is set to page wide-->
+            <!-- moveMe is for javascript to find next element which is moved when
+            xml preview is set to page wide-->
             <div class="row moveMe">
                 <div class="col-md-12">
                     <div class="panel panel-primary">
