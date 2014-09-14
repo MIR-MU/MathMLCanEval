@@ -165,26 +165,28 @@
                         </div>
                     </div>
 
-
                     <div class="panel panel-primary">
+                        <!-- Formula in MathML & rendered -->
+                        <div class="panel-heading">
+                            <spring:message code="entity.formula.rendered" />
+                        </div>
+                        <div class="panel-body">                            
+                            <div class="well-sm">
+                                <c:out value="${formulaEntry.xml}" escapeXml="false" />
+                            </div>
+                        </div>
+                    </div>
+                            
+                            <div class="panel panel-primary">
                         <!-- Formula in MathML & rendered -->
                         <div class="panel-heading">
                             <spring:message code="entity.formula.xml" />
                         </div>
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <pre class="brush: xml">
-                                        <c:out value="${formulaEntry.xml}" />
-                                    </pre>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="well-sm">
-                                        <c:out value="${formulaEntry.xml}" escapeXml="false" />
-                                    </div>                                    
-                                </div>
-                            </div>
-                        </div>
+                            <pre class="brush: xml">
+                                <c:out value="${formulaEntry.xml}" />
+                            </pre>
+                        </div>                            
                     </div>
 
                     <div class="panel panel-primary">

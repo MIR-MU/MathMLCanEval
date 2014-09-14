@@ -329,31 +329,41 @@
 
                             <div class="tab-content">
                                 <div class="tab-pane active" id="canonicalized">
-                                    <div class="col-md-6">
-                                        <pre class="brush: xml">
-                                            <c:out value="${canonicOutput.outputForm}" />
-                                        </pre>
-                                    </div> <!-- /col-md-6 -->
-
-                                    <div class="col-md-6">
-                                        <div class="well-sm">
-                                            <c:out value="${canonicOutput.outputForm}" escapeXml="false" />
-                                        </div>        <!-- /well-sm -->                                
-                                    </div> <!-- /col-md-6 -->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><spring:message code="entity.formula.rendered" /></div>
+                                        <div class="panel-body">
+                                            <div class="well-sm">
+                                                <c:out value="${canonicOutput.outputForm}" escapeXml="false" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><spring:message code="entity.formula.xml" /></div>
+                                        <div class="panel-body">
+                                            <pre class="brush: xml">
+                                                <c:out value="${canonicOutput.outputForm}" />
+                                            </pre>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="tab-pane" id="original">
-                                    <div class="col-md-6">                                        
-                                        <pre class="brush: xml">
-                                            <c:out value="${canonicOutput.parents[0].xml}" />
-                                        </pre>
-                                    </div><!-- /col-md-6 -->
-
-                                    <div class="col-md-6">
-                                        <div class="well-sm">
-                                            <c:out value="${canonicOutput.parents[0].xml}" escapeXml="false" />
-                                        </div><!-- /well-sm -->
-                                    </div> <!--/col-md-6-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><spring:message code="entity.formula.rendered" /></div>
+                                        <div class="panel-body">
+                                            <div class="well-sm">
+                                                <c:out value="${canonicOutput.parents[0].xml}" escapeXml="false" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><spring:message code="entity.formula.xml" /></div>
+                                        <div class="panel-body">
+                                            <pre class="brush: xml">
+                                                <c:out value="${canonicOutput.parents[0].xml}" />
+                                            </pre>
+                                        </div>
+                                    </div>
                                 </div> <!-- /tab-pane -->
 
                                 <div class="tab-pane" id="diff">
