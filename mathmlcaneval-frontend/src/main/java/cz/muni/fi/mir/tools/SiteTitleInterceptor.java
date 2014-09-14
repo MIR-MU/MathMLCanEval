@@ -45,7 +45,7 @@ public class SiteTitleInterceptor extends HandlerInterceptorAdapter implements M
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
     {
-        if (handler instanceof HandlerMethod)
+        if (handler instanceof HandlerMethod && modelAndView != null)
         {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             SiteTitleContainer result = new SiteTitleContainer();
