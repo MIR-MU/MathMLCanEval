@@ -8,15 +8,13 @@ import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.service.AnnotationService;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
-import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.AnnotationForm;
 import cz.muni.fi.mir.forms.FindSimilarForm;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -36,6 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping(value = "/canonicoutput")
+@SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class CanonicOutputController
 {
     @Autowired
@@ -49,6 +48,7 @@ public class CanonicOutputController
     private SecurityContextFacade securityContext;
 
     @RequestMapping(value = {"/view/{id}", "/view/{id}/"}, method = RequestMethod.GET)
+    @SiteTitle("{entity.canonicOutput.view}")
     public ModelAndView viewCanonicOutput(@PathVariable Long id)
     {
         ModelMap mm = new ModelMap();
