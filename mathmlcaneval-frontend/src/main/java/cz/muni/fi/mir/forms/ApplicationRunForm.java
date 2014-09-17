@@ -5,6 +5,7 @@
 package cz.muni.fi.mir.forms;
 
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 import org.joda.time.DateTime;
 
 /**
@@ -18,7 +19,9 @@ public class ApplicationRunForm
     private DateTime startTime;
     private DateTime stopTime;
     private UserForm user;
+    @NotNull(message = "{validator.appruns.config.empty}")
     private ConfigurationForm configurationForm;
+    @NotNull(message = "{validator.appruns.revision.empty}")
     private RevisionForm revisionForm;
 
     public Long getId()

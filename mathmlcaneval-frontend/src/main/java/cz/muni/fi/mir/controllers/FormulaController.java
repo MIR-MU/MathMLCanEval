@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -268,7 +269,7 @@ public class FormulaController
         else
         {
             // @Async call
-            formulaService.massFormulaImport(path, filter, 
+            formulaService.massFormulaImport(path, filter,
                     mapper.map(formulaForm.getRevisionForm(), Revision.class), 
                     mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
                     mapper.map(formulaForm.getProgramForm(), Program.class),
@@ -402,8 +403,42 @@ public class FormulaController
         
         return new ModelAndView("redirect:/formula/massdelete/");        
     }
-    
-    
+
+    @RequestMapping(value={"/bySourceDocument/{sourceDocumentId}", "/bySourceDocument/{sourceDocumentId}/"},
+            method = RequestMethod.GET,
+            produces = "application/json; charset=utf-8")
+    public @ResponseBody String getFormulaIdsBySourceDocument(@PathVariable long sourceDocumentId)
+    {
+        String listOfIds = "[";
+        SourceDocument sourceDocument = sourceDocumentService.getSourceDocumentByID(sourceDocumentId);
+        if (sourceDocument == null)
+        {
+            return StringUtils.EMPTY;
+        }
+        for (Formula f : formulaService.getFormulasBySourceDocument(sourceDocument))
+        {
+            listOfIds += f.getId().toString() + ",";
+        }
+        return listOfIds.substring(0, listOfIds.length() - 1) + "]";
+    }
+
+    @RequestMapping(value={"/byProgram/{programId}", "/byProgram/{programId}/"},
+            method = RequestMethod.GET,
+            produces = "application/json; charset=utf-8")
+    public @ResponseBody String getFormulaIdsByProgram(@PathVariable long programId)
+    {
+        String listOfIds = "[";
+        Program program = programService.getProgramByID(programId);
+        if (program == null)
+        {
+            return StringUtils.EMPTY;
+        }
+        for (Formula f : formulaService.getFormulasByProgram(program))
+        {
+            listOfIds += f.getId().toString() + ",";
+        }
+        return listOfIds.substring(0, listOfIds.length() - 1) + "]";
+    }
     
     private Map<String,String> generateSimilarityProperties(FindSimilarForm findSimilarForm)
     {

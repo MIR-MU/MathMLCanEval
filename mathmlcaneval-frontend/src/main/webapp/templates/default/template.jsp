@@ -213,6 +213,54 @@
                         windowVar.addClass('page-wide-window').next(".moveMe").css('margin-top',windowVar.height()+15);
                     }   
                 });
+            <c:if test="${massCanonicalize eq true}">
+                        var fetchFormulaIds = function(prefix, entityId) {
+                            $.ajax({
+                                type: 'GET',
+                                url:  prefix + entityId,
+                                dataType: 'json',
+                                async: true,
+                                success: function(result) {
+                                    $.each(result, function(i, id) {
+                                        $("#apprun-input-formulas").append(id + " ");
+                                    });
+                                }
+                            });
+                        };
+
+                        $(".apprun-input-add#source-document").click(function (e) {
+                            fetchFormulaIds("${pageContext.request.contextPath}/formula/bySourceDocument/", $("#apprun-sourcedocument-id").val());
+                            e.preventDefault();
+                        });
+                        $(".apprun-input-add#conversion-program").click(function (e) {
+                            fetchFormulaIds("${pageContext.request.contextPath}/formula/byProgram/", $("#apprun-program-id").val());
+                            e.preventDefault();
+                        });
+
+                        $(".apprun-input-option").click(function (e) {
+                            var method = $(this).attr('data-apprun-input');
+                            var className = "apprun-input-method";
+                            var theDiv = $('#' + method + '.' + className);
+
+                            theDiv.siblings('.' + className).css('display', 'none');
+                            theDiv.css('display', 'block');
+                            $("#apprun-input-button").html($(this).html() + '<span class="caret"></span>');
+                            //e.preventDefault();
+                        });
+                        $(".img-thumbnail").on('click', function (e) {
+
+                            if ($(this).hasClass('formula-canonicalize-checked')) {
+                                $(this).removeClass('formula-canonicalize-checked');
+                                $(this).children(':checkbox').first().attr('checked', false);
+
+                            } else {
+                                $(this).addClass('formula-canonicalize-checked');
+                                $(this).children(':checkbox').first().attr('checked', true);
+                            }
+
+                            e.preventDefault();
+                        });
+            </c:if>
                     });
 
                     function getUserRolesHTML()

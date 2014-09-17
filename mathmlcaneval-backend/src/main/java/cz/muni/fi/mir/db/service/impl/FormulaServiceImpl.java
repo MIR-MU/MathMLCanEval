@@ -25,7 +25,6 @@ import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
 import cz.muni.fi.mir.tools.XMLUtils;
-import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -527,5 +526,33 @@ public class FormulaServiceImpl implements FormulaService
         formulaDAO.updateFormula(formula);
         
         annotationDAO.deleteAnnotation(annotation);
+    }
+
+    @Override
+	@Async
+    public void massCanonicalize(List<Long> listOfIds, Revision revision, Configuration configuration, User user)
+    {
+        ApplicationRun applicationRun = EntityFactory.createApplicationRun();
+        applicationRun.setUser(user);
+        applicationRun.setRevision(revision);
+        applicationRun.setConfiguration(configuration);
+
+        List<Formula> toCanonicalize = new ArrayList<>();
+        for (Long formulaID : listOfIds)
+        {
+            Formula formula = formulaDAO.getFormulaByID(formulaID);
+            // for some reason, the session is already closed in the task,
+            // so we need to fetch to lazy collection while we have it...
+            formula.getOutputs().size();
+            toCanonicalize.add(formula);
+        }
+        if (!toCanonicalize.isEmpty())
+        {
+            logger.fatal("Attempt to create Application Run with flush mode to ensure its persisted.");
+            applicationRunDAO.createApplicationRunWithFlush(applicationRun);
+            logger.fatal("Operation withFlush called.");
+
+            mathCanonicalizerLoader.execute(toCanonicalize, applicationRun);
+        }
     }
 }

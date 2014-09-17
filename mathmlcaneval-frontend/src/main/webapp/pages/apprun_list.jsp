@@ -7,17 +7,26 @@
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">        
         <div class="container content">
+            <h1><spring:message code="entity.appruns.list" /></h1>
+            <div class="row">
+                <sec:authorize access="hasRole('ROLE_USER')">
+                    <div class="pull-right">
+                        <a href="${pageContext.request.contextPath}/appruns/create/" class="btn btn-primary"><spring:message code="entity.appruns.newButton" /></a>
+                    </div>
+                </sec:authorize>
+            </div>
+
             <table class="table table-bordered table-striped pull-top-50">
                 <thead>
                     <tr>
                         <th><spring:message code="general.field.id" /></th>
-                        <th><spring:message code="entity.applicationrun.start" /></th>
-                        <th><spring:message code="entity.applicationrun.stop" /></th>
-                        <th><spring:message code="entity.applicationrun.note" /></th>
-                        <th><spring:message code="entity.applicationrun.user" /></th>
-                        <th><spring:message code="entity.applicationrun.configuration" /></th>
-                        <th><spring:message code="entity.applicationrun.revision" /></th>
-                        <th><spring:message code="entity.applicationrun.outputs" /></th>
+                        <th><spring:message code="entity.appruns.start" /></th>
+                        <th><spring:message code="entity.appruns.stop" /></th>
+                        <th><spring:message code="entity.appruns.note" /></th>
+                        <th><spring:message code="entity.appruns.user" /></th>
+                        <th><spring:message code="entity.appruns.configuration" /></th>
+                        <th><spring:message code="entity.appruns.revision" /></th>
+                        <th><spring:message code="entity.appruns.outputs" /></th>
                         <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                         <th>
                             <spring:message code="general.table.option" />

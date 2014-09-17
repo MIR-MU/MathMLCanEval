@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -138,12 +139,12 @@ public class CanonicalizationTask implements Runnable
                 }
 
                 DateTime startTime = DateTime.now();
+                applicationRun.setStartTime(startTime);
                 for (Formula f : formulas)
                 {
                     CanonicOutput co = canonicalize(f, canonicalizer, canonicalize, applicationRun);
 
                     canonicOutputService.createCanonicOutput(co);
-                    // we need to force-fetch lazy collections. ugly..
                     Hibernate.initialize(f.getOutputs());
 
                     f.getOutputs().add(co);
@@ -154,7 +155,6 @@ public class CanonicalizationTask implements Runnable
                 }
 
                 DateTime stopTime = DateTime.now();
-                applicationRun.setStartTime(startTime);
                 applicationRun.setStopTime(stopTime);
                 applicationRunService.updateApplicationRun(applicationRun);
                 
