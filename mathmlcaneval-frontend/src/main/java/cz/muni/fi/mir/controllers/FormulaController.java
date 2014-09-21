@@ -287,18 +287,8 @@ public class FormulaController
     {
         User u = securityContext.getLoggedEntityUser();
         Annotation a = EntityFactory.createAnnotation(annotation, u);
-        annotationService.createAnnotation(a);
         
-        Formula f = formulaService.getFormulaByID(formulaID);
-        List<Annotation> currentAnnotations = new ArrayList<>();
-        if(f.getAnnotations() != null)
-        {
-            currentAnnotations.addAll(f.getAnnotations());
-        }
-        currentAnnotations.add(a);
-        f.setAnnotations(currentAnnotations);
-        
-        formulaService.updateFormula(f);
+        formulaService.annotateFormula(formulaService.getFormulaByID(formulaID), a);
         
         return "{ \"user\": \""+u.getUsername()+"\", \"note\" : \""+annotation+"\"}";
     }

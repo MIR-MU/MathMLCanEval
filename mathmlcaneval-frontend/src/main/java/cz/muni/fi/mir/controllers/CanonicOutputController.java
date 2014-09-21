@@ -76,21 +76,8 @@ public class CanonicOutputController
     public String annotate(@RequestParam("canonicOutputId") Long canonicOutputId, @RequestParam("note") String note)//note lebo form ma path =" note"
     {
         Annotation a = EntityFactory.createAnnotation(note, securityContext.getLoggedEntityUser());
-        annotationService.createAnnotation(a);
         
-        CanonicOutput co = canonicOutputService.getCanonicOutputByID(canonicOutputId);
-        List<Annotation> annotations = new ArrayList<>();
-        
-        if(co.getAnnotations() != null)
-        {
-            annotations.addAll(co.getAnnotations());
-        }
-        
-        annotations.add(a);
-        
-        co.setAnnotations(annotations);
-        
-        canonicOutputService.updateCanonicOutput(co);
+        canonicOutputService.annotateCannonicOutput(canonicOutputService.getCanonicOutputByID(canonicOutputId), a);
         
         return "{ \"user\": \""+securityContext.getLoggedEntityUser().getUsername()+"\", \"note\" : \""+note+"\"}";
     }

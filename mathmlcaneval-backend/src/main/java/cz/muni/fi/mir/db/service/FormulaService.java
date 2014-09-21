@@ -15,6 +15,7 @@
  */
 package cz.muni.fi.mir.db.service;
 
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
@@ -204,4 +205,8 @@ public interface FormulaService
     void attachSimilarFormulas(Formula formula, Long[] similarIDs,boolean override) throws IllegalArgumentException;
     
     void massRemove(List<Formula> toBeRemoved);
+    
+    void annotateFormula(Formula formula, Annotation annotation);
+    
+    void deleteAnnotationFromFormula(Formula formula, Annotation annotation);
 }

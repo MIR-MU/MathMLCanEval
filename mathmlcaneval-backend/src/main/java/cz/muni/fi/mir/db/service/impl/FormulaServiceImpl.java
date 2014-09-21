@@ -5,9 +5,11 @@
  */
 package cz.muni.fi.mir.db.service.impl;
 
+import cz.muni.fi.mir.db.dao.AnnotationDAO;
 import cz.muni.fi.mir.db.dao.ApplicationRunDAO;
 import cz.muni.fi.mir.db.dao.ElementDAO;
 import cz.muni.fi.mir.db.dao.FormulaDAO;
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Configuration;
@@ -57,13 +59,13 @@ public class FormulaServiceImpl implements FormulaService
     @Autowired
     private FileDirectoryService fileDirectoryService;
     @Autowired
-    private SecurityContextFacade securityContext;
-    @Autowired
     private ApplicationRunDAO applicationRunDAO;
     @Autowired
     private MathCanonicalizerLoader mathCanonicalizerLoader;
     @Autowired
     private XMLUtils xmlUtils;
+    @Autowired
+    private AnnotationDAO annotationDAO;
 
     @Override
     @Transactional(readOnly = false)
@@ -490,5 +492,40 @@ public class FormulaServiceImpl implements FormulaService
         {            
             formulaDAO.deleteFormula(f);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void annotateFormula(Formula formula, Annotation annotation)
+    {
+        annotationDAO.createAnnotation(annotation);
+        
+        List<Annotation> current = new ArrayList<>();
+        
+        if(formula.getAnnotations() != null && !formula.getAnnotations().isEmpty())
+        {
+            current.addAll(formula.getAnnotations());
+        }
+        
+        current.add(annotation);
+        
+        formula.setAnnotations(current);
+        
+        formulaDAO.updateFormula(formula);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteAnnotationFromFormula(Formula formula, Annotation annotation)
+    {
+        List<Annotation> temp = new ArrayList<>(formula.getAnnotations());
+        
+        temp.remove(annotation);
+        
+        formula.setAnnotations(temp);
+        
+        formulaDAO.updateFormula(formula);
+        
+        annotationDAO.deleteAnnotation(annotation);
     }
 }

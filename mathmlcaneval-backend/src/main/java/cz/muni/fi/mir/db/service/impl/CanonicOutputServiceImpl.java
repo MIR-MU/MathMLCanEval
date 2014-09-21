@@ -5,11 +5,14 @@
  */
 package cz.muni.fi.mir.db.service.impl;
 
+import cz.muni.fi.mir.db.dao.AnnotationDAO;
 import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,8 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
 
     @Autowired
     private CanonicOutputDAO canonicOutputDAO;
+    @Autowired
+    private AnnotationDAO annotationDAO;
 
     @Override
     @Transactional(readOnly = false)
@@ -73,5 +78,30 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     public List<CanonicOutput> getCanonicOutputByParentFormula(Formula formula)
     {
         return canonicOutputDAO.getCanonicOutputByParentFormula(formula);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void annotateCannonicOutput(CanonicOutput canonicOutput, Annotation annotation)
+    {
+        List<Annotation> temp = new ArrayList<>();
+        if(canonicOutput.getAnnotations() != null && !canonicOutput.getAnnotations().isEmpty())
+        {
+            temp.addAll(canonicOutput.getAnnotations());
+        }
+        annotationDAO.createAnnotation(annotation);
+        
+        temp.add(annotation);
+        
+        canonicOutput.setAnnotations(temp);
+        
+        canonicOutputDAO.updateCanonicOutput(canonicOutput);       
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteAnnotationFromCanonicOutput(CanonicOutput canonicOutput, Annotation annotation)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

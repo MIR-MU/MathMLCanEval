@@ -37,7 +37,7 @@ import org.joda.time.DateTime;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @AnalyzerDef(name="countElementFormAnalyzer",
         tokenizer = @TokenizerDef(factory = ElementCountTokenizerFactory.class))
-public class Formula implements Serializable
+public class Formula implements Serializable, Auditable
 {
 
     private static final long serialVersionUID = 7807040500942149400L;

@@ -22,8 +22,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import org.hibernate.search.annotations.ClassBridge;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 
 
@@ -35,7 +33,7 @@ import org.hibernate.search.annotations.Store;
 @ClassBridge(
         store = Store.YES,
         impl=CanonicOutputBridge.class)
-public class CanonicOutput implements Serializable
+public class CanonicOutput implements Serializable,Auditable
 {
     private static final long serialVersionUID = 6956045766345845859L;
 
