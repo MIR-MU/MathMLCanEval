@@ -19,6 +19,7 @@ import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.scheduling.FormulaImportTask;
 import cz.muni.fi.mir.scheduling.LongRunningTaskFactory;
@@ -28,8 +29,7 @@ import cz.muni.fi.mir.services.TaskService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
 import cz.muni.fi.mir.tools.XMLUtils;
-import java.io.FileNotFoundException;
-import cz.muni.fi.mir.wrappers.SecurityContextFacade;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,9 +39,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,11 +64,14 @@ public class FormulaServiceImpl implements FormulaService
     @Autowired
     private ApplicationRunDAO applicationRunDAO;
     @Autowired
+    private ApplicationRunService applicationRunService;
+    @Autowired
     private MathCanonicalizerLoader mathCanonicalizerLoader;
     @Autowired
     private XMLUtils xmlUtils;
     @Autowired
     private AnnotationDAO annotationDAO;
+    @Autowired
     private LongRunningTaskFactory taskFactory;
     @Autowired
     private TaskService taskService;
@@ -480,7 +483,6 @@ public class FormulaServiceImpl implements FormulaService
     }
 
     @Override
-	@Async
     public void massCanonicalize(List<Long> listOfIds, Revision revision, Configuration configuration, User user)
     {
         ApplicationRun applicationRun = EntityFactory.createApplicationRun();
@@ -494,13 +496,13 @@ public class FormulaServiceImpl implements FormulaService
             Formula formula = formulaDAO.getFormulaByID(formulaID);
             // for some reason, the session is already closed in the task,
             // so we need to fetch to lazy collection while we have it...
-            formula.getOutputs().size();
+            Hibernate.initialize(formula.getOutputs());
             toCanonicalize.add(formula);
         }
         if (!toCanonicalize.isEmpty())
         {
             logger.fatal("Attempt to create Application Run with flush mode to ensure its persisted.");
-            applicationRunDAO.createApplicationRunWithFlush(applicationRun);
+            applicationRunService.createApplicationRunWithFlush(applicationRun);
             logger.fatal("Operation withFlush called.");
 
             mathCanonicalizerLoader.execute(toCanonicalize, applicationRun);
