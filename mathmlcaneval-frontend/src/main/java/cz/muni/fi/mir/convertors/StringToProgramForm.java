@@ -4,9 +4,8 @@
  */
 package cz.muni.fi.mir.convertors;
 
-import cz.muni.fi.mir.db.domain.SourceDocument;
-import cz.muni.fi.mir.db.service.SourceDocumentService;
-import cz.muni.fi.mir.forms.SourceDocumentForm;
+import cz.muni.fi.mir.db.service.ProgramService;
+import cz.muni.fi.mir.forms.ProgramForm;
 import cz.muni.fi.mir.tools.Tools;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,14 @@ import org.springframework.core.convert.converter.Converter;
  *
  * @author siska
  */
-public class StringToSourceDocument implements Converter<String, SourceDocument>
+public class StringToProgramForm implements Converter<String, ProgramForm>
 {
-    @Autowired private SourceDocumentService sourceDocumentService;
+    @Autowired private ProgramService programService;
+    @Autowired private Mapper mapper;
 
 
     @Override
-    public SourceDocument convert(String source)
+    public ProgramForm convert(String source)
     {
         if(Tools.getInstance().stringIsEmpty(source))
         {
@@ -36,7 +36,7 @@ public class StringToSourceDocument implements Converter<String, SourceDocument>
             }
             else
             {
-                return sourceDocumentService.getSourceDocumentByID(Long.valueOf(source));
+                return mapper.map(programService.getProgramByID(new Long(source)), ProgramForm.class);
             }
         }
     }

@@ -8,13 +8,67 @@
     <tiles:putAttribute name="body">
         <div class="container content">
             <div class="row">
-                <div class="col-lg-10 pull-right">
-                    <form method="get" action="${pageContext.request.contextPath}/formula/search/" class="form-inline">
-                        <div class="form-group">
-                            <input type="text" name="keywords" class="form-control search-bar" />
+                <div class="col-md-12">
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                        !Advanced search
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in"><!-- if "in" class is added then search is shown @load -->
+                                <div class="panel-body">
+                                    <form:form action="${pageContext.request.contextPath}/formula/search/" method="post" commandName="formulaSearchRequest">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="program" class="col-sm-4 control-label">!program</label>
+                                                    <div class="col-sm-8">
+                                                        <form:select items="${programList}" path="program" itemLabel="name" itemValue="id" cssClass="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="configuration" class="col-sm-4 control-label">!configuration</label>
+                                                    <div class="col-sm-8">
+                                                        <form:select items="${configurationList}" path="configuration" itemLabel="name" itemValue="id" cssClass="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="sourceDocument" class="col-sm-4 control-label">!Source document</label>
+                                                    <div class="col-sm-8">
+                                                        <form:select items="${sourceDocumentList}" path="sourceDocument" itemLabel="name" itemValue="id" cssClass="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="sourceDocument" class="col-sm-4 control-label">!elements</label>
+                                                    <div class="col-sm-8">
+                                                        <form:select items="${elementList}" path="sourceDocument" itemLabel="elementName" itemValue="id" cssClass="form-control" id="elementList"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="annotationContent" class="col-sm-2 control-label">!annotation content</label>
+                                            <div class="col-sm-10">
+                                                <form:input path="annotationContent" cssClass="form-control" />
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary"><spring:message code="general.label.search" /></button>
+                                    </form:form>
+                                </div>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" disabled><spring:message code="general.label.search" /></button>
-                    </form>
+                    </div>                                        
                 </div>
             </div>
             <div class="row pull-top-50">

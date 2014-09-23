@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
 /**
  * The purpose of this class is to capture some comments of given Canonic
@@ -36,6 +38,7 @@ public class Annotation implements Serializable
     private User user;
 
     @Column(name = "note",columnDefinition = "text")
+    @Field
     private String note;
 
     public Long getId()

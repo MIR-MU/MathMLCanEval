@@ -99,10 +99,13 @@
         <property name="converters">
             <list>
                 <bean class="cz.muni.fi.mir.convertors.StringToProgram"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToProgramForm"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToSourceDocument"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToSourceDocumentForm"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToUserRole"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToRevision"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToConfiguration"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToConfigurationForm"/>
             </list>
         </property>
     </bean>

@@ -7,8 +7,12 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.FormulaDAO;
+import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
+import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
@@ -27,6 +31,7 @@ import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import org.apache.lucene.search.Query;
 import org.hibernate.Hibernate;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
@@ -509,5 +514,32 @@ public class FormulaDAOImpl implements FormulaDAO
     public void findSimilarMass(Map<String,String> properties)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest)
+//    public FormulaSearchResponse findFormulas(Program program, SourceDocument sourceDocument, Configuration configuration, Map<Element, Boolean> elements, String annotations, Integer size, Integer runsCount)
+    {
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+        org.hibernate.search.jpa.FullTextQuery ftq = null;  // actual query hitting database
+        
+        QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Formula.class).get();
+        
+        
+        Query query = qb.bool().must(qb.keyword().onField("sourceDocument.id").matching(formulaSearchRequest.getSourceDocument().getId()).createQuery())
+                .must(qb.keyword().onField("program.id").matching(formulaSearchRequest.getProgram().getId()).createQuery())
+                .must(qb.keyword().onField("annotation").ignoreFieldBridge().matching(formulaSearchRequest.getAnnotationContent()).createQuery()).createQuery();
+        
+        logger.info(query);
+        
+        ftq = fullTextEntityManager.createFullTextQuery(query, Formula.class);
+        
+        List<Formula> result = ftq.getResultList();
+        
+        logger.info(result);
+        
+        FormulaSearchResponse fsr = new FormulaSearchResponse();
+        fsr.setFormulas(result);
+        return fsr;
     }
 }

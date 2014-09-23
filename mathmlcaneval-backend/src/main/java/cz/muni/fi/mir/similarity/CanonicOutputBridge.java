@@ -1,5 +1,6 @@
 package cz.muni.fi.mir.similarity;
 
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import java.io.StringReader;
 import java.util.Map;
@@ -26,15 +27,22 @@ public class CanonicOutputBridge implements FieldBridge, ParameterizedBridge
     {
         SimilarityFormConverter sfc = SimilarityFormConverterWrapper.getConverter();
         
-        SimilarityForms sf = sfc.process((CanonicOutput) value);        
+        CanonicOutput co =(CanonicOutput) value;
+        SimilarityForms sf = sfc.process(co);        
         
+        StringBuilder sb = new StringBuilder();
         
+        for(Annotation a :co.getAnnotations())
+        {
+            sb.append(a.getNote()).append(" ");
+        }
         
         document.add(newField("outputForm", sf.getDefaultForm(),luceneOptions,null));
         document.add(newField("distanceForm",sf.getDistanceForm(),luceneOptions,null));
         document.add(newField("countElementForm",sf.getCountForm(),luceneOptions,
                 new ElementCountAnalyzer(Version.LUCENE_36)));
         document.add(newField("longestBranch",String.valueOf(sf.getLongestBranch()),luceneOptions,null));
+        document.add(newField("annotation",sb.toString(),luceneOptions,null));
         
         logger.debug("outputForm added " + sf);
     }

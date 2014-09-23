@@ -55,20 +55,23 @@ public class Formula implements Serializable, Auditable
     @Column(name = "hashValue", length = 40,nullable = true,unique = true)
     private String hashValue;                        //used for computation whether formula is already stored
     @ManyToOne
+    @IndexedEmbedded
     private SourceDocument sourceDocument;
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "insertTime")
     private DateTime insertTime;                    // datum pridani
     @ManyToOne
+    @IndexedEmbedded
     private Program program;                    // konverzni program
     @ManyToOne
     private User user;                          // kto ju vlozil
-    @ManyToMany(mappedBy="parents",cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy="parents",cascade = {CascadeType.REMOVE,CascadeType.MERGE})
     @IndexedEmbedded
     private List<CanonicOutput> outputs;         // 
     @OneToMany
     private List<Formula> similarFormulas;    
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = {CascadeType.REMOVE,CascadeType.MERGE})
+    //@IndexedEmbedded
     private List<Annotation> annotations;    
     @ManyToMany
     private List<Element> elements;

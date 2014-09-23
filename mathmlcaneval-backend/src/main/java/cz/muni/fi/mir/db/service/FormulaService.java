@@ -19,6 +19,8 @@ import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
+import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
@@ -209,4 +211,6 @@ public interface FormulaService
     void annotateFormula(Formula formula, Annotation annotation);
     
     void deleteAnnotationFromFormula(Formula formula, Annotation annotation);
+    
+    FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest);
 }

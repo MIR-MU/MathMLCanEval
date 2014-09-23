@@ -15,6 +15,8 @@ import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
+import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
@@ -25,7 +27,6 @@ import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
 import cz.muni.fi.mir.tools.XMLUtils;
-import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -527,5 +528,12 @@ public class FormulaServiceImpl implements FormulaService
         formulaDAO.updateFormula(formula);
         
         annotationDAO.deleteAnnotation(annotation);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest)
+    {
+        return formulaDAO.findFormulas(formulaSearchRequest);
     }
 }

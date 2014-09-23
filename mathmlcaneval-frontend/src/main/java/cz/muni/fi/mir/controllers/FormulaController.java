@@ -26,6 +26,9 @@ import cz.muni.fi.mir.forms.FormulaForm;
 import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
+import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
+import cz.muni.fi.mir.db.service.ElementService;
 import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.FileNotFoundException;
@@ -85,7 +88,7 @@ public class FormulaController
     @Autowired
     private ApplicationRunService applicationRunService;
     @Autowired
-    private AnnotationService annotationService;
+    private ElementService elementService;
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaController.class);
 
@@ -93,7 +96,7 @@ public class FormulaController
     @SiteTitle("{entity.formula.create}")
     public ModelAndView createFormula()
     {
-        ModelMap mm = prepareModelMap(true, true, true, true);        
+        ModelMap mm = prepareModelMap(true, true, true, true,false);        
         mm.addAttribute("formulaForm", new FormulaForm());
         
         try
@@ -118,7 +121,7 @@ public class FormulaController
     {
         if (result.hasErrors())
         {
-            ModelMap mm = prepareModelMap(true, true, true, true);            
+            ModelMap mm = prepareModelMap(true, true, true, true,false);            
             mm.addAttribute("formulaForm", formulaForm);
             mm.addAttribute(model);
 
@@ -176,7 +179,7 @@ public class FormulaController
     @SiteTitle("{entity.formula.view}")
     public ModelAndView viewFormula(@PathVariable Long id)
     {
-        ModelMap mm = prepareModelMap(true, true, false, false);
+        ModelMap mm = prepareModelMap(true, true, false, false,false);
         mm.addAttribute("formulaEntry", formulaService.getFormulaByID(id));
         mm.addAttribute("applicationRunForm", new ApplicationRunForm());
 
@@ -221,9 +224,10 @@ public class FormulaController
             pagination.setNumberOfRecords(formulaService.getNumberOfRecords());
         }
 
-        ModelMap mm = new ModelMap();
+        ModelMap mm = prepareModelMap(true, true, true, true,true);
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination.getPageSize() * (pagination.getPageNumber() - 1), pagination.getPageSize()));
+        mm.addAttribute("formulaSearchRequest", new FormulaSearchRequest());
 
         return new ModelAndView("formula_list",mm);
     }
@@ -233,7 +237,7 @@ public class FormulaController
     @SiteTitle("{navigation.import.mass}")
     public ModelAndView massImport()
     {
-        ModelMap mm = prepareModelMap(true,true,true,true);
+        ModelMap mm = prepareModelMap(true,true,true,true,false);
         mm.addAttribute("formulaForm", new FormulaForm());
         
         try
@@ -259,7 +263,7 @@ public class FormulaController
     {
         if(result.hasErrors())
         {
-            ModelMap mm = prepareModelMap(true,true,true,true);
+            ModelMap mm = prepareModelMap(true,true,true,true,false);
             mm.addAttribute("formulaForm", formulaForm);
             mm.addAttribute(model);
             
@@ -293,7 +297,11 @@ public class FormulaController
         return "{ \"user\": \""+u.getUsername()+"\", \"note\" : \""+annotation+"\"}";
     }
     
-    private ModelMap prepareModelMap(boolean includeRevision, boolean includeConfiguration, boolean includeSourceDocument, boolean includePrograms)
+    private ModelMap prepareModelMap(boolean includeRevision, 
+            boolean includeConfiguration, 
+            boolean includeSourceDocument, 
+            boolean includePrograms,
+            boolean includeElements)
     {
         ModelMap mm = new ModelMap();
         if(includeRevision)
@@ -314,6 +322,11 @@ public class FormulaController
         if(includePrograms)
         {
             mm.addAttribute("programList", programService.getAllPrograms());
+        }
+        
+        if(includeElements)
+        {
+            mm.addAttribute("elementList", elementService.getAllElements());
         }
         
         return mm;
@@ -401,6 +414,21 @@ public class FormulaController
         
         
         return new ModelAndView("redirect:/formula/massdelete/");        
+    }
+    
+    @RequestMapping(value = {"/search/"})
+    public ModelAndView search(@ModelAttribute FormulaSearchRequest formulaSearchRequest,@ModelAttribute("pagination") Pagination pagination)
+    {
+        ModelMap mm = prepareModelMap(true, true, true, true,true);
+        FormulaSearchResponse response = formulaService.findFormulas(formulaSearchRequest);
+        
+        mm.addAttribute("formulaList", response.getFormulas());
+        mm.addAttribute("pagination", pagination);
+//        logger.info(formulaSearchRequest);
+//        
+//        logger.fatal(formulaService.findFormulas(formulaSearchRequest));
+        
+        return new ModelAndView("formula_list",mm);
     }
     
     

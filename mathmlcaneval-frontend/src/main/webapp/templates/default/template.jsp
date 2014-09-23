@@ -19,7 +19,7 @@
         <title><c:out value="${websiteTitle}" /></title>
 
         <!-- Bootstrap core CSS -->
-        <link href="<c:url value="/resources/css/bootstrap.min.cosmo.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
         <link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
         <link href="<c:url value="/resources/css/shCore.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/shThemeDefault.css" />" rel="stylesheet" type="text/css" />
@@ -27,6 +27,8 @@
         <link href="<c:url value="/resources/css/diffview.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/simple-slider.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/simple-slider-volume.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/select2.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/select2-bootstrap.css" />" rel="stylesheet" type="text/css" />
 
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -62,6 +64,7 @@
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.categories.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/simple-slider.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/select2.min.js" />"></script>
         <script>
                     /*
                      * http://stackoverflow.com/questions/229726/using-javascript-within-a-jsp-tag
@@ -73,6 +76,7 @@
                     SyntaxHighlighter.all();
 
                     $(document).ready(function () {
+                        $("#elementList").select2();
 
                         $("#flot-placeholder").css('width', $(".stats-panel-body").width());
                         $("#flot-placeholder").css('height', $(".stats-panel-body").width() * 0.8);

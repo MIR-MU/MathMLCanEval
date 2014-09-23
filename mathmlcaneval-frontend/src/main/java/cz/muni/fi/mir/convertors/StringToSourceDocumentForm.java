@@ -4,7 +4,6 @@
  */
 package cz.muni.fi.mir.convertors;
 
-import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.forms.SourceDocumentForm;
 import cz.muni.fi.mir.tools.Tools;
@@ -16,13 +15,14 @@ import org.springframework.core.convert.converter.Converter;
  *
  * @author siska
  */
-public class StringToSourceDocument implements Converter<String, SourceDocument>
+public class StringToSourceDocumentForm implements Converter<String, SourceDocumentForm>
 {
     @Autowired private SourceDocumentService sourceDocumentService;
+    @Autowired private Mapper mapper;
 
 
     @Override
-    public SourceDocument convert(String source)
+    public SourceDocumentForm convert(String source)
     {
         if(Tools.getInstance().stringIsEmpty(source))
         {
@@ -36,7 +36,7 @@ public class StringToSourceDocument implements Converter<String, SourceDocument>
             }
             else
             {
-                return sourceDocumentService.getSourceDocumentByID(Long.valueOf(source));
+                return mapper.map(sourceDocumentService.getSourceDocumentByID(new Long(source)), SourceDocumentForm.class);
             }
         }
     }

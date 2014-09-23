@@ -4,7 +4,6 @@
  */
 package cz.muni.fi.mir.convertors;
 
-import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.forms.ConfigurationForm;
 import cz.muni.fi.mir.tools.Tools;
@@ -19,13 +18,14 @@ import org.springframework.core.convert.converter.Converter;
  *
  * @author siska
  */
-public class StringToConfiguration implements Converter<String, Configuration>
+public class StringToConfigurationForm implements Converter<String, ConfigurationForm>
 {
     @Autowired private ConfigurationService configurationService;
+    @Autowired private Mapper mapper;
 
 
     @Override
-    public Configuration convert(String source)
+    public ConfigurationForm convert(String source)
     {
         if(Tools.getInstance().stringIsEmpty(source))
         {
@@ -39,7 +39,7 @@ public class StringToConfiguration implements Converter<String, Configuration>
             }
             else
             {
-                return configurationService.getConfigurationByID(Long.valueOf(source));
+                return mapper.map(configurationService.getConfigurationByID(new Long(source)), ConfigurationForm.class);
             }
         }
     }

@@ -5,8 +5,12 @@
  */
 package cz.muni.fi.mir.db.dao;
 
+import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
+import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
@@ -70,4 +74,6 @@ public interface FormulaDAO
     List<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite);
 
     void findSimilarMass(Map<String, String> properties);
+    
+    FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest);
 }
