@@ -17,13 +17,9 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.concurrent.Future;
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -47,14 +43,13 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
     private final String jarFolder;
 
     @Autowired
-    @Qualifier(value = "taskExecutor")
-    private AsyncTaskExecutor taskExecutor;
-    
-    @Autowired
-    private LongRunningTaskFactory canonicalizationTaskFactory;
+    private LongRunningTaskFactory taskFactory;
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private TaskService taskService;
 
     /**
      * Default and the only protected constructor for this class. 
@@ -197,10 +192,10 @@ public class MathCanonicalizerLoaderImpl implements MathCanonicalizerLoader
     public void execute(List<Formula> formulas, ApplicationRun applicationRun)
     {
         this.setRevision(applicationRun.getRevision().getRevisionHash());
-        CanonicalizationTask ct = canonicalizationTaskFactory.createTask();
+        CanonicalizationTask ct = taskFactory.createTask();
         
         ct.setDependencies(formulas, applicationRun, mainClass);
         
-        taskExecutor.execute(ct);
+        taskService.submitTask(ct);
     }
 }

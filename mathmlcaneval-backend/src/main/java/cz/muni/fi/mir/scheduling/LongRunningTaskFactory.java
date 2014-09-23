@@ -14,4 +14,5 @@ public abstract class LongRunningTaskFactory
 {
     public abstract CanonicalizationTask createTask();
     public abstract ApplicationRunRemovalTask createAppTask();
+    public abstract FormulaImportTask createImportTask();
 }

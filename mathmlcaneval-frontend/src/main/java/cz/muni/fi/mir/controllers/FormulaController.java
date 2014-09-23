@@ -32,7 +32,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +109,7 @@ public class FormulaController
         return new ModelAndView("formula_create", mm);
     }
 
+    // TODO turn into the task? Or use existing FormulaImportTask?
     @Secured("ROLE_USER")
     @RequestMapping(value = {"/create", "/create/"}, method = RequestMethod.POST)
     @SiteTitle("{entity.formula.create}")
@@ -276,7 +276,7 @@ public class FormulaController
                     mapper.map(formulaForm.getSourceDocumentForm(), SourceDocument.class),
                     securityContext.getLoggedEntityUser());
             
-            return new ModelAndView("redirect:/formula/list/");
+            return new ModelAndView("redirect:/dashboard/");
         }
     }
     

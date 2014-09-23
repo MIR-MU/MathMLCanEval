@@ -46,6 +46,14 @@
                         </li>  
                     </sec:authorize>
                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="${pageContext.request.contextPath}/dashboard/"><spring:message code="index.page.button.dashboard" /></a></li>
+                            <li><a href="${pageContext.request.contextPath}/statistics/"><spring:message code="index.page.button.statistics" /></a></li>
+                            <li><a href="${pageContext.request.contextPath}/statistics/logger/"><spring:message code="index.page.button.logger" /></a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="navigation.section.user" /><b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="${pageContext.request.contextPath}/user/profile/"><spring:message code="navigation.user.myprofile" /></a></li>

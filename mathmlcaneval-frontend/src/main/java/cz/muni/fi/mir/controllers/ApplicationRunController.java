@@ -6,9 +6,7 @@
 
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Configuration;
-import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.ConfigurationService;
@@ -20,7 +18,6 @@ import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.ApplicationRunForm;
 import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
-import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.util.ArrayList;
@@ -134,7 +131,7 @@ public class ApplicationRunController
                     mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class),
                     securityContext.getLoggedEntityUser());
 
-            return new ModelAndView("redirect:/appruns/list/");
+            return new ModelAndView("redirect:/dashboard/");
         }
     }
 
@@ -181,7 +178,7 @@ public class ApplicationRunController
                     mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class),
                     securityContext.getLoggedEntityUser());
         }
-        return new ModelAndView("redirect:/appruns/list/");
+        return new ModelAndView("redirect:/dashboard/");
     }
 
     private ModelMap prepareModelMap(boolean includeRevision, boolean includeConfiguration, boolean includeSourceDocument, boolean includeProgram)

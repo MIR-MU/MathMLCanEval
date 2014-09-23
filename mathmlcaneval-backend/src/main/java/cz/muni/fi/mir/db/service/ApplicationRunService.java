@@ -19,6 +19,7 @@ import java.util.List;
 public interface ApplicationRunService 
 {
     void createApplicationRun(ApplicationRun applicationRun);
+    void createApplicationRunWithFlush(ApplicationRun applicationRun);
     void updateApplicationRun(ApplicationRun applicationRun);
     
     /**

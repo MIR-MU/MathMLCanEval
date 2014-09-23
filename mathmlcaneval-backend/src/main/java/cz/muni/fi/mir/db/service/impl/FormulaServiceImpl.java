@@ -20,20 +20,24 @@ import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.FormulaService;
+import cz.muni.fi.mir.scheduling.FormulaImportTask;
+import cz.muni.fi.mir.scheduling.LongRunningTaskFactory;
 import cz.muni.fi.mir.services.FileDirectoryService;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
+import cz.muni.fi.mir.services.TaskService;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
 import cz.muni.fi.mir.tools.XMLUtils;
 import java.io.FileNotFoundException;
+import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +69,9 @@ public class FormulaServiceImpl implements FormulaService
     private XMLUtils xmlUtils;
     @Autowired
     private AnnotationDAO annotationDAO;
+    private LongRunningTaskFactory taskFactory;
+    @Autowired
+    private TaskService taskService;
 
     @Override
     @Transactional(readOnly = false)
@@ -155,67 +162,11 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = false)
-    @Async
     public void massFormulaImport(String path, String filter, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument, User user)
     {
-        if(user == null)
-        {
-            throw new IllegalArgumentException("User is null");
-        }
-        ApplicationRun applicationRun = EntityFactory.createApplicationRun();
-        applicationRun.setUser(user);
-        logger.info(applicationRun.getUser());
-        applicationRun.setRevision(revision);
-        applicationRun.setConfiguration(configuration);
-
-        List<Formula> toImport = Collections.emptyList();
-        try
-        {
-            toImport = fileDirectoryService.exploreDirectory(path, filter);
-        }
-        catch (FileNotFoundException ex)
-        {
-            logger.error(ex);
-        }
-        if (!toImport.isEmpty())
-        {
-            logger.fatal("Attempt to create Application Run with flush mode to ensure its persisted.");
-            applicationRunDAO.createApplicationRunWithFlush(applicationRun);
-            logger.fatal("Operation withFlush called.");
-            
-            List<Formula> filtered = new ArrayList<>();
-            for (Formula f : toImport)
-            {
-                String hash = Tools.getInstance().SHA1(f.getXml());
-                Long id = formulaDAO.exists(hash);
-                if (id == null)
-                {
-                    f.setHashValue(hash);
-                    f.setProgram(program);
-                    f.setUser(user);
-                    f.setSourceDocument(sourceDocument);
-
-                    extractElements(f);
-
-                    attachElements(f);
-                    formulaDAO.createFormula(f);
-
-                    filtered.add(f);
-                }
-                else
-                {
-                    logger.info("Formula already exists with ID [" + id + "] - skipping.");
-                }
-            }
-
-            if(filtered.isEmpty())
-            {
-                logger.warn("No formulas are going to be imported because they are already presented.");
-            }
-            
-            mathCanonicalizerLoader.execute(filtered, applicationRun);
-
-        }
+        FormulaImportTask task = taskFactory.createImportTask();
+        task.setDependencies(path, filter, revision, configuration, program, sourceDocument, user);
+        taskService.submitTask(task);
     }
 
     @Override
