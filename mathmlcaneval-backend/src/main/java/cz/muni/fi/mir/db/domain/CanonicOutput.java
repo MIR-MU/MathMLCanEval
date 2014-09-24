@@ -4,7 +4,7 @@
  */
 package cz.muni.fi.mir.db.domain;
 
-import cz.muni.fi.mir.similarity.CanonicOutputBridge;
+import cz.muni.fi.mir.tools.CanonicOutputBridge;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;

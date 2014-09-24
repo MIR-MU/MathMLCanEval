@@ -18,7 +18,7 @@ import org.springframework.core.convert.converter.Converter;
  *
  * @author siska
  */
-public class StringToRevision implements Converter<String, RevisionForm>
+public class StringToRevisionForm implements Converter<String, RevisionForm>
 {
     @Autowired private RevisionService revisionService;
     @Autowired private Mapper mapper;

@@ -20,51 +20,107 @@
                             </div>
                             <div id="collapseOne" class="panel-collapse collapse in"><!-- if "in" class is added then search is shown @load -->
                                 <div class="panel-body">
-                                    <form:form action="${pageContext.request.contextPath}/formula/search/" method="post" commandName="formulaSearchRequest">
-                                        <div class="row">
+                                    <form:form action="${pageContext.request.contextPath}/formula/search/" method="post" commandName="formulaSearchRequestForm">
+                                        <div class="row form-row">
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!program</label>
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="program" class="col-sm-4 control-label">!program</label>
-                                                    <div class="col-sm-8">
-                                                        <form:select items="${programList}" path="program" itemLabel="name" itemValue="id" cssClass="form-control" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="configuration" class="col-sm-4 control-label">!configuration</label>
-                                                    <div class="col-sm-8">
-                                                        <form:select items="${configurationList}" path="configuration" itemLabel="name" itemValue="id" cssClass="form-control" />
-                                                    </div>
-                                                </div>
-                                            </div>                                            
+                                                <form:select items="${programList}" path="program" itemLabel="name" itemValue="id" cssClass="form-control" />
+                                            </div>                                       
                                         </div>
-                                        <div class="row">
+                                        <div class="row form-row">
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!conf</label>
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="sourceDocument" class="col-sm-4 control-label">!Source document</label>
-                                                    <div class="col-sm-8">
-                                                        <form:select items="${sourceDocumentList}" path="sourceDocument" itemLabel="name" itemValue="id" cssClass="form-control" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="sourceDocument" class="col-sm-4 control-label">!elements</label>
-                                                    <div class="col-sm-8">
-                                                        <form:select items="${elementList}" path="sourceDocument" itemLabel="elementName" itemValue="id" cssClass="form-control" id="elementList"/>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                <form:select items="${configurationList}" path="configuration" itemLabel="name" itemValue="id" cssClass="form-control" />
+                                            </div>                                       
                                         </div>
-                                        <div class="form-group">
-                                            <label for="annotationContent" class="col-sm-2 control-label">!annotation content</label>
-                                            <div class="col-sm-10">
+                                        <div class="row form-row">
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!source document</label>
+                                            <div class="col-md-6">
+                                                <form:select items="${sourceDocumentList}" path="sourceDocument" itemLabel="name" itemValue="id" cssClass="form-control" />
+                                            </div>                                       
+                                        </div>
+                                        <div id="elementRowsDiv">
+                                            <c:choose>
+                                                <c:when test="${fn:length(formulaSearchRequestForm.elementRows) eq 0}">
+                                                    <div class="row form-row">
+                                                        <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label">!elements</label>
+                                                        <div class="col-md-3">
+                                                            <form:select items="${elementList}" path="elementRows[0].element" itemLabel="elementName" itemValue="id" cssClass="form-control elementList"/> 
+                                                        </div>
+                                                        <label for="sourceDocument" class="col-md-1 control-label">!pocet</label> 
+                                                        <div class="col-md-2">
+                                                            <form:input path="elementRows[0].value" cssClass="form-control" />
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <span class="btn btn-sm btn-primary addelementrow"><i class=" glyphicon glyphicon-plus"></i></span>
+
+                                                            <span class="btn btn-sm btn-primary removeelemenrow"><i class=" glyphicon glyphicon-minus"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:forEach items="${formulaSearchRequestForm.elementRows}" var="entry" varStatus="i">
+                                                        <div class="row form-row">
+                                                            <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label">!elements</label>
+                                                            <div class="col-md-3">
+                                                                <form:select items="${elementList}" path="elementRows[${i.index}].element" itemLabel="elementName" itemValue="id" cssClass="form-control elementList"/> 
+                                                            </div>
+                                                            <label for="sourceDocument" class="col-md-1 control-label">!pocet</label> 
+                                                            <div class="col-md-2">
+                                                                <form:input path="elementRows[${i.index}].value" cssClass="form-control" />
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <span class="btn btn-sm btn-primary addelementrow"><i class=" glyphicon glyphicon-plus"></i></span>
+
+                                                                <span class="btn btn-sm btn-primary removeelemenrow"><i class=" glyphicon glyphicon-minus"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </c:forEach>                                                    
+                                                </c:otherwise>
+                                            </c:choose>                                            
+                                        </div>
+                                        <div class="row form-row">
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!annotation content</label>
+                                            <div class="col-md-6">
                                                 <form:input path="annotationContent" cssClass="form-control" />
-                                            </div>
+                                            </div>                                       
+                                        </div>
+
+                                        <div class="row form-row">
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!formula content</label>
+                                            <div class="col-md-6">
+                                                <form:input path="formulaContent" cssClass="form-control" />
+                                            </div>                                       
+                                        </div>
+                                        <div class="row form-row">
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!Canonic outputs</label>
+                                            <div class="col-md-6">
+                                                <form:input path="coRuns" cssClass="form-control" />
+                                            </div>                                       
                                         </div>
                                         <button type="submit" class="btn btn-primary"><spring:message code="general.label.search" /></button>
                                     </form:form>
+                                    <div class="hidden" id="elementRowTemplate">
+                                        <div class="row form-row">
+                                            <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label">!elements</label>
+                                            <div class="col-md-3">
+                                                <select name="elementRows[X].element" class="form-control">
+                                                    <c:forEach items="${elementList}" var="entry">
+                                                        <option value="<c:out value="${entry.id}" />"><c:out value="${entry.elementName}" /></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <label for="sourceDocument" class="col-md-1 control-label">!pocet</label> 
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control" name="elementRows[X].value"/>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <span class="btn btn-sm btn-primary addelementrow"><i class=" glyphicon glyphicon-plus"></i></span>
+
+                                                <span class="btn btn-sm btn-primary removeelemenrow"><i class=" glyphicon glyphicon-minus"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

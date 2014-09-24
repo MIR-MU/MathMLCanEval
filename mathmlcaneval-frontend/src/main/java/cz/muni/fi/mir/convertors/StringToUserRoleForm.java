@@ -22,7 +22,7 @@ import org.springframework.core.convert.converter.Converter;
  * @since 1.0
  * @version 1.0
  */
-public class StringToUserRole implements Converter<String, UserRoleForm>
+public class StringToUserRoleForm implements Converter<String, UserRoleForm>
 {
     @Autowired private UserRoleService userRoleService;
     @Autowired private Mapper mapper;

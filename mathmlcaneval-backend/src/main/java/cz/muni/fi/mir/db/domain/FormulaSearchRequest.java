@@ -5,6 +5,8 @@
  */
 package cz.muni.fi.mir.db.domain;
 
+import java.util.Map;
+
 /**
  *
  * @author emptak
@@ -15,6 +17,41 @@ public class FormulaSearchRequest
     private SourceDocument sourceDocument;
     private Configuration configuration;
     private String annotationContent;
+    private String formulaContent;
+    private Integer coRuns;
+
+    public String getFormulaContent()
+    {
+        return formulaContent;
+    }
+
+    public void setFormulaContent(String formulaContent)
+    {
+        this.formulaContent = formulaContent;
+    }
+
+    public Integer getCoRuns()
+    {
+        return coRuns;
+    }
+
+    public void setCoRuns(Integer coRuns)
+    {
+        this.coRuns = coRuns;
+    }
+    
+    
+    private Map<Element,Integer> elements;
+
+    public Map<Element, Integer> getElements()
+    {
+        return elements;
+    }
+
+    public void setElements(Map<Element, Integer> elements)
+    {
+        this.elements = elements;
+    }
 
     public String getAnnotationContent()
     {
@@ -66,9 +103,8 @@ public class FormulaSearchRequest
     @Override
     public String toString()
     {
-        return "FormulaSearchRequest{" + "program=" + program + ", sourceDocument=" + sourceDocument + ", configuration=" + configuration + '}';
+        return "FormulaSearchRequest{" + "program=" + program + ", sourceDocument=" + sourceDocument + ", configuration=" + configuration + ", annotationContent=" + annotationContent + ", elements=" + elements + '}';
     }
-    
-    
+
     
 }

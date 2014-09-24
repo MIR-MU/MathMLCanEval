@@ -98,13 +98,12 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <list>
-                <bean class="cz.muni.fi.mir.convertors.StringToProgram"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToProgramForm"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToSourceDocument"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToElementForm"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToProgramForm"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToSourceDocumentForm"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToUserRole"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToRevision"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToConfiguration"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToUserRoleForm"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToRevisionForm"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToConfigurationForm"/>
             </list>
         </property>

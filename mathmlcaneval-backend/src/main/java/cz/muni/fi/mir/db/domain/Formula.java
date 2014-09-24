@@ -5,7 +5,9 @@
 package cz.muni.fi.mir.db.domain;
 
 import cz.muni.fi.mir.similarity.ElementCountTokenizerFactory;
+import cz.muni.fi.mir.tools.CollectionBridge;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -23,8 +25,11 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.AnalyzerDef;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.Store;
 import org.hibernate.search.annotations.TokenizerDef;
 import org.joda.time.DateTime;
 
@@ -66,7 +71,8 @@ public class Formula implements Serializable, Auditable
     @ManyToOne
     private User user;                          // kto ju vlozil
     @ManyToMany(mappedBy="parents",cascade = {CascadeType.REMOVE,CascadeType.MERGE})
-    @IndexedEmbedded
+    @IndexedEmbedded    
+    @Field(bridge = @FieldBridge(impl = CollectionBridge.class),store = Store.YES)
     private List<CanonicOutput> outputs;         // 
     @OneToMany
     private List<Formula> similarFormulas;    

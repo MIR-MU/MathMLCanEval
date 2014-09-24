@@ -130,3 +130,8 @@ footer
     height: 350px;
     overflow-y: scroll;
 }
+
+.form-row
+{
+    margin-bottom: 5px;
+}

@@ -7,6 +7,7 @@ package cz.muni.fi.mir.controllers;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
@@ -29,6 +30,8 @@ import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
 import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.service.ElementService;
+import cz.muni.fi.mir.forms.ElementFormRow;
+import cz.muni.fi.mir.forms.FormulaSearchRequestForm;
 import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import java.io.FileNotFoundException;
@@ -227,7 +230,7 @@ public class FormulaController
         ModelMap mm = prepareModelMap(true, true, true, true,true);
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination.getPageSize() * (pagination.getPageNumber() - 1), pagination.getPageSize()));
-        mm.addAttribute("formulaSearchRequest", new FormulaSearchRequest());
+        mm.addAttribute("formulaSearchRequestForm", new FormulaSearchRequestForm());
 
         return new ModelAndView("formula_list",mm);
     }
@@ -417,16 +420,29 @@ public class FormulaController
     }
     
     @RequestMapping(value = {"/search/"})
-    public ModelAndView search(@ModelAttribute FormulaSearchRequest formulaSearchRequest,@ModelAttribute("pagination") Pagination pagination)
+    public ModelAndView search(@ModelAttribute FormulaSearchRequestForm formulaSearchRequestForm,@ModelAttribute("pagination") Pagination pagination)
     {
         ModelMap mm = prepareModelMap(true, true, true, true,true);
-        FormulaSearchResponse response = formulaService.findFormulas(formulaSearchRequest);
+        FormulaSearchRequest request = mapper.map(formulaSearchRequestForm,FormulaSearchRequest.class);
+        
+        if(formulaSearchRequestForm.getElementRows() != null && !formulaSearchRequestForm.getElementRows().isEmpty())
+        {
+            Map<Element,Integer> map = new HashMap<>();
+            for(ElementFormRow efr :formulaSearchRequestForm.getElementRows())
+            {
+                map.put(mapper.map(efr.getElement(),Element.class), efr.getValue());
+            }
+            request.setElements(map);
+        }
+        
+        FormulaSearchResponse response = formulaService.findFormulas(request);
         
         mm.addAttribute("formulaList", response.getFormulas());
         mm.addAttribute("pagination", pagination);
-//        logger.info(formulaSearchRequest);
-//        
-//        logger.fatal(formulaService.findFormulas(formulaSearchRequest));
+        mm.addAttribute("formulaSearchRequestForm", formulaSearchRequestForm);
+
+        logger.info(request);
+        logger.info(formulaSearchRequestForm);
         
         return new ModelAndView("formula_list",mm);
     }

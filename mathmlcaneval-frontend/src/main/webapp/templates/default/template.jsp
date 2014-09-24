@@ -76,7 +76,7 @@
                     SyntaxHighlighter.all();
 
                     $(document).ready(function () {
-                        $("#elementList").select2();
+                        $(".elementList").select2();
 
                         $("#flot-placeholder").css('width', $(".stats-panel-body").width());
                         $("#flot-placeholder").css('height', $(".stats-panel-body").width() * 0.8);
@@ -94,6 +94,11 @@
 
                         $(this).on('click', '.addrow', function () {
                             $("#userRolesRows").append(getUserRolesHTML());
+                        });
+                        
+                        $(this).on('click','.addelementrow',function(){                            
+                            $("#elementRowsDiv").append(getElementsSelectRow())
+                                    .find("select:last").select2();
                         });
 
             <c:if test="${not empty statistics}">
@@ -228,6 +233,26 @@
                             'name': 'userRoleForms[' + count + ']'
                         });
 
+                        return $html.html();
+                    }
+                    
+                    function getElementsSelectRow()
+                    {
+                        var count = $("#elementRowsDiv > div").length;
+                        var $html = $("#elementRowTemplate").clone();
+
+                        $html.find("select").attr({
+                            'name': function(_,name){
+                                return name.replace("X",count);
+                            }                           
+                        });
+                        
+                        $html.find("input").attr({
+                            'name': function(_,name){
+                                return name.replace("X",count);
+                            }                           
+                        });
+                        
                         return $html.html();
                     }
 
