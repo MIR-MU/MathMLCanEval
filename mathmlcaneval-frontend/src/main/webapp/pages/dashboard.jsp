@@ -60,7 +60,7 @@
                         </c:when>
                         <c:otherwise>
                             <tr>
-                                <td colspan="7" class="text-center"><spring:message code="dashboard.task.running" /></td>
+                                <td colspan="7" class="text-center"><spring:message code="dashboard.task.noRunning" /></td>
                             </tr>
                         </c:otherwise>
                     </c:choose>

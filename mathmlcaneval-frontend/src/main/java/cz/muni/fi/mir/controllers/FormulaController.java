@@ -5,7 +5,6 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
@@ -28,6 +27,7 @@ import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,8 +35,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,13 +192,10 @@ public class FormulaController
     {
         Formula formula = formulaService.getFormulaByID(new Long(formulaId));
 
-        ApplicationRun applicationRun = new ApplicationRun();
-        applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
-        applicationRun.setRevision(mapper.map(applicationRunForm.getRevisionForm(), Revision.class));
-        applicationRun.setConfiguration(mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class));
-        applicationRunService.createApplicationRun(applicationRun);
-
-        mathCanonicalizerLoader.execute(Arrays.asList(formula), applicationRun);
+        formulaService.massCanonicalize(Arrays.asList(new Long(formulaId)),
+                    mapper.map(applicationRunForm.getRevisionForm(), Revision.class),
+                    mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class),
+                    securityContext.getLoggedEntityUser());
     }
 
     @Secured("ROLE_USER")
