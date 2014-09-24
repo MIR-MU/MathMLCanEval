@@ -19,8 +19,10 @@ import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.FormulaService;
+import cz.muni.fi.mir.scheduling.TaskStatus.TaskType;
 import cz.muni.fi.mir.services.MailService;
 import cz.muni.fi.mir.tools.Tools;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -30,8 +32,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,7 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 1.0
  * @version 1.0
  */
-public class CanonicalizationTask implements Runnable
+public class CanonicalizationTask extends ApplicationTask
 {
 
     private List<Formula> formulas;
@@ -94,10 +96,13 @@ public class CanonicalizationTask implements Runnable
         this.formulas = formulas;
         this.applicationRun = applicationRun;
         this.mainClass = mainClass;
+
+        setStatus(new TaskStatus());
+        getStatus().setTaskType(TaskType.canonicalization);
     }
 
     @Override
-    public void run() throws IllegalStateException
+    public TaskStatus call() throws IllegalStateException
     {
         String message = "";
             message += "formulas isSet? [" + (formulas != null) + "], ";
@@ -115,6 +120,10 @@ public class CanonicalizationTask implements Runnable
             Constructor constructor = null;
             Method canonicalize = null;
             Object canonicalizer = null;
+            getStatus().setTotal(formulas.size());
+            getStatus().setCurrent(0);
+            getStatus().setUser(applicationRun.getUser());
+            getStatus().setNote(String.valueOf(applicationRun.getId()));
             try
             {
                 constructor = this.mainClass.getConstructor(InputStream.class);
@@ -138,23 +147,24 @@ public class CanonicalizationTask implements Runnable
                 }
 
                 DateTime startTime = DateTime.now();
+                getStatus().setStartTime(startTime);
+                applicationRun.setStartTime(startTime);
                 for (Formula f : formulas)
                 {
                     CanonicOutput co = canonicalize(f, canonicalizer, canonicalize, applicationRun);
 
                     canonicOutputService.createCanonicOutput(co);
-                    // we need to force-fetch lazy collections. ugly..
-                    Hibernate.initialize(f.getOutputs());
 
                     f.getOutputs().add(co);
 
                     formulaService.updateFormula(f);
 
                     logger.info(String.format("Formula %d canonicalized.", f.getId()));
+                    getStatus().setCurrent(getStatus().getCurrent() + 1);
                 }
 
                 DateTime stopTime = DateTime.now();
-                applicationRun.setStartTime(startTime);
+                getStatus().setStopTime(stopTime);
                 applicationRun.setStopTime(stopTime);
                 applicationRunService.updateApplicationRun(applicationRun);
                 
@@ -171,6 +181,7 @@ public class CanonicalizationTask implements Runnable
                                 applicationRun.getStopTime().toString())
                         );
             }
+            return getStatus();
         }
     }
 

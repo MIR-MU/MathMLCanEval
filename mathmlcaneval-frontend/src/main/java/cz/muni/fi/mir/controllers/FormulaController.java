@@ -5,7 +5,6 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
@@ -34,6 +33,7 @@ import cz.muni.fi.mir.forms.ElementFormRow;
 import cz.muni.fi.mir.forms.FormulaSearchRequestForm;
 import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,8 +41,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +117,7 @@ public class FormulaController
         return new ModelAndView("formula_create", mm);
     }
 
+    // TODO turn into the task? Or use existing FormulaImportTask?
     @Secured("ROLE_USER")
     @RequestMapping(value = {"/create", "/create/"}, method = RequestMethod.POST)
     @SiteTitle("{entity.formula.create}")
@@ -195,13 +198,10 @@ public class FormulaController
     {
         Formula formula = formulaService.getFormulaByID(new Long(formulaId));
 
-        ApplicationRun applicationRun = new ApplicationRun();
-        applicationRun.setUser(userService.getUserByUsername(securityContext.getLoggedUser()));
-        applicationRun.setRevision(mapper.map(applicationRunForm.getRevisionForm(), Revision.class));
-        applicationRun.setConfiguration(mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class));
-        applicationRunService.createApplicationRun(applicationRun);
-
-        mathCanonicalizerLoader.execute(Arrays.asList(formula), applicationRun);
+        formulaService.massCanonicalize(Arrays.asList(new Long(formulaId)),
+                    mapper.map(applicationRunForm.getRevisionForm(), Revision.class),
+                    mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class),
+                    securityContext.getLoggedEntityUser());
     }
 
     @Secured("ROLE_USER")
@@ -275,14 +275,14 @@ public class FormulaController
         else
         {
             // @Async call
-            formulaService.massFormulaImport(path, filter, 
+            formulaService.massFormulaImport(path, filter,
                     mapper.map(formulaForm.getRevisionForm(), Revision.class), 
                     mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
                     mapper.map(formulaForm.getProgramForm(), Program.class),
                     mapper.map(formulaForm.getSourceDocumentForm(), SourceDocument.class),
                     securityContext.getLoggedEntityUser());
             
-            return new ModelAndView("redirect:/formula/list/");
+            return new ModelAndView("redirect:/dashboard/");
         }
     }
     
@@ -446,8 +446,42 @@ public class FormulaController
         
         return new ModelAndView("formula_list",mm);
     }
-    
-    
+
+    @RequestMapping(value={"/bySourceDocument/{sourceDocumentId}", "/bySourceDocument/{sourceDocumentId}/"},
+            method = RequestMethod.GET,
+            produces = "application/json; charset=utf-8")
+    public @ResponseBody String getFormulaIdsBySourceDocument(@PathVariable long sourceDocumentId)
+    {
+        String listOfIds = "[";
+        SourceDocument sourceDocument = sourceDocumentService.getSourceDocumentByID(sourceDocumentId);
+        if (sourceDocument == null)
+        {
+            return StringUtils.EMPTY;
+        }
+        for (Formula f : formulaService.getFormulasBySourceDocument(sourceDocument))
+        {
+            listOfIds += f.getId().toString() + ",";
+        }
+        return listOfIds.substring(0, listOfIds.length() - 1) + "]";
+    }
+
+    @RequestMapping(value={"/byProgram/{programId}", "/byProgram/{programId}/"},
+            method = RequestMethod.GET,
+            produces = "application/json; charset=utf-8")
+    public @ResponseBody String getFormulaIdsByProgram(@PathVariable long programId)
+    {
+        String listOfIds = "[";
+        Program program = programService.getProgramByID(programId);
+        if (program == null)
+        {
+            return StringUtils.EMPTY;
+        }
+        for (Formula f : formulaService.getFormulasByProgram(program))
+        {
+            listOfIds += f.getId().toString() + ",";
+        }
+        return listOfIds.substring(0, listOfIds.length() - 1) + "]";
+    }
     
     private Map<String,String> generateSimilarityProperties(FindSimilarForm findSimilarForm)
     {

@@ -131,7 +131,12 @@
                 <div class="col-md-12">
                     <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                         <div class="pull-right">
-                            <a href="${pageContext.request.contextPath}/formula/massdelete/" class="btn btn-warning"><spring:message code="general.label.massdelete" /></a>
+                            <a href="${pageContext.request.contextPath}/formula/massdelete/" class="btn btn-danger"><spring:message code="general.label.massdelete" /></a>
+                        </div>
+                    </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_USER')">
+                        <div class="pull-right">
+                            <a href="${pageContext.request.contextPath}/appruns/create/select/" class="btn btn-warning"><spring:message code="entity.formula.canonicalizer.run" /></a>
                         </div>
                     </sec:authorize>
                 </div>

@@ -15,7 +15,6 @@ import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
-import cz.muni.fi.mir.scheduling.ApplicationRunRemovalTask;
 import cz.muni.fi.mir.scheduling.LongRunningTaskFactory;
 import java.util.HashSet;
 import java.util.List;
@@ -55,6 +54,13 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
     public void createApplicationRun(ApplicationRun applicationRun)
     {
         applicationRunDAO.createApplicationRun(applicationRun);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void createApplicationRunWithFlush(ApplicationRun applicationRun)
+    {
+        applicationRunDAO.createApplicationRunWithFlush(applicationRun);
     }
 
     @Override

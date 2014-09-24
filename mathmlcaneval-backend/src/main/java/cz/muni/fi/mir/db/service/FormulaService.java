@@ -16,6 +16,7 @@
 package cz.muni.fi.mir.db.service;
 
 import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
@@ -211,6 +212,10 @@ public interface FormulaService
     void annotateFormula(Formula formula, Annotation annotation);
     
     void deleteAnnotationFromFormula(Formula formula, Annotation annotation);
+
     
     FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest);
+
+
+    void massCanonicalize(List<Long> listOfIds, Revision revision, Configuration configuration, User user);
 }

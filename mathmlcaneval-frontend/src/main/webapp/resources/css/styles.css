@@ -110,7 +110,8 @@ footer
     margin-bottom: 1px;
 }
 
-.formula-delete-checked
+.formula-delete-checked,
+.formula-canonicalize-checked
 {
     border-color: black;
     border-width: 2px;
