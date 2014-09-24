@@ -124,3 +124,9 @@ footer
     margin-left:0px;
     margin-right:0px;
 }
+
+.minifeed
+{
+    height: 350px;
+    overflow-y: scroll;
+}

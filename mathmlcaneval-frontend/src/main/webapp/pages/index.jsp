@@ -53,19 +53,21 @@
                                 <div class="col-md-12">
                                     <div class="panel panel-info">
                                         <div class="panel-heading">Minifeed</div>
-                                        <table class="table table-striped table-bordered">
-                                            <c:forEach items="${minifeed}" var="entry">
-                                                <tr>
-                                                    <td><c:out value="${entry.user.username}" /></td>
-                                                    <td>
-                                                        <a href="${pageContext.request.contextPath}/<c:out value="${fn:toLowerCase(entry.targetClass)}" />/view/<c:out value="${entry.targetID}" />/">
-                                                            <c:out value="${entry.message}" />
-                                                        </a>
-                                                    </td>
-                                                    <td><joda:format value="${entry.eventTime}" style="SS" /></td>
-                                                </tr>
-                                            </c:forEach>
-                                        </table>
+                                        <div class="minifeed">
+                                            <table class="table table-striped table-bordered">
+                                                <c:forEach items="${minifeed}" var="entry">
+                                                    <tr>
+                                                        <td><c:out value="${entry.user.username}" /></td>
+                                                        <td>
+                                                            <a href="${pageContext.request.contextPath}/<c:out value="${fn:toLowerCase(entry.targetClass)}" />/view/<c:out value="${entry.targetID}" />/">
+                                                                <c:out value="${entry.message}" />
+                                                            </a>
+                                                        </td>
+                                                        <td><joda:format value="${entry.eventTime}" style="SS" /></td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>    
