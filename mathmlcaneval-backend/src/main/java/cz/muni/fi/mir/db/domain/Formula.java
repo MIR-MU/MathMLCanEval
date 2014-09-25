@@ -7,7 +7,6 @@ package cz.muni.fi.mir.db.domain;
 import cz.muni.fi.mir.similarity.ElementCountTokenizerFactory;
 import cz.muni.fi.mir.tools.CollectionBridge;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -21,10 +20,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
+import org.apache.solr.analysis.StandardTokenizerFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.AnalyzerDef;
+import org.hibernate.search.annotations.AnalyzerDefs;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
@@ -40,24 +41,27 @@ import org.joda.time.DateTime;
 @Entity(name = "formula")
 @Indexed
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@AnalyzerDef(name="countElementFormAnalyzer",
-        tokenizer = @TokenizerDef(factory = ElementCountTokenizerFactory.class))
+@AnalyzerDefs({
+        @AnalyzerDef(name = "countElementFormAnalyzer",
+                tokenizer = @TokenizerDef(factory = ElementCountTokenizerFactory.class)),
+        @AnalyzerDef(name = "standardAnalyzer",tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class))}
+)
 public class Formula implements Serializable, Auditable
 {
 
     private static final long serialVersionUID = 7807040500942149400L;
 
     @Id
-    @Column(name = "formula_id",nullable = false)
-    @SequenceGenerator(name="formulaid_seq", sequenceName="formulaid_seq")
+    @Column(name = "formula_id", nullable = false)
+    @SequenceGenerator(name = "formulaid_seq", sequenceName = "formulaid_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "formulaid_seq")
-    private Long id;                         
-    
+    private Long id;
+
     @Column(name = "xml", columnDefinition = "text", length = 100000)
     private String xml;                         // formulka v MathML
     @Column(name = "note")
     private String note;                        // poznamka
-    @Column(name = "hashValue", length = 40,nullable = true,unique = true)
+    @Column(name = "hashValue", length = 40, nullable = true, unique = true)
     private String hashValue;                        //used for computation whether formula is already stored
     @ManyToOne
     @IndexedEmbedded
@@ -70,15 +74,21 @@ public class Formula implements Serializable, Auditable
     private Program program;                    // konverzni program
     @ManyToOne
     private User user;                          // kto ju vlozil
-    @ManyToMany(mappedBy="parents",cascade = {CascadeType.REMOVE,CascadeType.MERGE})
-    @IndexedEmbedded    
-    @Field(bridge = @FieldBridge(impl = CollectionBridge.class),store = Store.YES)
+    @ManyToMany(mappedBy = "parents", cascade =
+    {
+        CascadeType.REMOVE, CascadeType.MERGE
+    })
+    @IndexedEmbedded
+    @Field(bridge = @FieldBridge(impl = CollectionBridge.class), store = Store.YES)
     private List<CanonicOutput> outputs;         // 
     @OneToMany
-    private List<Formula> similarFormulas;    
-    @OneToMany(cascade = {CascadeType.REMOVE,CascadeType.MERGE})
+    private List<Formula> similarFormulas;
+    @OneToMany(cascade =
+    {
+        CascadeType.REMOVE, CascadeType.MERGE
+    })
     //@IndexedEmbedded
-    private List<Annotation> annotations;    
+    private List<Annotation> annotations;
     @ManyToMany
     private List<Element> elements;
 
@@ -201,7 +211,7 @@ public class Formula implements Serializable, Auditable
     {
         this.annotations = annotations;
     }
-    
+
     @Override
     public int hashCode()
     {
@@ -230,7 +240,7 @@ public class Formula implements Serializable, Auditable
     {
         return "Formula{" + "id=" + id + " hashValue=" + hashValue + '}';
     }
-    
+
     @PreRemove
     private void removeFormulaFromOutputs()
     {

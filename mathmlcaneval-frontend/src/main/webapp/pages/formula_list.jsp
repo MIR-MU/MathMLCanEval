@@ -7,14 +7,14 @@
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">
         <div class="container content">
-            <div class="row">
+            <div class="row pull-top-50">
                 <div class="col-md-12">
                     <div class="panel-group" id="accordion">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                        !Advanced search
+                                        <spring:message code="search.title.advanced" />
                                     </a>
                                 </h4>
                             </div>
@@ -22,19 +22,19 @@
                                 <div class="panel-body">
                                     <form:form action="${pageContext.request.contextPath}/formula/search/" method="post" commandName="formulaSearchRequestForm">
                                         <div class="row form-row">
-                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!program</label>
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.formula.program" /></label>
                                             <div class="col-md-6">
                                                 <form:select items="${programList}" path="program" itemLabel="name" itemValue="id" cssClass="form-control" />
                                             </div>                                       
                                         </div>
                                         <div class="row form-row">
-                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!conf</label>
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.configuration.config" /></label>
                                             <div class="col-md-6">
                                                 <form:select items="${configurationList}" path="configuration" itemLabel="name" itemValue="id" cssClass="form-control" />
                                             </div>                                       
                                         </div>
                                         <div class="row form-row">
-                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!source document</label>
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.formula.sourceDocument" /></label>
                                             <div class="col-md-6">
                                                 <form:select items="${sourceDocumentList}" path="sourceDocument" itemLabel="name" itemValue="id" cssClass="form-control" />
                                             </div>                                       
@@ -43,11 +43,11 @@
                                             <c:choose>
                                                 <c:when test="${fn:length(formulaSearchRequestForm.elementRows) eq 0}">
                                                     <div class="row form-row">
-                                                        <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label">!elements</label>
+                                                        <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label"><spring:message code="search.elements.element" /></label>
                                                         <div class="col-md-3">
                                                             <form:select items="${elementList}" path="elementRows[0].element" itemLabel="elementName" itemValue="id" cssClass="form-control elementList"/> 
                                                         </div>
-                                                        <label for="sourceDocument" class="col-md-1 control-label">!pocet</label> 
+                                                            <label for="sourceDocument" class="col-md-1 control-label"><spring:message code="search.elements.count" /></label> 
                                                         <div class="col-md-2">
                                                             <form:input path="elementRows[0].value" cssClass="form-control" />
                                                         </div>
@@ -61,11 +61,11 @@
                                                 <c:otherwise>
                                                     <c:forEach items="${formulaSearchRequestForm.elementRows}" var="entry" varStatus="i">
                                                         <div class="row form-row">
-                                                            <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label">!elements</label>
+                                                            <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label"><spring:message code="search.elements.element" /></label>
                                                             <div class="col-md-3">
                                                                 <form:select items="${elementList}" path="elementRows[${i.index}].element" itemLabel="elementName" itemValue="id" cssClass="form-control elementList"/> 
                                                             </div>
-                                                            <label for="sourceDocument" class="col-md-1 control-label">!pocet</label> 
+                                                            <label for="sourceDocument" class="col-md-1 control-label"><spring:message code="search.elements.count" /></label> 
                                                             <div class="col-md-2">
                                                                 <form:input path="elementRows[${i.index}].value" cssClass="form-control" />
                                                             </div>
@@ -80,20 +80,20 @@
                                             </c:choose>                                            
                                         </div>
                                         <div class="row form-row">
-                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!annotation content</label>
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="search.annotation.content" /></label>
                                             <div class="col-md-6">
                                                 <form:input path="annotationContent" cssClass="form-control" />
                                             </div>                                       
                                         </div>
 
                                         <div class="row form-row">
-                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!formula content</label>
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="search.formula.content" /></label>
                                             <div class="col-md-6">
                                                 <form:input path="formulaContent" cssClass="form-control" />
                                             </div>                                       
                                         </div>
                                         <div class="row form-row">
-                                            <label for="program" class="col-md-2 col-md-offset-2 control-label">!Canonic outputs</label>
+                                            <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.applicationrun.outputs" /></label>
                                             <div class="col-md-6">
                                                 <form:input path="coRuns" cssClass="form-control" />
                                             </div>                                       
@@ -102,7 +102,7 @@
                                     </form:form>
                                     <div class="hidden" id="elementRowTemplate">
                                         <div class="row form-row">
-                                            <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label">!elements</label>
+                                            <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label"><spring:message code="search.elements.element" /></label>
                                             <div class="col-md-3">
                                                 <select name="elementRows[X].element" class="form-control">
                                                     <c:forEach items="${elementList}" var="entry">
@@ -110,7 +110,7 @@
                                                     </c:forEach>
                                                 </select>
                                             </div>
-                                            <label for="sourceDocument" class="col-md-1 control-label">!pocet</label> 
+                                            <label for="sourceDocument" class="col-md-1 control-label"><spring:message code="search.elements.count" /></label> 
                                             <div class="col-md-2">
                                                 <input type="text" class="form-control" name="elementRows[X].value"/>
                                             </div>

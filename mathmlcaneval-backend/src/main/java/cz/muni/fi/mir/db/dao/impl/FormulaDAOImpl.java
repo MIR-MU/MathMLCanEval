@@ -22,6 +22,7 @@ import cz.muni.fi.mir.similarity.SimilarityForms;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 /**
  *
@@ -383,7 +385,8 @@ public class FormulaDAOImpl implements FormulaDAO
             ftq = fullTextEntityManager
                 .createFullTextQuery(distanceFormQuery, Formula.class);
             
-            distanceResult.addAll(ftq.getResultList());
+            //todo pagination
+            distanceResult.addAll(ftq.setMaxResults(80).getResultList());
         }
         
         
@@ -402,7 +405,8 @@ public class FormulaDAOImpl implements FormulaDAO
             ftq = fullTextEntityManager
                 .createFullTextQuery(countElementQuery, Formula.class);
             
-            countResult.addAll(ftq.getResultList());
+            //TODO pagination
+            countResult.addAll(ftq.setMaxResults(80).getResultList());
         }
         
         
@@ -462,8 +466,8 @@ public class FormulaDAOImpl implements FormulaDAO
             
             ftq = fullTextEntityManager
                 .createFullTextQuery(branchQuery, Formula.class);
-            
-            branchResult.addAll(ftq.getResultList());
+            //TODO pagination
+            branchResult.addAll(ftq.setMaxResults(80).getResultList());
             
         }
         
@@ -557,12 +561,59 @@ public class FormulaDAOImpl implements FormulaDAO
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         org.hibernate.search.jpa.FullTextQuery ftq = null;  // actual query hitting database
         
-        QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Formula.class).get();
+        QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Formula.class)
+                .overridesForField("countElementForm", "countElementFormAnalyzer")
+                .overridesForField("annotation", "standardAnalyzer")
+                .get();
         
+        Map<String,Integer> elementMap = new HashMap<>();
         
-        Query query = qb.bool().must(qb.keyword().onField("sourceDocument.id").matching(formulaSearchRequest.getSourceDocument().getId()).createQuery())
-                .must(qb.keyword().onField("program.id").matching(formulaSearchRequest.getProgram().getId()).createQuery())
-                .must(qb.keyword().onField("annotation").ignoreFieldBridge().matching(formulaSearchRequest.getAnnotationContent()).createQuery()).createQuery();
+        for(Element e : formulaSearchRequest.getElements().keySet())
+        {
+            elementMap.put(e.getElementName(), formulaSearchRequest.getElements().get(e));
+        }    
+        
+        //logger.info("$"+qb.keyword().onField("annotation").ignoreFieldBridge().matching(formulaSearchRequest.getAnnotationContent()).createQuery().toString());
+        
+        Query query = 
+                qb.bool()
+                        .must(qb.keyword()
+                                .onField("sourceDocument.id")
+                                .matching(formulaSearchRequest.getSourceDocument().getId())
+                                .createQuery()
+                        )
+                        .must(qb.keyword()
+                                .onField("program.id")
+                                .matching(formulaSearchRequest.getProgram().getId())
+                                .createQuery()
+                        )
+                        .must(qb.keyword()
+                                .onField("countElementForm")
+                                .ignoreFieldBridge()
+                                .matching(elementMap.toString())
+                                .createQuery()
+                        )
+                        .must(qb.keyword()
+                                .wildcard()
+                                .onField("annotation")
+                                .ignoreFieldBridge()
+                                .matching(StringUtils.isEmpty(
+                                        formulaSearchRequest.getAnnotationContent())==true 
+                                        ? "*" 
+                                        : formulaSearchRequest.getAnnotationContent()
+                                )
+                                .createQuery()
+                        )
+//                        .must(qb.keyword()
+//                                .wildcard()
+//                                .onField("distanceForm")
+//                                .ignoreFieldBridge()
+//                                .matching(StringUtils.isEmpty(formulaSearchRequest.getFormulaContent()) == true
+//                                        ? "*"
+//                                        : formulaSearchRequest.getFormulaContent()
+//                                )
+//                                .createQuery())
+                .createQuery();
         
         logger.info(query);
         

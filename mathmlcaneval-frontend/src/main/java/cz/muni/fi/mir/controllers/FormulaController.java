@@ -432,7 +432,10 @@ public class FormulaController
             Map<Element,Integer> map = new HashMap<>();
             for(ElementFormRow efr :formulaSearchRequestForm.getElementRows())
             {
-                map.put(mapper.map(efr.getElement(),Element.class), efr.getValue());
+                if(efr.getValue() != null)
+                {
+                    map.put(mapper.map(efr.getElement(),Element.class), efr.getValue());
+                }                
             }
             request.setElements(map);
         }
@@ -443,8 +446,8 @@ public class FormulaController
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("formulaSearchRequestForm", formulaSearchRequestForm);
 
-        logger.info(request);
-        logger.info(formulaSearchRequestForm);
+//        logger.info(request);
+//        logger.info(formulaSearchRequestForm);
         
         return new ModelAndView("formula_list",mm);
     }

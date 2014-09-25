@@ -10,9 +10,11 @@ import java.io.StringReader;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.util.Version;
+import org.apache.solr.analysis.StandardTokenizerFactory;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.ParameterizedBridge;
@@ -46,7 +48,7 @@ public class CanonicOutputBridge implements FieldBridge, ParameterizedBridge
         document.add(FieldTools.newField("countElementForm",sf.getCountForm(),luceneOptions,
                 new ElementCountAnalyzer(Version.LUCENE_36)));
         document.add(FieldTools.newField("longestBranch",String.valueOf(sf.getLongestBranch()),luceneOptions,null));
-        document.add(FieldTools.newField("annotation",sb.toString(),luceneOptions,null));
+        document.add(FieldTools.newField("annotation",sb.toString(),luceneOptions,new StandardAnalyzer(Version.LUCENE_36)));
         
         logger.debug("outputForm added " + sf);
     }
