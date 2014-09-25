@@ -69,10 +69,44 @@ public class FormulaDAOImpl implements FormulaDAO
     @Override
     public void deleteFormula(Formula formula)
     {
-        Formula m = entityManager.find(Formula.class, formula.getId());
-        if(m != null)
+        Formula toDelete = entityManager.find(Formula.class, formula.getId());
+        if(toDelete != null)
         {
-            entityManager.remove(m);
+            if(toDelete.getSimilarFormulas() != null && !toDelete.getSimilarFormulas().isEmpty())
+            {
+                toDelete.setSimilarFormulas(null);
+                
+                entityManager.merge(toDelete);               
+            }
+            
+            List<Formula> haveReference = entityManager
+                        .createQuery("SELECT f FROM formula f where :formula MEMBER OF f.similarFormulas", Formula.class)
+                        .setParameter("formula", formula)
+                        .getResultList();
+                
+            if(!haveReference.isEmpty())
+            {
+                logger.info("References has been found");
+                for(Formula referenced : haveReference)
+                {
+                    List<Formula> newSimilar = referenced.getSimilarFormulas();
+
+                    for(Formula similar : newSimilar)
+                    {
+                        if(similar.equals(formula))
+                        {
+                            newSimilar.remove(similar);
+                            break;
+                        }
+                    }
+
+                    referenced.setSimilarFormulas(newSimilar);
+
+                    entityManager.merge(referenced);
+                }
+            }
+            logger.info("Deleting formula ["+formula.getId()+", "+formula.getHashValue()+"]");
+            entityManager.remove(toDelete);
         }
         else
         {

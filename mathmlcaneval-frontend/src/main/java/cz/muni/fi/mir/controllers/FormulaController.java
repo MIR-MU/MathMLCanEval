@@ -405,16 +405,18 @@ public class FormulaController
     }
     
     @RequestMapping(value={"/massdelete","/massdelete/"},method = RequestMethod.POST)
-    public ModelAndView massDelete(@RequestParam(value = "formulaDeleteID") String[] formulaDeleteIDs)
+    public ModelAndView massDelete(@RequestParam(value = "formulaDeleteID",required = false) String[] formulaDeleteIDs)
     {
-        List<Formula> toDelete = new ArrayList<>();
-        for(String s : formulaDeleteIDs)
+        if(formulaDeleteIDs != null && formulaDeleteIDs.length > 0)
         {
-            toDelete.add(EntityFactory.createFormula(Long.valueOf(s)));
+            List<Formula> toDelete = new ArrayList<>();
+            for(String s : formulaDeleteIDs)
+            {
+                toDelete.add(EntityFactory.createFormula(Long.valueOf(s)));
+            }
+
+            formulaService.massRemove(toDelete);            
         }
-        
-        formulaService.massRemove(toDelete);
-        
         
         return new ModelAndView("redirect:/formula/massdelete/");        
     }
