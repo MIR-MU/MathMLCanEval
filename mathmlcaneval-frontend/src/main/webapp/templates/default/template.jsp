@@ -152,27 +152,22 @@
                         var form = $("#annotationForm");
                         form.on("submit", function (event) {
                             if ($("#annotation-value").val().trim().length != 0)
-                            {
-                                var confValue = confirm('<spring:message code="general.annotation.submit" />\n' + $(this).find("#annotation-value").val());
-                                
-                                if (confValue)
-                                {
-                                    $.ajax({
-                                        type: form.attr('method'),
-                                        url: form.attr('action'),
-                                        data: form.serialize(),
-                                        dataType: 'json',
-                                        success: function (data) {
-                                            $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note + "</td></tr>");
-                                            $("#annotation-value").val('');
-                                            formatHashTags(false);
-                                            if ($("#annotationTable > tbody > tr:first").attr('class') === "empty-table")
-                                            {
-                                                $("#annotationTable > tbody > tr:first").remove();
-                                            }
+                            {                                
+                                $.ajax({
+                                    type: form.attr('method'),
+                                    url: form.attr('action'),
+                                    data: form.serialize(),
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note + "</td></tr>");
+                                        $("#annotation-value").val('');
+                                        formatHashTags(false);
+                                        if ($("#annotationTable > tbody > tr:first").attr('class') === "empty-table")
+                                        {
+                                            $("#annotationTable > tbody > tr:first").remove();
                                         }
-                                    });
-                                }
+                                    }
+                                });
                                 event.preventDefault();
                             }
                             else
