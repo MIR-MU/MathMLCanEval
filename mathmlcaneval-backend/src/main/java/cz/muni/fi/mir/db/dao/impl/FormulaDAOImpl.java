@@ -36,6 +36,7 @@ import org.apache.lucene.search.Query;
 import org.hibernate.Hibernate;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.BooleanJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -575,35 +576,66 @@ public class FormulaDAOImpl implements FormulaDAO
         
         //logger.info("$"+qb.keyword().onField("annotation").ignoreFieldBridge().matching(formulaSearchRequest.getAnnotationContent()).createQuery().toString());
         
-        Query query = 
-                qb.bool()
-                        .must(qb.keyword()
-                                .onField("sourceDocument.id")
-                                .matching(formulaSearchRequest.getSourceDocument().getId())
-                                .createQuery()
-                        )
-                        .must(qb.keyword()
-                                .onField("program.id")
-                                .matching(formulaSearchRequest.getProgram().getId())
-                                .createQuery()
-                        )
-                        .must(qb.keyword()
-                                .onField("countElementForm")
-                                .ignoreFieldBridge()
-                                .matching(elementMap.toString())
-                                .createQuery()
-                        )
-                        .must(qb.keyword()
-                                .wildcard()
-                                .onField("annotation")
-                                .ignoreFieldBridge()
-                                .matching(StringUtils.isEmpty(
-                                        formulaSearchRequest.getAnnotationContent())==true 
-                                        ? "*" 
-                                        : formulaSearchRequest.getAnnotationContent()
-                                )
-                                .createQuery()
-                        )
+        BooleanJunction<BooleanJunction> junction = qb.bool();
+        
+        
+        if(formulaSearchRequest.getSourceDocument() != null && formulaSearchRequest.getSourceDocument().getId() != null)
+        {
+            junction.must(qb.keyword()
+                            .onField("sourceDocument.id")
+                            .matching(formulaSearchRequest.getSourceDocument().getId())
+                            .createQuery()
+            );
+        }
+        
+        if(formulaSearchRequest.getProgram() != null && formulaSearchRequest.getProgram().getId() != null)
+        {
+            junction.must(qb.keyword()
+                            .onField("program.id")
+                            .matching(formulaSearchRequest.getProgram().getId())
+                            .createQuery()
+            );
+        }
+        
+        if(formulaSearchRequest.getElements() != null && !formulaSearchRequest.getElements().isEmpty())
+        {
+            junction.must(qb.keyword()
+                            .onField("countElementForm")
+                            .ignoreFieldBridge()
+                            .matching(elementMap.toString())
+                            .createQuery()
+            );
+        }
+        
+//        if(formulaSearchRequest.getAnnotationContent() != null && !StringUtils.isEmpty(formulaSearchRequest.getAnnotationContent()))
+//        {
+//            junction.must(qb.keyword()
+//                    .onField("annotation")
+//                    .ignoreFieldBridge()
+//                    .matching(formulaSearchRequest.getAnnotationContent())
+//                    .createQuery()
+//            );
+//        }
+        
+//        Query query = 
+//                qb.bool()                        
+//                        .must(qb.keyword()
+//                                .onField("countElementForm")
+//                                .ignoreFieldBridge()
+//                                .matching(elementMap.toString())
+//                                .createQuery()
+//                        )
+//                        .must(qb.keyword()
+//                                .wildcard()
+//                                .onField("annotation")
+//                                .ignoreFieldBridge()
+//                                .matching(StringUtils.isEmpty(
+//                                        formulaSearchRequest.getAnnotationContent())==true 
+//                                        ? "*" 
+//                                        : formulaSearchRequest.getAnnotationContent()
+//                                )
+//                                .createQuery()
+//                        )
 //                        .must(qb.keyword()
 //                                .wildcard()
 //                                .onField("distanceForm")
@@ -613,8 +645,8 @@ public class FormulaDAOImpl implements FormulaDAO
 //                                        : formulaSearchRequest.getFormulaContent()
 //                                )
 //                                .createQuery())
-                .createQuery();
-        
+//                .createQuery();
+        Query query = junction.createQuery();
         logger.info(query);
         
         ftq = fullTextEntityManager.createFullTextQuery(query, Formula.class);
