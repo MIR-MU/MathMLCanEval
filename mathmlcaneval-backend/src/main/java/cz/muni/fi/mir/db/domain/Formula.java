@@ -5,7 +5,7 @@
 package cz.muni.fi.mir.db.domain;
 
 import cz.muni.fi.mir.similarity.ElementCountTokenizerFactory;
-import cz.muni.fi.mir.tools.CollectionBridge;
+import cz.muni.fi.mir.tools.CanonicOutputBridge;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -79,7 +79,7 @@ public class Formula implements Serializable, Auditable
         CascadeType.REMOVE, CascadeType.MERGE
     })
     @IndexedEmbedded
-    @Field(bridge = @FieldBridge(impl = CollectionBridge.class), store = Store.YES)
+    @Field(bridge = @FieldBridge(impl = CanonicOutputBridge.class), store = Store.YES)
     private List<CanonicOutput> outputs;         // 
     @OneToMany
     private List<Formula> similarFormulas;

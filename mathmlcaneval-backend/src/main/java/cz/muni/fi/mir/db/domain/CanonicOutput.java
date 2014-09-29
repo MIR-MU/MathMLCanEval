@@ -4,7 +4,6 @@
  */
 package cz.muni.fi.mir.db.domain;
 
-import cz.muni.fi.mir.tools.CanonicOutputBridge;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -21,8 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
-import org.hibernate.search.annotations.ClassBridge;
-import org.hibernate.search.annotations.Store;
 
 
 /**
@@ -30,9 +27,6 @@ import org.hibernate.search.annotations.Store;
  * @author Empt
  */
 @Entity(name = "canonicOutput")
-@ClassBridge(
-        store = Store.YES,
-        impl=CanonicOutputBridge.class)
 public class CanonicOutput implements Serializable,Auditable
 {
     private static final long serialVersionUID = 6956045766345845859L;
@@ -59,6 +53,7 @@ public class CanonicOutput implements Serializable,Auditable
     @OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
     private List<Annotation> annotations;
 
+    @Override
     public Long getId()
     {
         return id;

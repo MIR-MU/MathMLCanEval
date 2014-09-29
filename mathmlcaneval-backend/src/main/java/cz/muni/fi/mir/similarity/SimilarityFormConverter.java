@@ -5,7 +5,6 @@
 package cz.muni.fi.mir.similarity;
 
 import cz.muni.fi.mir.db.domain.CanonicOutput;
-import cz.muni.fi.mir.tools.MapValueComparator;
 import cz.muni.fi.mir.tools.XMLUtils;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +39,7 @@ public class SimilarityFormConverter
     {
         SimilarityForms sf = new SimilarityForms();
         sf.setDefaultForm(canonicOutput.getOutputForm());
-        sf.setCountForm(getElementCountMethod(canonicOutput.getOutputForm()).toString());
+        sf.setCountForm(getElementCountMethod(canonicOutput.getOutputForm()));
         sf.setDistanceForm(getDistanceMethod(canonicOutput.getOutputForm()));
         sf.setLongestBranch(getBranchMethod(canonicOutput.getOutputForm()));
 
@@ -61,11 +60,7 @@ public class SimilarityFormConverter
 
         countElementTravel(document.getDocumentElement(), map);
 
-        MapValueComparator<String, Integer> mvc = new MapValueComparator<>();
-
-        Map<String, Integer> sortedMap = mvc.sortByValues(map);
-
-        return sortedMap;
+        return map;
     }
 
     /**

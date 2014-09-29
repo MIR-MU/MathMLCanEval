@@ -1,5 +1,7 @@
 package cz.muni.fi.mir.similarity;
 
+import java.util.Map;
+
 /**
  *
  * @author emptak
@@ -8,7 +10,7 @@ public class SimilarityForms
 {
     private String defaultForm;
     private String distanceForm;
-    private String countForm;
+    private Map<String,Integer> countForm;
     private String longestBranch;
 
     public String getLongestBranch()
@@ -41,12 +43,12 @@ public class SimilarityForms
         this.distanceForm = distanceForm;
     }
 
-    public String getCountForm()
+    public Map<String, Integer> getCountForm()
     {
         return countForm;
     }
 
-    public void setCountForm(String countForm)
+    public void setCountForm(Map<String, Integer> countForm)
     {
         this.countForm = countForm;
     }
