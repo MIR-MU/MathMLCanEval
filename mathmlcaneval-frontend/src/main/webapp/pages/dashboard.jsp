@@ -32,6 +32,12 @@
                 </table>
             </div>
 
+            <div class="btn-group pull-right space-bottom-10">
+                <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                    <a href="${pageContext.request.contextPath}/dashboard/clear/" class="btn btn-danger"><spring:message code="dashboard.task.clear" /></a>
+                </sec:authorize>
+            </div>
+
             <div class="panel panel-primary">
                 <div class="panel-heading"><spring:message code="dashboard.task.running" /></div>
                 <table class="table table-bordered">

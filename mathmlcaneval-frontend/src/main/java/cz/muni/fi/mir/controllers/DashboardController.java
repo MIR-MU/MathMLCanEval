@@ -52,4 +52,13 @@ public class DashboardController
 
         return new ModelAndView("dashboard",mm);
     }
+
+    @RequestMapping(value = {"/clear", "/clear/"})
+    @Secured("ROLE_ADMINISTRATOR")
+    public ModelAndView clearFinished()
+    {
+        taskService.removeFinishedTasks();
+
+        return new ModelAndView("redirect:/dashboard/");
+    }
 }

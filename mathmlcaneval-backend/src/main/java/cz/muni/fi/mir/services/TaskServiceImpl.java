@@ -1,6 +1,7 @@
 package cz.muni.fi.mir.services;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,5 +66,18 @@ public class TaskServiceImpl implements TaskService
             }
         }
         return statuses;
+    }
+
+    @Override
+    public void removeFinishedTasks()
+    {
+        for (Iterator<Map.Entry<Future<TaskStatus>, ApplicationTask>> it = entries.entrySet().iterator(); it.hasNext(); )
+        {
+              Map.Entry<Future<TaskStatus>, ApplicationTask> entry = it.next();
+              if (entry.getKey().isDone() || entry.getKey().isCancelled())
+              {
+                  it.remove();
+              }
+        }
     }
 }

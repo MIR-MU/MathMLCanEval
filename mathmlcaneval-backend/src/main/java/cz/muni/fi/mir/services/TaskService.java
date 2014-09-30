@@ -28,4 +28,8 @@ public interface TaskService {
      */
     public abstract List<TaskStatus> getTasks();
 
+    /**
+     * Remove all finished (or cancelled) tasks.
+     */
+    public void removeFinishedTasks();
 }
