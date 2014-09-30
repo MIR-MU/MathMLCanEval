@@ -16,8 +16,16 @@
                     </form>
                 </div>
             </div>
-            <div class="row pull-top-50">
 
+            <div class="row pull-top-50">
+                <div class="col-md-12">
+                    <div class="pull-right">
+                        <a href="#" class="btn btn-default invert-selection-button"><spring:message code="general.button.invert" /></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
             </div>
             <form method="POST" action="${pageContext.request.contextPath}/formula/massdelete/">
                 <div class="row">               

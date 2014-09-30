@@ -193,12 +193,12 @@
             <c:if test="${massDelete eq true}">
                         $(".img-thumbnail").on('click', function (e) {
 
-                            if ($(this).hasClass('formula-delete-checked')) {
-                                $(this).removeClass('formula-delete-checked');
+                            if ($(this).hasClass('formula-select-checked')) {
+                                $(this).removeClass('formula-select-checked');
                                 $(this).children(':checkbox').first().attr('checked', false);
 
                             } else {
-                                $(this).addClass('formula-delete-checked');
+                                $(this).addClass('formula-select-checked');
                                 $(this).children(':checkbox').first().attr('checked', true);
                             }
 
@@ -253,18 +253,30 @@
                         });
                         $(".img-thumbnail").on('click', function (e) {
 
-                            if ($(this).hasClass('formula-canonicalize-checked')) {
-                                $(this).removeClass('formula-canonicalize-checked');
+                            if ($(this).hasClass('formula-select-checked')) {
+                                $(this).removeClass('formula-select-checked');
                                 $(this).children(':checkbox').first().attr('checked', false);
-
                             } else {
-                                $(this).addClass('formula-canonicalize-checked');
+                                $(this).addClass('formula-select-checked');
                                 $(this).children(':checkbox').first().attr('checked', true);
                             }
 
                             e.preventDefault();
                         });
             </c:if>
+                        $(".invert-selection-button").click(function (e) {
+                            $(".img-thumbnail").each(function () {
+                                if ($(this).hasClass('formula-select-checked')) {
+                                    $(this).removeClass('formula-select-checked');
+                                    $(this).children(':checkbox').first().attr('checked', false);
+                                } else {
+                                    $(this).addClass('formula-select-checked');
+                                    $(this).children(':checkbox').first().attr('checked', true);
+                                }
+                            });
+
+                            e.preventDefault();
+                        });
                     });
 
                     function getUserRolesHTML()

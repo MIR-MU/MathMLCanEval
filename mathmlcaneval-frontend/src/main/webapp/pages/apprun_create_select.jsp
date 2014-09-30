@@ -33,6 +33,14 @@
                     <label class="col-sm-3 control-label"><spring:message code="entity.appruns.selected" /></label>
                 </div>
 
+                <div class="row pull-top-50">
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <a href="#" class="btn btn-default invert-selection-button"><spring:message code="general.button.invert" /></a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">            
                     <c:choose>
                         <c:when test="${fn:length(formulaList) gt 0}">
