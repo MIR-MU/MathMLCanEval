@@ -12,7 +12,6 @@ import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
-import cz.muni.fi.mir.db.service.AnnotationService;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.FormulaService;
@@ -300,41 +299,6 @@ public class FormulaController
         return "{ \"user\": \""+u.getUsername()+"\", \"note\" : \""+annotation+"\"}";
     }
     
-    private ModelMap prepareModelMap(boolean includeRevision, 
-            boolean includeConfiguration, 
-            boolean includeSourceDocument, 
-            boolean includePrograms,
-            boolean includeElements)
-    {
-        ModelMap mm = new ModelMap();
-        if(includeRevision)
-        {
-            mm.addAttribute("revisionList", revisionService.getAllRevisions());
-        }
-        
-        if(includeConfiguration)
-        {
-            mm.addAttribute("configurationList", configurationService.getAllCofigurations());
-        }
-        
-        if(includeSourceDocument)
-        {
-            mm.addAttribute("sourceDocumentList", sourceDocumentService.getAllDocuments());
-        }
-        
-        if(includePrograms)
-        {
-            mm.addAttribute("programList", programService.getAllPrograms());
-        }
-        
-        if(includeElements)
-        {
-            mm.addAttribute("elementList", elementService.getAllElements());
-        }
-        
-        return mm;
-    }
-    
     @RequestMapping(value = {"/reindex/","/reindex"},method = RequestMethod.GET)
     public ModelAndView reindex()
     {
@@ -457,7 +421,7 @@ public class FormulaController
             produces = "application/json; charset=utf-8")
     public @ResponseBody String getFormulaIdsBySourceDocument(@PathVariable long sourceDocumentId)
     {
-        String listOfIds = "[";
+        StringBuilder listOfIds = new StringBuilder("[");        
         SourceDocument sourceDocument = sourceDocumentService.getSourceDocumentByID(sourceDocumentId);
         if (sourceDocument == null)
         {
@@ -465,9 +429,10 @@ public class FormulaController
         }
         for (Formula f : formulaService.getFormulasBySourceDocument(sourceDocument))
         {
-            listOfIds += f.getId().toString() + ",";
+            listOfIds.append(f.getId()).append(",");
         }
-        return listOfIds.substring(0, listOfIds.length() - 1) + "]";
+        
+        return listOfIds.deleteCharAt(listOfIds.length()-1).append("]").toString();
     }
 
     @RequestMapping(value={"/byProgram/{programId}", "/byProgram/{programId}/"},
@@ -528,5 +493,40 @@ public class FormulaController
             default:
                 throw new IllegalArgumentException("Wrong input expecting [on/off] was ["+value+"]");
         }
+    }
+    
+     private ModelMap prepareModelMap(boolean includeRevision, 
+            boolean includeConfiguration, 
+            boolean includeSourceDocument, 
+            boolean includePrograms,
+            boolean includeElements)
+    {
+        ModelMap mm = new ModelMap();
+        if(includeRevision)
+        {
+            mm.addAttribute("revisionList", revisionService.getAllRevisions());
+        }
+        
+        if(includeConfiguration)
+        {
+            mm.addAttribute("configurationList", configurationService.getAllCofigurations());
+        }
+        
+        if(includeSourceDocument)
+        {
+            mm.addAttribute("sourceDocumentList", sourceDocumentService.getAllDocuments());
+        }
+        
+        if(includePrograms)
+        {
+            mm.addAttribute("programList", programService.getAllPrograms());
+        }
+        
+        if(includeElements)
+        {
+            mm.addAttribute("elementList", elementService.getAllElements());
+        }
+        
+        return mm;
     }
 }

@@ -68,11 +68,10 @@ public class CanonicOutputBridge implements FieldBridge
             //stores element in co.element field 
             //in form ElementName=count
             //eg mfrac=3
-            document.add(newField("co.element", s+"="+sf.getCountForm().get(s), luceneOptions, null)); 
+            
+            //
+            document.add(newField("co.element", s+sf.getCountForm().get(s), luceneOptions, null)); 
         }
-        
-//        document.add(newField("co.element",sf.getCountForm().toString(),luceneOptions,
-//                new ElementCountAnalyzer(Version.LUCENE_36)));
         
         document.add(newField("co.longestBranch",String.valueOf(sf.getLongestBranch()),luceneOptions,null));
         

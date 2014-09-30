@@ -24,6 +24,7 @@ import org.apache.solr.analysis.StandardTokenizerFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.AnalyzerDef;
 import org.hibernate.search.annotations.AnalyzerDefs;
 import org.hibernate.search.annotations.Field;
@@ -78,8 +79,7 @@ public class Formula implements Serializable, Auditable
     {
         CascadeType.REMOVE, CascadeType.MERGE
     })
-    @IndexedEmbedded
-    @Field(bridge = @FieldBridge(impl = CanonicOutputBridge.class), store = Store.YES)
+    @Field(bridge = @FieldBridge(impl = CanonicOutputBridge.class), store = Store.YES,analyze = Analyze.YES)
     private List<CanonicOutput> outputs;         // 
     @OneToMany
     private List<Formula> similarFormulas;
@@ -92,6 +92,8 @@ public class Formula implements Serializable, Auditable
     @ManyToMany
     private List<Element> elements;
 
+    
+    @Override
     public Long getId()
     {
         return id;

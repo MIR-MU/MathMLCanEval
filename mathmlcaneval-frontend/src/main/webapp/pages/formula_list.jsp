@@ -24,19 +24,34 @@
                                         <div class="row form-row">
                                             <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.formula.program" /></label>
                                             <div class="col-md-6">
-                                                <form:select items="${programList}" path="program" itemLabel="name" itemValue="id" cssClass="form-control" />
+                                                <form:select path="program" cssClass="form-control">
+                                                    <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
+                                                    <c:forEach items="${programList}" var="entry">
+                                                        <form:option value="${entry.id}" label="${entry.name}" />
+                                                    </c:forEach>
+                                                </form:select>
                                             </div>                                       
                                         </div>
                                         <div class="row form-row">
                                             <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.configuration.config" /></label>
                                             <div class="col-md-6">
-                                                <form:select items="${configurationList}" path="configuration" itemLabel="name" itemValue="id" cssClass="form-control" />
+                                                <form:select path="configuration" cssClass="form-control">
+                                                    <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
+                                                    <c:forEach items="${configurationList}" var="entry">
+                                                        <form:option value="${entry.id}" label="${entry.name}" />
+                                                    </c:forEach>
+                                                </form:select>
                                             </div>                                       
                                         </div>
                                         <div class="row form-row">
                                             <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.formula.sourceDocument" /></label>
                                             <div class="col-md-6">
-                                                <form:select items="${sourceDocumentList}" path="sourceDocument" itemLabel="name" itemValue="id" cssClass="form-control" />
+                                                <form:select path="sourceDocument" cssClass="form-control">
+                                                    <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
+                                                    <c:forEach items="${sourceDocumentList}" var="entry">
+                                                        <form:option value="${entry.id}" label="${entry.name}" />
+                                                    </c:forEach>
+                                                </form:select>
                                             </div>                                       
                                         </div>
                                         <div id="elementRowsDiv">

@@ -561,17 +561,11 @@ public class FormulaDAOImpl implements FormulaDAO
     {
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         org.hibernate.search.jpa.FullTextQuery ftq = null;  // actual query hitting database
+        boolean isEmpty = true;
 
         QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Formula.class)
                 .overridesForField("co.annotation", "standardAnalyzer")
                 .get();
-
-        Map<String, Integer> elementMap = new HashMap<>();
-
-        for (Element e : formulaSearchRequest.getElements().keySet())
-        {
-            elementMap.put(e.getElementName(), formulaSearchRequest.getElements().get(e));
-        }
 
         //logger.info("$"+qb.keyword().onField("annotation").ignoreFieldBridge().matching(formulaSearchRequest.getAnnotationContent()).createQuery().toString());
         BooleanJunction<BooleanJunction> junction = qb.bool();
@@ -583,6 +577,8 @@ public class FormulaDAOImpl implements FormulaDAO
                     .matching(formulaSearchRequest.getSourceDocument().getId())
                     .createQuery()
             );
+            
+            isEmpty = false;
         }
 
         if (formulaSearchRequest.getProgram() != null && formulaSearchRequest.getProgram().getId() != null)
@@ -592,6 +588,8 @@ public class FormulaDAOImpl implements FormulaDAO
                     .matching(formulaSearchRequest.getProgram().getId())
                     .createQuery()
             );
+            
+            isEmpty = false;
         }
 
         if (formulaSearchRequest.getElements() != null && !formulaSearchRequest.getElements().isEmpty())
@@ -603,9 +601,11 @@ public class FormulaDAOImpl implements FormulaDAO
                         .onField("co.element")
                         .ignoreFieldBridge()
                         .ignoreAnalyzer()
-                        .matching(e.getElementName()+"="+formulaSearchRequest.getElements().get(e))
+                        .matching(e.getElementName()+formulaSearchRequest.getElements().get(e))
                         .createQuery()
-                );                
+                );        
+                
+                isEmpty = false;
             }
             
             junction.must(junctionElements.createQuery());
@@ -619,6 +619,8 @@ public class FormulaDAOImpl implements FormulaDAO
                     .matching(formulaSearchRequest.getAnnotationContent())
                     .createQuery()
             );
+            
+            isEmpty = false;
         }
 
         if (formulaSearchRequest.getFormulaContent() != null && !StringUtils.isEmpty(formulaSearchRequest.getFormulaContent()))
@@ -630,6 +632,8 @@ public class FormulaDAOImpl implements FormulaDAO
                     .matching(formulaSearchRequest.getFormulaContent()+"*")
                     .createQuery()
             );
+            
+            isEmpty = false;
         }
         
         if(formulaSearchRequest.getCoRuns() != null)
@@ -640,15 +644,27 @@ public class FormulaDAOImpl implements FormulaDAO
                     .matching(formulaSearchRequest.getCoRuns())
                     .createQuery()
             );
+            
+            isEmpty = false;
         }
-
-        Query query = junction.createQuery();
-        logger.info(query);
-
-        ftq = fullTextEntityManager.createFullTextQuery(query, Formula.class);
-
+        
         FormulaSearchResponse fsr = new FormulaSearchResponse();
-        fsr.setFormulas(ftq.getResultList());
-        return fsr;
+        
+        if(!isEmpty)
+        {
+            Query query = junction.createQuery();
+            logger.info(query);
+
+            ftq = fullTextEntityManager.createFullTextQuery(query, Formula.class);
+            
+            fsr.setFormulas(ftq.getResultList());
+        }
+        else
+        {
+            //TODO
+            fsr.setFormulas(getAllFormulas(0, 20));
+        }        
+        
+        return fsr;        
     }
 }
