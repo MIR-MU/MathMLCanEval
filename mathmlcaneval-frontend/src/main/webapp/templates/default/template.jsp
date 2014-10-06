@@ -65,7 +65,7 @@
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.categories.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/simple-slider.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/select2.min.js" />"></script>
-        <script>
+        <script type="text/javascript">
                     /*
                      * http://stackoverflow.com/questions/229726/using-javascript-within-a-jsp-tag
                      */
@@ -75,6 +75,7 @@
 
                     SyntaxHighlighter.all();
 
+                    //document.ready start
                     $(document).ready(function () {
                         $(".elementList").select2();
 
@@ -95,35 +96,11 @@
                         $(this).on('click', '.addrow', function () {
                             $("#userRolesRows").append(getUserRolesHTML());
                         });
-                        
-                        $(this).on('click','.addelementrow',function(){                            
+
+                        $(this).on('click', '.addelementrow', function () {
                             $("#elementRowsDiv").append(getElementsSelectRow())
                                     .find("select:last").select2();
                         });
-
-            <c:if test="${not empty statistics}">
-                        $(function () {
-
-                            var data = [["isValid", <c:out value="${statistics.totalValid}" />],
-                                ["isInvalid", <c:out value="${statistics.totalInvalid}" />],
-                                ["uncertain", <c:out value="${statistics.totalUncertain}" />],
-                                ["removeResult", <c:out value="${statistics.totalRemove}" />]];
-
-                            $.plot("#flot-placeholder", [data], {
-                                series: {
-                                    bars: {
-                                        show: true,
-                                        barWidth: 0.6,
-                                        align: "center"
-                                    }
-                                },
-                                xaxis: {
-                                    mode: "categories",
-                                    tickLength: 0
-                                }
-                            });
-                        });
-            </c:if>
 
                         $(".annotation-option").click(function (e) {
                             var currentValue = $("#annotation-value").val();
@@ -152,7 +129,7 @@
                         var form = $("#annotationForm");
                         form.on("submit", function (event) {
                             if ($("#annotation-value").val().trim().length != 0)
-                            {                                
+                            {
                                 $.ajax({
                                     type: form.attr('method'),
                                     url: form.attr('action'),
@@ -189,6 +166,93 @@
                             $("#tresholdOutput").text(number);
                         });
 
+                        $("#resizeWindow").click(function () {
+                            var windowVar = $("#formulaWindow");
+                            if (windowVar.hasClass('page-wide-window'))
+                            {
+                                windowVar.removeClass('page-wide-window').next('.moveMe').css('margin-top', '0');
+                            }
+                            else
+                            {
+                                windowVar.addClass('page-wide-window').next(".moveMe").css('margin-top', windowVar.height() + 15);
+                            }
+                        });
+
+                        $(".invert-selection-button").click(function (e) {
+                            $(".img-thumbnail").each(function () {
+                                if ($(this).hasClass('formula-select-checked')) {
+                                    $(this).removeClass('formula-select-checked');
+                                    $(this).children(':checkbox').first().attr('checked', false);
+                                } else {
+                                    $(this).addClass('formula-select-checked');
+                                    $(this).children(':checkbox').first().attr('checked', true);
+                                }
+                            });
+
+                            e.preventDefault();
+                        });
+
+                        $("#fileinput").change(function () {
+                            refreshTable();
+                        });
+
+                        $("#filereset").click(function (e) {
+                            e.preventDefault();
+                            $(this).parents("form:first")[0].reset();
+                            refreshTable();
+                        });
+
+
+                        $("#xml").on('load keyup keypress paste', function () {
+                            $("#mathml-preview").html($(this).val());
+                            MathJax.Hub.Queue(["Typeset", MathJax.Hub, "mathml-preview"]);
+                        }).trigger("keyup");
+
+                        $("#btnCanon").click(function () {
+                            $.ajax({
+                                type: "Get",
+                                url: $('#canonicalizeForm').attr('action'),
+                                data: $('#canonicalizeForm').serialize(),
+                                dataType: 'text',
+                                success: function (response) {
+                                    showTooltip("<spring:message code="entity.formula.started" />", true);
+                                },
+                                error: function (response) {
+                                    showTooltip("<spring:message code="entity.formula.crashed" />", false);
+                                }
+                            });
+                        });
+                        
+                        $('#inputFilter').tooltip({
+                            'title': "<spring:message code="general.hint.filter" />",
+                            'placement': 'right',
+                            'container': 'body'
+                        });
+
+            <c:if test="${not empty statistics}">
+                        $(function () {
+
+                            var data = [["isValid", <c:out value="${statistics.totalValid}" />],
+                                ["isInvalid", <c:out value="${statistics.totalInvalid}" />],
+                                ["uncertain", <c:out value="${statistics.totalUncertain}" />],
+                                ["removeResult", <c:out value="${statistics.totalRemove}" />]];
+
+                            $.plot("#flot-placeholder", [data], {
+                                series: {
+                                    bars: {
+                                        show: true,
+                                        barWidth: 0.6,
+                                        align: "center"
+                                    }
+                                },
+                                xaxis: {
+                                    mode: "categories",
+                                    tickLength: 0
+                                }
+                            });
+                        });
+            </c:if>
+
 
             <c:if test="${massDelete eq true}">
                         $(".img-thumbnail").on('click', function (e) {
@@ -205,27 +269,16 @@
                             e.preventDefault();
                         });
             </c:if>
-                
-                $("#resizeWindow").click(function(){
-                    var windowVar = $("#formulaWindow");
-                    if(windowVar.hasClass('page-wide-window'))
-                    {
-                        windowVar.removeClass('page-wide-window').next('.moveMe').css('margin-top','0');
-                    }
-                    else
-                    {                        
-                        windowVar.addClass('page-wide-window').next(".moveMe").css('margin-top',windowVar.height()+15);
-                    }   
-                });
+
             <c:if test="${massCanonicalize eq true}">
-                        var fetchFormulaIds = function(prefix, entityId) {
+                        var fetchFormulaIds = function (prefix, entityId) {
                             $.ajax({
                                 type: 'GET',
-                                url:  prefix + entityId,
+                                url: prefix + entityId,
                                 dataType: 'json',
                                 async: true,
-                                success: function(result) {
-                                    $.each(result, function(i, id) {
+                                success: function (result) {
+                                    $.each(result, function (i, id) {
                                         $("#apprun-input-formulas").append(id + " ");
                                     });
                                 }
@@ -264,20 +317,53 @@
                             e.preventDefault();
                         });
             </c:if>
-                        $(".invert-selection-button").click(function (e) {
-                            $(".img-thumbnail").each(function () {
-                                if ($(this).hasClass('formula-select-checked')) {
-                                    $(this).removeClass('formula-select-checked');
-                                    $(this).children(':checkbox').first().attr('checked', false);
-                                } else {
-                                    $(this).addClass('formula-select-checked');
-                                    $(this).children(':checkbox').first().attr('checked', true);
-                                }
-                            });
 
-                            e.preventDefault();
-                        });
-                    });
+                    });//document.ready end
+
+                    function diffView() {
+                        var byId = function (id) {
+                            return document.getElementById(id);
+                        },
+                                base = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-2")).originalText),
+                                newtxt = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-1")).originalText),
+                                sm = new difflib.SequenceMatcher(base, newtxt),
+                                opcodes = sm.get_opcodes(),
+                                diffoutputdiv = byId("diff");
+
+                        diffoutputdiv.innerHTML = "";
+                        diffoutputdiv.appendChild(diffview.buildView({
+                            baseTextLines: base,
+                            newTextLines: newtxt,
+                            opcodes: opcodes,
+                            baseTextName: "<spring:message code="entity.canonicOutput.original" />",
+                            newTextName: "<spring:message code="entity.canonicOutput.outputForm" />",
+                            viewType: 0
+                        }));
+                    }
+
+                    function showTooltip(data, close)
+                    {
+                        $('#btnCanon')
+                                .tooltip({
+                                    title: data,
+                                    trigger: 'manual',
+                                    placement: 'top'
+                                }).attr('data-original-title', data).tooltip('fixTitle').tooltip('show');
+                        setTimeout(function () {
+                            $('#btnCanon').tooltip('hide');
+                            if (close) {
+                                $('#canonModal').modal('hide');
+                            }
+                        }, 2000);
+                    }
+
+                    function refreshTable()
+                    {
+                        $("#uploads-table").empty();
+                        for (var i = 0; i < $("#fileinput").prop('files').length; ++i) {
+                            $("#uploads-table").append('<tr><td>' + $("#fileinput").prop('files')[i].name + '</td><td>' + $("#fileinput").prop('files')[i].size + '</td></tr>');
+                        }
+                    }
 
                     function getUserRolesHTML()
                     {
@@ -290,24 +376,24 @@
 
                         return $html.html();
                     }
-                    
+
                     function getElementsSelectRow()
                     {
                         var count = $("#elementRowsDiv > div").length;
                         var $html = $("#elementRowTemplate").clone();
 
                         $html.find("select").attr({
-                            'name': function(_,name){
-                                return name.replace("X",count);
-                            }                           
+                            'name': function (_, name) {
+                                return name.replace("X", count);
+                            }
                         });
-                        
+
                         $html.find("input").attr({
-                            'name': function(_,name){
-                                return name.replace("X",count);
-                            }                           
+                            'name': function (_, name) {
+                                return name.replace("X", count);
+                            }
                         });
-                        
+
                         return $html.html();
                     }
 
@@ -343,7 +429,7 @@
                                     break;
                                 case "#formulaMeaningless":
                                     labelType = 'danger';
-                                    icon = 'trash'
+                                    icon = 'trash';
                                     break;
                                 default:
                                     labelType = 'default';
@@ -365,98 +451,6 @@
                             });
                         }
                     }
-        </script>
-        <script>
-            function refreshTable()
-            {
-                $("#uploads-table").empty();
-                for (var i = 0; i < $("#fileinput").prop('files').length; ++i) {
-                    $("#uploads-table").append('<tr><td>' + $("#fileinput").prop('files')[i].name + '</td><td>' + $("#fileinput").prop('files')[i].size + '</td></tr>');
-                }
-            }
-            ;
-            $(document).ready(function () {
-                $("#fileinput").change(function () {
-                    refreshTable();
-                });
-                $("#filereset").click(function (e) {
-                    e.preventDefault();
-                    $(this).parents("form:first")[0].reset();
-                    refreshTable();
-                });
-            });
-        </script>
-        <script>
-            $(document).ready(function () {
-                $("#xml").on('load keyup keypress paste', function () {
-                    $("#mathml-preview").html($(this).val());
-                    MathJax.Hub.Queue(["Typeset", MathJax.Hub, "mathml-preview"]);
-                }).trigger("keyup");
-            });
-        </script>
-        <script>
-            function showTooltip(data, close)
-            {
-                $('#btnCanon')
-                        .tooltip({
-                            title: data,
-                            trigger: 'manual',
-                            placement: 'top'
-                        }).attr('data-original-title', data).tooltip('fixTitle').tooltip('show');
-                setTimeout(function () {
-                    $('#btnCanon').tooltip('hide');
-                    if (close) {
-                        $('#canonModal').modal('hide');
-                    }
-                }, 2000);
-            }
-            $(document).ready(function () {
-                $("#btnCanon").click(function () {
-                    $.ajax({
-                        type: "Get",
-                        url: $('#canonicalizeForm').attr('action'),
-                        data: $('#canonicalizeForm').serialize(),
-                        dataType: 'text',
-                        success: function (response) {
-                            showTooltip("<spring:message code="entity.formula.started" />", true);
-                        },
-                        error: function (response) {
-                            showTooltip("<spring:message code="entity.formula.crashed" />", false);
-                        }
-                    });
-                });
-            });
-        </script>
-        <script type="text/javascript">
-            function diffView() {
-                var byId = function (id) {
-                    return document.getElementById(id);
-                },
-                        base = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-2")).originalText),
-                        newtxt = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-1")).originalText),
-                        sm = new difflib.SequenceMatcher(base, newtxt),
-                        opcodes = sm.get_opcodes(),
-                        diffoutputdiv = byId("diff");
-
-                diffoutputdiv.innerHTML = "";
-                diffoutputdiv.appendChild(diffview.buildView({
-                    baseTextLines: base,
-                    newTextLines: newtxt,
-                    opcodes: opcodes,
-                    baseTextName: "<spring:message code="entity.canonicOutput.original" />",
-                    newTextName: "<spring:message code="entity.canonicOutput.outputForm" />",
-                    viewType: 0
-                }));
-            }
-        </script>
-
-        <script>
-
-            $('#inputFilter').tooltip({
-                'title': "<spring:message code="general.hint.filter" />",
-                'placement': 'right',
-                'container': 'body'
-            });
         </script>
     </body>
 </html>
