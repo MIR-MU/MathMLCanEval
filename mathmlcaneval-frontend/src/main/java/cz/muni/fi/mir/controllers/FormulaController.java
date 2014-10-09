@@ -409,6 +409,9 @@ public class FormulaController
         mm.addAttribute("formulaList", response.getFormulas());
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("formulaSearchRequestForm", formulaSearchRequestForm);
+        mm.addAttribute("searchMode", true);
+        
+        logger.info(formulaSearchRequestForm);
 
 //        logger.info(request);
 //        logger.info(formulaSearchRequestForm);

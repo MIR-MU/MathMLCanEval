@@ -6,8 +6,7 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.FormulaDAO;
-import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
@@ -21,7 +20,6 @@ import cz.muni.fi.mir.similarity.SimilarityForms;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -565,6 +563,7 @@ public class FormulaDAOImpl implements FormulaDAO
 
         QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Formula.class)
                 .overridesForField("co.annotation", "standardAnalyzer")
+                .overridesForField("co.element", "keywordAnalyzer")
                 .get();
 
         //logger.info("$"+qb.keyword().onField("annotation").ignoreFieldBridge().matching(formulaSearchRequest.getAnnotationContent()).createQuery().toString());
@@ -600,8 +599,7 @@ public class FormulaDAOImpl implements FormulaDAO
                 junctionElements.must(qb.keyword()
                         .onField("co.element")
                         .ignoreFieldBridge()
-                        .ignoreAnalyzer()
-                        .matching(e.getElementName()+formulaSearchRequest.getElements().get(e))
+                        .matching(e.getElementName()+"="+formulaSearchRequest.getElements().get(e))
                         .createQuery()
                 );        
                 
@@ -666,5 +664,29 @@ public class FormulaDAOImpl implements FormulaDAO
         }        
         
         return fsr;        
+    }
+
+    @Override
+    public Formula getFormulaByCanonicOutput(CanonicOutput canonicOutput)
+    {
+        Formula f = null;
+        try
+        {
+            f = entityManager.createQuery("SELECT f FROM formula f WHERE :co MEMBER OF f.outputs", Formula.class)
+                    .setParameter("co", canonicOutput).getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.error(nre);
+        }
+        
+        return f;
+    }
+
+    @Override
+    public void index(Formula f)
+    {
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+        fullTextEntityManager.index(f);
     }
 }

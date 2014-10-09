@@ -4,7 +4,6 @@
  */
 package cz.muni.fi.mir.db.domain;
 
-import cz.muni.fi.mir.similarity.ElementCountTokenizerFactory;
 import cz.muni.fi.mir.tools.CanonicOutputBridge;
 import java.io.Serializable;
 import java.util.List;
@@ -20,7 +19,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
+import org.apache.solr.analysis.KeywordTokenizerFactory;
+import org.apache.solr.analysis.LowerCaseFilterFactory;
+import org.apache.solr.analysis.StandardFilterFactory;
 import org.apache.solr.analysis.StandardTokenizerFactory;
+import org.apache.solr.analysis.StopFilterFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
@@ -32,6 +35,7 @@ import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
+import org.hibernate.search.annotations.TokenFilterDef;
 import org.hibernate.search.annotations.TokenizerDef;
 import org.joda.time.DateTime;
 
@@ -42,10 +46,19 @@ import org.joda.time.DateTime;
 @Entity(name = "formula")
 @Indexed
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@AnalyzerDefs({
-        @AnalyzerDef(name = "countElementFormAnalyzer",
-                tokenizer = @TokenizerDef(factory = ElementCountTokenizerFactory.class)),
-        @AnalyzerDef(name = "standardAnalyzer",tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class))}
+@AnalyzerDefs(
+{
+    @AnalyzerDef(name = "standardAnalyzer",
+            tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+            filters =
+            {
+                @TokenFilterDef(factory = StandardFilterFactory.class),
+                @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                @TokenFilterDef(factory = StopFilterFactory.class)
+            }),
+    @AnalyzerDef(name = "keywordAnalyzer",
+            tokenizer = @TokenizerDef(factory = KeywordTokenizerFactory.class))
+}
 )
 public class Formula implements Serializable, Auditable
 {
@@ -79,7 +92,7 @@ public class Formula implements Serializable, Auditable
     {
         CascadeType.REMOVE, CascadeType.MERGE
     })
-    @Field(bridge = @FieldBridge(impl = CanonicOutputBridge.class), store = Store.YES,analyze = Analyze.YES)
+    @Field(bridge = @FieldBridge(impl = CanonicOutputBridge.class), store = Store.YES, analyze = Analyze.YES)
     private List<CanonicOutput> outputs;         // 
     @OneToMany
     private List<Formula> similarFormulas;
@@ -92,7 +105,6 @@ public class Formula implements Serializable, Auditable
     @ManyToMany
     private List<Element> elements;
 
-    
     @Override
     public Long getId()
     {

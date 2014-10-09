@@ -5,8 +5,7 @@
  */
 package cz.muni.fi.mir.db.dao;
 
-import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
@@ -30,7 +29,7 @@ public interface FormulaDAO
     void updateFormula(Formula formula);
 
     /**
-     * Method deletes given formula from database. 
+     * Method deletes given formula from database.
      *
      * @param formula to be deleted
      */
@@ -74,6 +73,22 @@ public interface FormulaDAO
     List<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite);
 
     void findSimilarMass(Map<String, String> properties);
-    
+
     FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest);
+
+    /**
+     * Method returns formula of which is given canonicOutput descendant.
+     * @param canonicOutput which parent we are looking for
+     * @return formula containing given canonic output. null if there is no match (which should not occur)
+     */
+    Formula getFormulaByCanonicOutput(CanonicOutput canonicOutput);
+
+    /**
+     * Method manually indexes given formula. For indexing entire database use {@link #reindex()
+     * }. Writing to index occurs only after transaction is commit, therefore TX
+     * has to be managed on upper level.
+     *
+     * @param f to be indexed.
+     */
+    void index(Formula f);
 }

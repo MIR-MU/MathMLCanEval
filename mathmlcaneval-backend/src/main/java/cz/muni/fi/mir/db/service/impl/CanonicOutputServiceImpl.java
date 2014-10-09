@@ -7,6 +7,7 @@ package cz.muni.fi.mir.db.service.impl;
 
 import cz.muni.fi.mir.db.dao.AnnotationDAO;
 import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
+import cz.muni.fi.mir.db.dao.FormulaDAO;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
@@ -14,6 +15,8 @@ import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,8 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     private CanonicOutputDAO canonicOutputDAO;
     @Autowired
     private AnnotationDAO annotationDAO;
+    @Autowired
+    private FormulaDAO formulaDAO;
 
     @Override
     @Transactional(readOnly = false)
@@ -95,7 +100,9 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
         
         canonicOutput.setAnnotations(temp);
         
-        canonicOutputDAO.updateCanonicOutput(canonicOutput);       
+        canonicOutputDAO.updateCanonicOutput(canonicOutput);     
+        
+        formulaDAO.index(formulaDAO.getFormulaByCanonicOutput(canonicOutput));
     }
 
     @Override

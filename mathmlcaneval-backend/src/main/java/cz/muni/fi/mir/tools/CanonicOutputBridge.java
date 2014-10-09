@@ -13,6 +13,8 @@ import java.io.StringReader;
 import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.KeywordAnalyzer;
+import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -61,16 +63,11 @@ public class CanonicOutputBridge implements FieldBridge
         // which is stored in co.distanceForm
         document.add(newField("co.distanceForm",sf.getDistanceForm(),luceneOptions,null));
         
+        PerFieldAnalyzerWrapper keywordAnalyzer = new PerFieldAnalyzerWrapper(new KeywordAnalyzer());
         
-        //does not work ejkejej TODO ~> so
         for(String s : sf.getCountForm().keySet())
         {
-            //stores element in co.element field 
-            //in form ElementName=count
-            //eg mfrac=3
-            
-            //
-            document.add(newField("co.element", s+sf.getCountForm().get(s), luceneOptions, null)); 
+            document.add(newField("co.element", s+"="+sf.getCountForm().get(s), luceneOptions, keywordAnalyzer)); 
         }
         
         document.add(newField("co.longestBranch",String.valueOf(sf.getLongestBranch()),luceneOptions,null));
