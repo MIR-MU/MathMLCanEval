@@ -69,7 +69,7 @@
                                                         <div class="col-md-2">
                                                             <span class="btn btn-sm btn-primary addelementrow"><i class=" glyphicon glyphicon-plus"></i></span>
 
-                                                            <span class="btn btn-sm btn-primary removeelemenrow"><i class=" glyphicon glyphicon-minus"></i></span>
+                                                            <span class="btn btn-sm btn-primary removeelementrow"><i class=" glyphicon glyphicon-minus"></i></span>
                                                         </div>
                                                     </div>
                                                 </c:when>
@@ -78,7 +78,20 @@
                                                         <div class="row form-row">
                                                             <label for="sourceDocument" class="col-md-2 col-md-offset-2 control-label"><spring:message code="search.elements.element" /></label>
                                                             <div class="col-md-3">
-                                                                <form:select items="${elementList}" path="elementRows[${i.index}].element" itemLabel="elementName" itemValue="id" cssClass="form-control elementList"/> 
+                                                                <form:select path="elementRows[${i.index}].element" cssClass="form-control elementList">
+                                                                    <%-- automatic conversion does not work here... --%>
+                                                                    <c:forEach items="${elementList}" var="entry">
+                                                                        <c:choose>
+                                                                            <c:when test="${entry eq elementRows[i.index].element}">
+                                                                                <option value="${entry.id}" selected="selected"><c:out value="${entry.elementName}" /></option>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <option value="${entry.id}"><c:out value="${entry.elementName}" /></option>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                    </c:forEach>
+                                                                    <form:options items="${elementList}" itemLabel="elementName" itemValue="id" />
+                                                                </form:select>  
                                                             </div>
                                                             <label for="sourceDocument" class="col-md-1 control-label"><spring:message code="search.elements.count" /></label> 
                                                             <div class="col-md-2">
@@ -87,7 +100,7 @@
                                                             <div class="col-md-2">
                                                                 <span class="btn btn-sm btn-primary addelementrow"><i class=" glyphicon glyphicon-plus"></i></span>
 
-                                                                <span class="btn btn-sm btn-primary removeelemenrow"><i class=" glyphicon glyphicon-minus"></i></span>
+                                                                <span class="btn btn-sm btn-primary removeelementrow"><i class=" glyphicon glyphicon-minus"></i></span>
                                                             </div>
                                                         </div>
                                                     </c:forEach>                                                    
@@ -132,7 +145,7 @@
                                             <div class="col-md-2">
                                                 <span class="btn btn-sm btn-primary addelementrow"><i class=" glyphicon glyphicon-plus"></i></span>
 
-                                                <span class="btn btn-sm btn-primary removeelemenrow"><i class=" glyphicon glyphicon-minus"></i></span>
+                                                <span class="btn btn-sm btn-primary removeelementrow"><i class=" glyphicon glyphicon-minus"></i></span>
                                             </div>
                                         </div>
                                     </div>

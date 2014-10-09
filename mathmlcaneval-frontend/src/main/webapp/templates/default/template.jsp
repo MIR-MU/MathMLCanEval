@@ -78,6 +78,7 @@
                     //document.ready start
                     $(document).ready(function () {
                         $(".elementList").select2();
+                        $("#teest").select2();
 
                         $("#flot-placeholder").css('width', $(".stats-panel-body").width());
                         $("#flot-placeholder").css('height', $(".stats-panel-body").width() * 0.8);
@@ -100,6 +101,14 @@
                         $(this).on('click', '.addelementrow', function () {
                             $("#elementRowsDiv").append(getElementsSelectRow())
                                     .find("select:last").select2();
+                        });
+
+                        $(this).on('click', '.removeelementrow', function () {
+                            $(this).parents("div.row").first().remove();
+                            if ($("#elementRowsDiv > div").length === 0) {
+                                $("#elementRowsDiv").append(getElementsSelectRow())
+                                        .find("select:last").select2();
+                            }
                         });
 
                         $(".annotation-option").click(function (e) {
@@ -222,7 +231,7 @@
                                 }
                             });
                         });
-                        
+
                         $('#inputFilter').tooltip({
                             'title': "<spring:message code="general.hint.filter" />",
                             'placement': 'right',
