@@ -120,7 +120,10 @@
                             </tbody>
                         </table>
                         <sec:authorize access="hasRole('ROLE_USER')">
-                            <form method="POST" action="${pageContext.request.contextPath}/formula/annotate/" id="annotationForm">
+                            <form:form method="POST" 
+                                       action="${pageContext.request.contextPath}/annotation/annotate/" 
+                                       modelAttribute="annotationAction"
+                                       id="annotationForm">
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -149,10 +152,9 @@
                                                         </li>
                                                     </ul>
                                                 </div> <!--/input-group-btn --> 
-
-                                                <input type="hidden" name="canonicOutputId" value="${canonicOutput.id}" />
-                                                <input type="hidden" name="formulaID" value="<c:out value="${formulaEntry.id}" />" />
-                                                <input type="text" id="annotation-value" name="annotation-value" class="form-control" />
+                                                <form:input type="text" id="annotation-value" path="annotationValue" cssClass="form-control" />                                                
+                                                <input type="hidden" name="clazz" value="formula" />
+                                                <input type="hidden" name="entityID" value="<c:out value="${formulaEntry.id}" />" />
                                                 <span class="input-group-btn">
                                                     <input type="submit" class="btn btn-primary" value="<spring:message code="general.button.submit" />" />
                                                 </span>
@@ -160,7 +162,7 @@
                                         </div> <!-- /col-md-12-->
                                     </div> <!-- /row -->
                                 </div> <!-- /panel-body -->
-                            </form>
+                            </form:form>
                         </sec:authorize>
                     </div>
                 </div>

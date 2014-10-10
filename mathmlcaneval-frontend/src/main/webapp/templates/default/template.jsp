@@ -145,7 +145,16 @@
                                     data: form.serialize(),
                                     dataType: 'json',
                                     success: function (data) {
-                                        $("#annotationTable > tbody:last").append("<tr><td>" + data.user + "</td><td class=\"annotation-note-cell\">" + data.note + "</td></tr>");
+                                        var output = "<tr><td>" + data.username; 
+                                        output +="</td><td class=\"annotation-note-cell\">";
+                                        output += data.annotationValue + "</td>";
+                                                
+                                        <sec:authorize access="hasRole('ROLE_USER')">
+                                                output += '<td><a href="#" class="annotation-remove" id="'+data.id;
+                                                output += '"><span class="glyphicon glyphicon-remove"></span></a></td>';
+                                        </sec:authorize>
+                                            output += "</tr>";
+                                        $("#annotationTable > tbody:last").append(output);
                                         $("#annotation-value").val('');
                                         formatHashTags(false);
                                         if ($("#annotationTable > tbody > tr:first").attr('class') === "empty-table")
@@ -165,7 +174,7 @@
                             event.preventDefault();
                         });
 
-                        $(".annotation-remove").on('click', function (e) {
+                        $(document).on('click', '.annotation-remove',function (e) {
                             var selector = "#" + $(this).attr("id") + "." + $(this).attr("class");
                             var onSuccess = function () { window.location.reload(true); };
                             $.ajax({

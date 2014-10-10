@@ -248,7 +248,10 @@
                             </tbody>
                         </table>
                         <sec:authorize access="hasRole('ROLE_USER')">
-                            <form:form id="annotationForm" method="post" action="${pageContext.request.contextPath}/canonicoutput/annotate/" commandName="annotationForm" cssClass="form-horizontal" cssStyle="margin-top: 5px;">
+                            <form:form method="POST" 
+                                       action="${pageContext.request.contextPath}/annotation/annotate/" 
+                                       modelAttribute="annotationAction"
+                                       id="annotationForm">
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -287,9 +290,9 @@
                                                         </li>
                                                     </ul>
                                                 </div> <!--/input-group-btn --> 
-
-                                                <input type="hidden" name="canonicOutputId" value="${canonicOutput.id}" />
-                                                <form:input path="note" placeholder="Note" id="annotation-value" cssClass="form-control"/>
+                                                <form:input type="text" id="annotation-value" path="annotationValue" cssClass="form-control" />                                                
+                                                <input type="hidden" name="clazz" value="canonicoutput" />
+                                                <input type="hidden" name="entityID" value="<c:out value="${canonicOutput.id}" />" />
                                                 <span class="input-group-btn">
                                                     <input type="submit" class="btn btn-primary" value="<spring:message code="general.button.submit" />" />
                                                 </span>

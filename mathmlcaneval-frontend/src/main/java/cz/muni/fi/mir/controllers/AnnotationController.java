@@ -13,10 +13,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.AnnotationService;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.FormulaService;
+import cz.muni.fi.mir.tools.AnnotationAction;
+import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/annotation")
@@ -58,5 +63,32 @@ public class AnnotationController
             return false;
         }
         return true;
+    }
+    
+    @RequestMapping(value = {"/annotate/","/annotate"},
+            method = RequestMethod.POST,
+            produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public AnnotationAction annotate(@ModelAttribute("annotationAction") AnnotationAction annotationAction)
+    {
+        User u = securityContext.getLoggedEntityUser();
+        Annotation a = EntityFactory.createAnnotation(annotationAction.getAnnotationValue(), u);
+        
+        switch(annotationAction.getClazz())
+        {
+            case "formula":
+                formulaService.annotateFormula(formulaService.getFormulaByID(annotationAction.getEntityID()), a);
+                break;
+            case "canonicoutput":
+                canonicOutputService.annotateCannonicOutput(canonicOutputService.getCanonicOutputByID(annotationAction.getEntityID()), a);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid target class should be [formula] or [canonicoutput[, but was ["+annotationAction.getClazz()+"]");
+        }
+        
+        annotationAction.setUsername(u.getUsername());
+        annotationAction.setId(a.getId());
+        
+        return annotationAction;        
     }
 }

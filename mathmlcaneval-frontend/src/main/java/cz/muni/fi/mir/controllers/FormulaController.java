@@ -4,14 +4,12 @@
  */
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
-import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.FormulaService;
@@ -30,6 +28,7 @@ import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.service.ElementService;
 import cz.muni.fi.mir.forms.ElementFormRow;
 import cz.muni.fi.mir.forms.FormulaSearchRequestForm;
+import cz.muni.fi.mir.tools.AnnotationAction;
 import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 
@@ -187,6 +186,7 @@ public class FormulaController
         ModelMap mm = prepareModelMap(true, true, false, false,false);
         mm.addAttribute("formulaEntry", formulaService.getFormulaByID(id));
         mm.addAttribute("applicationRunForm", new ApplicationRunForm());
+        mm.addAttribute("annotationAction", new AnnotationAction());
 
         return new ModelAndView("formula_view", mm);
     }
@@ -283,21 +283,7 @@ public class FormulaController
             
             return new ModelAndView("redirect:/dashboard/");
         }
-    }
-    
-    @RequestMapping(value = {"/annotate/","/annotate"},
-            method = RequestMethod.POST,
-            produces = "application/json; charset=utf-8")
-    @ResponseBody
-    public String annotate(@RequestParam(value = "formulaID") Long formulaID, @RequestParam(value = "annotation-value") String annotation)
-    {
-        User u = securityContext.getLoggedEntityUser();
-        Annotation a = EntityFactory.createAnnotation(annotation, u);
-        
-        formulaService.annotateFormula(formulaService.getFormulaByID(formulaID), a);
-        
-        return "{ \"user\": \""+u.getUsername()+"\", \"note\" : \""+annotation+"\"}";
-    }
+    }    
     
     @RequestMapping(value = {"/reindex/","/reindex"},method = RequestMethod.GET)
     public ModelAndView reindex()
