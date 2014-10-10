@@ -15,8 +15,6 @@ import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,6 +84,13 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public CanonicOutput getCanonicOutputByAnnotation(Annotation annotation)
+    {
+        return canonicOutputDAO.getCanonicOutputByAnnotation(annotation);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void annotateCannonicOutput(CanonicOutput canonicOutput, Annotation annotation)
     {
@@ -109,6 +114,14 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     @Transactional(readOnly = false)
     public void deleteAnnotationFromCanonicOutput(CanonicOutput canonicOutput, Annotation annotation)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Annotation> temp = new ArrayList<>(canonicOutput.getAnnotations());
+
+        temp.remove(annotation);
+
+        canonicOutput.setAnnotations(temp);
+
+        canonicOutputDAO.updateCanonicOutput(canonicOutput);
+
+        annotationDAO.deleteAnnotation(annotation);
     }
 }

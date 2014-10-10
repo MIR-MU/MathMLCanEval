@@ -7,14 +7,18 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
+
 import java.util.Collections;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 
 /**
@@ -111,5 +115,22 @@ public class CanonicOutputDAOImpl implements CanonicOutputDAO
         }
         
         return resultList;
+    }
+
+    @Override
+    public CanonicOutput getCanonicOutputByAnnotation(Annotation annotation)
+    {
+        CanonicOutput result = null;
+
+        try
+        {
+            result = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE :annotationID MEMBER OF co.annotations", CanonicOutput.class)
+                    .setParameter("annotationID", annotation.getId()).getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        return result;
     }
 }

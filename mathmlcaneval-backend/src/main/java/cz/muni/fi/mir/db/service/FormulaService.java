@@ -16,7 +16,6 @@
 package cz.muni.fi.mir.db.service;
 
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
@@ -182,6 +181,8 @@ public interface FormulaService
     List<Formula> getFormulasByProgram(Program program);
 
     List<Formula> getFormulasByUser(User user);
+
+    Formula getFormulaByAnnotation(Annotation annotation);
 
     /**
      * Method returns all formulas out of database based on given elements, from range &lt;start;end&gt;.

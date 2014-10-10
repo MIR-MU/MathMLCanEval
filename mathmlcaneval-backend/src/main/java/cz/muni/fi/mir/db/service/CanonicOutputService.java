@@ -27,6 +27,7 @@ public interface CanonicOutputService
     List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun);
     List<CanonicOutput> getCanonicOutputByFormula(Formula formula);
     List<CanonicOutput> getCanonicOutputByParentFormula(Formula formula);
+    CanonicOutput getCanonicOutputByAnnotation(Annotation annotation);
     
     void annotateCannonicOutput(CanonicOutput canonicOutput, Annotation annotation);
     void deleteAnnotationFromCanonicOutput(CanonicOutput canonicOutput, Annotation annotation);

@@ -5,6 +5,7 @@
  */
 package cz.muni.fi.mir.db.dao;
 
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
@@ -57,6 +58,8 @@ public interface FormulaDAO
     List<Formula> getFormulasByProgram(Program program);
 
     List<Formula> getFormulasByUser(User user);
+
+    Formula getFormulaByAnnotation(Annotation annotation);
 
     List<Formula> getAllForHashing();
 

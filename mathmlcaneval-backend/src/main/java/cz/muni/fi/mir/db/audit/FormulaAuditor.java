@@ -31,18 +31,18 @@ public class FormulaAuditor
         auditorService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.UPDATE, 
                         formula, 
-                        "Annotated formula with "+annotation.getNote()
+                        "Annotated formula with " + annotation.getNote()
                 )
         );
     }
     
-    @Before("execution(* cz.muni.fi.mir.db.service.FormulaService.deleteFormula(..)) && args(formula,annotation)")
+    @Before("execution(* cz.muni.fi.mir.db.service.FormulaService.deleteAnnotationFromFormula(..)) && args(formula,annotation)")
     public void arroundDeleteAnnotation(Formula formula, Annotation annotation)
     {
         auditorService.createDatabaseEvent(databaseEventFactory
-                .newInstance(DatabaseEvent.Operation.UPDATE, 
+                .newInstance(DatabaseEvent.Operation.DELETE,
                         formula, 
-                        "Deleted annotation "+annotation.getNote()+"from formula "+formula.getId()
+                        "Deleted annotation " + annotation.getNote() + " from formula"
                 )
         );
     }

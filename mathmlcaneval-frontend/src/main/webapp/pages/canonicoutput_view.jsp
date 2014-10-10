@@ -160,7 +160,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1><spring:message code="entity.output.entry" /></h1>
-                </div> <!-- /col-md-12> -->
+                </div> <!-- /col-md-12>
             </div> <!-- /row -->
 
             <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
@@ -238,6 +238,9 @@
                                             <tr>
                                                 <td><c:out value="${annotationRow.user.username}" /></td>
                                                 <td class="annotation-note-cell"><c:out value="${annotationRow.note}" /></td>
+                                                <sec:authorize access="hasRole('ROLE_USER')">
+                                                <td><a href="#" class="annotation-remove" id="${annotationRow.id}"><span class="glyphicon glyphicon-remove"></span></a></td>
+                                                </sec:authorize>
                                             </tr>
                                         </c:forEach>
                                     </c:otherwise>

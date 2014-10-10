@@ -165,6 +165,27 @@
                             event.preventDefault();
                         });
 
+                        $(".annotation-remove").on('click', function (e) {
+                            var selector = "#" + $(this).attr("id") + "." + $(this).attr("class");
+                            var onSuccess = function () { window.location.reload(true); };
+                            $.ajax({
+                                type: "GET",
+                                url: "${pageContext.request.contextPath}/annotation/delete/" + $(this).attr("id"),
+                                dataType: 'json',
+                                async: true,
+                                success: function (response) {
+                                    if (response == true) {
+                                        showTooltip(selector, "<spring:message code="entity.annotation.removed" />", onSuccess);
+                                    } else {
+                                        showTooltip(selector, "<spring:message code="entity.annotation.notRemoved" />");
+                                    }
+                                },
+                                error: function (response) {
+                                    showTooltip(selector, "<spring:message code="entity.annotation.notRemoved" />");
+                                }
+                            });
+                            e.preventDefault();
+                        });
 
                         formatHashTags(true);
 
@@ -224,10 +245,10 @@
                                 data: $('#canonicalizeForm').serialize(),
                                 dataType: 'text',
                                 success: function (response) {
-                                    showTooltip("<spring:message code="entity.formula.started" />", true);
+                                    showTooltip("#btnCanon", "<spring:message code="entity.formula.started" />", function() { $('#canonModal').modal('hide'); });
                                 },
                                 error: function (response) {
-                                    showTooltip("<spring:message code="entity.formula.crashed" />", false);
+                                    showTooltip("#btnCanon", "<spring:message code="entity.formula.crashed" />");
                                 }
                             });
                         });
@@ -350,20 +371,19 @@
                         }));
                     }
 
-                    function showTooltip(data, close)
+                    function showTooltip(selector, data, onClose, timeout)
                     {
-                        $('#btnCanon')
-                                .tooltip({
+                        $(selector).tooltip({
                                     title: data,
                                     trigger: 'manual',
                                     placement: 'top'
                                 }).attr('data-original-title', data).tooltip('fixTitle').tooltip('show');
                         setTimeout(function () {
-                            $('#btnCanon').tooltip('hide');
-                            if (close) {
-                                $('#canonModal').modal('hide');
+                            $(selector).tooltip('hide');
+                            if (onClose) {
+                                onClose();
                             }
-                        }, 2000);
+                        }, timeout || 2000);
                     }
 
                     function refreshTable()

@@ -6,6 +6,7 @@
 package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.FormulaDAO;
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
@@ -17,6 +18,7 @@ import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.similarity.SimilarityFormConverter;
 import cz.muni.fi.mir.similarity.SimilarityForms;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,9 +28,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+
 import org.apache.lucene.search.Query;
 import org.hibernate.Hibernate;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -176,6 +180,23 @@ public class FormulaDAOImpl implements FormulaDAO
         }
 
         return resultList;
+    }
+
+    @Override
+    public Formula getFormulaByAnnotation(Annotation annotation)
+    {
+        Formula result = null;
+
+        try
+        {
+            result = entityManager.createQuery("SELECT f FROM formula f WHERE :annotationID MEMBER OF f.annotations", Formula.class)
+                    .setParameter("annotationID", annotation.getId()).getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        return result;
     }
 
     @Override

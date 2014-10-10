@@ -110,6 +110,9 @@
                                             <tr>
                                                 <td>${entry.user.username}</td>
                                                 <td class="annotation-note-cell">${entry.note}</td>
+                                                <sec:authorize access="hasRole('ROLE_USER')">
+                                                <td><a href="#" class="annotation-remove" id="${entry.id}"><span class="glyphicon glyphicon-remove"></span></a></td>
+                                                </sec:authorize>
                                             </tr>
                                         </c:forEach>
                                     </c:otherwise>

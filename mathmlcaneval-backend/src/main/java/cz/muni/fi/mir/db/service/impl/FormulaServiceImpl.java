@@ -150,6 +150,13 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = true)
+    public Formula getFormulaByAnnotation(Annotation annotation)
+    {
+        return formulaDAO.getFormulaByAnnotation(annotation);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Formula> getAllFormulas()
     {
         return formulaDAO.getAllFormulas();

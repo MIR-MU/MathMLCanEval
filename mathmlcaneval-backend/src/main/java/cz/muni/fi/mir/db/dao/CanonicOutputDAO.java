@@ -6,6 +6,7 @@
 
 package cz.muni.fi.mir.db.dao;
 
+import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
@@ -26,4 +27,5 @@ public interface CanonicOutputDAO
     List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun);
     List<CanonicOutput> getCanonicOutputByFormula(Formula formula);
     List<CanonicOutput> getCanonicOutputByParentFormula(Formula formula);
+    CanonicOutput getCanonicOutputByAnnotation(Annotation annotation);
 }
