@@ -80,35 +80,14 @@ public class ConfigurationController
         }
     }
     
-    @RequestMapping(value ={"/edit/{id}","/edit/{id}/"},method = RequestMethod.GET)
-    @SiteTitle("{entity.configuration.edit}")
-    public ModelAndView editConfiguration(@PathVariable Long id)
+    @RequestMapping(value ={"/clone/{id}","/clone/{id}/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.configuration.clone}")
+    public ModelAndView cloneConfiguration(@PathVariable Long id)
     {
         ModelMap mm = new ModelMap();
         mm.addAttribute("configurationForm", mapper.map(configurationService.getConfigurationByID(id), ConfigurationForm.class));
 
-        return new ModelAndView("configuration_edit", mm);
-    }
-
-    @Secured("ROLE_ADMINISTRATOR")
-    @RequestMapping(value={"/edit","/edit/"}, method = RequestMethod.POST)
-    @SiteTitle("{entity.configuration.edit}")
-    public ModelAndView editConfigurationSubmit(@Valid @ModelAttribute("configurationForm") ConfigurationForm configurationForm, BindingResult result, Model model)
-    {
-        if(result.hasErrors())
-        {
-            ModelMap mm = new ModelMap();
-            mm.addAttribute("configurationForm", configurationForm);
-            mm.addAttribute(model);
-
-            return new ModelAndView("configuration_edit",mm);
-        }
-        else
-        {
-            configurationService.updateConfiguration(mapper.map(configurationForm, Configuration.class));
-
-            return new ModelAndView("redirect:/configuration/list/");
-        }
+        return new ModelAndView("configuration_clone", mm);
     }
 
     @Secured("ROLE_ADMINISTRATOR")

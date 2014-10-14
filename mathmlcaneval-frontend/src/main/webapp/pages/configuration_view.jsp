@@ -1,14 +1,17 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">        
         <div class="container content">
             <h1><spring:message code="entity.configuration.entry" /></h1>
-            <div class="pull-right">
-                <div class="pull-right">        
-                    <a href="${pageContext.request.contextPath}/configuration/list/" class="btn btn-primary space-bottom-10"><spring:message code="general.label.goback" /></a>        
-                </div>
+            <div class="btn-group pull-right space-bottom-10">
+                <!-- superuser -->
+                <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                    <a href="${pageContext.request.contextPath}/configuration/clone/${configurationEntry.id}" class="btn btn-danger"><spring:message code="configuration.page.button.clone" /></a>
+                </sec:authorize>
+                <a href="${pageContext.request.contextPath}/configuration/list/" class="btn btn-primary"><spring:message code="general.label.goback" /></a>
             </div>
             <div class="row pull-top-50">
                 <div class="col-lg-12">

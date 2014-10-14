@@ -37,8 +37,8 @@
                                     <td><c:out value="${entry.note}" /></td>
                                     <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                                         <td>
-                                            <a href="${pageContext.request.contextPath}/configuration/edit/<c:out value="${entry.id}" />/">
-                                                <span class="glyphicon glyphicon-wrench"></span>
+                                            <a href="${pageContext.request.contextPath}/configuration/clone/<c:out value="${entry.id}" />/">
+                                                <span class="glyphicon glyphicon-open"></span>
                                             </a>
                                             <a href="${pageContext.request.contextPath}/configuration/delete/<c:out value="${entry.id}" />/">
                                                 <span class="glyphicon glyphicon-remove"></span>
