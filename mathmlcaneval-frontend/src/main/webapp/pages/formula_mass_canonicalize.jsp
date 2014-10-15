@@ -7,7 +7,7 @@
     <tiles:putAttribute name="body">
         <div class="container content">
             <h1><spring:message code="entity.appruns.new" /></h1>
-            <form:form method="POST" commandName="applicationRunForm" action="${pageContext.request.contextPath}/appruns/create/select" class="form-horizontal pull-top-50">
+            <form:form method="POST" commandName="applicationRunForm" action="${pageContext.request.contextPath}/formula/masscanonicalize/run" class="form-horizontal pull-top-50">
                 <div class="row">
                     <label class="col-sm-3 control-label"><spring:message code="entity.appruns.revision" /></label>
                     <div class="col-sm-9">
@@ -35,6 +35,9 @@
 
                 <div class="row pull-top-50">
                     <div class="col-md-12">
+                        <div class="pull-right">
+                            <a href="${pageContext.request.contextPath}/formula/search/" class="btn btn-danger"><spring:message code="general.label.goback" /></a>
+                        </div>
                         <div class="pull-right">
                             <a href="#" class="btn btn-default invert-selection-button"><spring:message code="general.button.invert" /></a>
                         </div>

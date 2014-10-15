@@ -349,15 +349,30 @@ public class FormulaController
     
     @RequestMapping(value = {"/massdelete","/massdelete/"},method = RequestMethod.GET)
     @SiteTitle("{entity.formula.massdelete}")
-    public ModelAndView massDelete(@ModelAttribute("pagination") Pagination pagination, Model model)
+    public ModelAndView massDelete(@ModelAttribute("formulaSearchRequestForm") FormulaSearchRequestForm formulaSearchRequestForm, @ModelAttribute("pagination") Pagination pagination, Model model)
     {
-        if (pagination.getNumberOfRecords() == 0) {
-            pagination.setNumberOfRecords(formulaService.getNumberOfRecords());
+        ModelMap mm = new ModelMap();
+        FormulaSearchRequest request = mapper.map(formulaSearchRequestForm,FormulaSearchRequest.class);
+
+        if(formulaSearchRequestForm.getElementRows() != null && !formulaSearchRequestForm.getElementRows().isEmpty())
+        {
+            Map<Element,Integer> map = new HashMap<>();
+            for(ElementFormRow efr :formulaSearchRequestForm.getElementRows())
+            {
+                if(efr.getValue() != null)
+                {
+                    map.put(mapper.map(efr.getElement(),Element.class), efr.getValue());
+                }                
+            }
+            request.setElements(map);
         }
 
-        ModelMap mm = new ModelMap();
+        FormulaSearchResponse response = formulaService.findFormulas(request, pagination);
+        pagination.setNumberOfRecords(response.getTotalResultSize());
+
+        mm.addAttribute("formulaList", response.getFormulas());
         mm.addAttribute("pagination", pagination);
-        mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination));
+        mm.addAttribute("formulaSearchRequestForm", formulaSearchRequestForm);
         mm.addAttribute("massDelete", true);
 
         return new ModelAndView("formula_mass_delete",mm);
@@ -379,8 +394,70 @@ public class FormulaController
         
         return new ModelAndView("redirect:/formula/massdelete/");        
     }
+
+    @RequestMapping(value = {"/masscanonicalize","/masscanonicalize/"},method = RequestMethod.GET)
+    @SiteTitle("{entity.appruns.new}")
+    public ModelAndView createSelect(@ModelAttribute("formulaSearchRequestForm") FormulaSearchRequestForm formulaSearchRequestForm, @ModelAttribute("pagination") Pagination pagination, Model model)
+    {
+        ModelMap mm = prepareModelMap(true, true, true, true,true);
+        FormulaSearchRequest request = mapper.map(formulaSearchRequestForm,FormulaSearchRequest.class);
+        
+        if(formulaSearchRequestForm.getElementRows() != null && !formulaSearchRequestForm.getElementRows().isEmpty())
+        {
+            Map<Element,Integer> map = new HashMap<>();
+            for(ElementFormRow efr :formulaSearchRequestForm.getElementRows())
+            {
+                if(efr.getValue() != null)
+                {
+                    map.put(mapper.map(efr.getElement(),Element.class), efr.getValue());
+                }
+            }
+            request.setElements(map);
+        }
+
+        FormulaSearchResponse response = formulaService.findFormulas(request, pagination);
+        pagination.setNumberOfRecords(response.getTotalResultSize());
+
+        mm.addAttribute("formulaList", response.getFormulas());
+        mm.addAttribute("pagination", pagination);
+        mm.addAttribute("formulaSearchRequestForm", formulaSearchRequestForm);
+        mm.addAttribute("applicationRunForm", new ApplicationRunForm());
+        mm.addAttribute("searchMode", true);
+        mm.addAttribute("massCanonicalize", true);
+
+        return new ModelAndView("formula_mass_canonicalize", mm);
+    }
+
+    @RequestMapping(value={"/masscanonicalize/run","/masscanonicalize/run/"},method = RequestMethod.POST)
+    public ModelAndView submitCreateSelect(@ModelAttribute("pagination") Pagination pagination, @RequestParam(value = "formulaCanonicalizeID") String[] formulaCanonicalizeIDs, @Valid @ModelAttribute("applicationRunForm") ApplicationRunForm applicationRunForm, BindingResult result, Model model)
+    {
+        if(result.hasErrors())
+        {
+            ModelMap mm = prepareModelMap(true, true, true, true,true);
+            mm.addAttribute("applicationRunForm", applicationRunForm);
+            mm.addAttribute("pagination", pagination);
+            mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination));
+            mm.addAttribute("massCanonicalize", true);
+            mm.addAttribute(model);
+
+            return new ModelAndView("formula_mass_canonicalize",mm);
+        } else {
+            List<Long> toCanonicalize = new ArrayList<>();
+            for(String formulaID : formulaCanonicalizeIDs)
+            {
+                if (!StringUtils.isBlank(formulaID)) {
+                    toCanonicalize.add(Long.valueOf(formulaID));
+                }
+            }
+            formulaService.massCanonicalize(toCanonicalize,
+                    mapper.map(applicationRunForm.getRevisionForm(), Revision.class),
+                    mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class),
+                    securityContext.getLoggedEntityUser());
+        }
+        return new ModelAndView("redirect:/dashboard/");
+    }
     
-    @RequestMapping(value = {"/search/"})
+    @RequestMapping(value = {"/search", "/search/"})
     public ModelAndView search(@ModelAttribute("formulaSearchRequestForm") FormulaSearchRequestForm formulaSearchRequestForm, @ModelAttribute("pagination") Pagination pagination)
     {
         ModelMap mm = prepareModelMap(true, true, true, true,true);

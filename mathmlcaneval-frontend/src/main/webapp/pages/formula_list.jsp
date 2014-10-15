@@ -174,7 +174,7 @@
                         </sec:authorize>
                         <sec:authorize access="hasRole('ROLE_USER')">
                             <div class="pull-right">
-                                <a href="${pageContext.request.contextPath}/appruns/create/select/" class="btn btn-warning"><spring:message code="entity.formula.canonicalizer.run" /></a>
+                                <a href="${pageContext.request.contextPath}/formula/masscanonicalize/" class="btn btn-warning"><spring:message code="entity.formula.canonicalizer.run" /></a>
                             </div>
                         </sec:authorize>
                     </div>

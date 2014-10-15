@@ -6,19 +6,11 @@
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">
         <div class="container content">
-            <div class="row">
-                <div class="col-lg-10 pull-right">
-                    <form method="get" action="${pageContext.request.contextPath}/formula/search/" class="form-inline">
-                        <div class="form-group">
-                            <input type="text" name="keywords" class="form-control search-bar" />
-                        </div>
-                        <button type="submit" class="btn btn-primary" disabled><spring:message code="general.label.search" /></button>
-                    </form>
-                </div>
-            </div>
-
             <div class="row pull-top-50">
                 <div class="col-md-12">
+                    <div class="pull-right">
+                        <a href="${pageContext.request.contextPath}/formula/search/" class="btn btn-danger"><spring:message code="general.label.goback" /></a>
+                    </div>
                     <div class="pull-right">
                         <a href="#" class="btn btn-default invert-selection-button"><spring:message code="general.button.invert" /></a>
                     </div>
@@ -28,7 +20,7 @@
             <div class="row">
             </div>
             <form method="POST" action="${pageContext.request.contextPath}/formula/massdelete/">
-                <div class="row">               
+                <div class="row">
                     <c:choose>
                         <c:when test="${fn:length(formulaList) gt 0}">
                             <c:forEach items="${formulaList}" var="entry" varStatus="i">
