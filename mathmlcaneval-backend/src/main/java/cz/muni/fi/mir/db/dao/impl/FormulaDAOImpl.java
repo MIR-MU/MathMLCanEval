@@ -12,6 +12,7 @@ import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
 import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
+import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
@@ -216,14 +217,14 @@ public class FormulaDAOImpl implements FormulaDAO
     }
 
     @Override
-    public List<Formula> getAllFormulas(int skip, int number)
+    public List<Formula> getAllFormulas(Pagination pagination)
     {
         List<Formula> resultList = Collections.emptyList();
         try
         {
             resultList = entityManager.createQuery("SELECT f FROM formula f ORDER BY f.id DESC", Formula.class)
-                    .setFirstResult(skip)
-                    .setMaxResults(number)
+                    .setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1))
+                    .setMaxResults(pagination.getPageSize())
                     .getResultList();
         }
         catch (NoResultException nre)
@@ -355,7 +356,7 @@ public class FormulaDAOImpl implements FormulaDAO
     }
 
     @Override
-    public List<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite)
+    public FormulaSearchResponse findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination)
     {
         // worst method i have ever written
         // this one might need lot of rework later.
@@ -371,6 +372,30 @@ public class FormulaDAOImpl implements FormulaDAO
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         org.hibernate.search.jpa.FullTextQuery ftq = null;  // actual query hitting database
         Set<Formula> resultSet = new HashSet<>();
+        int totalResultSize = 0;
+
+        // distribute page size among methods
+        int paginationDividend = 0;
+        int paginationSizePerMethod = pagination.getPageSize();
+        int paginationSkip = pagination.getPageSize() * (pagination.getPageNumber() - 1);
+        if (Boolean.valueOf(properties.get(FormulaService.USE_DISTANCE)))
+        {
+            paginationDividend += 1;
+        }
+        if (Boolean.valueOf(properties.get(FormulaService.USE_COUNT)))
+        {
+            paginationDividend += 1;
+        }
+        if (Boolean.valueOf(properties.get(FormulaService.USE_BRANCH)))
+        {
+            paginationDividend += 1;
+        }
+        if (paginationDividend > 1)
+        {
+            // find the closest number divisible by number of methods
+            paginationSizePerMethod = (int) (Math.round(1.0 * paginationSizePerMethod / paginationDividend) * paginationDividend);
+            paginationSizePerMethod /= paginationDividend; 
+        }
 
         List<Formula> distanceResult = new ArrayList<>();
         List<Formula> countResult = new ArrayList<>();
@@ -404,9 +429,12 @@ public class FormulaDAOImpl implements FormulaDAO
 
             ftq = fullTextEntityManager
                     .createFullTextQuery(distanceFormQuery, Formula.class);
+            totalResultSize += ftq.getResultSize();
 
-            //todo pagination
-            distanceResult.addAll(ftq.setMaxResults(80).getResultList());
+            distanceResult.addAll(ftq
+                    .setFirstResult(paginationSkip)
+                    .setMaxResults(paginationSizePerMethod)
+                    .getResultList());
         }
 
         // user selected that he wants COUNT method
@@ -423,9 +451,11 @@ public class FormulaDAOImpl implements FormulaDAO
 
             ftq = fullTextEntityManager
                     .createFullTextQuery(countElementQuery, Formula.class);
-
-            //TODO pagination
-            countResult.addAll(ftq.setMaxResults(80).getResultList());
+            totalResultSize += ftq.getResultSize();
+            countResult.addAll(ftq
+                    .setFirstResult(paginationSkip)
+                    .setMaxResults(paginationSizePerMethod)
+                    .getResultList());
         }
 
         // user selected that he wants BRANCH method
@@ -490,8 +520,11 @@ public class FormulaDAOImpl implements FormulaDAO
 
             ftq = fullTextEntityManager
                     .createFullTextQuery(branchQuery, Formula.class);
-            //TODO pagination
-            branchResult.addAll(ftq.setMaxResults(80).getResultList());
+            totalResultSize += ftq.getResultSize();
+            branchResult.addAll(ftq
+                    .setFirstResult(paginationSkip)
+                    .setMaxResults(paginationSizePerMethod)
+                    .getResultList());
 
         }
 
@@ -538,6 +571,10 @@ public class FormulaDAOImpl implements FormulaDAO
         // formula itself shouldnt be between results
         resultSet.remove(formula);
 
+        FormulaSearchResponse fsr = new FormulaSearchResponse();
+        fsr.setFormulas(new ArrayList<>(resultSet));
+        fsr.setTotalResultSize(totalResultSize);
+
         // we would like to write results immediately
         if (directWrite)
         {   // override old results ?
@@ -566,7 +603,7 @@ public class FormulaDAOImpl implements FormulaDAO
             updateFormula(formula);
         }
 
-        return new ArrayList<>(resultSet);
+        return fsr;
     }
 
     @Override
@@ -576,7 +613,7 @@ public class FormulaDAOImpl implements FormulaDAO
     }
 
     @Override
-    public FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest)
+    public FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination)
     {
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         org.hibernate.search.jpa.FullTextQuery ftq = null;  // actual query hitting database
@@ -675,14 +712,17 @@ public class FormulaDAOImpl implements FormulaDAO
             logger.info(query);
 
             ftq = fullTextEntityManager.createFullTextQuery(query, Formula.class);
+            fsr.setTotalResultSize(ftq.getResultSize());
             
+            ftq.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1));
+            ftq.setMaxResults(pagination.getPageSize());
             fsr.setFormulas(ftq.getResultList());
         }
         else
         {
-            //TODO
-            fsr.setFormulas(getAllFormulas(0, 20));
-        }        
+            fsr.setTotalResultSize(getNumberOfRecords());
+            fsr.setFormulas(getAllFormulas(pagination));
+        }
         
         return fsr;        
     }

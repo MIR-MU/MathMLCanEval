@@ -7,6 +7,7 @@
 package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.Configuration;
+import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.ConfigurationService;
@@ -16,14 +17,16 @@ import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.ApplicationRunForm;
-import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,7 +149,7 @@ public class ApplicationRunController
         ModelMap mm = prepareModelMap(true, true, true, true);
         mm.addAttribute("applicationRunForm", new ApplicationRunForm());
         mm.addAttribute("pagination", pagination);
-        mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination.getPageSize() * (pagination.getPageNumber() - 1), pagination.getPageSize()));
+        mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination));
         mm.addAttribute("massCanonicalize", true);
         
         return new ModelAndView("apprun_create_select", mm);
@@ -160,7 +163,7 @@ public class ApplicationRunController
             ModelMap mm = prepareModelMap(true, true, true, true);
             mm.addAttribute("applicationRunForm", applicationRunForm);
             mm.addAttribute("pagination", pagination);
-            mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination.getPageSize() * (pagination.getPageNumber() - 1), pagination.getPageSize()));
+            mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination));
             mm.addAttribute("massCanonicalize", true);
             mm.addAttribute(model);
 

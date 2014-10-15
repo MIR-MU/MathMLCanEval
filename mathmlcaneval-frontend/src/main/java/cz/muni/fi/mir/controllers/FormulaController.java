@@ -7,6 +7,7 @@ package cz.muni.fi.mir.controllers;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
@@ -20,7 +21,6 @@ import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.ApplicationRunForm;
 import cz.muni.fi.mir.forms.FindSimilarForm;
 import cz.muni.fi.mir.forms.FormulaForm;
-import cz.muni.fi.mir.pagination.Pagination;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
@@ -57,6 +57,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -66,6 +67,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping(value = "/formula")
+@SessionAttributes({"findSimilarForm", "formulaSearchRequestForm"})
 @SiteTitle(mainTitle = "{website.title}", separator = " - ")
 public class FormulaController
 {
@@ -228,7 +230,7 @@ public class FormulaController
 
         ModelMap mm = prepareModelMap(true, true, true, true,true);
         mm.addAttribute("pagination", pagination);
-        mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination.getPageSize() * (pagination.getPageNumber() - 1), pagination.getPageSize()));
+        mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination));
         mm.addAttribute("formulaSearchRequestForm", new FormulaSearchRequestForm());
 
         return new ModelAndView("formula_list",mm);
@@ -295,18 +297,25 @@ public class FormulaController
     
     @RequestMapping(value = {"/similar/","/similar"},method = RequestMethod.POST)
     @SiteTitle("{entity.canonicOutput.findSimilar}")
-    public ModelAndView submitFindSimilar(@ModelAttribute(value = "findSimilarForm") FindSimilarForm form)
+    public ModelAndView submitFindSimilar(@ModelAttribute("findSimilarForm") FindSimilarForm form,
+                                          @ModelAttribute("pagination") Pagination pagination,
+                                          final Model model)
     {        
         Formula requestFormula = formulaService.getFormulaByID(form.getFormulaID());
-        List<Formula> similars = formulaService.findSimilar(
+        FormulaSearchResponse response = formulaService.findSimilar(
                 requestFormula, 
                 generateSimilarityProperties(form),
                 form.isOverride(),
-                form.isDirectWrite()
+                form.isDirectWrite(),
+                pagination
         );
+        List<Formula> similars = response.getFormulas();
+        pagination.setNumberOfRecords(response.getTotalResultSize());
         
         ModelMap mm = new ModelMap();
+        mm.addAttribute("pagination", pagination);
         mm.addAttribute("similarForms", similars);
+        mm.addAttribute("findSimilarForm", form);
         mm.addAttribute("requestFormula", requestFormula);
         
         if(form.isDirectWrite())
@@ -348,7 +357,7 @@ public class FormulaController
 
         ModelMap mm = new ModelMap();
         mm.addAttribute("pagination", pagination);
-        mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination.getPageSize() * (pagination.getPageNumber() - 1), pagination.getPageSize()));
+        mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination));
         mm.addAttribute("massDelete", true);
 
         return new ModelAndView("formula_mass_delete",mm);
@@ -372,7 +381,7 @@ public class FormulaController
     }
     
     @RequestMapping(value = {"/search/"})
-    public ModelAndView search(@ModelAttribute FormulaSearchRequestForm formulaSearchRequestForm,@ModelAttribute("pagination") Pagination pagination)
+    public ModelAndView search(@ModelAttribute("formulaSearchRequestForm") FormulaSearchRequestForm formulaSearchRequestForm, @ModelAttribute("pagination") Pagination pagination)
     {
         ModelMap mm = prepareModelMap(true, true, true, true,true);
         FormulaSearchRequest request = mapper.map(formulaSearchRequestForm,FormulaSearchRequest.class);
@@ -390,7 +399,8 @@ public class FormulaController
             request.setElements(map);
         }
         
-        FormulaSearchResponse response = formulaService.findFormulas(request);
+        FormulaSearchResponse response = formulaService.findFormulas(request, pagination);
+        pagination.setNumberOfRecords(response.getTotalResultSize());
         
         mm.addAttribute("formulaList", response.getFormulas());
         mm.addAttribute("pagination", pagination);
@@ -518,4 +528,18 @@ public class FormulaController
         
         return mm;
     }
+
+     /**
+      * Constructor for session attribute FindSimilarForm.
+      * We keep it in session to not lose it when changing the page.
+      */
+     @ModelAttribute("findSimilarForm")
+     public FindSimilarForm getFindSimilarForm() {
+         return new FindSimilarForm();
+     }
+
+     @ModelAttribute("formulaSearchRequestForm")
+     public FormulaSearchRequestForm getFormulaSearchRequestForm() {
+         return new FormulaSearchRequestForm();
+     }
 }

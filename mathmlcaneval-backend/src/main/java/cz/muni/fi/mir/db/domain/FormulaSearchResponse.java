@@ -14,7 +14,7 @@ import java.util.List;
 public class FormulaSearchResponse
 {
     private List<Formula> formulas;
-    private int totalLesultSize;
+    private int totalResultSize;
     private int viewSize;
     private int offset;
 
@@ -28,14 +28,14 @@ public class FormulaSearchResponse
         this.formulas = formulas;
     }
 
-    public int getTotalLesultSize()
+    public int getTotalResultSize()
     {
-        return totalLesultSize;
+        return totalResultSize;
     }
 
-    public void setTotalLesultSize(int totalLesultSize)
+    public void setTotalResultSize(int totalResultSize)
     {
-        this.totalLesultSize = totalLesultSize;
+        this.totalResultSize = totalResultSize;
     }
 
     public int getViewSize()

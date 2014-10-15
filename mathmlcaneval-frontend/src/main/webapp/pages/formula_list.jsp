@@ -205,7 +205,7 @@
                 </div>
                 <!-- pagination -->
                 <div class="text-center"> 
-                    <form:form method="get" action="${pageContext.request.contextPath}/formula/list/" commandName="pagination">
+                    <form:form method="get" action="${pageContext.request.contextPath}/formula/search/" commandName="pagination">
                         <ul class="pager">
                             <c:if test="${pagination.pageSize != pagination.defaultPageSize}">
                                 <c:set var="size" value="&pageSize=${pagination.pageSize}" />

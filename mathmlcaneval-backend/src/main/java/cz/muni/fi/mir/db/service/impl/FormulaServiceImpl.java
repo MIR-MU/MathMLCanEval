@@ -17,6 +17,7 @@ import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
 import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
+import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
@@ -32,7 +33,6 @@ import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
 import cz.muni.fi.mir.tools.XMLUtils;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -164,9 +164,9 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = true)
-    public List<Formula> getAllFormulas(int skip, int number)
+    public List<Formula> getAllFormulas(Pagination pagination)
     {
-        return formulaDAO.getAllFormulas(skip, number);
+        return formulaDAO.getAllFormulas(pagination);
     }
 
     @Override
@@ -375,9 +375,9 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = false)
-    public List<Formula> findSimilar(Formula formula,Map<String,String> properties,boolean override,boolean directWrite)
+    public FormulaSearchResponse findSimilar(Formula formula,Map<String,String> properties,boolean override,boolean directWrite, Pagination pagination)
     {
-        return formulaDAO.findSimilar(formula,properties,override,directWrite);
+        return formulaDAO.findSimilar(formula,properties,override,directWrite, pagination);
     }
 
     @Override
@@ -490,9 +490,9 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = true)
-    public FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest)
+    public FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination)
     {
-        return formulaDAO.findFormulas(formulaSearchRequest);
+        return formulaDAO.findFormulas(formulaSearchRequest, pagination);
     }
 
     @Override

@@ -6,6 +6,7 @@ package cz.muni.fi.mir.tests;
 
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
@@ -13,11 +14,15 @@ import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,7 +157,10 @@ public class FormulaTest
             formulaService.createFormula(p);
         }
 
-        List<Formula> result = formulaService.getAllFormulas(0, 100);
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(100);
+
+        List<Formula> result = formulaService.getAllFormulas(pagination);
 
         assertEquals(TestTools.ERROR_LIST_SIZE, formulas.size(), result.size());
 
@@ -176,7 +184,10 @@ public class FormulaTest
         }
 
         int max_results = formulas.size() - 1;
-        List<Formula> result = formulaService.getAllFormulas(1, max_results);
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(max_results);
+
+        List<Formula> result = formulaService.getAllFormulas(pagination);
         assertEquals(max_results, result.size());
     }
 

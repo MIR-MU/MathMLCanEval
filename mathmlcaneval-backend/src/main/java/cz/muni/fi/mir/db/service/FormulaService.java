@@ -21,12 +21,14 @@ import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
 import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
+import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.services.FileDirectoryService;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -174,7 +176,7 @@ public interface FormulaService
 
     List<Formula> getAllFormulas();
 
-    List<Formula> getAllFormulas(int skip, int number);
+    List<Formula> getAllFormulas(Pagination pagination);
 
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
 
@@ -202,7 +204,7 @@ public interface FormulaService
     
     void reindex();
     
-    List<Formula> findSimilar(Formula formula,Map<String,String> properties,boolean override,boolean directWrite);
+    FormulaSearchResponse findSimilar(Formula formula,Map<String,String> properties,boolean override,boolean directWrite, Pagination pagination);
     
     void findSimilarMass(Map<String,String> properties);
     
@@ -215,7 +217,7 @@ public interface FormulaService
     void deleteAnnotationFromFormula(Formula formula, Annotation annotation);
 
     
-    FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest);
+    FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination);
 
 
     void massCanonicalize(List<Long> listOfIds, Revision revision, Configuration configuration, User user);

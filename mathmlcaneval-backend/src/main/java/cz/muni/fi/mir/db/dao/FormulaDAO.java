@@ -11,9 +11,11 @@ import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
 import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
+import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +53,7 @@ public interface FormulaDAO
 
     List<Formula> getAllFormulas();
 
-    List<Formula> getAllFormulas(int skip, int number);
+    List<Formula> getAllFormulas(Pagination pagination);
 
     List<Formula> getFormulasBySourceDocument(SourceDocument sourceDocument);
 
@@ -73,11 +75,11 @@ public interface FormulaDAO
 
     void reindex();
 
-    List<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite);
+    FormulaSearchResponse findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination);
 
     void findSimilarMass(Map<String, String> properties);
 
-    FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest);
+    FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination);
 
     /**
      * Method returns formula of which is given canonicOutput descendant.
