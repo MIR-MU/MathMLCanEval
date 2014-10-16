@@ -295,7 +295,7 @@ public class FormulaController
         return new ModelAndView("redirect:/");
     }
     
-    @RequestMapping(value = {"/similar/","/similar"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/similar/","/similar"})
     @SiteTitle("{entity.canonicOutput.findSimilar}")
     public ModelAndView submitFindSimilar(@ModelAttribute("findSimilarForm") FindSimilarForm form,
                                           @ModelAttribute("pagination") Pagination pagination,
@@ -305,7 +305,7 @@ public class FormulaController
         
         logger.info(form);
         FormulaSearchResponse response = formulaService.findSimilar(
-                requestFormula, 
+                requestFormula,
                 generateSimilarityProperties(form),
                 form.isOverride(),
                 form.isDirectWrite(),
@@ -349,7 +349,7 @@ public class FormulaController
         return new ModelAndView("redirect:/formula/view/"+formulaID);
     }
     
-    @RequestMapping(value = {"/massdelete","/massdelete/"},method = RequestMethod.GET)
+    @RequestMapping(value = {"/massdelete","/massdelete/"})
     @SiteTitle("{entity.formula.massdelete}")
     public ModelAndView massDelete(@ModelAttribute("formulaSearchRequestForm") FormulaSearchRequestForm formulaSearchRequestForm, @ModelAttribute("pagination") Pagination pagination, Model model)
     {
@@ -397,7 +397,7 @@ public class FormulaController
         return new ModelAndView("redirect:/formula/massdelete/");        
     }
 
-    @RequestMapping(value = {"/masscanonicalize","/masscanonicalize/"},method = RequestMethod.GET)
+    @RequestMapping(value = {"/masscanonicalize","/masscanonicalize/"})
     @SiteTitle("{entity.appruns.new}")
     public ModelAndView createSelect(@ModelAttribute("formulaSearchRequestForm") FormulaSearchRequestForm formulaSearchRequestForm, @ModelAttribute("pagination") Pagination pagination, Model model)
     {

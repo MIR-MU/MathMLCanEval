@@ -500,8 +500,6 @@ public class FormulaDAOImpl implements FormulaDAO
             updateFormula(formula);
         }
         
-        ftq.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1));
-        ftq.setMaxResults(pagination.getPageSize());
         fsr.setFormulas(resultList);
         
         return fsr;

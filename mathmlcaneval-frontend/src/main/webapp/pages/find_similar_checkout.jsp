@@ -38,7 +38,7 @@
                 </form>
                 <!-- pagination -->
                 <div class="text-center">
-                    <form:form method="POST" action="${pageContext.request.contextPath}/formula/similar/" commandName="pagination">
+                    <form:form method="GET" action="${pageContext.request.contextPath}/formula/similar/" commandName="pagination">
                         <ul class="pager">
                             <c:if test="${pagination.pageSize != pagination.defaultPageSize}">
                                 <c:set var="size" value="&pageSize=${pagination.pageSize}" />
