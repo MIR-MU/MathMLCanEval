@@ -302,6 +302,8 @@ public class FormulaController
                                           final Model model)
     {        
         Formula requestFormula = formulaService.getFormulaByID(form.getFormulaID());
+        
+        logger.info(form);
         FormulaSearchResponse response = formulaService.findSimilar(
                 requestFormula, 
                 generateSimilarityProperties(form),
@@ -311,7 +313,7 @@ public class FormulaController
         );
         List<Formula> similars = response.getFormulas();
         pagination.setNumberOfRecords(response.getTotalResultSize());
-        
+//        
         ModelMap mm = new ModelMap();
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("similarForms", similars);

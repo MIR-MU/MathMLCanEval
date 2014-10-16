@@ -19,15 +19,12 @@ import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.similarity.SimilarityFormConverter;
 import cz.muni.fi.mir.similarity.SimilarityForms;
-
 import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
@@ -357,109 +354,99 @@ public class FormulaDAOImpl implements FormulaDAO
 
     @Override
     public FormulaSearchResponse findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination)
-    {
-        // worst method i have ever written
-        // this one might need lot of rework later.
-        // because all values are stored in index rework into projection might be nice
-        // so we dont have to access db (like at the end of this method)
-
-//       {countCondition=AND, useBranch=false, 
-//       branchCondition=null, useOverride=false, 
-//       useDistance=true, branchMethodValue=, 
-//       countElementMethodValue=EXACT, 
-//       distanceCondition=AND, useCount=false, distanceMethodValue=0.8}
-        logger.info(properties);
+    {        
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-        org.hibernate.search.jpa.FullTextQuery ftq = null;  // actual query hitting database
-        Set<Formula> resultSet = new HashSet<>();
-        int totalResultSize = 0;
-
-        // distribute page size among methods
-        int paginationDividend = 0;
-        int paginationSizePerMethod = pagination.getPageSize();
-        int paginationSkip = pagination.getPageSize() * (pagination.getPageNumber() - 1);
-        if (Boolean.valueOf(properties.get(FormulaService.USE_DISTANCE)))
-        {
-            paginationDividend += 1;
-        }
-        if (Boolean.valueOf(properties.get(FormulaService.USE_COUNT)))
-        {
-            paginationDividend += 1;
-        }
-        if (Boolean.valueOf(properties.get(FormulaService.USE_BRANCH)))
-        {
-            paginationDividend += 1;
-        }
-        if (paginationDividend > 1)
-        {
-            // find the closest number divisible by number of methods
-            paginationSizePerMethod = (int) (Math.round(1.0 * paginationSizePerMethod / paginationDividend) * paginationDividend);
-            paginationSizePerMethod /= paginationDividend; 
-        }
-
-        List<Formula> distanceResult = new ArrayList<>();
-        List<Formula> countResult = new ArrayList<>();
-        List<Formula> branchResult = new ArrayList<>();
-
-        SimilarityForms sf = similarityFormConverter.process(formula.getOutputs().get(0));
-
-        QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder()
-                .forEntity(Formula.class)
-                .overridesForField("co.countElementForm", "countElementFormAnalyzer") //we have to override default analyzer
+        org.hibernate.search.jpa.FullTextQuery ftq = null;
+        
+        QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Formula.class)
+                .overridesForField("co.element", "keywordAnalyzer")
                 .get();
-
-        org.apache.lucene.search.Query distanceFormQuery = null;
-        org.apache.lucene.search.Query countElementQuery = null;
-        org.apache.lucene.search.Query branchQuery = null;
-
-        // user selected that he wants use DISTANCE method
-        if (Boolean.valueOf(properties.get(FormulaService.USE_DISTANCE)))
+        
+        BooleanJunction<BooleanJunction> junction = qb.bool();
+        
+        SimilarityForms sf = similarityFormConverter.process(formula.getOutputs().get(0));
+        
+        if(Boolean.valueOf(properties.get(FormulaService.USE_DISTANCE)))
         {
-            distanceFormQuery = qb
-                    .keyword().fuzzy()
+            junction.must(qb.keyword()
+                    .fuzzy()
                     .withThreshold(Float.valueOf(properties.get(FormulaService.VALUE_DISTANCEMETHOD)))
                     .withPrefixLength(1)
                     .onField("co.distanceForm")
-                    //.ignoreAnalyzer()
-                    .ignoreFieldBridge() //https://forum.hibernate.org/viewtopic.php?f=9&t=1008943
-                    .matching(sf.getDistanceForm())
-                    .createQuery();
-
-            logger.debug("Distance query:" + distanceFormQuery.toString());
-
-            ftq = fullTextEntityManager
-                    .createFullTextQuery(distanceFormQuery, Formula.class);
-            totalResultSize += ftq.getResultSize();
-
-            distanceResult.addAll(ftq
-                    .setFirstResult(paginationSkip)
-                    .setMaxResults(paginationSizePerMethod)
-                    .getResultList());
-        }
-
-        // user selected that he wants COUNT method
-        if (Boolean.valueOf(properties.get(FormulaService.USE_COUNT)))
-        {
-            // TODO exact / partial match from FormulaService.VALUE_COUNTELEMENTMETHOD
-            // need rework because tokens are treated  should instead of must
-            countElementQuery
-                    = qb.keyword().onField("co.countElementForm")
                     .ignoreFieldBridge()
-                    .matching(sf.getCountForm()).createQuery();
-
-            logger.debug("Count element query:" + countElementQuery.toString());
-
-            ftq = fullTextEntityManager
-                    .createFullTextQuery(countElementQuery, Formula.class);
-            totalResultSize += ftq.getResultSize();
-            countResult.addAll(ftq
-                    .setFirstResult(paginationSkip)
-                    .setMaxResults(paginationSizePerMethod)
-                    .getResultList());
+                    .matching(sf.getDistanceForm())
+                    .createQuery());
         }
-
-        // user selected that he wants BRANCH method
-        if (Boolean.valueOf(properties.get(FormulaService.USE_BRANCH)))
+        
+        if(Boolean.valueOf(properties.get(FormulaService.USE_COUNT)))
+        {
+            if("must".equalsIgnoreCase(properties.get(FormulaService.CONDITION_COUNT)))
+            {
+                BooleanJunction<BooleanJunction> junctionElements = qb.bool();
+                if("must".equalsIgnoreCase(properties.get(FormulaService.VALUE_COUNTELEMENTMETHOD)))
+                {
+                    for(String stringElement : sf.getCountForm().keySet())
+                    {
+                        junctionElements.must(qb.keyword()
+                                .onField("co.element")
+                                .ignoreFieldBridge()
+                                .matching(stringElement+"="+sf.getCountForm()
+                                        .get(stringElement))
+                                .createQuery());
+                    }
+                }
+                else
+                {
+                    for(String stringElement : sf.getCountForm().keySet())
+                    {
+                        junctionElements.should(qb.keyword()
+                                .onField("co.element")
+                                .ignoreFieldBridge()
+                                .matching(stringElement+"="+sf.getCountForm()
+                                        .get(stringElement))
+                                .createQuery());
+                    }
+                }
+                
+                junction.must(junctionElements.createQuery());
+            }
+            else if("should".equalsIgnoreCase(properties.get(FormulaService.CONDITION_COUNT)))
+            {
+                BooleanJunction<BooleanJunction> junctionElements = qb.bool();
+                if("must".equalsIgnoreCase(properties.get(FormulaService.VALUE_COUNTELEMENTMETHOD)))
+                {
+                    for(String stringElement : sf.getCountForm().keySet())
+                    {
+                        junctionElements.must(qb.keyword()
+                                .onField("co.element")
+                                .ignoreFieldBridge()
+                                .matching(stringElement+"="+sf.getCountForm()
+                                        .get(stringElement))
+                                .createQuery());
+                    }
+                }
+                else
+                {
+                    for(String stringElement : sf.getCountForm().keySet())
+                    {
+                        junctionElements.should(qb.keyword()
+                                .onField("co.element")
+                                .ignoreFieldBridge()
+                                .matching(stringElement+"="+sf.getCountForm()
+                                        .get(stringElement))
+                                .createQuery());
+                    }
+                }
+                
+                junction.should(junctionElements.createQuery());
+            }
+            else
+            {
+                throw new IllegalArgumentException("condi");
+            }
+        }
+        
+        if(Boolean.valueOf(properties.get(FormulaService.USE_BRANCH)))
         {
             // we obtain user input from form which might be variable A
             // case A = exact length
@@ -467,120 +454,30 @@ public class FormulaDAOImpl implements FormulaDAO
             // cae +A = [currentLength;currentLength+A]
             // case +-A = [currentLength-A;currentLength+A]
             // case -+A = same as above
-            String input = properties.get(FormulaService.VALUE_BRANCHMETHOD);
-            //we substract number from input
-            Matcher m = p.matcher(input);
-            m.find();
-            int difference = Integer.parseInt(m.group()); // the difference from inpitu
-
-            boolean from = input.contains("-");                                 // flag for case -A
-            boolean to = input.contains("+");                                   // flag for case +A
-            int branchLength = Integer.parseInt(sf.getLongestBranch());         // current length of formula
-
-            // case +- A || -+ A
-            if (from && to)
-            {
-                branchQuery = qb.range().onField("co.longestBranch")
-                        .from(branchLength - difference)
-                        .to(branchLength + difference)
-                        .createQuery();
-            }
-            // case -A
-            else
-            {
-                if (from && !to)
-                {
-                    branchQuery = qb.range().onField("co.longestBranch")
-                            .from(branchLength - difference)
-                            .to(branchLength)
-                            .createQuery();
-                }
-
-                // case +A
-                else
-                {
-                    if (!from && to)
-                    {
-                        branchQuery = qb.range().onField("co.longestBranch")
-                                .from(branchLength)
-                                .to(branchLength + difference)
-                                .createQuery();
-                    }
-                    // case A
-                    else
-                    {
-                        branchQuery = qb.keyword().onField("co.longestBranch")
-                                .matching(branchLength)
-                                .createQuery();
-                    }
-                }
-            }
-
-            logger.debug("Branch query: " + branchQuery.toString());
-
-            ftq = fullTextEntityManager
-                    .createFullTextQuery(branchQuery, Formula.class);
-            totalResultSize += ftq.getResultSize();
-            branchResult.addAll(ftq
-                    .setFirstResult(paginationSkip)
-                    .setMaxResults(paginationSizePerMethod)
-                    .getResultList());
-
+            //TODO
+            
+            //int branchLength = Integer.parseInt(sf.getLongestBranch());
         }
-
-        if (!distanceResult.isEmpty() && "AND".equalsIgnoreCase(properties.get(FormulaService.CONDITION_DISTANCE)))
-        {
-            resultSet.addAll(distanceResult);
-        }
-
-        if (!countResult.isEmpty())
-        {
-            if ("AND".equalsIgnoreCase(properties.get(FormulaService.CONDITION_COUNT)))
-            {
-                resultSet.retainAll(countResult);
-            }
-            else
-            {
-                resultSet.addAll(countResult);
-            }
-        }
-
-        if (!branchResult.isEmpty())
-        {
-            if ("AND".equalsIgnoreCase(properties.get(FormulaService.CONDITION_BRANCH)))
-            {
-                resultSet.retainAll(branchResult);
-            }
-            else
-            {
-                resultSet.addAll(branchResult);
-            }
-        }
-
-        //resultSet.addAll(ftq.getResultList());
-//        List<Object[]> explains = ftq.setProjection("distanceForm","countElementForm",FullTextQuery.EXPLANATION).getResultList();
-//        
-//        for(Object[] o :explains)
-//        {
-//            String form = (String) o[0];
-//            String form2 = (String) o[1];
-//            Explanation e = (Explanation) o[2];
-//            
-//            logger.info(form+"$"+form2+"\n"+e);
-//        }
-        // formula itself shouldnt be between results
-        resultSet.remove(formula);
-
+        
+        Query query = junction.createQuery();
+        logger.info(query);
+        
+        ftq = fullTextEntityManager.createFullTextQuery(query, Formula.class);
+        
+        
+        
         FormulaSearchResponse fsr = new FormulaSearchResponse();
-        fsr.setFormulas(new ArrayList<>(resultSet));
-        fsr.setTotalResultSize(totalResultSize);
-
+        fsr.setTotalResultSize(ftq.getResultSize());
+        List<Formula> resultList = ftq.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1))
+                .setMaxResults(pagination.getPageSize())
+                .getResultList();
+        
         // we would like to write results immediately
         if (directWrite)
         {   // override old results ?
             if (override)
             {
-                formula.setSimilarFormulas(new ArrayList<>(resultSet));
+                formula.setSimilarFormulas(new ArrayList<>(resultList));
             }
             else
             {   // check if null and append to earlier
@@ -588,13 +485,13 @@ public class FormulaDAOImpl implements FormulaDAO
                 if (formula.getSimilarFormulas() != null)
                 {
                     similars.addAll(formula.getSimilarFormulas());
-                    similars.addAll(resultSet);
+                    similars.addAll(resultList);
 
                     formula.setSimilarFormulas(similars);
                 }
                 else
                 {
-                    similars.addAll(resultSet);
+                    similars.addAll(resultList);
 
                     formula.setSimilarFormulas(similars);
                 }
@@ -602,7 +499,11 @@ public class FormulaDAOImpl implements FormulaDAO
             // update
             updateFormula(formula);
         }
-
+        
+        ftq.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1));
+        ftq.setMaxResults(pagination.getPageSize());
+        fsr.setFormulas(resultList);
+        
         return fsr;
     }
 

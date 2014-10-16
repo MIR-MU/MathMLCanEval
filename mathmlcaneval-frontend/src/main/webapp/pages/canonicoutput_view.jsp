@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <form:select path="distanceCondition" cssClass="form-control">
+                                        <form:select path="countCondition" cssClass="form-control">
                                             <form:option value="must"><spring:message code="general.label.logic.and" /></form:option>
                                             <form:option value="should"><spring:message code="general.label.logic.or" /></form:option>
                                         </form:select>                                                                   
@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <form:select path="countCondition" cssClass="form-control">
+                                        <form:select path="branchCondition" cssClass="form-control">
                                             <form:option value="must"><spring:message code="general.label.logic.and" /></form:option>
                                             <form:option value="should"><spring:message code="general.label.logic.or" /></form:option>
                                         </form:select>                                                                                                             
