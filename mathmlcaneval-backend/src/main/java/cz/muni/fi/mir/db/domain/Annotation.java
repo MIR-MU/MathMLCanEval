@@ -37,9 +37,10 @@ public class Annotation implements Serializable
     @ManyToOne
     private User user;
 
-    @Column(name = "note",columnDefinition = "text")
+    //TODO REWRITE COLUMN INSIDE DATABASE LATER !!!!
+    @Column(name = "annotationContent",columnDefinition = "text")
     @Field
-    private String note;
+    private String annotationContent;
 
     public Long getId()
     {
@@ -61,14 +62,14 @@ public class Annotation implements Serializable
         this.user = user;
     }
 
-    public String getNote()
+    public String getAnnotationContent()
     {
-        return note;
+        return annotationContent;
     }
 
-    public void setNote(String note)
+    public void setAnnotationContent(String annotationContent)
     {
-        this.note = note;
+        this.annotationContent = annotationContent;
     }
 
     @Override
@@ -97,6 +98,6 @@ public class Annotation implements Serializable
     @Override
     public String toString()
     {
-        return "Annotation{" + "id=" + id + ", user=" + user + ", note=" + note +  '}';
+        return "Annotation{" + "id=" + id + ", user=" + user + ", note=" + annotationContent +  '}';
     }
 }

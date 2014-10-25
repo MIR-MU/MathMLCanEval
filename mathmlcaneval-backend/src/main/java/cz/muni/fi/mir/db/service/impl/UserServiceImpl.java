@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService
     @Transactional(readOnly = false)
     public void createUser(User user)
     {
-        userDAO.createUser(user);
+        userDAO.create(user);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService
     @Transactional(readOnly = false)
     public void updateUser(User user)
     {
-        userDAO.updateUser(user);
+        userDAO.update(user);
     }
 
     @Override
@@ -54,14 +54,14 @@ public class UserServiceImpl implements UserService
     @Transactional(readOnly = false)
     public void deleteUser(User user)
     {
-        userDAO.deleteUser(user);
+        userDAO.delete(user.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public User getUserByID(Long id)
     {
-        return userDAO.getUserByID(id);
+        return userDAO.getByID(id);
     }
 
     @Override
@@ -98,5 +98,4 @@ public class UserServiceImpl implements UserService
     {
         return userDAO.getUserByEmail(email);
     }
-    
 }

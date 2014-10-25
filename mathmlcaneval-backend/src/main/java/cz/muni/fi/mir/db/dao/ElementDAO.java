@@ -23,12 +23,8 @@ import java.util.List;
  *
  * @author emptak
  */
-public interface ElementDAO
+public interface ElementDAO extends GenericDAO<Element,Long>
 {
-    void createElement(Element element);
-    void updateElement(Element element);
-    void deleteElement(Element element);
-    Element getElementByID(Long id);
     Element getElementByName(String name);
     List<Element> getAllElements();
 }

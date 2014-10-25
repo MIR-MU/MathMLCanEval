@@ -16,14 +16,8 @@ import java.util.List;
  *
  * @author Empt
  */
-public interface CanonicOutputDAO 
-{
-    void createCanonicOutput(CanonicOutput canonicOutput);
-    void updateCanonicOutput(CanonicOutput canonicOutput);
-    void deleteCanonicOutput(CanonicOutput canonicOutput);
-    
-    CanonicOutput getCanonicOutputByID(Long id);
-    
+public interface CanonicOutputDAO extends GenericDAO<CanonicOutput, Long>
+{   
     List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun);
     List<CanonicOutput> getCanonicOutputByFormula(Formula formula);
     List<CanonicOutput> getCanonicOutputByParentFormula(Formula formula);

@@ -55,15 +55,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service(value = "formulaService")
 public class FormulaServiceImpl implements FormulaService
 {
-
     private static final Logger logger = Logger.getLogger(FormulaServiceImpl.class);
 
     @Autowired
     private FormulaDAO formulaDAO;
     @Autowired
     private ElementDAO elementDAO;
-    @Autowired
-    private FileDirectoryService fileDirectoryService;
     @Autowired
     private ApplicationRunDAO applicationRunDAO;
     @Autowired
@@ -85,7 +82,7 @@ public class FormulaServiceImpl implements FormulaService
     {
         checkNull(formula);
 
-        formulaDAO.createFormula(formula);
+        formulaDAO.create(formula);
     }
 
     @Override
@@ -99,7 +96,7 @@ public class FormulaServiceImpl implements FormulaService
             throw new IllegalArgumentException("Given formula does not have valid id [" + formula.getId() + "].");
         }
 
-        formulaDAO.updateFormula(formula);
+        formulaDAO.update(formula);
     }
 
     @Override
@@ -203,7 +200,7 @@ public class FormulaServiceImpl implements FormulaService
         for (Formula f : formulas)
         {
             f.setHashValue(Tools.getInstance().SHA1(f.getXml()));
-            formulaDAO.updateFormula(f);
+            formulaDAO.update(f);
         }
     }
 
@@ -243,7 +240,7 @@ public class FormulaServiceImpl implements FormulaService
         appRun.setRevision(revision);
         appRun.setConfiguration(configuration);
 
-        applicationRunDAO.createApplicationRun(appRun);
+        applicationRunDAO.create(appRun);
 
         Formula f = EntityFactory.createFormula();
         f.setOutputs(new ArrayList<CanonicOutput>());
@@ -257,7 +254,7 @@ public class FormulaServiceImpl implements FormulaService
         if (null == formulaDAO.getFormulaByHash(f.getHashValue()))
         {
             attachElements(f);
-            formulaDAO.createFormula(f);
+            formulaDAO.create(f);
 
             mathCanonicalizerLoader.execute(Arrays.asList(f), appRun);
         }
@@ -282,7 +279,7 @@ public class FormulaServiceImpl implements FormulaService
         for (Formula f : formulas)
         {
             extractElements(f);
-            formulaDAO.updateFormula(f);
+            formulaDAO.update(f);
         }
     }
 
@@ -350,7 +347,7 @@ public class FormulaServiceImpl implements FormulaService
                     int index2 = newList.indexOf(e);
                     if (index2 == -1)
                     {
-                        elementDAO.createElement(e);
+                        elementDAO.create(e);
                         newList.add(e);
                     }
                     else
@@ -429,7 +426,7 @@ public class FormulaServiceImpl implements FormulaService
             //todo x sublist addition
             //so if A{w,x,y} where w,x,y are similar then set
             // x{w,y,A} w{A,x,y} and y{w,x,A} as similar
-            formulaDAO.updateFormula(formula);
+            formulaDAO.update(formula);
         }
     }
     
@@ -457,7 +454,7 @@ public class FormulaServiceImpl implements FormulaService
     @Transactional(readOnly = false)
     public void annotateFormula(Formula formula, Annotation annotation)
     {
-        annotationDAO.createAnnotation(annotation);
+        annotationDAO.create(annotation);
         
         List<Annotation> current = new ArrayList<>();
         
@@ -470,7 +467,7 @@ public class FormulaServiceImpl implements FormulaService
         
         formula.setAnnotations(current);
         
-        formulaDAO.updateFormula(formula);
+        formulaDAO.update(formula);
     }
 
     @Override
@@ -483,9 +480,9 @@ public class FormulaServiceImpl implements FormulaService
         
         formula.setAnnotations(temp);
         
-        formulaDAO.updateFormula(formula);
+        formulaDAO.update(formula);
         
-        annotationDAO.deleteAnnotation(annotation);
+        annotationDAO.delete(annotation.getId());
     }
 
     @Override

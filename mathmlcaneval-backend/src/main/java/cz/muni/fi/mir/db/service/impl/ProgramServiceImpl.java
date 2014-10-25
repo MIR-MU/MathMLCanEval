@@ -25,28 +25,28 @@ public class ProgramServiceImpl implements ProgramService
     @Transactional(readOnly = false)
     public void createProgram(Program program)
     {
-        programDAO.createProgram(program);
+        programDAO.create(program);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void deleteProgram(Program program)
     {
-        programDAO.deleteProgram(program);
+        programDAO.delete(program.getId());
     }
 
     @Override
     @Transactional(readOnly = false)
     public void updateProgram(Program program)
     {
-        programDAO.updateProgram(program);
+        programDAO.update(program);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Program getProgramByID(Long id)
     {
-        return programDAO.getProgramByID(id);
+        return programDAO.getByID(id);
     }
 
     @Override

@@ -13,6 +13,5 @@ package cz.muni.fi.mir.scheduling;
 public abstract class LongRunningTaskFactory
 {
     public abstract CanonicalizationTask createTask();
-    public abstract ApplicationRunRemovalTask createAppTask();
     public abstract FormulaImportTask createImportTask();
 }

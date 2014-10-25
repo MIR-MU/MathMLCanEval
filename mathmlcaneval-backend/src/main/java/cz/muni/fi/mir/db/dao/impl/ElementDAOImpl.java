@@ -20,9 +20,7 @@ import cz.muni.fi.mir.db.dao.ElementDAO;
 import cz.muni.fi.mir.db.domain.Element;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
@@ -31,40 +29,15 @@ import org.springframework.stereotype.Repository;
  * @author emptak
  */
 @Repository(value = "elementDAO")
-public class ElementDAOImpl implements ElementDAO
+public class ElementDAOImpl extends GenericDAOImpl<Element, Long> implements ElementDAO
 {
     private static final Logger logger = Logger.getLogger(AnnotationDAOImpl.class);
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Override
-    public void createElement(Element element)
+    
+    public ElementDAOImpl()
     {
-        entityManager.persist(element);
+        super(Element.class);
     }
-
-    @Override
-    public void updateElement(Element element)
-    {
-        entityManager.merge(element);
-    }
-
-    @Override
-    public void deleteElement(Element element)
-    {
-        Element e = entityManager.find(Element.class, element.getId());
-        if(e != null)
-        {
-            entityManager.remove(e);
-        }
-    }
-
-    @Override
-    public Element getElementByID(Long id)
-    {
-        return entityManager.find(Element.class, id);
-    }
-
+    
     @Override
     public Element getElementByName(String name)
     {
@@ -98,6 +71,5 @@ public class ElementDAOImpl implements ElementDAO
         }
         
         return resultList;
-    }
-    
+    }    
 }

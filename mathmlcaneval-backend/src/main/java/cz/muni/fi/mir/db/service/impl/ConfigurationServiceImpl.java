@@ -25,28 +25,28 @@ public class ConfigurationServiceImpl implements ConfigurationService
     @Transactional(readOnly = false)
     public void createConfiguration(Configuration configuration)
     {
-        configurationDAO.createConfiguration(configuration);
+        configurationDAO.create(configuration);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void updateConfiguration(Configuration configuration)
     {
-        configurationDAO.updateConfiguration(configuration);
+        configurationDAO.update(configuration);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void deleteConfiguration(Configuration configuration)
     {
-        configurationDAO.deleteConfiguration(configuration);
+        configurationDAO.delete(configuration.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Configuration getConfigurationByID(Long id)
     {
-        return configurationDAO.getConfigurationByID(id);
+        return configurationDAO.getByID(id);
     }
 
     @Override

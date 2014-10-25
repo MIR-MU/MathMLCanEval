@@ -109,7 +109,7 @@
                                         <c:forEach items="${formulaEntry.annotations}" var="entry">
                                             <tr>
                                                 <td>${entry.user.username}</td>
-                                                <td class="annotation-note-cell">${entry.note}</td>
+                                                <td class="annotation-note-cell">${entry.annotationContent}</td>
                                                 <sec:authorize access="hasRole('ROLE_USER')">
                                                 <td><a href="#" class="annotation-remove" id="${entry.id}"><span class="glyphicon glyphicon-remove"></span></a></td>
                                                 </sec:authorize>
@@ -152,7 +152,7 @@
                                                         </li>
                                                     </ul>
                                                 </div> <!--/input-group-btn --> 
-                                                <form:input type="text" id="annotation-value" path="annotationValue" cssClass="form-control" />                                                
+                                                <form:input type="text" id="annotation-value" path="annotationContent" cssClass="form-control" />                                                
                                                 <input type="hidden" name="clazz" value="formula" />
                                                 <input type="hidden" name="entityID" value="<c:out value="${formulaEntry.id}" />" />
                                                 <span class="input-group-btn">

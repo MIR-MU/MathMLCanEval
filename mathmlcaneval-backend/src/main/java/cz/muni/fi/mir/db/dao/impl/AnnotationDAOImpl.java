@@ -5,9 +5,7 @@ import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.User;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,43 +15,13 @@ import org.springframework.stereotype.Repository;
  * @since 1.0
  */
 @Repository(value = "annotationDAO")
-public class AnnotationDAOImpl implements AnnotationDAO
+public class AnnotationDAOImpl extends GenericDAOImpl<Annotation, Long> implements AnnotationDAO
 {
-    @PersistenceContext
-    private EntityManager entityManager;
-    
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(AnnotationDAOImpl.class);
 
-    @Override
-    public void createAnnotation(Annotation annotation)
+    public AnnotationDAOImpl()
     {
-        entityManager.persist(annotation);
-    }
-
-    @Override
-    public void updateAnnotation(Annotation annotation)
-    {
-        entityManager.merge(annotation);
-    }
-
-    @Override
-    public void deleteAnnotation(Annotation annotation)
-    {
-        Annotation a = entityManager.find(Annotation.class, annotation.getId());
-        if(a != null)
-        {
-            entityManager.remove(a);
-        }
-        else
-        {
-            logger.info("Trying to delete Annotation with ID that has not been found. The ID is ["+annotation.getId().toString()+"]");
-        }
-    }
-
-    @Override
-    public Annotation getAnnotationByID(Long id)
-    {
-        return entityManager.find(Annotation.class, id);
+        super(Annotation.class);
     }
 
     @Override
@@ -99,7 +67,7 @@ public class AnnotationDAOImpl implements AnnotationDAO
         
         try
         {
-            resultList = entityManager.createQuery("SELECT a FROM annotation a WHERE a.note LIKE :note ORDER BY a.id DESC", Annotation.class)
+            resultList = entityManager.createQuery("SELECT a FROM annotation a WHERE a.annotationContent LIKE :note ORDER BY a.id DESC", Annotation.class)
                     .setParameter("note", "%"+note+"%").getResultList();
         }
         catch(NoResultException nre)

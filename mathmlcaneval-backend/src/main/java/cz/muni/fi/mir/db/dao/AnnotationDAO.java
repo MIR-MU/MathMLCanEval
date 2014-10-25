@@ -2,6 +2,7 @@ package cz.muni.fi.mir.db.dao;
 
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.User;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -19,39 +20,8 @@ import java.util.List;
  * @since 1.0
  *
  */
-public interface AnnotationDAO
+public interface AnnotationDAO extends GenericDAO<Annotation, Long>
 {
-
-    /**
-     * Method creates given Annotation inside database.
-     *
-     * @param annotation to be persisted
-     */
-    void createAnnotation(Annotation annotation);
-
-    /**
-     * Method updates given Annotation inside database.
-     *
-     * @param annotation to be updated
-     */
-    void updateAnnotation(Annotation annotation);
-
-    /**
-     * Method removes given Annotation from database. Because Entity manager
-     * just checks ID, no other values than ID have to be set.
-     *
-     * @param annotation to be deleted
-     */
-    void deleteAnnotation(Annotation annotation);
-
-    /**
-     * Method obtains Annotation from database based on given ID.
-     *
-     * @param id of Annotation to be fetched
-     * @return Annotation with given ID, null if there is no match for given ID
-     */
-    Annotation getAnnotationByID(Long id);
-
     /**
      * Method obtains all Annotations from database in <b>DESCENDING</b> order.
      * So newer annotation are in the front, and the old ones in the back of

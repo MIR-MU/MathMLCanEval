@@ -9,10 +9,9 @@ import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -20,19 +19,14 @@ import org.springframework.stereotype.Repository;
  * @author Empt
  */
 @Repository(value = "userDAO")
-public class UserDAOImpl implements UserDAO
+public class UserDAOImpl extends GenericDAOImpl<User,Long> implements UserDAO
 {
-    @PersistenceContext
-    private EntityManager entityManager;
-    
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(UserDAOImpl.class);
-
-    @Override
-    public void createUser(User user)
+    private static final Logger logger = Logger.getLogger(UserDAOImpl.class);
+    public UserDAOImpl()
     {
-        entityManager.persist(user);
+        super(User.class);
     }
-
+    
     @Override
     public User getUserByUsername(String username)
     {
@@ -48,32 +42,6 @@ public class UserDAOImpl implements UserDAO
         }
         
         return u;
-    }
-
-    @Override
-    public void updateUser(User user)
-    {
-        entityManager.merge(user);
-    }
-
-    @Override
-    public void deleteUser(User user)
-    {
-        User u = entityManager.find(User.class, user.getId());
-        if(u != null)
-        {
-            entityManager.remove(u);
-        }
-        else
-        {
-            logger.info("Trying to delete User with ID that has not been found. The ID is ["+user.getId().toString()+"]");
-        }
-    }
-
-    @Override
-    public User getUserByID(Long id)
-    {
-        return entityManager.find(User.class, id);
     }
 
     @Override
@@ -185,5 +153,4 @@ public class UserDAOImpl implements UserDAO
         
         return result;
     }
-    
 }

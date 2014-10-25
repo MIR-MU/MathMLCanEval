@@ -8,9 +8,8 @@ import cz.muni.fi.mir.db.dao.SourceDocumentDAO;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,43 +17,13 @@ import org.springframework.stereotype.Repository;
  * @author Empt
  */
 @Repository(value = "sourceDocumentDAO")
-public class SourceDocumentDAOImpl implements SourceDocumentDAO
-{
-    @PersistenceContext
-    private EntityManager entityManager;
-    
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(SourceDocumentDAOImpl.class);
+public class SourceDocumentDAOImpl extends GenericDAOImpl<SourceDocument, Long> implements SourceDocumentDAO
+{    
+    private static final Logger logger = Logger.getLogger(SourceDocumentDAOImpl.class);
 
-    @Override
-    public void createSourceDocument(SourceDocument sourceDocument)
+    public SourceDocumentDAOImpl()
     {
-        entityManager.persist(sourceDocument);
-    }
-
-    @Override
-    public void updateSourceDocument(SourceDocument sourceDocument)
-    {
-        entityManager.merge(sourceDocument);
-    }
-
-    @Override
-    public void deleteSourceDocument(SourceDocument sourceDocument)
-    {
-        SourceDocument sd = entityManager.find(SourceDocument.class, sourceDocument.getId());
-        if(sd != null)
-        {
-            entityManager.remove(sd);
-        }
-        else
-        {
-            logger.info("Trying to delete SourceDocument with ID that has not been found. The ID is ["+sourceDocument.getId().toString()+"]");
-        }
-    }
-
-    @Override
-    public SourceDocument getSourceDocumentByID(Long id)
-    {
-        return entityManager.find(SourceDocument.class, id);
+        super(SourceDocument.class);
     }
     
     @Override

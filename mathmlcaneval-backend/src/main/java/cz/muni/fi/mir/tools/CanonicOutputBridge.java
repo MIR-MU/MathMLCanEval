@@ -55,7 +55,7 @@ public class CanonicOutputBridge implements FieldBridge
         {
             for(Annotation a : canonicOutput.getAnnotations())
             {
-                document.add(newField("co.annotation", a.getNote(), luceneOptions, new StandardAnalyzer(Version.LUCENE_36)));
+                document.add(newField("co.annotation", a.getAnnotationContent(), luceneOptions, new StandardAnalyzer(Version.LUCENE_36)));
             }
         }        
         

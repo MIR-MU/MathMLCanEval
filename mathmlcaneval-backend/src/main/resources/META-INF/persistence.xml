@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-  <persistence-unit name="mathcaneval" transaction-type="RESOURCE_LOCAL">
-    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-    <class>cz.muni.fi.mir.db.domain.CannonicOutput</class>
-    <class>cz.muni.fi.mir.db.domain.Revision</class>
-    <class>cz.muni.fi.mir.db.domain.SourceDocument</class>
-    <class>cz.muni.fi.mir.db.domain.User</class>
-    <class>cz.muni.fi.mir.db.domain.Configuration</class>
-    <class>cz.muni.fi.mir.db.domain.UserRole</class>
-    <class>cz.muni.fi.mir.db.domain.ApplicationRun</class>
-    <class>cz.muni.fi.mir.db.domain.Program</class>
-    <class>cz.muni.fi.mir.db.domain.Formula</class>
-    <class>cz.muni.fi.mir.db.domain.Annotation</class>
-    <class>cz.muni.fi.mir.index.IndexedOutput</class>
-    <class>cz.muni.fi.mir.db.domain.Statistics</class>
-    <class>cz.muni.fi.mir.db.audit.DatabaseEvent</class>
-    <properties/>
-  </persistence-unit>
+    <persistence-unit name="mathcaneval" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>cz.muni.fi.mir.db.domain.CannonicOutput</class>
+        <class>cz.muni.fi.mir.db.domain.Revision</class>
+        <class>cz.muni.fi.mir.db.domain.SourceDocument</class>
+        <class>cz.muni.fi.mir.db.domain.User</class>
+        <class>cz.muni.fi.mir.db.domain.Configuration</class>
+        <class>cz.muni.fi.mir.db.domain.UserRole</class>
+        <class>cz.muni.fi.mir.db.domain.ApplicationRun</class>
+        <class>cz.muni.fi.mir.db.domain.Program</class>
+        <class>cz.muni.fi.mir.db.domain.Formula</class>
+        <class>cz.muni.fi.mir.db.domain.Annotation</class>
+        <class>cz.muni.fi.mir.db.domain.Statistics</class>
+        <class>cz.muni.fi.mir.db.audit.DatabaseEvent</class>
+        <class>cz.muni.fi.mir.db.domain.AnnotationValue</class>
+        <properties/>
+    </persistence-unit>
 </persistence>

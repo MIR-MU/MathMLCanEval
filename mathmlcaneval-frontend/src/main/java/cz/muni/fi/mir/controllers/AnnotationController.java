@@ -72,7 +72,7 @@ public class AnnotationController
     public AnnotationAction annotate(@ModelAttribute("annotationAction") AnnotationAction annotationAction)
     {
         User u = securityContext.getLoggedEntityUser();
-        Annotation a = EntityFactory.createAnnotation(annotationAction.getAnnotationValue(), u);
+        Annotation a = EntityFactory.createAnnotation(annotationAction.getAnnotationContent(), u);
         
         switch(annotationAction.getClazz())
         {

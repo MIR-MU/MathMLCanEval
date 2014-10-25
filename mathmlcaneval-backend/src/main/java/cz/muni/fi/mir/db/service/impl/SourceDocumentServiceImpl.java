@@ -25,28 +25,28 @@ public class SourceDocumentServiceImpl implements SourceDocumentService
     @Transactional(readOnly = false)
     public void createSourceDocument(SourceDocument sourceDocument)
     {
-        sourceDocumentDAO.createSourceDocument(sourceDocument);
+        sourceDocumentDAO.create(sourceDocument);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void updateSourceDocument(SourceDocument sourceDocument)
     {
-        sourceDocumentDAO.updateSourceDocument(sourceDocument);
+        sourceDocumentDAO.update(sourceDocument);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void deleteSourceDocument(SourceDocument sourceDocument)
     {
-        sourceDocumentDAO.deleteSourceDocument(sourceDocument);
+        sourceDocumentDAO.delete(sourceDocument.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public SourceDocument getSourceDocumentByID(Long id)
     {
-        return sourceDocumentDAO.getSourceDocumentByID(id);
+        return sourceDocumentDAO.getByID(id);
     }
 
     @Override

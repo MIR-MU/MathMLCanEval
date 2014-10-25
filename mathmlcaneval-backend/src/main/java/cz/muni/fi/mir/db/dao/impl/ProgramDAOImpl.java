@@ -9,9 +9,8 @@ import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.tools.Tools;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,46 +18,15 @@ import org.springframework.stereotype.Repository;
  * @author Empt
  */
 @Repository(value = "programDAO")
-public class ProgramDAOImpl implements ProgramDAO
-{
-    @PersistenceContext
-    private EntityManager entityManager;
+public class ProgramDAOImpl extends GenericDAOImpl<Program, Long> implements ProgramDAO
+{    
+    private static final Logger logger = Logger.getLogger(ProgramDAOImpl.class);
+
+    public ProgramDAOImpl()
+    {
+        super(Program.class);
+    }
     
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ProgramDAOImpl.class);
-
-    @Override
-    public void createProgram(Program program)
-    {
-        entityManager.persist(program);
-    }
-
-    @Override
-    public void deleteProgram(Program program)
-    {
-        Program p = entityManager.find(Program.class, program.getId());
-        
-        if(p != null)
-        {
-            entityManager.remove(p);
-        }
-        else
-        {
-            logger.info("Trying to delete Program with ID that has not been found. The ID is ["+program.getId().toString()+"]");
-        }
-    }
-
-    @Override
-    public void updateProgram(Program program)
-    {
-        entityManager.merge(program);
-    }
-
-    @Override
-    public Program getProgramByID(Long id)
-    {
-        return entityManager.find(Program.class, id);
-    }
-
     @Override
     public List<Program> getProgramByName(String name)
     {

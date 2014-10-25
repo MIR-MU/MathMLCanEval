@@ -147,7 +147,7 @@
                                     success: function (data) {
                                         var output = "<tr><td>" + data.username; 
                                         output +="</td><td class=\"annotation-note-cell\">";
-                                        output += data.annotationValue + "</td>";
+                                        output += data.annotationContent + "</td>";
                                                 
                                         <sec:authorize access="hasRole('ROLE_USER')">
                                                 output += '<td><a href="#" class="annotation-remove" id="'+data.id;

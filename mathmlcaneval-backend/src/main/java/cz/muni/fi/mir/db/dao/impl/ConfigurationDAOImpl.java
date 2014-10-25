@@ -2,6 +2,7 @@ package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.ConfigurationDAO;
 import cz.muni.fi.mir.db.domain.Configuration;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,45 +18,15 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository(value = "configurationDAO")
-public class ConfigurationDAOImpl implements ConfigurationDAO
+public class ConfigurationDAOImpl extends GenericDAOImpl<Configuration, Long> implements ConfigurationDAO
 {
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ConfigurationDAOImpl.class);
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ConfigurationDAOImpl.class);  
     
-    @Override
-    public void createConfiguration(Configuration configuration)
+    public ConfigurationDAOImpl()
     {
-        entityManager.persist(configuration);
+        super(Configuration.class);
     }
-
-    @Override
-    public void updateConfiguration(Configuration configuration)
-    {
-        entityManager.merge(configuration);
-    }
-
-    @Override
-    public void deleteConfiguration(Configuration configuration)
-    {
-        Configuration c = entityManager.find(Configuration.class, configuration.getId());
-        if(c!= null)
-        {
-            entityManager.remove(c);
-        }
-        else
-        {
-            logger.info("Trying to delete Configuration with ID that has not been found. The ID is ["+configuration.getId().toString()+"]");
-        }
-    }
-
-    @Override
-    public Configuration getConfigurationByID(Long id)
-    {
-        return entityManager.find(Configuration.class, id);
-    }
-
+    
     @Override
     public List<Configuration> getAllCofigurations()
     {
@@ -108,5 +79,4 @@ public class ConfigurationDAOImpl implements ConfigurationDAO
         
         return resultList;
     }
-    
 }

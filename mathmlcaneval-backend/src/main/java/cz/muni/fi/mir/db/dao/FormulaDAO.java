@@ -24,13 +24,8 @@ import java.util.Map;
  *
  * @author Empt
  */
-public interface FormulaDAO
+public interface FormulaDAO extends GenericDAO<Formula,Long>
 {
-
-    void createFormula(Formula formula);
-
-    void updateFormula(Formula formula);
-
     /**
      * Method deletes given formula from database.
      *

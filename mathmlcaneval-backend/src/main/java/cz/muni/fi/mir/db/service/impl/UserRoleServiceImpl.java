@@ -25,28 +25,28 @@ public class UserRoleServiceImpl implements UserRoleService
     @Transactional(readOnly = false)
     public void createUserRole(UserRole userRole)
     {
-        userRoleDAO.createUserRole(userRole);
+        userRoleDAO.create(userRole);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void updateUserRole(UserRole userRole)
     {
-        userRoleDAO.updateUserRole(userRole);
+        userRoleDAO.update(userRole);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void deleteUserRole(UserRole userRole)
     {
-        userRoleDAO.deleteUserRole(userRole);
+        userRoleDAO.delete(userRole.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserRole getUserRoleByID(Long id)
     {
-        return userRoleDAO.getUserRoleByID(id);
+        return userRoleDAO.getByID(id);
     }
 
     @Override

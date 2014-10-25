@@ -15,14 +15,11 @@ import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
-import cz.muni.fi.mir.scheduling.LongRunningTaskFactory;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,17 +40,11 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
     @Autowired
     private FormulaDAO formulaDAO;
 
-    @Autowired
-    private LongRunningTaskFactory longRunningTaskFactory;
-    @Autowired
-    @Qualifier(value = "taskExecutor")
-    private AsyncTaskExecutor taskExecutor;
-
     @Override
     @Transactional(readOnly = false)
     public void createApplicationRun(ApplicationRun applicationRun)
     {
-        applicationRunDAO.createApplicationRun(applicationRun);
+        applicationRunDAO.create(applicationRun);
     }
 
     @Override
@@ -67,7 +58,7 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
     @Transactional(readOnly = false)
     public void updateApplicationRun(ApplicationRun applicationRun)
     {
-        applicationRunDAO.updateApplicationRun(applicationRun);
+        applicationRunDAO.update(applicationRun);
     }
 
     @Override
@@ -89,12 +80,12 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
                 // if we want to delete outputs
                 if (deleteCanonicOutputs)
                 {   // we simply delete them
-                    canonicOutputDAO.deleteCanonicOutput(co);
+                    canonicOutputDAO.delete(co.getId());
                 }
                 else
                 {   //otherwise we remove reference to apprun and update it
                     co.setApplicationRun(null);
-                    canonicOutputDAO.updateCanonicOutput(co);
+                    canonicOutputDAO.update(co);
                 }
             }
         }
@@ -163,7 +154,7 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
             //phase 5 remove orphans
             for (CanonicOutput co : orphaned)
             {
-                canonicOutputDAO.deleteCanonicOutput(co);
+                canonicOutputDAO.delete(co.getId());
             }
 
             // once here there are neither canonic outputs nor 
@@ -171,14 +162,14 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
         }
 
         // once previous is done there is no reference to apprun
-        applicationRunDAO.deleteApplicationRun(applicationRun);
+        applicationRunDAO.delete(applicationRun.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApplicationRun getApplicationRunByID(Long id)
     {
-        return applicationRunDAO.getApplicationRunByID(id);
+        return applicationRunDAO.getByID(id);
     }
 
     @Override
@@ -229,27 +220,5 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
         {
             return applicationRunDAO.getAllApplicationRunsFromRange(start, end);
         }
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void deleteApplicationRunInTask(final ApplicationRun applicationRun,
-            boolean deleteFormulas,
-            boolean deleteCanonicOutputs)
-    {
-
-        // nasty workaround, task created by lookup method
-        // did not work.
-        
-        //does not work either :(
-//        taskExecutor.execute(new Runnable()
-//        {
-//
-//            @Override
-//            public void run()
-//            {
-//                deleteApplicationRun(applicationRun, true, true);
-//            }
-//        });
     }
 }

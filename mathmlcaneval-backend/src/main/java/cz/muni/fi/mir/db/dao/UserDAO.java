@@ -23,17 +23,10 @@ import java.util.List;
  * @since 1.0
  * 
  */
-public interface UserDAO
+public interface UserDAO extends GenericDAO<User,Long>
 {
-    void createUser(User user);
-    void updateUser(User user);
-    void deleteUser(User user);
-    
-    User getUserByID(Long id);
     User getUserByUsername(String username);
     User getUserByEmail(String email);
-    
-    
     List<User> getAllUsers();
     List<User> getUsersByRole(UserRole userRole);
     List<User> getUsersByRoles(List<UserRole> roles);

@@ -8,10 +8,10 @@ import cz.muni.fi.mir.db.domain.User;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Dominik Szalai
@@ -20,75 +20,21 @@ import org.apache.log4j.Logger;
  * @since 1.0
  *
  */
-//@Repository(value = "applicationRunDAO")
-public class ApplicationRunDAOImpl implements ApplicationRunDAO
+@Repository(value = "applicationRunDAO")
+public class ApplicationRunDAOImpl extends GenericDAOImpl<ApplicationRun, Long> implements ApplicationRunDAO
 {
 
-    private String psqlver = null;
-
     /**
-     * Sets postgreqsql version. If value is set to 9.1 or higher then {@link #getAllApplicationRuns()
+     * Postgreqsql version. If value is set to 9.1 or higher then {@link #getAllApplicationRuns()
      * } method has different behaviour.
-     *
-     * @param psqlver version of postgreqsql.
      */
-    public void setPsqlver(String psqlver)
+    @Value("${postgresql.version}")
+    private String psqlver;
+    private static final Logger logger = Logger.getLogger(ApplicationRunDAOImpl.class);   
+    
+    public ApplicationRunDAOImpl()
     {
-        this.psqlver = psqlver;
-    }
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    private static final Logger logger = Logger.getLogger(ApplicationRunDAOImpl.class);
-
-    @Override
-    public void createApplicationRun(ApplicationRun applicationRun)
-    {
-        entityManager.persist(applicationRun);
-    }
-
-    @Override
-    public void updateApplicationRun(ApplicationRun applicationRun)
-    {
-        entityManager.merge(applicationRun);
-    }
-
-    @Override
-    public void deleteApplicationRun(ApplicationRun applicationRun)
-    {
-        ApplicationRun ap = entityManager.find(ApplicationRun.class, applicationRun.getId());
-        if (ap != null)
-        {
-            entityManager.remove(ap);
-        }
-        else
-        {
-            logger.info("Trying to delete ApplicationRun with ID that has not been found. The ID is [" + applicationRun.getId().toString() + "]");
-        }
-    }
-
-    @Override
-    public ApplicationRun getApplicationRunByID(Long id)
-    {
-        ApplicationRun ar = entityManager.find(ApplicationRun.class, id);
-        if(ar != null)
-        {
-            int count = 0;
-            try
-            {
-                count = entityManager.createQuery("SELECT count(co) FROM canonicOutput co WHERE co.applicationRun = :apprun", Long.class)
-                        .setParameter("apprun", ar).getSingleResult().intValue();
-            }
-            catch (NoResultException nre)
-            {
-                logger.debug(nre);
-            }
-
-            ar.setCanonicOutputCount(count);            
-        }        
-
-        return ar;
+        super(ApplicationRun.class);
     }
 
     /**
@@ -219,8 +165,25 @@ public class ApplicationRunDAOImpl implements ApplicationRunDAO
     @Override
     public void createApplicationRunWithFlush(ApplicationRun applicationRun)
     {
-        createApplicationRun(applicationRun);
+        super.create(applicationRun);
         logger.info("Attempt to flush");
         entityManager.flush();
+    }
+    
+    @Override
+    public Integer getNumberOfCanonicalizations(ApplicationRun applicationRun)
+    {
+        int count = 0;
+        try
+        {
+            count = entityManager.createQuery("SELECT count(co) FROM canonicOutput co WHERE co.applicationRun = :apprun", Long.class)
+                    .setParameter("apprun", applicationRun).getSingleResult().intValue();
+        }
+        catch (NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return count;
     }
 }

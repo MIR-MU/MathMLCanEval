@@ -7,7 +7,6 @@ package cz.muni.fi.mir.tools;
 
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.User;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
  *
@@ -18,7 +17,7 @@ public class AnnotationAction
     private Long id;
     private Long entityID;
     private String username;
-    private String annotationValue;
+    private String annotationContent;
     private String clazz;
 
     public AnnotationAction()
@@ -28,14 +27,14 @@ public class AnnotationAction
     public AnnotationAction(Annotation annotation)
     {
         this.username = annotation.getUser().getUsername();
-        this.annotationValue = annotation.getNote();
+        this.annotationContent = annotation.getAnnotationContent();
         this.id = annotation.getId();
     }
 
     public AnnotationAction(User user, String content, Long id)
     {
         this.username = user.getUsername();
-        this.annotationValue = content;
+        this.annotationContent = content;
         this.id = id;
     }
 
@@ -49,14 +48,14 @@ public class AnnotationAction
         this.username = username;
     }
 
-    public String getAnnotationValue()
+    public String getAnnotationContent()
     {
-        return annotationValue;
+        return annotationContent;
     }
 
-    public void setAnnotationValue(String annotationValue)
+    public void setAnnotationContent(String annotationContent)
     {
-        this.annotationValue = annotationValue;
+        this.annotationContent = annotationContent;
     }
 
     public Long getId()
@@ -92,6 +91,6 @@ public class AnnotationAction
     @Override
     public String toString()
     {
-        return "AnnotationAction{" + "id=" + id + ", entityID=" + entityID + ", username=" + username + ", annotationValue=" + annotationValue + ", clazz=" + clazz + '}';
+        return "AnnotationAction{" + "id=" + id + ", entityID=" + entityID + ", username=" + username + ", annotationValue=" + annotationContent + ", clazz=" + clazz + '}';
     }
 }

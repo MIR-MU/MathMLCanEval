@@ -21,46 +21,14 @@ import java.util.List;
  * @since 1.0
  *
  */
-public interface ApplicationRunDAO
+public interface ApplicationRunDAO extends GenericDAO<ApplicationRun, Long>
 {
-
     /**
-     * Method creates ApplicationRun inside database.
+     * Method creates ApplicationRun inside database and calls flush after.
      *
      * @param applicationRun ApplicationRun to be persisted.
      */
-    void createApplicationRun(ApplicationRun applicationRun);
-    
-    /**
-     * Method creates ApplicationRun inside database.
-     *
-     * @param applicationRun ApplicationRun to be persisted.
-     */
-    void createApplicationRunWithFlush(ApplicationRun applicationRun);
-
-    /**
-     * Method updates given ApplicationRun inside database
-     *
-     * @param applicationRun ApplicationRun to be updated.
-     */
-    void updateApplicationRun(ApplicationRun applicationRun);
-
-    /**
-     * Method removes given ApplicationRun from database. Because Entity manager
-     * just checks ID, no other values than ID have to be set.
-     *
-     * @param applicationRun to be deleted
-     */
-    void deleteApplicationRun(ApplicationRun applicationRun);
-
-    /**
-     * Method fetches ApplicationRun by given id passed as method argument.
-     *
-     * @param id of ApplicationRun to be obtained.
-     * @return ApplicationRun with given ID passed as method argument, if there
-     * is no such ID then null is returned.
-     */
-    ApplicationRun getApplicationRunByID(Long id);
+    void createApplicationRunWithFlush(ApplicationRun applicationRun);   
 
     /**
      * Method obtains all ApplicationRuns from database in <b>DESCENDING</b>
@@ -115,4 +83,6 @@ public interface ApplicationRunDAO
      * are no such ApplicationRuns then empty List is returned.
      */
     List<ApplicationRun> getAllApplicationRunsByConfiguration(Configuration configuration);
+    
+    Integer getNumberOfCanonicalizations(ApplicationRun applicationRun);
 }

@@ -2,11 +2,13 @@ package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.UserRoleDAO;
 import cz.muni.fi.mir.db.domain.UserRole;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,43 +19,13 @@ import org.springframework.stereotype.Repository;
  * @since 1.0
  */
 @Repository(value = "userRoleDAO")
-public class UserRoleDAOImpl implements UserRoleDAO
-{
-    @PersistenceContext
-    private EntityManager entityManager;
+public class UserRoleDAOImpl extends GenericDAOImpl<UserRole, Long> implements UserRoleDAO
+{    
+    private static final Logger logger = Logger.getLogger(UserRoleDAOImpl.class);
     
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(UserRoleDAOImpl.class);
-
-    @Override
-    public void createUserRole(UserRole userRole)
+    public UserRoleDAOImpl()
     {
-        entityManager.persist(userRole);
-    }
-
-    @Override
-    public void updateUserRole(UserRole userRole)
-    {
-        entityManager.merge(userRole);
-    }
-
-    @Override
-    public void deleteUserRole(UserRole userRole)
-    {
-        UserRole ur = entityManager.find(UserRole.class, userRole.getId());
-        if(ur != null)
-        {
-            entityManager.remove(ur);
-        }
-        else
-        {
-            logger.info("Trying to delete UserRole with ID that has not been found. The ID is ["+userRole.getId().toString()+"]");
-        }
-    }
-
-    @Override
-    public UserRole getUserRoleByID(Long id)
-    {
-        return entityManager.find(UserRole.class, id);
+        super(UserRole.class);
     }
 
     @Override
@@ -88,6 +60,5 @@ public class UserRoleDAOImpl implements UserRoleDAO
         }
         
         return resultList;
-    }
-    
+    }    
 }

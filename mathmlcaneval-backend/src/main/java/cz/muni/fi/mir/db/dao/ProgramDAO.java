@@ -18,17 +18,9 @@ import java.util.List;
  * @since 1.0
  *
  */
-public interface ProgramDAO
-{
-    void createProgram(Program program);
-    void deleteProgram(Program program);
-    void updateProgram(Program program);
-    
-    Program getProgramByID(Long id);
-    
+public interface ProgramDAO extends GenericDAO<Program,Long>
+{    
     List<Program> getProgramByName(String name);
     List<Program> getProgramByNameAndVersion(String name, String version);
-    
-    
     List<Program> getAllPrograms();    
 }

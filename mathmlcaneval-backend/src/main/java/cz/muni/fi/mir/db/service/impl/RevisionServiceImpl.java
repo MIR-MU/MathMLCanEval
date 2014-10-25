@@ -25,28 +25,28 @@ public class RevisionServiceImpl implements RevisionService
     @Transactional(readOnly = false)
     public void createRevision(Revision revision)
     {
-        revisionDAO.createRevision(revision);
+        revisionDAO.create(revision);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void deleteRevision(Revision revision)
     {
-        revisionDAO.deleteRevision(revision);
+        revisionDAO.delete(revision.getId());
     }
 
     @Override
     @Transactional(readOnly = false)
     public void updateRevision(Revision revision)
     {
-        revisionDAO.updateRevision(revision);
+        revisionDAO.update(revision);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Revision getRevisionByID(Long id)
     {
-        return revisionDAO.getRevisionByID(id);
+        return revisionDAO.getByID(id);
     }
 
     @Override

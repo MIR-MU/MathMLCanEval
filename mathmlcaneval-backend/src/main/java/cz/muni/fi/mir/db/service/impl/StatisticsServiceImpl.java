@@ -80,7 +80,7 @@ public class StatisticsServiceImpl implements StatisticsService
         
         try
         {
-            totalValid = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.note LIKE :is_valid",Long.class)
+            totalValid = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.annotationContent LIKE :is_valid",Long.class)
                     .setParameter("is_valid", "%"+coIsValid+"%").getSingleResult();
         }
         catch(NoResultException e)
@@ -90,7 +90,7 @@ public class StatisticsServiceImpl implements StatisticsService
         
         try
         {
-            totalInvalid = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.note LIKE :is_invalid",Long.class)
+            totalInvalid = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.annotationContent LIKE :is_invalid",Long.class)
                     .setParameter("is_invalid", "%"+coIsInvalid+"%").getSingleResult();
         }
         catch(NoResultException e)
@@ -100,7 +100,7 @@ public class StatisticsServiceImpl implements StatisticsService
         
         try
         {
-            totalUncertain = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.note LIKE :is_uncertain",Long.class)
+            totalUncertain = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.annotationContent LIKE :is_uncertain",Long.class)
                     .setParameter("is_uncertain", "%"+coUncertain+"%").getSingleResult();
         }
         catch(NoResultException e)
@@ -110,7 +110,7 @@ public class StatisticsServiceImpl implements StatisticsService
         
         try
         {
-            totalRemove = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.note LIKE :toremove",Long.class)
+            totalRemove = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co JOIN co.annotations coa WHERE coa.annotationContent LIKE :toremove",Long.class)
                     .setParameter("toremove", "%"+coRemove+"%").getSingleResult();
         }
         catch(NoResultException e)
@@ -140,7 +140,7 @@ public class StatisticsServiceImpl implements StatisticsService
         
         try
         {
-            totalFormulaRemove = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.note LIKE :fRemove", Long.class)
+            totalFormulaRemove = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.annotationContent LIKE :fRemove", Long.class)
                     .setParameter("fRemove", "%"+formulaRemove+"%").getSingleResult();
         }
         catch(NoResultException nre)
@@ -150,7 +150,7 @@ public class StatisticsServiceImpl implements StatisticsService
         
         try
         {
-            totalFormulaMeaningless = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.note LIKE :fMeaningles", Long.class)
+            totalFormulaMeaningless = entityManager.createQuery("SELECT COUNT(f) FROM formula f JOIN f.annotations fa WHERE fa.annotationContent LIKE :fMeaningles", Long.class)
                     .setParameter("fMeaningles", "%"+formulaMeaningless+"%").getSingleResult();
         }
         catch(NoResultException nre)

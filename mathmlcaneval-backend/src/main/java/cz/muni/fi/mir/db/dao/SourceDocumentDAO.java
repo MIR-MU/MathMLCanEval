@@ -11,13 +11,7 @@ import java.util.List;
  *
  * @author Empt
  */
-public interface SourceDocumentDAO
-{
-    void createSourceDocument(SourceDocument sourceDocument);
-    void updateSourceDocument(SourceDocument sourceDocument);
-    void deleteSourceDocument(SourceDocument sourceDocument);
-    
-    SourceDocument getSourceDocumentByID(Long id);   
-    
+public interface SourceDocumentDAO extends GenericDAO<SourceDocument,Long>
+{    
     List<SourceDocument> getAllDocuments();
 }

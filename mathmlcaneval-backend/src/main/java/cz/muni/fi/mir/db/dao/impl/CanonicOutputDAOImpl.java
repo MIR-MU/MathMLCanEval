@@ -15,9 +15,8 @@ import cz.muni.fi.mir.db.domain.Formula;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import org.apache.log4j.Logger;
 
 import org.springframework.stereotype.Repository;
 
@@ -26,43 +25,13 @@ import org.springframework.stereotype.Repository;
  * @author Empt
  */
 @Repository(value = "canonicOutputDAO")
-public class CanonicOutputDAOImpl implements CanonicOutputDAO
-{
-    @PersistenceContext
-    private EntityManager entityManager;
+public class CanonicOutputDAOImpl extends GenericDAOImpl<CanonicOutput, Long> implements CanonicOutputDAO
+{  
+    private static final Logger logger = Logger.getLogger(CanonicOutputDAOImpl.class);
     
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(CanonicOutputDAOImpl.class);
-
-    @Override
-    public void createCanonicOutput(CanonicOutput canonicOutput)
+    public CanonicOutputDAOImpl()
     {
-        entityManager.persist(canonicOutput);
-    }
-
-    @Override
-    public void updateCanonicOutput(CanonicOutput canonicOutput)
-    {
-        entityManager.merge(canonicOutput);
-    }
-
-    @Override
-    public void deleteCanonicOutput(CanonicOutput canonicOutput)
-    {
-        CanonicOutput co = entityManager.find(CanonicOutput.class, canonicOutput.getId());
-        if(co != null)
-        {
-            entityManager.remove(co);
-        }
-        else
-        {
-            logger.info("Trying to delete CanonicOutput with ID that has not been found. The ID is ["+canonicOutput.getId().toString()+"]");
-        }
-    }
-
-    @Override
-    public CanonicOutput getCanonicOutputByID(Long id)
-    {
-        return entityManager.find(CanonicOutput.class, id);
+        super(CanonicOutput.class);
     }
 
     @Override

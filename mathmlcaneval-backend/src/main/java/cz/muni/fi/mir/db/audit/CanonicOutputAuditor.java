@@ -29,7 +29,7 @@ public class CanonicOutputAuditor
         auditorService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.UPDATE, 
                         canonicOutput, 
-                        "Annotated canonicoutput with " + annotation.getNote()
+                        "Annotated canonicoutput with " + annotation.getAnnotationContent()
                 )
         );
     }
@@ -40,7 +40,7 @@ public class CanonicOutputAuditor
         auditorService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.DELETE,
                         canonicOutput, 
-                        "Deleted annotation " + annotation.getNote() + " from canonicoutput"
+                        "Deleted annotation " + annotation.getAnnotationContent() + " from canonicoutput"
                 )
         );
     }

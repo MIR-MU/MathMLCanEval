@@ -16,7 +16,7 @@ public class AnnotationForm
 {
     private Long id;
     private UserForm user;
-    private String note;
+    private String annotationContent;
 
     public Long getId()
     {
@@ -38,14 +38,14 @@ public class AnnotationForm
         this.user = user;
     }
 
-    public String getNote()
+    public String getAnnotationContent()
     {
-        return note;
+        return annotationContent;
     }
 
-    public void setNote(String note)
+    public void setAnnotationContent(String annotationContent)
     {
-        this.note = note;
+        this.annotationContent = annotationContent;
     }
 
     @Override
@@ -74,6 +74,6 @@ public class AnnotationForm
     @Override
     public String toString()
     {
-        return "Annotation{" + "id=" + id + ", user=" + user + ", note=" + note + '}';
+        return "Annotation{" + "id=" + id + ", user=" + user + ", note=" + annotationContent + '}';
     }
 }

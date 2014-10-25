@@ -18,41 +18,8 @@ import java.util.List;
  * @since 1.0
  *
  */
-public interface ConfigurationDAO
+public interface ConfigurationDAO extends GenericDAO<Configuration, Long>
 {
-
-    /**
-     * Method creates given Configuration inside database.
-     *
-     * @param configuration to be created.
-     */
-    void createConfiguration(Configuration configuration);
-
-    /**
-     * Method updates given Configuration inside database.
-     *
-     * @param configuration Configuration to be updated.
-     */
-    void updateConfiguration(Configuration configuration);
-
-    /**
-     * Method removes Configuration from database. Because EntityManager just
-     * checks ID, no other values than ID have to be set
-     *
-     * @param configuration to be deleted
-     */
-    void deleteConfiguration(Configuration configuration);
-
-    /**
-     * Method fetches Configuration from database based on given ID passed as
-     * method argument.
-     *
-     * @param id of Configuration to be obtained
-     * @return Configuration with given ID, null if there is no such
-     * Configuration.
-     */
-    Configuration getConfigurationByID(Long id);
-
     /**
      * Method fetches all Configurations out of database in <b>DESCENDING</b>
      * order.

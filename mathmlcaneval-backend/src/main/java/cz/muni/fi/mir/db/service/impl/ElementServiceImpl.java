@@ -46,28 +46,28 @@ public class ElementServiceImpl implements ElementService
     @Transactional(readOnly = false)
     public void createElement(Element element)
     {
-        elementDAO.createElement(element);
+        elementDAO.create(element);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void updateElement(Element element)
     {
-        elementDAO.updateElement(element);
+        elementDAO.update(element);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void deleteElement(Element element)
     {
-        elementDAO.deleteElement(element);
+        elementDAO.delete(element.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Element getElementByID(Long id)
     {
-        return elementDAO.getElementByID(id);
+        return elementDAO.getByID(id);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class ElementServiceImpl implements ElementService
         {
             for(Element e : newList)
             {
-                elementDAO.createElement(e);
+                elementDAO.create(e);
             }
         }      
     }

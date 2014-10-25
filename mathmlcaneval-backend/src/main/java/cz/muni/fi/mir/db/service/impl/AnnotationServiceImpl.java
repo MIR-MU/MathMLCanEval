@@ -26,28 +26,28 @@ public class AnnotationServiceImpl implements AnnotationService
     @Transactional(readOnly = false)
     public void createAnnotation(Annotation annotation)
     {
-        annotationDAO.createAnnotation(annotation);
+        annotationDAO.create(annotation);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void updateAnnotation(Annotation annotation)
     {
-        annotationDAO.updateAnnotation(annotation);
+        annotationDAO.update(annotation);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void deleteAnnotation(Annotation annotation)
     {
-        annotationDAO.deleteAnnotation(annotation);
+        annotationDAO.delete(annotation.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Annotation getAnnotationByID(Long id)
     {
-        return annotationDAO.getAnnotationByID(id);
+        return annotationDAO.getByID(id);
     }
 
     @Override

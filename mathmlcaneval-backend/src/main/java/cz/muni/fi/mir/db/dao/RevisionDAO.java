@@ -11,16 +11,9 @@ import java.util.List;
  *
  * @author Empt
  */
-public interface RevisionDAO
+public interface RevisionDAO extends GenericDAO<Revision,Long>
 {
-    void createRevision(Revision revision);
-    void deleteRevision(Revision revision);
-    void updateRevision(Revision revision);
-    
-    Revision getRevisionByID(Long id);
     Revision getRevisionByHash(String hash);
-    
-    
     List<Revision> getAllRevisions();
     List<Revision> findRevisionByNote(String note);
 }

@@ -19,6 +19,7 @@ import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.similarity.SimilarityFormConverter;
 import cz.muni.fi.mir.similarity.SimilarityForms;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import java.util.Collection;
@@ -30,6 +31,7 @@ import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import org.apache.log4j.Logger;
 
 import org.apache.lucene.search.Query;
 import org.hibernate.Hibernate;
@@ -46,27 +48,15 @@ import org.springframework.util.StringUtils;
  * @author Empt
  */
 @Repository(value = "formulaDAO")
-public class FormulaDAOImpl implements FormulaDAO
+public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements FormulaDAO
 {
-
-    @PersistenceContext
-    private EntityManager entityManager;
     @Autowired
     private SimilarityFormConverter similarityFormConverter;
-
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaDAOImpl.class);
-    private static final Pattern p = Pattern.compile("\\d+");
-
-    @Override
-    public void createFormula(Formula formula)
+    private static final Logger logger = Logger.getLogger(FormulaDAOImpl.class);
+    
+    public FormulaDAOImpl()
     {
-        entityManager.persist(formula);
-    }
-
-    @Override
-    public void updateFormula(Formula formula)
-    {
-        entityManager.merge(formula);
+        super(Formula.class);
     }
 
     @Override
@@ -108,7 +98,7 @@ public class FormulaDAOImpl implements FormulaDAO
                     entityManager.merge(referenced);
                 }
             }
-            logger.info("Deleting formula [" + formula.getId() + ", " + formula.getHashValue() + "]");
+            logger.info("Deleting formula [" + formula.getId() + "]");
             entityManager.remove(toDelete);
         }
         else
@@ -497,7 +487,7 @@ public class FormulaDAOImpl implements FormulaDAO
                 }
             }
             // update
-            updateFormula(formula);
+            super.update(formula);
         }
         
         fsr.setFormulas(resultList);

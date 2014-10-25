@@ -38,28 +38,28 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     @Transactional(readOnly = false)
     public void createCanonicOutput(CanonicOutput canonicOutput)
     {
-        canonicOutputDAO.createCanonicOutput(canonicOutput);
+        canonicOutputDAO.create(canonicOutput);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void updateCanonicOutput(CanonicOutput canonicOutput)
     {
-        canonicOutputDAO.updateCanonicOutput(canonicOutput);
+        canonicOutputDAO.update(canonicOutput);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void deleteCanonicOutput(CanonicOutput canonicOutput)
     {
-        canonicOutputDAO.deleteCanonicOutput(canonicOutput);
+        canonicOutputDAO.delete(canonicOutput.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public CanonicOutput getCanonicOutputByID(Long id)
     {
-        return canonicOutputDAO.getCanonicOutputByID(id);
+        return canonicOutputDAO.getByID(id);
     }
 
     @Override
@@ -99,13 +99,13 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
         {
             temp.addAll(canonicOutput.getAnnotations());
         }
-        annotationDAO.createAnnotation(annotation);
+        annotationDAO.create(annotation);
         
         temp.add(annotation);
         
         canonicOutput.setAnnotations(temp);
         
-        canonicOutputDAO.updateCanonicOutput(canonicOutput);     
+        canonicOutputDAO.update(canonicOutput);     
         
         formulaDAO.index(formulaDAO.getFormulaByCanonicOutput(canonicOutput));
     }
@@ -120,8 +120,8 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
 
         canonicOutput.setAnnotations(temp);
 
-        canonicOutputDAO.updateCanonicOutput(canonicOutput);
+        canonicOutputDAO.update(canonicOutput);
 
-        annotationDAO.deleteAnnotation(annotation);
+        annotationDAO.delete(annotation.getId());
     }
 }

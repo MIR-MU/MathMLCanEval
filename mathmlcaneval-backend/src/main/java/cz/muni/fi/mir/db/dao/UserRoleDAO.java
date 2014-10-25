@@ -18,34 +18,8 @@ import java.util.List;
  * @since 1.0
  * 
  */
-public interface UserRoleDAO
-{
-    /**
-     * Method creates given UserRole inside database.
-     * @param userRole to be created
-     */
-    void createUserRole(UserRole userRole);
-    
-    /**
-     * Method updates given UserRole inside database.
-     * @param userRole to be updated
-     */
-    void updateUserRole(UserRole userRole);
-    
-    /**
-     * Method deletes UserRole from database. Since entityManager
-     * checks only ID, it is the only one required field to be set.
-     * @param userRole to be deleted
-     */
-    void deleteUserRole(UserRole userRole);
-    
-    /**
-     * Method fetches UserRole with given ID from database.
-     * @param id of UserRole to be fetched
-     * @return UserRole with given ID, null if there is no match
-     */
-    UserRole getUserRoleByID(Long id);
-    
+public interface UserRoleDAO extends GenericDAO<UserRole, Long>
+{    
     /**
      * Method obtains UserRole based on its text value. Because
      * roleName is unique, only single result can be obtained

@@ -386,7 +386,7 @@ public class EntityFactory
     public static Annotation createAnnotation(String note, User user)
     {
         Annotation a = createAnnotation();
-        a.setNote(note);
+        a.setAnnotationContent(note);
         a.setUser(user);
 
         return a;

@@ -237,7 +237,7 @@
                                         <c:forEach items="${canonicOutput.annotations}" var="annotationRow">
                                             <tr>
                                                 <td><c:out value="${annotationRow.user.username}" /></td>
-                                                <td class="annotation-note-cell"><c:out value="${annotationRow.note}" /></td>
+                                                <td class="annotation-note-cell"><c:out value="${annotationRow.annotationContent}" /></td>
                                                 <sec:authorize access="hasRole('ROLE_USER')">
                                                 <td><a href="#" class="annotation-remove" id="${annotationRow.id}"><span class="glyphicon glyphicon-remove"></span></a></td>
                                                 </sec:authorize>
@@ -290,7 +290,7 @@
                                                         </li>
                                                     </ul>
                                                 </div> <!--/input-group-btn --> 
-                                                <form:input type="text" id="annotation-value" path="annotationValue" cssClass="form-control" />                                                
+                                                <form:input type="text" id="annotation-value" path="annotationContent" cssClass="form-control" />                                                
                                                 <input type="hidden" name="clazz" value="canonicoutput" />
                                                 <input type="hidden" name="entityID" value="<c:out value="${canonicOutput.id}" />" />
                                                 <span class="input-group-btn">
