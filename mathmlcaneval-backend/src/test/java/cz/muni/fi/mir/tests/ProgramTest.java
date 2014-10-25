@@ -106,29 +106,6 @@ public class ProgramTest
     }
 
     @Test
-    public void testGetProgramByName()
-    {
-        logger.info("Running ProgramTest#testGetProgramByName()");
-        for (Program p : programs)
-        {
-            programService.createProgram(p);
-        }
-
-        List<Program> result = programService.getProgramByName("texlive");
-
-        assertEquals("wrong size", 3, result.size());
-        List<Program> temp = programs.subList(0, 3);
-        Collections.sort(result, TestTools.programComparator);
-        Collections.sort(temp, TestTools.programComparator);
-
-        for (int i = 0; i < result.size(); i++)
-        {
-            deepCompare(temp.get(i), result.get(i));
-        }
-
-    }
-
-    @Test
     public void testGetProgramByNameAndVersion()
     {
         logger.info("Running ProgramTest#testGetProgramByNameAndVersion()");

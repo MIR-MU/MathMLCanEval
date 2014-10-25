@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- *
- * @author Empt
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 @Service(value = "revisionService")
 public class RevisionServiceImpl implements RevisionService
@@ -51,22 +51,8 @@ public class RevisionServiceImpl implements RevisionService
 
     @Override
     @Transactional(readOnly = true)
-    public Revision getRevisionByHash(String hash)
-    {
-        return revisionDAO.getRevisionByHash(hash);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<Revision> getAllRevisions()
     {
         return revisionDAO.getAllRevisions();
-    }    
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Revision> findRevisionByNote(String note)
-    {
-        return revisionDAO.findRevisionByNote(note);
-    }
+    }  
 }

@@ -11,20 +11,34 @@ import java.util.Map;
 import org.joda.time.DateTime;
 
 /**
- *
- * @author emptak
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface StatisticsService
 {
-    
+    /**
+     * 
+     */
     void calculate();
     
-    Statistics getStatisticsByID(Long id);
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    Statistics getStatisticsByID(Long id) throws IllegalArgumentException;
     
+    /**
+     * 
+     * @return 
+     */
     Statistics getStatistics();
     
-    List<Statistics> getStatisticsFromRange(DateTime start, DateTime end);
-    
+    /**
+     * 
+     * @return 
+     */
     Map<Long,DateTime> getStatisticsMap();
     
 }

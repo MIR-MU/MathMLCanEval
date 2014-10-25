@@ -2,11 +2,7 @@ package cz.muni.fi.mir.db.dao.impl;
 
 import cz.muni.fi.mir.db.dao.ApplicationRunDAO;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
-import cz.muni.fi.mir.db.domain.Configuration;
-import cz.muni.fi.mir.db.domain.Revision;
-import cz.muni.fi.mir.db.domain.User;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
@@ -14,11 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author Dominik Szalai
- *
- * @version 1.0
- * @since 1.0
- *
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 @Repository(value = "applicationRunDAO")
 public class ApplicationRunDAOImpl extends GenericDAOImpl<ApplicationRun, Long> implements ApplicationRunDAO
@@ -85,78 +78,6 @@ public class ApplicationRunDAOImpl extends GenericDAOImpl<ApplicationRun, Long> 
                 }
             }
 
-        }
-
-        return resultList;
-    }
-
-    @Override
-    public List<ApplicationRun> getAllApplicationRunsByUser(User user)
-    {
-        List<ApplicationRun> resultList = Collections.emptyList();
-
-        try
-        {
-            resultList = entityManager.createQuery("SELECT apr FROM applicationRun apr WHERE apr.user = :user", ApplicationRun.class)
-                    .setParameter("user", user).getResultList();
-        }
-        catch (NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-
-        return resultList;
-    }
-
-    @Override
-    public List<ApplicationRun> getAllApplicationRunsByRevision(Revision revision)
-    {
-        List<ApplicationRun> resultList = Collections.emptyList();
-
-        try
-        {
-            resultList = entityManager.createQuery("SELECT apr FROM applicationRun apr WHERE apr.revision = :revision", ApplicationRun.class)
-                    .setParameter("revision", revision).getResultList();
-        }
-        catch (NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-
-        return resultList;
-    }
-
-    @Override
-    public List<ApplicationRun> getAllApplicationRunsByConfiguration(Configuration configuration)
-    {
-        List<ApplicationRun> resultList = Collections.emptyList();
-
-        try
-        {
-            resultList = entityManager.createQuery("SELECT apr FROM applicationRun apr WHERE apr.configuration = :configuration", ApplicationRun.class)
-                    .setParameter("configuration", configuration).getResultList();
-        }
-        catch (NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-
-        return resultList;
-    }
-
-    @Override
-    public List<ApplicationRun> getAllApplicationRunsFromRange(int start, int end)
-    {
-        List<ApplicationRun> resultList = Collections.emptyList();
-
-        try
-        {
-            resultList = entityManager.createQuery("SELECT ar FROM applicationRun ar ORDER BY ar.id DESC", ApplicationRun.class)
-                    .setFirstResult(start).setMaxResults(end - start).getResultList();
-        }
-        catch (NoResultException nre)
-        {
-            logger.debug(nre);
         }
 
         return resultList;

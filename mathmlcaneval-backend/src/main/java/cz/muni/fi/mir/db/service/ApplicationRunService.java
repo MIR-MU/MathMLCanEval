@@ -1,28 +1,33 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.mir.db.service;
 
 import cz.muni.fi.mir.db.domain.ApplicationRun;
-import cz.muni.fi.mir.db.domain.Configuration;
-import cz.muni.fi.mir.db.domain.Revision;
-import cz.muni.fi.mir.db.domain.User;
 import java.util.List;
 
 /**
  *
- * @author Empt
+ * @author Dominik Szalai - emptulik at gmail.com
+ * @author Rober Siska - xsiska2 at mail.muni.cz
  */
 public interface ApplicationRunService
 {
 
-    void createApplicationRun(ApplicationRun applicationRun);
+    /**
+     * Method creates given application run inside database.
+     *
+     * @param applicationRun application run to be created.
+     * @param withFlush if create should be immediately run with flush operation
+     * @throws IllegalArgumentException if applicationRun is null
+     */
+    void createApplicationRun(ApplicationRun applicationRun, boolean withFlush) throws IllegalArgumentException;
 
-    void createApplicationRunWithFlush(ApplicationRun applicationRun);
-
-    void updateApplicationRun(ApplicationRun applicationRun);
+    /**
+     * Method updated given application run inside database.
+     *
+     * @param applicationRun to be updated
+     * @throws IllegalArgumentException if application run is null or does not
+     * have valid id (is null or lass than one)
+     */
+    void updateApplicationRun(ApplicationRun applicationRun) throws IllegalArgumentException;
 
     /**
      * Method deletes given application run from database. Based on other inputs
@@ -48,20 +53,29 @@ public interface ApplicationRunService
      * @param deleteFormulas flags option how deletion is performed on formulas
      * @param deleteCanonicOutputs flags option how deletion is performed on
      * canonic outputs
+     * @throws IllegalArgumentException if application run is null or does not
+     * have valid id (is null or lass than one)
      */
     void deleteApplicationRun(ApplicationRun applicationRun,
             boolean deleteFormulas,
-            boolean deleteCanonicOutputs);
+            boolean deleteCanonicOutputs) throws IllegalArgumentException;
 
-    ApplicationRun getApplicationRunByID(Long id);
+    /**
+     * Method obtains given application run based on its id.
+     *
+     * @param id of application run to be obtained
+     * @return application run with given id, null if there is no such
+     * application run
+     * @throws IllegalArgumentException if id is null or lass than one
+     */
+    ApplicationRun getApplicationRunByID(Long id) throws IllegalArgumentException;
 
+    /**
+     * TODO PAGINATION + rename to getFromRange Method obtains all application
+     * runs from database.
+     *
+     * @return all application runs from database, empty list if there are no
+     * runs yet.
+     */
     List<ApplicationRun> getAllApplicationRuns();
-
-    List<ApplicationRun> getAllApplicationRunsFromRange(int start, int end);
-
-    List<ApplicationRun> getAllApplicationRunsByUser(User user);
-
-    List<ApplicationRun> getAllApplicationRunsByRevision(Revision revision);
-
-    List<ApplicationRun> getAllApplicationRunsByConfiguration(Configuration configuration);
 }

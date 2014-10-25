@@ -25,8 +25,8 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 /**
- *
- * @author emptak
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 @Repository(value = "elementDAO")
 public class ElementDAOImpl extends GenericDAOImpl<Element, Long> implements ElementDAO

@@ -31,11 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author emptak
- */
 @Service(value = "elementService")
+@Transactional(readOnly = false)
 public class ElementServiceImpl implements ElementService
 {
     private static final Logger logger = Logger.getLogger(ElementServiceImpl.class);
@@ -43,38 +40,24 @@ public class ElementServiceImpl implements ElementService
     private ElementDAO elementDAO;
 
     @Override
-    @Transactional(readOnly = false)
-    public void createElement(Element element)
+    public void createElement(Element element) throws IllegalArgumentException
     {
+        if(element == null)
+        {
+            throw new IllegalArgumentException("Given input is null");
+        }
         elementDAO.create(element);
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public void updateElement(Element element)
-    {
-        elementDAO.update(element);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void deleteElement(Element element)
-    {
-        elementDAO.delete(element.getId());
-    }
-
-    @Override
     @Transactional(readOnly = true)
-    public Element getElementByID(Long id)
+    public Element getElementByID(Long id) throws IllegalArgumentException
     {
+        if(id == null || Long.valueOf("0").compareTo(id) < 1)
+        {
+            throw new IllegalArgumentException("Given id is out of valid range. Should be grater than one but was ["+id+"]");
+        }
         return elementDAO.getByID(id);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Element getElementByName(String name)
-    {
-        return elementDAO.getElementByName(name);
     }
 
     @Override
@@ -85,7 +68,6 @@ public class ElementServiceImpl implements ElementService
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void reCreate()
     {
         InputStream inputStream = ElementService.class.getClassLoader().getResourceAsStream("other/mathmlelements.txt");
@@ -120,9 +102,12 @@ public class ElementServiceImpl implements ElementService
         {
             for(Element e : newList)
             {
-                elementDAO.create(e);
+                Element temp = elementDAO.getElementByName(e.getElementName());
+                if(temp == null)
+                {
+                    elementDAO.create(e);
+                }                
             }
         }      
     }
-    
 }

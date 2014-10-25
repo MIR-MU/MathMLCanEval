@@ -14,8 +14,8 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 /**
- *
- * @author Empt
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 @Repository(value = "programDAO")
 public class ProgramDAOImpl extends GenericDAOImpl<Program, Long> implements ProgramDAO
@@ -25,24 +25,6 @@ public class ProgramDAOImpl extends GenericDAOImpl<Program, Long> implements Pro
     public ProgramDAOImpl()
     {
         super(Program.class);
-    }
-    
-    @Override
-    public List<Program> getProgramByName(String name)
-    {
-        List<Program> resultList = Collections.emptyList();
-        
-        try
-        {
-            resultList = entityManager.createQuery("SELECT p FROM program p WHERE p.name = :name",Program.class)
-                    .setParameter("name", name).getResultList();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return resultList;
     }
 
     @Override

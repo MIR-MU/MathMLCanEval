@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package cz.muni.fi.mir.db.service;
 
 import cz.muni.fi.mir.db.domain.Element;
@@ -21,17 +20,40 @@ import java.util.List;
 
 /**
  *
- * @author emptak
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface ElementService
 {
-    void createElement(Element element);
-    void updateElement(Element element);
-    void deleteElement(Element element);
-    Element getElementByID(Long id);
-    Element getElementByName(String name);
+
+    /**
+     * Method creates given element inside database
+     *
+     * @param element to be created
+     * @throws IllegalArgumentException if element is null
+     */
+    void createElement(Element element) throws IllegalArgumentException;
+
+    /**
+     * Method obtains element out of database based on given input id.
+     *
+     * @param id of element to be obtained
+     * @return element with given id, null if there is no match
+     * @throws IllegalArgumentException if id is null or out of valid range
+     */
+    Element getElementByID(Long id) throws IllegalArgumentException;
+
+    /**
+     * Method returns all elements out of database.
+     *
+     * @return list containing all elements, or empty list if there are none
+     * yet.
+     */
     List<Element> getAllElements();
-    
+
+    /**
+     * Method loads file from classpath location
+     * <b>"other/mathmlelements.txt</b> containing MathML elements which are
+     * later stored inside database.
+     */
     void reCreate();
-    
 }

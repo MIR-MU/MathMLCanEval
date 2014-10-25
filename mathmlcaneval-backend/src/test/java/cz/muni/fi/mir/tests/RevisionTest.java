@@ -100,17 +100,6 @@ public class RevisionTest
     }
 
     @Test
-    public void testGetRevisionByHash()
-    {
-        logger.info("Running RevisionTest#testGetRevisionByHash()");
-
-        revisionService.createRevision(revs.get(0));
-        Revision result = revisionService.getRevisionByHash("f383d4a196c27992bf9bcb903919cf354024554a");
-
-        deepCompare(revs.get(0), result);
-    }
-
-    @Test
     public void testGetAllRevisions()
     {
         logger.info("Running RevisionTest#testGetAllRevisions()");
@@ -130,26 +119,6 @@ public class RevisionTest
         for (int i = 0; i < revs.size(); i++)
         {
             deepCompare(revs.get(i), result.get(i));
-        }
-    }
-
-    @Test
-    public void testFindRevisionByNote()
-    {
-        logger.info("Running RevisionTest#testFindRevisionByNote()");
-
-        for (Revision r : revs)
-        {
-            revisionService.createRevision(r);
-        }
-
-        List<Revision> result = revisionService.findRevisionByNote("poznamka");
-
-        assertEquals(TestTools.ERROR_LIST_SIZE, 3, result.size());
-
-        for (Revision r : result)
-        {
-            assertTrue("Revision resultList does not have proper note.", r.getNote().contains("poznamka"));
         }
     }
 

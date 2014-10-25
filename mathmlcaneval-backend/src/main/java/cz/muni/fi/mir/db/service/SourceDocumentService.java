@@ -8,16 +8,43 @@ import cz.muni.fi.mir.db.domain.SourceDocument;
 import java.util.List;
 
 /**
- *
- * @author Empt
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface SourceDocumentService
 {
-    void createSourceDocument(SourceDocument sourceDocument);
-    void updateSourceDocument(SourceDocument sourceDocument);
-    void deleteSourceDocument(SourceDocument sourceDocument);
+    /**
+     * 
+     * @param sourceDocument
+     * @throws IllegalArgumentException 
+     */
+    void createSourceDocument(SourceDocument sourceDocument) throws IllegalArgumentException;
     
-    SourceDocument getSourceDocumentByID(Long id);
+    /**
+     * 
+     * @param sourceDocument
+     * @throws IllegalArgumentException 
+     */
+    void updateSourceDocument(SourceDocument sourceDocument) throws IllegalArgumentException;
     
+    /**
+     * 
+     * @param sourceDocument
+     * @throws IllegalArgumentException 
+     */
+    void deleteSourceDocument(SourceDocument sourceDocument) throws IllegalArgumentException;
+    
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    SourceDocument getSourceDocumentByID(Long id) throws IllegalArgumentException;
+    
+    /**
+     * 
+     * @return 
+     */
     List<SourceDocument> getAllDocuments();
 }

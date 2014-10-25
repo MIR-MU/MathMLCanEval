@@ -6,7 +6,6 @@ package cz.muni.fi.mir.tests;
 
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.service.ConfigurationService;
-import cz.muni.fi.mir.tools.EntityFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -122,43 +121,6 @@ public class ConfigurationTest
         for (int i = 0; i < configs.size(); i++)
         {
             deepCompare(configs.get(i), result.get(i));
-        }
-    }
-
-    @Test
-    public void testGetBySubstringNote()
-    {
-        logger.info("Running ConfigurationTest#testGetBySubstringNote()");
-        for (Configuration c : configs)
-        {
-            configurationService.createConfiguration(c);
-        }
-
-        List<Configuration> result = configurationService.getBySubstringNote("hodnoty su");
-        assertEquals(TestTools.ERROR_LIST_SIZE, 2, result.size());
-
-        for (Configuration c : result)
-        {
-            assertTrue("Given configuration does not have proper substring in note.", c.getNote().contains("hodnoty su"));
-        }
-
-    }
-
-    @Test
-    public void testFindyByName()
-    {
-        logger.info("Running ConfigurationTest#testFindyByName()");
-        for (Configuration c : configs)
-        {
-            configurationService.createConfiguration(c);
-        }
-
-        List<Configuration> result = configurationService.findyByName("vsetko");
-        assertEquals(TestTools.ERROR_LIST_SIZE, 2, result.size());
-
-        for (Configuration c : result)
-        {
-            assertTrue("Configuration does not have field name set properly.", c.getName().contains("vsetko"));
         }
     }
 

@@ -131,11 +131,6 @@ public class ProgramController
             mm.addAttribute("programList", 
                     programService.getProgramByNameAndVersion(filters.get("name").get(0), filters.get("version").get(0)));
         }
-        else if(filters.containsKey("name"))
-        {
-            mm.addAttribute("programList", 
-                    programService.getProgramByName(filters.get("name").get(0)));
-        }
         else
         {
             mm.addAttribute("programList", programService.getAllPrograms());

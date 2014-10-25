@@ -4,23 +4,25 @@ import cz.muni.fi.mir.db.domain.Program;
 import java.util.List;
 
 /**
- * The purpose of this interface is to provide basic CRUD operations and search
- * functionality on {@link cz.muni.fi.mir.db.domain.Program} objects
- * persisted inside any given database engine specified by configuration. Since
- * there might be some functionality that requires more operation calls, no
- * transaction management should be managed on this layer. Also no validation is
- * made on this layer so make sure you do not pass non-valid objects into
- * implementation of this DAO (Database Access Object) layer.
- *
- * @author Dominik Szalai
- *
- * @version 1.0
- * @since 1.0
- *
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface ProgramDAO extends GenericDAO<Program,Long>
-{    
-    List<Program> getProgramByName(String name);
+{      
+    /**
+     * Method obtains programs based on their names and versions. There may be
+     * multiple programs with same name and version but different input
+     * parameters. Name and version is checked by exact match.
+     *
+     * @param name of program
+     * @param version version of program
+     * @return list of programs having given name and version
+     */
     List<Program> getProgramByNameAndVersion(String name, String version);
+    
+    /**
+     * Method loads all programs out of database.
+     * @return list of all programs, empty list if there are none yet.
+     */
     List<Program> getAllPrograms();    
 }

@@ -8,17 +8,51 @@ import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.List;
 
 /**
- *
- * @author Empt
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface UserRoleService
 {
-    void createUserRole(UserRole userRole);
-    void updateUserRole(UserRole userRole);
-    void deleteUserRole(UserRole userRole);
+    /**
+     * 
+     * @param userRole
+     * @throws IllegalArgumentException 
+     */
+    void createUserRole(UserRole userRole) throws IllegalArgumentException;
     
-    UserRole getUserRoleByID(Long id);
-    UserRole getUserRoleByName(String roleName);
+    /**
+     * 
+     * @param userRole
+     * @throws IllegalArgumentException 
+     */
+    void updateUserRole(UserRole userRole) throws IllegalArgumentException;
     
+    /**
+     * 
+     * @param userRole
+     * @throws IllegalArgumentException 
+     */
+    void deleteUserRole(UserRole userRole) throws IllegalArgumentException;
+    
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    UserRole getUserRoleByID(Long id) throws IllegalArgumentException;
+    
+    /**
+     * 
+     * @param roleName
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    UserRole getUserRoleByName(String roleName) throws IllegalArgumentException;
+    
+    /**
+     * 
+     * @return 
+     */
     List<UserRole> getAllUserRoles();     
 }

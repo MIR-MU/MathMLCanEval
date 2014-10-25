@@ -10,10 +10,7 @@ import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
 import cz.muni.fi.mir.db.dao.FormulaDAO;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
-import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Formula;
-import cz.muni.fi.mir.db.domain.Revision;
-import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import java.util.HashSet;
 import java.util.List;
@@ -25,12 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author Empt
+ * @author Dominik Szalai - emptulik at gmail.com
+ * @author Rober Siska - xsiska2 at mail.muni.cz
  */
 @Service(value = "applicationRunService")
+@Transactional(readOnly = false)
 public class ApplicationRunServiceImpl implements ApplicationRunService
 {
-
     private static final Logger logger = Logger.getLogger(ApplicationRunServiceImpl.class);
 
     @Autowired
@@ -41,32 +39,38 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
     private FormulaDAO formulaDAO;
 
     @Override
-    @Transactional(readOnly = false)
-    public void createApplicationRun(ApplicationRun applicationRun)
+    public void createApplicationRun(ApplicationRun applicationRun,boolean withFlush) throws IllegalArgumentException
     {
-        applicationRunDAO.create(applicationRun);
+        if(applicationRun == null)
+        {
+            throw new IllegalArgumentException("Given application run is null.");
+        }
+        
+        if(withFlush)
+        {
+            applicationRunDAO.createApplicationRunWithFlush(applicationRun);
+        }
+        else
+        {
+            applicationRunDAO.create(applicationRun);
+        }        
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public void createApplicationRunWithFlush(ApplicationRun applicationRun)
+    public void updateApplicationRun(ApplicationRun applicationRun) throws IllegalArgumentException
     {
-        applicationRunDAO.createApplicationRunWithFlush(applicationRun);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void updateApplicationRun(ApplicationRun applicationRun)
-    {
+        checkInput(applicationRun);
+        
         applicationRunDAO.update(applicationRun);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteApplicationRun(ApplicationRun applicationRun,
             boolean deleteFormulas,
-            boolean deleteCanonicOutputs)
+            boolean deleteCanonicOutputs) throws IllegalArgumentException
     {
+        checkInput(applicationRun);
+        
         //phase one obtain all outputs that belongs to run
         List<CanonicOutput> canonicOutputs = canonicOutputDAO.getCanonicOutputByAppRun(applicationRun);
 
@@ -167,58 +171,38 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
 
     @Override
     @Transactional(readOnly = true)
-    public ApplicationRun getApplicationRunByID(Long id)
+    public ApplicationRun getApplicationRunByID(Long id) throws IllegalArgumentException
     {
+        if(id == null || Long.valueOf("0").compareTo(id) < 1)
+        {
+            throw new IllegalArgumentException("Invalid entity id should be greater than 0 but was ["+id+"]");
+        }
+        
         return applicationRunDAO.getByID(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ApplicationRun> getAllApplicationRuns()
+    public List<ApplicationRun> getAllApplicationRuns() 
     {
         return applicationRunDAO.getAllApplicationRuns();
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ApplicationRun> getAllApplicationRunsByUser(User user)
+    
+    
+    /**
+     * Method checks input for validity.
+     * @param applicationRun to be checked
+     * @throws IllegalArgumentException if application run is null or does not have set id.
+     */
+    private void checkInput(ApplicationRun applicationRun) throws IllegalArgumentException
     {
-        return applicationRunDAO.getAllApplicationRunsByUser(user);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ApplicationRun> getAllApplicationRunsByRevision(Revision revision)
-    {
-        return applicationRunDAO.getAllApplicationRunsByRevision(revision);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ApplicationRun> getAllApplicationRunsByConfiguration(Configuration configuration)
-    {
-        return applicationRunDAO.getAllApplicationRunsByConfiguration(configuration);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ApplicationRun> getAllApplicationRunsFromRange(int start, int end)
-    {
-        if (start < 0)
+        if(applicationRun == null)
         {
-            throw new IllegalArgumentException("ERROR: start cannot be lower than zero. Start value is [" + start + "].");
+            throw new IllegalArgumentException("Given application run is null");
         }
-        else if (end < 0)
+        if(applicationRun.getId() == null || Long.valueOf("0").compareTo(applicationRun.getId()) < 1)
         {
-            throw new IllegalArgumentException("ERROR: end cannot be lower than zero. End value is [" + start + "].");
-        }
-        else if (start > end)
-        {
-            throw new IllegalArgumentException("ERROR: end value cannot be lower than start value. Current value for end is [" + end + "] and for start [" + start + "]");
-        }
-        else
-        {
-            return applicationRunDAO.getAllApplicationRunsFromRange(start, end);
+            throw new IllegalArgumentException("Invalid entity id should be greater than 0 but was ["+applicationRun.getId()+"]");
         }
     }
 }

@@ -9,22 +9,59 @@ import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.List;
 
 /**
- *
- * @author Empt
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface UserService
 {
-    void createUser(User user);
-    void updateUser(User user);
-    void deleteUser(User user);
+    /**
+     * 
+     * @param user
+     * @throws IllegalArgumentException 
+     */
+    void createUser(User user) throws IllegalArgumentException;
     
-    User getUserByID(Long id);
-    User getUserByUsername(String username);
-    User getUserByEmail(String email);
+    /**
+     * 
+     * @param user
+     * @throws IllegalArgumentException 
+     */
+    void updateUser(User user) throws IllegalArgumentException;
+    
+    /**
+     * 
+     * @param user
+     * @throws IllegalArgumentException 
+     */
+    void deleteUser(User user) throws IllegalArgumentException;
+    
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    User getUserByID(Long id) throws IllegalArgumentException;
+    
+    /**
+     * 
+     * @param username
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    User getUserByUsername(String username) throws IllegalArgumentException;
    
-    
+    /**
+     * 
+     * @return 
+     */    
     List<User> getAllUsers();
-    List<User> getUsersByRole(UserRole userRole);
-    List<User> getUsersByRoles(List<UserRole> roles);
-    List<User> findUserByRealName(String name);
+    
+    /**
+     * 
+     * @param userRole
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    List<User> getUsersByRole(UserRole userRole) throws IllegalArgumentException;
 }

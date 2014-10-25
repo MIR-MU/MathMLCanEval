@@ -1,34 +1,21 @@
 package cz.muni.fi.mir.db.dao;
 
 import cz.muni.fi.mir.db.domain.ApplicationRun;
-import cz.muni.fi.mir.db.domain.Configuration;
-import cz.muni.fi.mir.db.domain.Revision;
-import cz.muni.fi.mir.db.domain.User;
 import java.util.List;
 
 /**
- * The purpose of this interface is to provide basic CRUD operations and search
- * functionality on {@link cz.muni.fi.mir.db.domain.ApplicationRun} objects
- * persisted inside any given database engine specified by configuration. Since
- * there might be some functionality that requires more operation calls, no
- * transaction management should be managed on this layer. Also no validation is
- * made on this layer so make sure you do not pass non-valid objects into
- * implementation of this DAO (Database Access Object) layer.
  *
- * @author Dominik Szalai
- *
- * @version 1.0
- * @since 1.0
- *
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface ApplicationRunDAO extends GenericDAO<ApplicationRun, Long>
 {
+
     /**
      * Method creates ApplicationRun inside database and calls flush after.
      *
      * @param applicationRun ApplicationRun to be persisted.
      */
-    void createApplicationRunWithFlush(ApplicationRun applicationRun);   
+    void createApplicationRunWithFlush(ApplicationRun applicationRun);
 
     /**
      * Method obtains all ApplicationRuns from database in <b>DESCENDING</b>
@@ -41,48 +28,12 @@ public interface ApplicationRunDAO extends GenericDAO<ApplicationRun, Long>
     List<ApplicationRun> getAllApplicationRuns();
 
     /**
-     * Method obtains all ApplicationRuns from database in <b>DESCENDING</b>
-     * order. Newer ApplicationRuns are therefore in front and the old ones are
-     * in the back. Method is usable for processing AJAX request, e.g. when
-     * using pagination and we do not want to get all entries at once, which is
-     * not effective when having lots of records.
+     * Method returns number of canonicalizations for given application run.
+     * Reason for this is that canonic outputs are set to lazy mode, thus not
+     * loaded during obtaining from database.
      *
-     * @param start start position of result set
-     * @param end end position of result set
-     * @return List of ApplicationRuns from given range, if there are no entries
-     * yet, empty List is returned.
+     * @param applicationRun to be checked
+     * @return number of canonic outputs
      */
-    List<ApplicationRun> getAllApplicationRunsFromRange(int start, int end);
-
-    /**
-     * Method obtains all ApplicationRuns made by given user specified as method
-     * argument. Result is ordered in <b>DESCENDING</b> order.
-     *
-     * @param user of whose ApplicationRuns we want to retrieve.
-     * @return List of ApplicationRuns made by given User. If there are no
-     * entries for User yet, then empty List is returned.
-     */
-    List<ApplicationRun> getAllApplicationRunsByUser(User user);
-
-    /**
-     * Method obtains all ApplicationRuns run with given Revision specified as
-     * method argument. Result is ordered in <b>DESCENDING</b> order.
-     *
-     * @param revision used for ApplicationRun
-     * @return List of ApplicationRuns which used given Revision, if there are
-     * no such ApplicationRuns then empty List is returned.
-     */
-    List<ApplicationRun> getAllApplicationRunsByRevision(Revision revision);
-
-    /**
-     * Method obtains all ApplicationRuns run with given Configuration specified
-     * as method argument. Result is ordered in <b>DESCENDING</b> order.
-     *
-     * @param configuration used for ApplicationRun
-     * @return List of ApplicationRuns which used given Configuration, if there
-     * are no such ApplicationRuns then empty List is returned.
-     */
-    List<ApplicationRun> getAllApplicationRunsByConfiguration(Configuration configuration);
-    
     Integer getNumberOfCanonicalizations(ApplicationRun applicationRun);
 }

@@ -15,7 +15,6 @@ import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
-import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.RandomString;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -106,7 +105,7 @@ public class ApplicationRunTest
     {
         logger.info("Running ApplicationRunTest#testCreateAndGetApplicationRun()");
 
-        applicationRunService.createApplicationRun(appruns.get(0));
+        applicationRunService.createApplicationRun(appruns.get(0),false);
 
         ApplicationRun result = applicationRunService.getApplicationRunByID(ID);
 
@@ -120,7 +119,7 @@ public class ApplicationRunTest
     {
         logger.info("Running ApplicationRunTest#testUpdateApplicationRun()");
 
-        applicationRunService.createApplicationRun(appruns.get(0));
+        applicationRunService.createApplicationRun(appruns.get(0),false);
 
         ApplicationRun result = applicationRunService.getApplicationRunByID(ID);
 
@@ -143,7 +142,7 @@ public class ApplicationRunTest
     public void testDeleteApplicationRun()
     {
         logger.info("Running ApplicationRunTest#testDeleteApplicationRun()");
-        applicationRunService.createApplicationRun(appruns.get(0));
+        applicationRunService.createApplicationRun(appruns.get(0),false);
 
         ApplicationRun result = applicationRunService.getApplicationRunByID(ID);
 
@@ -160,7 +159,7 @@ public class ApplicationRunTest
         logger.info("Running ApplicationRunTest#testGetAllApplicationRuns()");
         for (ApplicationRun apRun : appruns)
         {
-            applicationRunService.createApplicationRun(apRun);
+            applicationRunService.createApplicationRun(apRun,false);
         }
 
         List<ApplicationRun> result = applicationRunService.getAllApplicationRuns();
@@ -173,89 +172,6 @@ public class ApplicationRunTest
         for (int i = 0; i < result.size(); i++)
         {
             deepCompare(appruns.get(i), result.get(i));
-        }
-    }
-
-    @Test
-    public void testGetAllApplicationRunsByUser()
-    {
-        logger.info("Running ApplicationRunTest#testGetAllApplicationRunsByUser()");
-
-        for (ApplicationRun apRun : appruns)
-        {
-            applicationRunService.createApplicationRun(apRun);
-        }
-
-        List<ApplicationRun> result = applicationRunService.getAllApplicationRunsByUser(users.get(0));
-        assertEquals(TestTools.ERROR_LIST_SIZE, 3, result.size());
-        for (ApplicationRun apr : result)
-        {
-            assertEquals(users.get(0), apr.getUser());
-        }
-    }
-
-    @Test
-    public void testGetAllApplicationRunsByRevision()
-    {
-        logger.info("Running ApplicationRunTest#testGetAllApplicationRunsByRevision()");
-
-        for (ApplicationRun apRun : appruns)
-        {
-            applicationRunService.createApplicationRun(apRun);
-        }
-
-        List<ApplicationRun> result = applicationRunService.getAllApplicationRunsByRevision(revs.get(1));
-        assertEquals("size", 2, result.size());
-        for (ApplicationRun apr : result)
-        {
-            assertEquals(revs.get(1), apr.getRevision());
-        }
-    }
-
-    @Test
-    public void testGetAllApplicationRunsByConfiguration()
-    {
-        logger.info("Running ApplicationRunTest#testGetAllApplicationRunsByConfiguration()");
-        for (ApplicationRun apRun : appruns)
-        {
-            applicationRunService.createApplicationRun(apRun);
-        }
-
-        List<ApplicationRun> result = applicationRunService.getAllApplicationRunsByConfiguration(configs.get(0));
-        List<ApplicationRun> result1 = applicationRunService.getAllApplicationRunsByConfiguration(configs.get(1));
-        assertEquals(TestTools.ERROR_LIST_SIZE, 3, result.size());
-        assertEquals(TestTools.ERROR_LIST_SIZE, 1, result1.size());
-
-        for (ApplicationRun apr : result)
-        {
-            assertEquals(configs.get(0), apr.getConfiguration());
-        }
-    }
-    
-    @Test
-    public void testGetAllApplicationRunsFromRange()
-    {
-        logger.info("Running ApplicationRunTest#testGetAllApplicationRunsFromRange()");
-        List<ApplicationRun> temp = new ArrayList<>();
-        for(int i = 0 ; i < 100; i++)
-        {
-            ApplicationRun ar = EntityFactory.createApplicationRun(randomString.nextString(),DataTestTools.getRandomDate(), DataTestTools.getRandomDate(), users.get(0), revs.get(1), configs.get(2));
-            temp.add(ar);
-            
-            applicationRunService.createApplicationRun(ar);
-        }
-        
-        Collections.sort(temp,TestTools.applicationRunComparatorInverted);
-        
-        temp = temp.subList(1, 31);
-        
-        List<ApplicationRun> result = applicationRunService.getAllApplicationRunsFromRange(1, 31);
-        
-        assertEquals(TestTools.ERROR_LIST_SIZE,temp.size(),result.size());
-        
-        for(int i = 0 ; i < result.size();i++)
-        {
-            deepCompare(temp.get(i), result.get(i));
         }
     }
 

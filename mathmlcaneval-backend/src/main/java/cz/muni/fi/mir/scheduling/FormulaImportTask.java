@@ -63,6 +63,13 @@ public class FormulaImportTask extends ApplicationTask
 
     /**
      * Method setups data dependencies used for FormulaImportTask.
+     * @param path
+     * @param filter
+     * @param revision
+     * @param configuration
+     * @param program
+     * @param sourceDocument
+     * @param user 
      */
     public void setDependencies(String path, String filter, Revision revision, Configuration configuration, Program program, SourceDocument sourceDocument, User user)
     {
@@ -111,7 +118,7 @@ public class FormulaImportTask extends ApplicationTask
             getStatus().setStartTime(startTime);
 
             logger.fatal("Attempt to create Application Run with flush mode to ensure its persisted.");
-            applicationRunService.createApplicationRunWithFlush(applicationRun);
+            applicationRunService.createApplicationRun(applicationRun,true);
             logger.fatal("Operation withFlush called.");
 
             List<Formula> filtered = new ArrayList<>();

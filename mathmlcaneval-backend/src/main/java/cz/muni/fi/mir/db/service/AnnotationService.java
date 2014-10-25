@@ -5,23 +5,21 @@
 package cz.muni.fi.mir.db.service;
 
 import cz.muni.fi.mir.db.domain.Annotation;
-import cz.muni.fi.mir.db.domain.User;
-import java.util.List;
 
 /**
  *
- * @author Empt
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface AnnotationService
 {
-    void createAnnotation(Annotation annotation);
-    void updateAnnotation(Annotation annotation);
-    void deleteAnnotation(Annotation annotation);
-    
-    Annotation getAnnotationByID(Long id);
-    
-    List<Annotation> getAllAnnotations();
-    List<Annotation> getAllAnnotationsFromRange(int start, int end) throws IllegalArgumentException;
-    List<Annotation> getAnnotationByUser(User user);
-    List<Annotation> findByNote(String note);
+
+    /**
+     * Method obtains given annotation based on input id.
+     *
+     * @param id of annotation to be obtained
+     * @return annotation with given id, null if there is no such annotation
+     * with input id.
+     * @throws IllegalArgumentException if id is null or less than one.
+     */
+    Annotation getAnnotationByID(Long id) throws IllegalArgumentException;
 }

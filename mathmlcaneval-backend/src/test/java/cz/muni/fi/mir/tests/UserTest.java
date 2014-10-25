@@ -124,27 +124,6 @@ public class UserTest
     }
     
     @Test
-    public void testFindUserByRealName()
-    {
-        logger.info("Running UserTest#testFindUserByRealName()");
-        
-        for(User u : users)
-        {
-            userService.createUser(u);
-        }
-        
-        List<User> rList = userService.findUserByRealName("tretie");
-        assertEquals("result should be one",1,rList.size());
-        
-        deepCompare(users.get(1), rList.get(0));
-        rList.clear();
-        
-        rList = userService.findUserByRealName("viac");
-        
-        assertEquals("result should be 2", 2,rList.size());
-    }
-    
-    @Test
     public void testGetUserByUsername()
     {
         logger.info("Running UserTest#testGetUserByUsername()");
@@ -219,33 +198,8 @@ public class UserTest
         {
             userService.createUser(u);
         }
-        
-//        List<User> result = userService.getUsersByRoles(roles.subList(1, 3));
-//        
-//        for(User u : result)
-//        {
-//            System.out.println(u.getId());
-//        }
     }
     
-    @Test
-    public void testGetByEmail()
-    {
-        logger.info("Running UserTest#testGetByEmail()");
-        for(User u : users)
-        {
-            userService.createUser(u);
-        }
-        
-        User u1 = userService.getUserByEmail("example1@example.com");
-        User u2 = userService.getUserByEmail("example3@example.com");
-        
-        assertNotNull("User was not created", u1);
-        assertNotNull("User was not created", u2);
-        
-        deepCompare(users.get(0), u1);
-        deepCompare(users.get(2), u2);
-    }
     
     
     private void deepCompare(User expected, User actual)

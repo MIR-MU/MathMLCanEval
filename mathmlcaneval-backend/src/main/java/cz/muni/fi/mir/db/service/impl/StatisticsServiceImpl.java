@@ -21,8 +21,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- *
- * @author emptak
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public class StatisticsServiceImpl implements StatisticsService
 {
@@ -212,12 +212,6 @@ public class StatisticsServiceImpl implements StatisticsService
         }
         
         return statistics;
-    }
-
-    @Override
-    public List<Statistics> getStatisticsFromRange(DateTime start, DateTime end)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -77,25 +77,4 @@ public class UserServiceImpl implements UserService
     {
         return userDAO.getUsersByRole(userRole);
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<User> findUserByRealName(String name)
-    {
-        return userDAO.findUserByRealName(name);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<User> getUsersByRoles(List<UserRole> roles)
-    {
-        return userDAO.getUsersByRoles(roles);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public User getUserByEmail(String email)
-    {
-        return userDAO.getUserByEmail(email);
-    }
 }

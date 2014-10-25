@@ -20,11 +20,25 @@ import cz.muni.fi.mir.db.domain.Element;
 import java.util.List;
 
 /**
- *
- * @author emptak
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface ElementDAO extends GenericDAO<Element,Long>
 {
+    /**
+     * Method obtains element out of database based on given name. In order to
+     * match element by name, the match has to be exact.
+     *
+     * @param name of element to be found
+     * @return Element with given name, null if there is no match
+     */
     Element getElementByName(String name);
+    
+    /**
+     * Method returns all elements out of database.
+     *
+     * @return list containing all elements, or empty list if there are none
+     * yet.
+     */
     List<Element> getAllElements();
 }
