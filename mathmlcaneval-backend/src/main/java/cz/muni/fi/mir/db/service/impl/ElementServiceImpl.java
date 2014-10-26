@@ -1,5 +1,5 @@
-/*
- * Copyright 2014 emptak.
+/* 
+ * Copyright 2014 MIR@MU.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package cz.muni.fi.mir.db.service.impl;
 
-import cz.muni.fi.mir.db.dao.ElementDAO;
-import cz.muni.fi.mir.db.domain.Element;
-import cz.muni.fi.mir.db.service.ElementService;
-import cz.muni.fi.mir.tools.EntityFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import cz.muni.fi.mir.db.dao.ElementDAO;
+import cz.muni.fi.mir.db.domain.Element;
+import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.service.ElementService;
+import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.XMLUtils;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service(value = "elementService")
 @Transactional(readOnly = false)
@@ -38,6 +43,8 @@ public class ElementServiceImpl implements ElementService
     private static final Logger logger = Logger.getLogger(ElementServiceImpl.class);
     @Autowired
     private ElementDAO elementDAO;
+    @Autowired
+    private XMLUtils xmlUtils;
 
     @Override
     public void createElement(Element element) throws IllegalArgumentException
@@ -53,7 +60,7 @@ public class ElementServiceImpl implements ElementService
     @Transactional(readOnly = true)
     public Element getElementByID(Long id) throws IllegalArgumentException
     {
-        if(id == null || Long.valueOf("0").compareTo(id) < 1)
+        if(id == null || Long.valueOf("0").compareTo(id) >= 0)
         {
             throw new IllegalArgumentException("Given id is out of valid range. Should be grater than one but was ["+id+"]");
         }
@@ -109,5 +116,36 @@ public class ElementServiceImpl implements ElementService
                 }                
             }
         }      
+    }
+
+    @Override
+    public List<Element> extractElements(Formula formula)
+    {
+        Set<Element> temp = new HashSet<>();
+
+        org.w3c.dom.Document doc = xmlUtils.parse(formula.getXml());
+
+        if (doc != null)
+        {
+            org.w3c.dom.NodeList nodeList = doc.getElementsByTagName("*");
+            for (int i = 0; i < nodeList.getLength(); i++)
+            {
+                temp.add(EntityFactory.createElement(nodeList.item(i).getNodeName()));
+            }
+        }
+        List<Element> result = null;
+
+        if (formula.getElements() == null || formula.getElements().isEmpty())
+        {
+            result = new ArrayList<>(temp.size());
+        }
+        else
+        {
+            result = new ArrayList<>(formula.getElements());
+        }
+
+        result.addAll(temp);
+
+        return result;
     }
 }

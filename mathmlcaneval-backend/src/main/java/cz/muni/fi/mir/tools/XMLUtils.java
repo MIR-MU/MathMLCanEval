@@ -1,5 +1,5 @@
-/*
- * Copyright 2014 emptak.
+/* 
+ * Copyright 2014 MIR@MU.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,19 @@
  */
 package cz.muni.fi.mir.tools;
 
-import cz.muni.fi.mir.similarity.SimilarityFormConverter;
 import java.io.IOException;
 import java.io.StringReader;
+
 import javax.xml.parsers.DocumentBuilder;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import cz.muni.fi.mir.similarity.SimilarityFormConverter;
 
 /**
  *

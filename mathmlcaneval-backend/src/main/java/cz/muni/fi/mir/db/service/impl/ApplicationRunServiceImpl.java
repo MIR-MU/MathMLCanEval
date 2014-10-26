@@ -1,9 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package cz.muni.fi.mir.db.service.impl;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cz.muni.fi.mir.db.dao.ApplicationRunDAO;
 import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
@@ -12,13 +31,6 @@ import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -59,7 +71,7 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
     @Override
     public void updateApplicationRun(ApplicationRun applicationRun) throws IllegalArgumentException
     {
-        checkInput(applicationRun);
+        InputChecker.checkInput(applicationRun);
         
         applicationRunDAO.update(applicationRun);
     }
@@ -69,7 +81,7 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
             boolean deleteFormulas,
             boolean deleteCanonicOutputs) throws IllegalArgumentException
     {
-        checkInput(applicationRun);
+        InputChecker.checkInput(applicationRun);
         
         //phase one obtain all outputs that belongs to run
         List<CanonicOutput> canonicOutputs = canonicOutputDAO.getCanonicOutputByAppRun(applicationRun);
@@ -173,7 +185,7 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
     @Transactional(readOnly = true)
     public ApplicationRun getApplicationRunByID(Long id) throws IllegalArgumentException
     {
-        if(id == null || Long.valueOf("0").compareTo(id) < 1)
+        if(id == null || Long.valueOf("0").compareTo(id) >= 0)
         {
             throw new IllegalArgumentException("Invalid entity id should be greater than 0 but was ["+id+"]");
         }
@@ -186,23 +198,5 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
     public List<ApplicationRun> getAllApplicationRuns() 
     {
         return applicationRunDAO.getAllApplicationRuns();
-    }
-    
-    
-    /**
-     * Method checks input for validity.
-     * @param applicationRun to be checked
-     * @throws IllegalArgumentException if application run is null or does not have set id.
-     */
-    private void checkInput(ApplicationRun applicationRun) throws IllegalArgumentException
-    {
-        if(applicationRun == null)
-        {
-            throw new IllegalArgumentException("Given application run is null");
-        }
-        if(applicationRun.getId() == null || Long.valueOf("0").compareTo(applicationRun.getId()) < 1)
-        {
-            throw new IllegalArgumentException("Invalid entity id should be greater than 0 but was ["+applicationRun.getId()+"]");
-        }
     }
 }

@@ -1,13 +1,31 @@
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package cz.muni.fi.mir.db.dao.impl;
 
-import cz.muni.fi.mir.db.dao.ApplicationRunDAO;
-import cz.muni.fi.mir.db.domain.ApplicationRun;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.NoResultException;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+
+import cz.muni.fi.mir.db.dao.ApplicationRunDAO;
+import cz.muni.fi.mir.db.domain.ApplicationRun;
 
 /**
  * 
@@ -31,7 +49,7 @@ public class ApplicationRunDAOImpl extends GenericDAOImpl<ApplicationRun, Long> 
     }
 
     /**
-     * Method is affected by {@link #setPsqlver(java.lang.String) }. If set to
+     * Method is affected by {@link #psqlver }. If set to
      * version (>= 9.1) then method uses calculation of outputs in single
      * method. Otherwise two selects are required as of bug in previous versions
      * of postgresql. See <a

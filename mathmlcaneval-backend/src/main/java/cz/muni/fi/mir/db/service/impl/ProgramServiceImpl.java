@@ -1,16 +1,29 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package cz.muni.fi.mir.db.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cz.muni.fi.mir.db.dao.ProgramDAO;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.service.ProgramService;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -36,7 +49,7 @@ public class ProgramServiceImpl implements ProgramService
     @Override
     public void deleteProgram(Program program) throws IllegalArgumentException
     {
-        checkInput(program);
+        InputChecker.checkInput(program);
         
         programDAO.delete(program.getId());
     }
@@ -44,7 +57,7 @@ public class ProgramServiceImpl implements ProgramService
     @Override
     public void updateProgram(Program program) throws IllegalArgumentException
     {
-        checkInput(program);
+        InputChecker.checkInput(program);
         
         programDAO.update(program);
     }
@@ -53,7 +66,7 @@ public class ProgramServiceImpl implements ProgramService
     @Transactional(readOnly = true)
     public Program getProgramByID(Long id) throws IllegalArgumentException
     {
-        if(id == null || Long.valueOf("0").compareTo(id) < 1)
+        if(id == null || Long.valueOf("0").compareTo(id) >= 0)
         {
             throw new IllegalArgumentException("Given entity does not have valid id should be greater than one but was ["+id+"]");
         }
@@ -78,22 +91,5 @@ public class ProgramServiceImpl implements ProgramService
     public List<Program> getAllPrograms()
     {
         return programDAO.getAllPrograms();
-    }
-    
-    /**
-     * Method validates input
-     * @param program to be checked
-     * @throws IllegalArgumentException if program is null or does not have valid id. 
-     */
-    private void checkInput(Program program) throws IllegalArgumentException
-    {
-        if(program == null)
-        {
-            throw new IllegalArgumentException("Given input is null.");
-        }
-        if(program.getId() == null || Long.valueOf("0").compareTo(program.getId()) < 1)
-        {
-            throw new IllegalArgumentException("Given entity does not have valid id should be greater than one but was ["+program.getId()+"]");
-        }
     }
 }

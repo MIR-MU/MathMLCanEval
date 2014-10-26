@@ -1,20 +1,34 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package cz.muni.fi.mir.db.dao.impl;
 
-import cz.muni.fi.mir.db.dao.RevisionDAO;
-import cz.muni.fi.mir.db.domain.Revision;
 import java.util.Collections;
 import java.util.List;
+
 import javax.persistence.NoResultException;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import cz.muni.fi.mir.db.dao.RevisionDAO;
+import cz.muni.fi.mir.db.domain.Revision;
+
 /**
- *
- * @author Empt
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 @Repository(value = "revisionDAO")
 public class RevisionDAOImpl extends GenericDAOImpl<Revision,Long> implements RevisionDAO
@@ -25,24 +39,7 @@ public class RevisionDAOImpl extends GenericDAOImpl<Revision,Long> implements Re
     {
         super(Revision.class);
     }
-
-    @Override
-    public Revision getRevisionByHash(String hash)
-    {
-        Revision result = null;
-        try
-        {
-            result = entityManager.createQuery("SELECT r FROM revision r where r.revisionHash = :revision",Revision.class)
-                    .setParameter("revision", hash).getSingleResult();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return result;
-    }
-
+    
     @Override
     public List<Revision> getAllRevisions()
     {
@@ -59,23 +56,5 @@ public class RevisionDAOImpl extends GenericDAOImpl<Revision,Long> implements Re
         }
         
         return result;
-    }    
-
-    @Override
-    public List<Revision> findRevisionByNote(String note)
-    {
-        List<Revision> resultList = Collections.emptyList();
-        
-        try
-        {
-            resultList = entityManager.createQuery("SELECT r FROM revision r WHERE r.note LIKE :note", Revision.class)
-                    .setParameter("note", "%"+note+"%").getResultList();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return resultList;
-    }
+    } 
 }

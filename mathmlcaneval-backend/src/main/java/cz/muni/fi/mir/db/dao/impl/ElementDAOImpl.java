@@ -1,5 +1,5 @@
-/*
- * Copyright 2014 emptak.
+/* 
+ * Copyright 2014 MIR@MU.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package cz.muni.fi.mir.db.dao.impl;
+
+import java.util.Collections;
+import java.util.List;
+
+import javax.persistence.NoResultException;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import cz.muni.fi.mir.db.dao.ElementDAO;
 import cz.muni.fi.mir.db.domain.Element;
-import java.util.Collections;
-import java.util.List;
-import javax.persistence.NoResultException;
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Repository;
 
 /**
  * 

@@ -1,5 +1,5 @@
-/*
- * Copyright 2014 emptak.
+/* 
+ * Copyright 2014 MIR@MU.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,10 @@
  */
 package cz.muni.fi.mir.db.service;
 
-import cz.muni.fi.mir.db.domain.Element;
 import java.util.List;
+
+import cz.muni.fi.mir.db.domain.Element;
+import cz.muni.fi.mir.db.domain.Formula;
 
 /**
  *
@@ -56,4 +58,11 @@ public interface ElementService
      * later stored inside database.
      */
     void reCreate();
+    
+    /**
+     * Method extracts elements from MathML representation
+     * @param formula to be extracted
+     * @return List of elements inside formula.
+     */
+    List<Element> extractElements(Formula formula);
 }

@@ -1,34 +1,54 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package cz.muni.fi.mir.db.dao;
 
-import cz.muni.fi.mir.db.domain.User;
-import cz.muni.fi.mir.db.domain.UserRole;
 import java.util.List;
 
+import cz.muni.fi.mir.db.domain.User;
+import cz.muni.fi.mir.db.domain.UserRole;
+
 /**
- *  The purpose of this interface is to provide basic CRUD operations and search 
- * functionality on UserRole objects persisted inside any given database engine 
- * specified by configuration. Since there might be some functionality that requires
- * more operation calls, no transaction management should be managed on this layer.
- * Also no validation is made on this layer so make sure you do not pass non-valid
- * objects into implementation of this DAO (Database Access Object) layer.
- * 
- * @author Dominik Szalai
- * @author Robert Siska
- * 
- * @version 1.0
- * @since 1.0
- * 
+ *
+ * @author Dominik Szalai - emptulik at gmail.com
+ * @author Rober Siska - xsiska2 at mail.muni.cz
  */
-public interface UserDAO extends GenericDAO<User,Long>
+public interface UserDAO extends GenericDAO<User, Long>
 {
+
+    /**
+     * Method obtains user based on its username.
+     *
+     * @param username of user
+     * @return user with given username, null if there no match
+     */
     User getUserByUsername(String username);
-    User getUserByEmail(String email);
+
+    /**
+     * Method obtains all users from database.
+     *
+     * @return list of all users, empty list if there are none yet.
+     */
     List<User> getAllUsers();
+
+    /**
+     * Method obtains all users having given user role.
+     *
+     * @param userRole of users to be fetched
+     * @return list of all users having given user role, empty list if there are
+     * none yet
+     */
     List<User> getUsersByRole(UserRole userRole);
-    List<User> getUsersByRoles(List<UserRole> roles);
-    List<User> findUserByRealName(String name);
 }

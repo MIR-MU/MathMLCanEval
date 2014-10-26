@@ -36,7 +36,7 @@ public class StatisticsController
     public ModelAndView list()
     {
         ModelMap mm = prepareModelMap();
-        mm.addAttribute("statistics", statisticsService.getStatistics());
+        mm.addAttribute("statistics", statisticsService.getLatestStatistics());
         
         return new ModelAndView("statistics",mm);
     }
@@ -57,7 +57,7 @@ public class StatisticsController
         new Thread(r).start();
         ModelMap mm = prepareModelMap();
         mm.addAttribute("statisticsMessage", "statistics.calc.started");
-        mm.addAttribute("statistics", statisticsService.getStatistics());
+        mm.addAttribute("statistics", statisticsService.getLatestStatistics());
         
         return new ModelAndView("statistics",mm);
     }

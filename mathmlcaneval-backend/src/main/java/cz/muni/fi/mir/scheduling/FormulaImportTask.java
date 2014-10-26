@@ -1,11 +1,24 @@
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package cz.muni.fi.mir.scheduling;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -28,7 +41,6 @@ import cz.muni.fi.mir.services.FileDirectoryService;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.tools.Tools;
-import cz.muni.fi.mir.tools.XMLUtils;
 
 /**
  * TODO turn mass import to task
@@ -56,8 +68,6 @@ public class FormulaImportTask extends ApplicationTask
     private MathCanonicalizerLoader mathCanonicalizerLoader;
     @Autowired
     private ElementService elementService;
-    @Autowired
-    private XMLUtils xmlUtils;
 
     private static final Logger logger = Logger.getLogger(FormulaImportTask.class);
 
@@ -87,7 +97,7 @@ public class FormulaImportTask extends ApplicationTask
         this.filter = filter;
 
         setStatus(new TaskStatus());
-        getStatus().setTaskType(TaskType.massImport);
+        getStatus().setTaskType(TaskType.MASSIMPORT);
     }
 
     @Override
@@ -95,7 +105,7 @@ public class FormulaImportTask extends ApplicationTask
     {
         ApplicationRun applicationRun = EntityFactory.createApplicationRun();
         applicationRun.setUser(user);
-        logger.info(applicationRun.getUser());
+        logger.info(applicationRun.getUser()+" has started formula import.");
         applicationRun.setRevision(revision);
         applicationRun.setConfiguration(configuration);
 
@@ -117,9 +127,7 @@ public class FormulaImportTask extends ApplicationTask
             DateTime startTime = DateTime.now();
             getStatus().setStartTime(startTime);
 
-            logger.fatal("Attempt to create Application Run with flush mode to ensure its persisted.");
             applicationRunService.createApplicationRun(applicationRun,true);
-            logger.fatal("Operation withFlush called.");
 
             List<Formula> filtered = new ArrayList<>();
             for (Formula f : toImport)
@@ -133,7 +141,7 @@ public class FormulaImportTask extends ApplicationTask
                     f.setUser(user);
                     f.setSourceDocument(sourceDocument);
 
-                    extractElements(f);
+                    f.setElements(elementService.extractElements(f));
                     attachElements(f);
                     formulaService.createFormula(f);
 
@@ -163,44 +171,6 @@ public class FormulaImportTask extends ApplicationTask
 
     // TODO refactor.
     // Move these methods elsewhere. They're needed in formulaService and here as well.
-    private void extractElements(Formula f)
-    {
-        Set<Element> temp = new HashSet<>();
-
-        org.w3c.dom.Document doc = xmlUtils.parse(f.getXml());
-
-        if (doc != null)
-        {
-            org.w3c.dom.NodeList nodeList = doc.getElementsByTagName("*");
-            for (int i = 0; i < nodeList.getLength(); i++)
-            {
-                temp.add(EntityFactory.createElement(nodeList.item(i).getNodeName()));
-            }
-        }
-        List<Element> result = null;
-
-        if (f.getElements() == null || f.getElements().isEmpty())
-        {
-            result = new ArrayList<>(temp.size());
-        }
-        else
-        {
-            result = new ArrayList<>(f.getElements());
-        }
-
-        result.addAll(temp);
-
-        f.setElements(result);
-    }
-
-    private void checkNull(Formula f) throws IllegalArgumentException
-    {
-        if (f == null)
-        {
-            throw new IllegalArgumentException("Given formula is null.");
-        }
-    }
-
     /**
      * Method takes elements from formula and matches them against already
      * persisted list of elements. If element already exist then it has id in

@@ -1,22 +1,36 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package cz.muni.fi.mir.db.dao.impl;
+
+import java.util.Collections;
+import java.util.List;
+
+import javax.persistence.NoResultException;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import cz.muni.fi.mir.db.dao.UserDAO;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
-import java.util.Collections;
-import java.util.List;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Empt
+ * @author Dominik Szalai - emptulik at gmail.com
+ * @author Rober Siska - xsiska2 at mail.muni.cz
  */
 @Repository(value = "userDAO")
 public class UserDAOImpl extends GenericDAOImpl<User,Long> implements UserDAO
@@ -78,79 +92,5 @@ public class UserDAOImpl extends GenericDAOImpl<User,Long> implements UserDAO
         }
         
         return resultList;
-    }
-
-    @Override
-    public List<User> findUserByRealName(String name)
-    {
-        List<User> resultList = Collections.emptyList();
-        
-        try
-        {
-            resultList = entityManager.createQuery("SELECT u FROM users u WHERE u.realName LIKE :realName", User.class)
-                    .setParameter("realName", "%"+name+"%").getResultList();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return resultList;
-    }
-
-    /**
-     * TODO
-     * @param roles
-     * @return 
-     */
-    @Override
-    public List<User> getUsersByRoles(List<UserRole> roles)
-    {
-        
-        List<User> resultList = Collections.emptyList();
-        
-        
-        StringBuilder query = new StringBuilder("SELECT u FROM users u WHERE ");
-        for(int i =0;i<roles.size();i++)
-        {
-            query.append(":roles").append(i).append(" MEMBER OF u.userRole");
-            if(i < roles.size() -1)
-            {
-                query.append(" AND ");
-            }
-        }
-        
-        try
-        {
-            TypedQuery<User> q = entityManager.createQuery(query.toString(), User.class);
-            for(int i =0;i<roles.size();i++)
-            {
-                q.setParameter("roles"+i, roles.get(i));
-            }
-            resultList = q.getResultList();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return resultList;
-    }
-
-    @Override
-    public User getUserByEmail(String email)
-    {
-        User result = null;
-        try
-        {
-            result = entityManager.createQuery("SELECT u FROM users u WHERE u.email = :email", User.class)
-                    .setParameter("email", email).getSingleResult();
-        }
-        catch(NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-        
-        return result;
     }
 }

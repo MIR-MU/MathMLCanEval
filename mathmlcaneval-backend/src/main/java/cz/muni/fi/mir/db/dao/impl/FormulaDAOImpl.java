@@ -1,9 +1,37 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package cz.muni.fi.mir.db.dao.impl;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.NoResultException;
+
+import org.apache.log4j.Logger;
+import org.apache.lucene.search.Query;
+import org.hibernate.Hibernate;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.BooleanJunction;
+import org.hibernate.search.query.dsl.QueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import cz.muni.fi.mir.db.dao.FormulaDAO;
 import cz.muni.fi.mir.db.domain.Annotation;
@@ -19,33 +47,11 @@ import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.similarity.SimilarityFormConverter;
 import cz.muni.fi.mir.similarity.SimilarityForms;
-import java.io.Serializable;
-import java.util.ArrayList;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import org.apache.log4j.Logger;
-
-import org.apache.lucene.search.Query;
-import org.hibernate.Hibernate;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
-import org.hibernate.search.query.dsl.BooleanJunction;
-import org.hibernate.search.query.dsl.QueryBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 /**
  *
- * @author Empt
+ * @author Dominik Szalai - emptulik at gmail.com
+ * @author Rober Siska - xsiska2 at mail.muni.cz
  */
 @Repository(value = "formulaDAO")
 public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements FormulaDAO
@@ -188,22 +194,6 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
     }
 
     @Override
-    public List<Formula> getAllFormulas()
-    {
-        List<Formula> resultList = Collections.emptyList();
-        try
-        {
-            resultList = entityManager.createQuery("SELECT f FROM formula f ORDER BY f.id DESC", Formula.class).getResultList();
-        }
-        catch (NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-
-        return resultList;
-    }
-
-    @Override
     public List<Formula> getAllFormulas(Pagination pagination)
     {
         List<Formula> resultList = Collections.emptyList();
@@ -256,75 +246,10 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
         }
         catch (NoResultException nre)
         {
-            logger.debug(nre);
+            logger.debug("No formula found with hash ["+hash+"]");
         }
 
         return f;
-    }
-
-    @Override
-    public List<Formula> getAllForHashing()
-    {
-        List<Formula> resultList = Collections.emptyList();
-        try
-        {
-            resultList = entityManager.createQuery("SELECT f FROM formula f WHERE f.hashValue IS NULL OR f.hashValue <> ''", Formula.class)
-                    .getResultList();
-        }
-        catch (NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-
-        return resultList;
-    }
-
-    @Override
-    public List<Formula> getFormulasByElements(Collection<Element> collection, int start, int end)
-    {
-        List<Formula> resultList = Collections.emptyList();
-        try
-        {
-            resultList = entityManager.createQuery("SELECT f FROM formula f WHERE f IN ("
-                    + "SELECT ff from formula ff "
-                    + "INNER JOIN ff.elements ffe "
-                    + "WHERE ffe IN (:elements) "
-                    + "GROUP BY ff "
-                    + "HAVING COUNT(DISTINCT ff) = (:elementsSize))", Formula.class)
-                    .setParameter("elements", collection).setParameter("elementsSize", collection.size())
-                    .setFirstResult(start).setMaxResults(end)
-                    .getResultList();
-        }
-        catch (NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-
-        return resultList;
-    }
-
-    @Override
-    public List<Formula> getAllFormulas(boolean force)
-    {
-        List<Formula> resultList = Collections.emptyList();
-        if (force)
-        {
-            resultList = getAllFormulas();
-        }
-        else
-        {
-            try
-            {
-                resultList = entityManager.createQuery("SELECT f FROM formula f WHERE f.elements IS EMPTY", Formula.class)
-                        .getResultList();
-            }
-            catch (NoResultException nre)
-            {
-                logger.debug(nre);
-            }
-        }
-
-        return resultList;
     }
 
     @Override
@@ -354,7 +279,7 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
         
         BooleanJunction<BooleanJunction> junction = qb.bool();
         
-        SimilarityForms sf = similarityFormConverter.process(formula.getOutputs().get(0));
+        SimilarityForms sf = similarityFormConverter.process(formula.getOutputs().get(formula.getOutputs().size()-1));
         
         if(Boolean.valueOf(properties.get(FormulaService.USE_DISTANCE)))
         {
@@ -493,12 +418,6 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
         fsr.setFormulas(resultList);
         
         return fsr;
-    }
-
-    @Override
-    public void findSimilarMass(Map<String, String> properties)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

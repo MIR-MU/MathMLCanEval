@@ -31,7 +31,7 @@ public class MainController
     public ModelAndView handleIndex()
     {
         ModelMap mm = new ModelMap();
-        mm.addAttribute("statistics", statisticsService.getStatistics());
+        mm.addAttribute("statistics", statisticsService.getLatestStatistics());
         mm.addAttribute("minifeed", auditorService.getLatestEvents());
         return new ModelAndView("index",mm);
     }

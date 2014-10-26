@@ -1,7 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package cz.muni.fi.mir.db.service;
 
@@ -57,7 +67,7 @@ public interface CanonicOutputService
 
     /**
      * Method adds annotation to given canonic output. Execution of this method
-     * is tracked via {@link CanonicOutputAuditor#arroundCreateAnnotation(cz.muni.fi.mir.db.domain.CanonicOutput, cz.muni.fi.mir.db.domain.Annotation)
+     * is tracked via {@link CanonicOutputAuditor#aroundCreateAnnotation(cz.muni.fi.mir.db.domain.CanonicOutput, cz.muni.fi.mir.db.domain.Annotation)
      * }.
      *
      * @param canonicOutput in which annotation will be put
@@ -69,7 +79,7 @@ public interface CanonicOutputService
 
     /**
      * Method deletes annotation from canonic output. Execution of this method
-     * is tracked via {@link CanonicOutputAuditor#arroundDeleteAnnotation(cz.muni.fi.mir.db.domain.CanonicOutput, cz.muni.fi.mir.db.domain.Annotation)
+     * is tracked via {@link CanonicOutputAuditor#aroundDeleteAnnotation(cz.muni.fi.mir.db.domain.CanonicOutput, cz.muni.fi.mir.db.domain.Annotation)
      * }
      *
      * @param canonicOutput from which annotation will be removed

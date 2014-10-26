@@ -1,9 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2014 MIR@MU.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package cz.muni.fi.mir.db.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cz.muni.fi.mir.db.dao.AnnotationDAO;
 import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
@@ -11,11 +28,6 @@ import cz.muni.fi.mir.db.dao.FormulaDAO;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -48,7 +60,7 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     @Override
     public void deleteCanonicOutput(CanonicOutput canonicOutput) throws IllegalArgumentException
     {
-        checkInput(canonicOutput);
+        InputChecker.checkInput(canonicOutput);
         
         canonicOutputDAO.delete(canonicOutput.getId());
     }
@@ -57,7 +69,7 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     @Transactional(readOnly = true)
     public CanonicOutput getCanonicOutputByID(Long id) throws IllegalArgumentException
     {
-        if(Long.valueOf("0").compareTo(id) < 1)
+        if(Long.valueOf("0").compareTo(id) >= 0)
         {
             throw new IllegalArgumentException("Given entity does not have valid id should be greater than one but was ["+id+"]");
         }
@@ -75,8 +87,11 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     @Override
     public void annotateCannonicOutput(CanonicOutput canonicOutput, Annotation annotation) throws IllegalArgumentException
     {
-        checkInput(canonicOutput);
-        checkInput(annotation);        
+        InputChecker.checkInput(canonicOutput);
+        if(annotation == null)
+        {
+            throw new IllegalArgumentException("Given annotation is null");
+        }
         
         List<Annotation> temp = new ArrayList<>();
         if(canonicOutput.getAnnotations() != null && !canonicOutput.getAnnotations().isEmpty())
@@ -97,8 +112,8 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     @Override
     public void deleteAnnotationFromCanonicOutput(CanonicOutput canonicOutput, Annotation annotation) throws IllegalArgumentException
     {
-        checkInput(canonicOutput);
-        checkInput(annotation);
+        InputChecker.checkInput(canonicOutput);
+        InputChecker.checkInput(annotation);
         
         List<Annotation> temp = new ArrayList<>(canonicOutput.getAnnotations());
 
@@ -109,39 +124,5 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
         canonicOutputDAO.update(canonicOutput);
 
         annotationDAO.delete(annotation.getId());
-    }
-    
-    /**
-     * Method checks given canonic output on input.
-     * @param canonicOutput to be checked
-     * @throws IllegalArgumentException if canonic output is null, or does not have valid id.
-     */
-    private void checkInput(CanonicOutput canonicOutput) throws IllegalArgumentException
-    {
-        if(canonicOutput == null)
-        {
-            throw new IllegalArgumentException("Given input is null.");
-        }
-        if(canonicOutput.getId() == null || Long.valueOf("0").compareTo(canonicOutput.getId()) < 1)
-        {
-            throw new IllegalArgumentException("Given entity does not have valid id should be greater than one but was ["+canonicOutput.getId()+"]");
-        }
-    }
-    
-    /**
-     * Method checks annotation on input.
-     * @param annotation to be checked
-     * @throws IllegalArgumentException if canonic output is null, or does not have valid id.
-     */
-    private void checkInput(Annotation annotation) throws IllegalArgumentException
-    {
-        if(annotation == null)
-        {
-            throw new IllegalArgumentException("Given input is null.");
-        }
-        if(annotation.getId() == null || Long.valueOf("0").compareTo(annotation.getId()) < 1)
-        {
-            throw new IllegalArgumentException("Given entity does not have valid id should be greater than one but was ["+annotation.getId()+"]");
-        }
     }
 }

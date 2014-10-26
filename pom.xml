@@ -37,6 +37,15 @@
         </license>
     </licenses>
     
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/michal-ruzicka/MathMLCanEval/issues</url>
+    </issueManagement>
+    
+    <organization>
+        <name>Maths Information Retrieval research group at Masaryk University</name>
+        <url>https://mir.fi.muni.cz/</url>
+    </organization>    
     
     <modules>
         <module>mathmlcaneval-backend</module>

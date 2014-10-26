@@ -1,5 +1,5 @@
-/*
- * Copyright 2014 emptak.
+/* 
+ * Copyright 2014 MIR@MU.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package cz.muni.fi.mir.similarity;
 
 import org.apache.log4j.Logger;
