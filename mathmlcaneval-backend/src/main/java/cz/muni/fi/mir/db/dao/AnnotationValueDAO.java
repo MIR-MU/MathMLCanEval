@@ -27,4 +27,6 @@ public interface AnnotationValueDAO extends GenericDAO<AnnotationValue, Long>
 {
     AnnotationValue getByValue(String value);
     List<AnnotationValue> getAll();
+    List<AnnotationValue> getAllForFormulas();
+    List<AnnotationValue> getAllForCanonicOutputs();
 }

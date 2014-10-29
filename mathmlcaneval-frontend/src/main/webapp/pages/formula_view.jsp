@@ -134,16 +134,13 @@
                                                     </button>
 
                                                     <ul class="dropdown-menu" role="menu">
-                                                        <li>
-                                                            <a href="#" class="annotation-option" data-annotation="#formulaRemove">
-                                                                <span class="glyphicon glyphicon-trash"></span> #formulaRemove
+                                                        <c:forEach items="${annotationValueList}" var="entry">
+                                                            <li>
+                                                            <a href="#" class="annotation-option" data-annotation="${entry.value}" data-description="${entry.description}">
+                                                                <span class="glyphicon glyphicon-${entry.icon}"></span> ${entry.value}
                                                             </a>
                                                         </li>
-                                                        <li>
-                                                            <a href="#" class="annotation-option" data-annotation="#formulaMeaningless">
-                                                                <span class="glyphicon glyphicon glyphicon-remove"></span> #formulaMeaningless
-                                                            </a>
-                                                        </li>
+                                                        </c:forEach>
                                                         <li class="divider"></li>
                                                         <li>
                                                             <a href="#" id="clear-form">

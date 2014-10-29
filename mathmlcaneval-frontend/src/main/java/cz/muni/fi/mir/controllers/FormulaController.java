@@ -25,6 +25,7 @@ import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
 import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
+import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
 import cz.muni.fi.mir.db.service.ElementService;
 import cz.muni.fi.mir.forms.ElementFormRow;
 import cz.muni.fi.mir.forms.FormulaSearchRequestForm;
@@ -93,6 +94,8 @@ public class FormulaController
     private RevisionService revisionService;
     @Autowired
     private ApplicationRunService applicationRunService;
+    @Autowired
+    private AnnotationValueSerivce annotationValueSerivce;
     @Autowired
     private ElementService elementService;
 
@@ -190,6 +193,7 @@ public class FormulaController
         mm.addAttribute("formulaEntry", formulaService.getFormulaByID(id));
         mm.addAttribute("applicationRunForm", new ApplicationRunForm());
         mm.addAttribute("annotationAction", new AnnotationAction());
+        mm.addAttribute("annotationValueList", annotationValueSerivce.getAllForFormulas());
 
         return new ModelAndView("formula_view", mm);
     }

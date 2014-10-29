@@ -44,4 +44,7 @@ public interface AnnotationValueSerivce
     void populate();
 
     List<AnnotationValue> getAll();
+    
+    List<AnnotationValue> getAllForFormulas();
+    List<AnnotationValue> getAllForCanonicOutputs();
 }

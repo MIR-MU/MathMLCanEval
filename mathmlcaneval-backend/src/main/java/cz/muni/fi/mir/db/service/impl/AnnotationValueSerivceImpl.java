@@ -31,6 +31,10 @@ import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.AnnotationValue;
 import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
 
+/**
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
+ */
 @Service
 @Transactional(readOnly = false)
 public class AnnotationValueSerivceImpl implements AnnotationValueSerivce
@@ -107,6 +111,20 @@ public class AnnotationValueSerivceImpl implements AnnotationValueSerivce
     public AnnotationValue getAnnotationValueByValue(String value)
     {
         return annotationValueDAO.getByValue(value);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AnnotationValue> getAllForFormulas()
+    {
+        return annotationValueDAO.getAllForFormulas();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AnnotationValue> getAllForCanonicOutputs()
+    {
+        return annotationValueDAO.getAllForCanonicOutputs();
     }
     
 }

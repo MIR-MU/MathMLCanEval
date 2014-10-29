@@ -6,6 +6,7 @@ package cz.muni.fi.mir.controllers;
 
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.service.AnnotationService;
+import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.forms.AnnotationForm;
 import cz.muni.fi.mir.forms.FindSimilarForm;
@@ -35,7 +36,7 @@ public class CanonicOutputController
     @Autowired
     private CanonicOutputService canonicOutputService;
     @Autowired
-    private AnnotationService annotationService;
+    private AnnotationValueSerivce annotationValueSerivce;
 
     @Autowired
     private Mapper mapper;
@@ -53,6 +54,8 @@ public class CanonicOutputController
         mm.addAttribute("annotationForm", new AnnotationForm());
         mm.addAttribute("findSimilarForm", new FindSimilarForm());
         mm.addAttribute("annotationAction", new AnnotationAction());
+        mm.addAttribute("annotationValueList", annotationValueSerivce.getAllForCanonicOutputs());
+        
         
 
         return new ModelAndView("canonicoutput_view", mm);

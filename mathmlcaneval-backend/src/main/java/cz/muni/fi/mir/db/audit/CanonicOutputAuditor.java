@@ -21,7 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.AnnotationValue;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -33,6 +37,8 @@ public class CanonicOutputAuditor
 {
     @Autowired private AuditorService auditorService;
     @Autowired private DatabaseEventFactory databaseEventFactory;
+    @Autowired private AnnotationValueSerivce annotationValueSerivce;
+    private static final Pattern pattern = Pattern.compile("(#\\S+)");
     
     @Before("execution(* cz.muni.fi.mir.db.service.CanonicOutputService.annotateCannonicOutput(..)) && args(canonicOutput,annotation)")
     public void aroundCreateAnnotation(CanonicOutput canonicOutput, Annotation annotation)
@@ -43,6 +49,22 @@ public class CanonicOutputAuditor
                         "Annotated canonicoutput with " + annotation.getAnnotationContent()
                 )
         );
+        
+        Matcher m = pattern.matcher(annotation.getAnnotationContent());    
+                
+        while(m.find())
+        {
+            String match = m.group();
+            AnnotationValue aValue = annotationValueSerivce.getAnnotationValueByValue(match);
+            if(aValue == null)
+            {
+                aValue = new AnnotationValue();
+                aValue.setValue(match);
+                aValue.setType(AnnotationValue.Type.CANONICOUTPUT);
+                
+                annotationValueSerivce.createAnnotationValue(aValue);
+            }
+        }
     }
 
     @Before("execution(* cz.muni.fi.mir.db.service.CanonicOutputService.deleteAnnotationFromCanonicOutput(..)) && args(canonicOutput,annotation)")

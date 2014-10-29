@@ -24,6 +24,7 @@ import org.springframework.stereotype.Repository;
 
 import cz.muni.fi.mir.db.dao.AnnotationValueDAO;
 import cz.muni.fi.mir.db.domain.AnnotationValue;
+import java.util.Collections;
 
 /**
  *
@@ -42,7 +43,18 @@ public class AnnotationValueDAOImpl extends GenericDAOImpl<AnnotationValue, Long
     @Override
     public List<AnnotationValue> getAll()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<AnnotationValue> result = Collections.emptyList();
+        try
+        {
+            result = entityManager.createQuery("SELECT av FROM annotationValue av ORDER BY av.position DESC", AnnotationValue.class)
+                    .getResultList();
+        }
+        catch(NoResultException nre)    
+        {
+            logger.debug(nre);
+        }
+        
+        return result;
     }
 
     @Override
@@ -57,6 +69,40 @@ public class AnnotationValueDAOImpl extends GenericDAOImpl<AnnotationValue, Long
         catch(NoResultException ex)
         {
             logger.info(ex);
+        }
+        
+        return result;
+    }
+
+    @Override
+    public List<AnnotationValue> getAllForFormulas()
+    {
+        List<AnnotationValue> result = Collections.emptyList();
+        try
+        {
+            result = entityManager.createQuery("SELECT av FROM annotationValue av WHERE av.type = :type", AnnotationValue.class)
+                    .setParameter("type", AnnotationValue.Type.FORMULA).getResultList();
+        }
+        catch(NoResultException nre)    
+        {
+            logger.debug(nre);
+        }
+        
+        return result;
+    }
+
+    @Override
+    public List<AnnotationValue> getAllForCanonicOutputs()
+    {
+        List<AnnotationValue> result = Collections.emptyList();
+        try
+        {
+            result = entityManager.createQuery("SELECT av FROM annotationValue av WHERE av.type = :type", AnnotationValue.class)
+                    .setParameter("type", AnnotationValue.Type.CANONICOUTPUT).getResultList();
+        }
+        catch(NoResultException nre)    
+        {
+            logger.debug(nre);
         }
         
         return result;

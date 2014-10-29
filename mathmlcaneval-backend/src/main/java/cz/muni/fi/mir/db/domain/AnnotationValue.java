@@ -20,6 +20,8 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,6 +34,13 @@ import javax.persistence.SequenceGenerator;
 @Entity(name = "annotationValue")
 public class AnnotationValue implements Serializable
 {
+    public enum Type
+    {
+        FORMULA,
+        CANONICOUTPUT,
+        BOTH
+    }
+    
     private static final long serialVersionUID = -1311727412278415211L;
     
     @Id
@@ -43,6 +52,14 @@ public class AnnotationValue implements Serializable
     private String value;
     @Column(name="description")
     private String description;
+    @Enumerated(EnumType.STRING)
+    private Type type;
+    @Column(name="icon")
+    private String icon;
+    @Column(name="label")
+    private String label;
+    @Column(name="position")
+    private Integer position;
 
     public Long getId()
     {
@@ -74,6 +91,46 @@ public class AnnotationValue implements Serializable
         this.description = description;
     }
 
+    public Type getType()
+    {
+        return type;
+    }
+
+    public void setType(Type type)
+    {
+        this.type = type;
+    }
+
+    public String getIcon()
+    {
+        return icon;
+    }
+
+    public void setIcon(String icon)
+    {
+        this.icon = icon;
+    }
+
+    public String getLabel()
+    {
+        return label;
+    }
+
+    public void setLabel(String label)
+    {
+        this.label = label;
+    }
+
+    public Integer getPosition()
+    {
+        return position;
+    }
+
+    public void setPosition(Integer position)
+    {
+        this.position = position;
+    }
+
     @Override
     public int hashCode()
     {
@@ -100,6 +157,6 @@ public class AnnotationValue implements Serializable
     @Override
     public String toString()
     {
-        return "AnnotationValue{" + "id=" + id + ", value=" + value + ", description=" + description + '}';
+        return "AnnotationValue{" + "id=" + id + ", value=" + value + ", description=" + description + ", type=" + type + ", icon=" + icon + ", label=" + label + '}';
     }
 }

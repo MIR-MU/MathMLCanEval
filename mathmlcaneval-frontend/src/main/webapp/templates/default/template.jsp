@@ -124,7 +124,7 @@
                             placement: 'right',
                             container: 'body',
                             title: function () {
-                                var val = $(this).attr('data-annotation');
+                                var val = $(this).attr('data-description');
                                 return '<spring:message code="general.label.button.annotate.hint" />' + ' ' + val;
                             }
                         });
@@ -145,15 +145,15 @@
                                     data: form.serialize(),
                                     dataType: 'json',
                                     success: function (data) {
-                                        var output = "<tr><td>" + data.username; 
-                                        output +="</td><td class=\"annotation-note-cell\">";
+                                        var output = "<tr><td>" + data.username;
+                                        output += "</td><td class=\"annotation-note-cell\">";
                                         output += data.annotationContent + "</td>";
-                                                
-                                        <sec:authorize access="hasRole('ROLE_USER')">
-                                                output += '<td><a href="#" class="annotation-remove" id="'+data.id;
-                                                output += '"><span class="glyphicon glyphicon-remove"></span></a></td>';
-                                        </sec:authorize>
-                                            output += "</tr>";
+
+            <sec:authorize access="hasRole('ROLE_USER')">
+                                        output += '<td><a href="#" class="annotation-remove" id="' + data.id;
+                                        output += '"><span class="glyphicon glyphicon-remove"></span></a></td>';
+            </sec:authorize>
+                                        output += "</tr>";
                                         $("#annotationTable > tbody:last").append(output);
                                         $("#annotation-value").val('');
                                         formatHashTags(false);
@@ -174,9 +174,11 @@
                             event.preventDefault();
                         });
 
-                        $(document).on('click', '.annotation-remove',function (e) {
+                        $(document).on('click', '.annotation-remove', function (e) {
                             var selector = "#" + $(this).attr("id") + "." + $(this).attr("class");
-                            var onSuccess = function () { window.location.reload(true); };
+                            var onSuccess = function () {
+                                window.location.reload(true);
+                            };
                             $.ajax({
                                 type: "GET",
                                 url: "${pageContext.request.contextPath}/annotation/delete/" + $(this).attr("id"),
@@ -254,7 +256,9 @@
                                 data: $('#canonicalizeForm').serialize(),
                                 dataType: 'text',
                                 success: function (response) {
-                                    showTooltip("#btnCanon", "<spring:message code="entity.formula.started" />", function() { $('#canonModal').modal('hide'); });
+                                    showTooltip("#btnCanon", "<spring:message code="entity.formula.started" />", function () {
+                                        $('#canonModal').modal('hide');
+                                    });
                                 },
                                 error: function (response) {
                                     showTooltip("#btnCanon", "<spring:message code="entity.formula.crashed" />");
@@ -383,10 +387,10 @@
                     function showTooltip(selector, data, onClose, timeout)
                     {
                         $(selector).tooltip({
-                                    title: data,
-                                    trigger: 'manual',
-                                    placement: 'top'
-                                }).attr('data-original-title', data).tooltip('fixTitle').tooltip('show');
+                            title: data,
+                            trigger: 'manual',
+                            placement: 'top'
+                        }).attr('data-original-title', data).tooltip('fixTitle').tooltip('show');
                         setTimeout(function () {
                             $(selector).tooltip('hide');
                             if (onClose) {
@@ -445,48 +449,47 @@
                             var icon;
                             switch (b)
                             {
-                                case "#isValid":
-                                    labelType = 'success';
-                                    icon = 'ok';
-                                    break;
-                                case "#isInvalid":
-                                    labelType = 'warning';
-                                    icon = 'flag';
-                                    break;
-                                case "#uncertain":
-                                    labelType = 'info';
-                                    icon = 'question-sign';
-                                    break;
-                                case "#removeResult":
-                                    labelType = 'danger';
-                                    icon = 'remove';
-                                    break;
-                                case "#formulaRemove":
-                                    labelType = 'danger';
-                                    icon = 'remove';
-                                    break;
-                                case "#formulaMeaningless":
-                                    labelType = 'danger';
-                                    icon = 'trash';
-                                    break;
-                                default:
+            <c:if test="${not empty annotationValueList}">
+                <c:forEach items="${annotationValueList}" var="entry">
+                            case "${entry.value}":
+                                        {
+                    <c:choose>
+                        <c:when test="${not empty entry.label}">
+                            labelType = '${entry.label}';
+                        </c:when>
+                        <c:otherwise>
+                            labelType = 'default';
+                        </c:otherwise>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${not empty entry.icon}">
+                            icon = '${entry.icon}';
+                        </c:when>
+                        <c:otherwise>
+                            icon = 'comment';
+                        </c:otherwise>
+                    </c:choose>
+                            break;}
+                </c:forEach>
+            </c:if>
+                            default:
                                     labelType = 'default';
-                                    icon = 'comment';
-                            }
+                            icon = 'comment';
+                        }
 
-                            return '<span class="label label-' + labelType + '">' + b + ' <span class="glyphicon glyphicon-' + icon + '"></span></span>';
-                        }
-                        if (onload)
-                        {
-                            $("#annotationTable > tbody > tr > td:nth-child(2)").each(function () {
-                                $(this).html($(this).html().replace(regEx2, appendLabel));
-                            });
-                        }
-                        else
-                        {
-                            $("#annotationTable > tbody > tr:last > td:nth-child(2)").each(function () {
-                                $(this).html($(this).html().replace(regEx2, appendLabel));
-                            });
+                        return '<span class="label label-' + labelType + '">' + b + ' <span class="glyphicon glyphicon-' + icon + '"></span></span>';
+                    }
+                    if (onload)
+                    {
+                        $("#annotationTable > tbody > tr > td:nth-child(2)").each(function () {
+                            $(this).html($(this).html().replace(regEx2, appendLabel));
+                        });
+                    }
+                    else
+                    {
+                        $("#annotationTable > tbody > tr:last > td:nth-child(2)").each(function () {
+                            $(this).html($(this).html().replace(regEx2, appendLabel));
+                        });
                         }
                     }
         </script>

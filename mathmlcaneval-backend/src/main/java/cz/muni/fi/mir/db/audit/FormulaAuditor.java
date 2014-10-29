@@ -39,7 +39,7 @@ public class FormulaAuditor
     @Autowired private AuditorService auditorService;
     @Autowired private AnnotationValueSerivce annotationValueSerivce;
     @Autowired private DatabaseEventFactory databaseEventFactory;
-    private final Pattern pattern = Pattern.compile("(#\\S+)");
+    private static final Pattern pattern = Pattern.compile("(#\\S+)");
     
     
     
@@ -63,6 +63,7 @@ public class FormulaAuditor
             {
                 aValue = new AnnotationValue();
                 aValue.setValue(match);
+                aValue.setType(AnnotationValue.Type.FORMULA);
                 
                 annotationValueSerivce.createAnnotationValue(aValue);
             }

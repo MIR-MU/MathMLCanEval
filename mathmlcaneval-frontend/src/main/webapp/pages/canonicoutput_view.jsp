@@ -262,26 +262,13 @@
                                                     </button>
 
                                                     <ul class="dropdown-menu" role="menu">
-                                                        <li>
-                                                            <a href="#" class="annotation-option" data-annotation="#isValid">
-                                                                <span class="glyphicon glyphicon-ok"></span> #isValid
+                                                        <c:forEach items="${annotationValueList}" var="entry">
+                                                            <li>
+                                                            <a href="#" class="annotation-option" data-annotation="${entry.value}" data-description="${entry.description}">
+                                                                <span class="glyphicon glyphicon-${entry.icon}"></span> ${entry.value}
                                                             </a>
                                                         </li>
-                                                        <li>
-                                                            <a href="#" class="annotation-option" data-annotation="#isInvalid">
-                                                                <span class="glyphicon glyphicon-flag"></span> #isInvalid
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" class="annotation-option" data-annotation="#uncertain">
-                                                                <span class="glyphicon glyphicon-question-sign"></span> #uncertain
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" class="annotation-option" data-annotation="#removeResult">
-                                                                <span class="glyphicon glyphicon-remove"></span> #removeResult
-                                                            </a>
-                                                        </li>
+                                                        </c:forEach>
                                                         <li class="divider"></li>
                                                         <li>
                                                             <a href="#" id="clear-form">
