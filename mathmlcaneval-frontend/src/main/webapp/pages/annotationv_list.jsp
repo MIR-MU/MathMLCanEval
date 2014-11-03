@@ -11,28 +11,28 @@
                 <thead>
                     <tr>
                         <th>
-                            id
+                            <spring:message code="general.field.id" />
                         </th>
                         <th>
-                            category
+                            <spring:message code="entity.annotationvalue.category" />
                         </th>
                         <th>
-                            position
+                            <spring:message code="entity.annotationvalue.priority" />
                         </th>
                         <th>
-                            value
+                            <spring:message code="entity.annotationvalue.value" />
                         </th>
                         <th>
-                            icon
+                            <spring:message code="entity.annotationvalue.icon" />
                         </th>
                         <th>
-                            label
+                            <spring:message code="entity.annotationvalue.label" />
                         </th>
                         <th>
-                            description
+                            <spring:message code="entity.annotationvalue.description" />
                         </th>
                         <th>
-                            options
+                            <spring:message code="general.table.option" />
                         </th>
                     </tr>
                 </thead>
@@ -45,7 +45,7 @@
                             <c:out value="${entry.type}" />
                         </td>
                         <td>
-                            <c:out value="${entry.position}" />
+                            <c:out value="${entry.priority}" />
                         </td>
                         <td>
                             <c:out value="${entry.value}" />
@@ -59,9 +59,9 @@
                         <td>
                             <c:out value="${entry.description}" />
                         </td>
-                        <td>
-                            <span class="glyphicon glyphicon-pencil"></span>
-                            <span class="glyphicon glyphicon-remove"></span>
+                        <td>                            
+                            <a href="${pageContext.request.contextPath}/annotationvalue/edit/<c:out value="${entry.id}"/>"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a href="${pageContext.request.contextPath}/annotationvalue/delete/<c:out value="${entry.id}"/>"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                 </c:forEach>

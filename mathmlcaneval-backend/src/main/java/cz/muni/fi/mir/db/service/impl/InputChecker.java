@@ -16,6 +16,7 @@
 package cz.muni.fi.mir.db.service.impl;
 
 import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.AnnotationValue;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Configuration;
@@ -239,6 +240,23 @@ public class InputChecker
         if(pagination == null)
         {
             throw new IllegalArgumentException("Given pagination is null.");
+        }
+    }
+    
+    /**
+     * Method validates input
+     * @param annotationValue to be checked
+     * @throws IllegalArgumentException if value is null, or id is null or less than one
+     */
+    public static void checkInput(AnnotationValue annotationValue) throws IllegalArgumentException
+    {
+        if(annotationValue == null)
+        {
+            throw new IllegalArgumentException("Given annotation value is null");
+        }
+        if (annotationValue.getId() == null || Long.valueOf("0").compareTo(annotationValue.getId()) >= 0)
+        {
+            throw new IllegalArgumentException("Given annotation value does not have valid id should be greater than one but was [" + annotationValue.getId() + "]");
         }
     }
 }

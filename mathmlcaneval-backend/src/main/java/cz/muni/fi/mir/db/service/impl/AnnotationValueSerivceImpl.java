@@ -46,28 +46,42 @@ public class AnnotationValueSerivceImpl implements AnnotationValueSerivce
     private final Pattern pattern = Pattern.compile("(#\\S+)");
 
     @Override
-    public void createAnnotationValue(AnnotationValue annotationValue)
+    public void createAnnotationValue(AnnotationValue annotationValue) throws IllegalArgumentException
     {
+        if(annotationValue == null)
+        {
+            throw new IllegalArgumentException("Given annotaion value is null");
+        }
+        
         annotationValueDAO.create(annotationValue);
     }
 
     @Override
-    public void updateAnnotationValue(AnnotationValue annotationValue)
+    public void updateAnnotationValue(AnnotationValue annotationValue) throws IllegalArgumentException
     {
+        InputChecker.checkInput(annotationValue);
+        
         annotationValueDAO.update(annotationValue);
     }
 
     @Override
-    public void deleteAnnotationValue(AnnotationValue annotationValue)
+    public void deleteAnnotationValue(AnnotationValue annotationValue) throws IllegalArgumentException
     {
+        InputChecker.checkInput(annotationValue);
+        
         annotationValueDAO.delete(annotationValue.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public AnnotationValue getAnnotationValueByID(AnnotationValue annotationValue)
+    public AnnotationValue getAnnotationValueByID(Long id) throws IllegalArgumentException
     {
-        return annotationValueDAO.getByID(annotationValue.getId());
+        if (id == null || Long.valueOf("0").compareTo(id) >= 0)
+        {
+            throw new IllegalArgumentException("Given annotation value does not have valid id should be greater than one but was [" + id + "]");
+        }            
+            
+        return annotationValueDAO.getByID(id);
     }
 
     @Override
@@ -108,8 +122,13 @@ public class AnnotationValueSerivceImpl implements AnnotationValueSerivce
 
     @Override
     @Transactional(readOnly = true)
-    public AnnotationValue getAnnotationValueByValue(String value)
+    public AnnotationValue getAnnotationValueByValue(String value) throws IllegalArgumentException
     {
+        if(value == null || value.length() < 1)
+        {
+            throw new IllegalArgumentException("Given input for annotation value should be empty. Expected nonzero length string but was ["+value+"]");
+        }
+        
         return annotationValueDAO.getByValue(value);
     }
 
@@ -125,6 +144,5 @@ public class AnnotationValueSerivceImpl implements AnnotationValueSerivce
     public List<AnnotationValue> getAllForCanonicOutputs()
     {
         return annotationValueDAO.getAllForCanonicOutputs();
-    }
-    
+    }    
 }

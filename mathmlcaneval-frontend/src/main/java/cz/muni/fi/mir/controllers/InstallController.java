@@ -5,9 +5,11 @@
  */
 package cz.muni.fi.mir.controllers;
 
+import cz.muni.fi.mir.db.domain.AnnotationValue;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
+import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
 import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
@@ -57,6 +59,8 @@ public class InstallController
     private MailService mailService;
     @Autowired
     private RevisionService revisionService;
+    @Autowired
+    private AnnotationValueSerivce annotationValueSerivce;
     
     
     @Value("${mathml-canonicalizer.default.revision}")
@@ -185,11 +189,78 @@ public class InstallController
                 configurationService.createConfiguration(config);
             }
             
+            for(AnnotationValue av : provideAnnotaionValues())
+            {
+                annotationValueSerivce.createAnnotationValue(av);
+            }
+            
             mailService.sendMail(null, email, "Installation is now complete.", 
                     "Installation of MathCanEval application has ended. Below are user credentials submited in setup process.\n"
             +"Username: "+username+"\nPassword: "+passVerify);
             return new ModelAndView("redirect:/");
         }
+    }
+    
+    private AnnotationValue[] provideAnnotaionValues()
+    {
+        AnnotationValue[] values = new AnnotationValue[6];
+        values[0] = prepareAnnotationValue(AnnotationValue.Type.FORMULA, 
+                    "#formulaRemove", "Formula should be removed from the database as the formula markup is"
+                            + " invalid (i.e. the formula MathML is not valid XML)",
+                    "remove", "danger", Integer.valueOf("10"));
+        
+        values[1] = prepareAnnotationValue(AnnotationValue.Type.FORMULA, 
+                    "#formulaMeaningless", "Formula is valid MathML but is meaningless, for example "
+                            + "some text improperly encoded as string of math variables.",
+                    "trash", "danger", Integer.valueOf("9"));
+        
+        values[2] = prepareAnnotationValue(AnnotationValue.Type.CANONICOUTPUT, 
+                    "#isValid", "Canonicalization result is correct according to current implementation of the canonicalization functions, "
+                            + "i.e. all the canonicalization methods were applied correctly and the result is valid MathML "
+                            + "with the same meaning of the input formula.",
+                    "ok", "success", Integer.valueOf("10"));
+        values[3] = prepareAnnotationValue(AnnotationValue.Type.CANONICOUTPUT, 
+                    "#isInvalid", "Implemented canonicalization methods were not applied correctly according their specification, or the "
+                            + "result is not valid MathML, or the result formula has different meaning as the input one.",
+                    "flag", "warning", Integer.valueOf("9"));
+        values[4] = prepareAnnotationValue(AnnotationValue.Type.CANONICOUTPUT, 
+                    "#uncertain", "The annotator is not able to decide the canonicalization was applied correctly.",
+                    "question-sign", "info", Integer.valueOf("8"));
+        values[5] = prepareAnnotationValue(AnnotationValue.Type.CANONICOUTPUT, 
+                    "#removeResult", "The result should be removed for any reason.",
+                    "remove", "danger", Integer.valueOf("7"));
+        
+        return values;
+    }
+    
+    @RequestMapping("/av")
+    public ModelAndView setupAnnotationValues()
+    {
+        for(AnnotationValue av : provideAnnotaionValues())
+        {
+            annotationValueSerivce.createAnnotationValue(av);
+        }
+        
+        return new ModelAndView("redirect:/");
+    }
+    
+    
+    private AnnotationValue prepareAnnotationValue(AnnotationValue.Type type,
+            String value,
+            String description,
+            String icon,
+            String label,
+            Integer priority)
+    {
+        AnnotationValue av = new AnnotationValue();
+        av.setDescription(description);
+        av.setIcon(icon);
+        av.setLabel(label);
+        av.setPriority(priority);
+        av.setType(type);
+        av.setValue(value);
+        
+        return av;
     }
     
     @Secured("ROLE_ADMINISTRATOR")

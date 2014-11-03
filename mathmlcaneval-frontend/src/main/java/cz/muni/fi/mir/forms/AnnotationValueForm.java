@@ -13,26 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.db.domain;
+package cz.muni.fi.mir.forms;
 
-import java.io.Serializable;
 import java.util.Objects;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-@Entity(name = "annotationValue")
-public class AnnotationValue implements Serializable
+public class AnnotationValueForm
 {
     public enum Type
     {
@@ -41,24 +32,13 @@ public class AnnotationValue implements Serializable
         BOTH
     }
     
-    private static final long serialVersionUID = -1311727412278415211L;
-    
-    @Id
-    @Column(name = "annotationv_id",nullable = false)
-    @SequenceGenerator(name="annotationvid_seq", sequenceName="annotationvid_seq")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "annotationvid_seq")
     private Long id;
-    @Column(name = "annotationValue",unique = true)
+    @NotEmpty
     private String value;
-    @Column(name="description")
     private String description;
-    @Enumerated(EnumType.STRING)
     private Type type;
-    @Column(name="icon")
     private String icon;
-    @Column(name="label")
     private String label;
-    @Column(name="priority")
     private Integer priority;
 
     public Long getId()
@@ -150,7 +130,7 @@ public class AnnotationValue implements Serializable
         {
             return false;
         }
-        final AnnotationValue other = (AnnotationValue) obj;
+        final AnnotationValueForm other = (AnnotationValueForm) obj;
         return Objects.equals(this.id, other.id);
     }
 

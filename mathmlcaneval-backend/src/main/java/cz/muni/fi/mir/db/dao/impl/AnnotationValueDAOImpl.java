@@ -46,7 +46,7 @@ public class AnnotationValueDAOImpl extends GenericDAOImpl<AnnotationValue, Long
         List<AnnotationValue> result = Collections.emptyList();
         try
         {
-            result = entityManager.createQuery("SELECT av FROM annotationValue av ORDER BY av.position DESC", AnnotationValue.class)
+            result = entityManager.createQuery("SELECT av FROM annotationValue av ORDER BY av.priority DESC", AnnotationValue.class)
                     .getResultList();
         }
         catch(NoResultException nre)    
@@ -80,8 +80,9 @@ public class AnnotationValueDAOImpl extends GenericDAOImpl<AnnotationValue, Long
         List<AnnotationValue> result = Collections.emptyList();
         try
         {
-            result = entityManager.createQuery("SELECT av FROM annotationValue av WHERE av.type = :type", AnnotationValue.class)
-                    .setParameter("type", AnnotationValue.Type.FORMULA).getResultList();
+            result = entityManager.createQuery("SELECT av FROM annotationValue av WHERE av.type = :type ORDER BY av.priority DESC", AnnotationValue.class)
+                    .setParameter("type", AnnotationValue.Type.FORMULA)
+                    .setFirstResult(0).setMaxResults(10).getResultList();
         }
         catch(NoResultException nre)    
         {
@@ -97,8 +98,9 @@ public class AnnotationValueDAOImpl extends GenericDAOImpl<AnnotationValue, Long
         List<AnnotationValue> result = Collections.emptyList();
         try
         {
-            result = entityManager.createQuery("SELECT av FROM annotationValue av WHERE av.type = :type", AnnotationValue.class)
-                    .setParameter("type", AnnotationValue.Type.CANONICOUTPUT).getResultList();
+            result = entityManager.createQuery("SELECT av FROM annotationValue av WHERE av.type = :type ORDER BY av.priority DESC", AnnotationValue.class)
+                    .setParameter("type", AnnotationValue.Type.CANONICOUTPUT)
+                    .setFirstResult(0).setMaxResults(10).getResultList();
         }
         catch(NoResultException nre)    
         {

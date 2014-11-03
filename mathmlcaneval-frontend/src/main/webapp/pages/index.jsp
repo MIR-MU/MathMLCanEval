@@ -18,10 +18,10 @@
                                         <p><spring:message code="index.page.button.appruns.description" /></p>
                                     </div>
                                 </a>
-                                <a href="${pageContext.request.contextPath}/#" class="thumbnail well well-sm">
+                                <a href="${pageContext.request.contextPath}/annotationvalue/" class="thumbnail well well-sm">
                                     <div class="caption">
-                                        <h2><spring:message code="index.page.button.elements" /></h2>
-                                        <p><spring:message code="index.page.button.elements.description" /></p>
+                                        <h2><spring:message code="index.page.button.annotationvalue" /></h2>
+                                        <p><spring:message code="index.page.button.annotationvalue.description" /></p>
                                     </div>
                                 </a>
                             </sec:authorize>

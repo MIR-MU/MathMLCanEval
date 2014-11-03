@@ -25,8 +25,39 @@ import cz.muni.fi.mir.db.domain.AnnotationValue;
  */
 public interface AnnotationValueDAO extends GenericDAO<AnnotationValue, Long>
 {
+
+    /**
+     * method obtains annotation value based on its value. Value contains
+     * hashtag so partial match does not work.
+     *
+     * @param value of annotation
+     * @return annotation with given value
+     */
     AnnotationValue getByValue(String value);
+
+    /**
+     * Method gets all annotation values from database ordered by their priority
+     *
+     * @return list of all annotation in ordered form, empty list if there are
+     * none yet.
+     */
     List<AnnotationValue> getAll();
+
+    /**
+     * Method obtains all annotation values from database that belongs to
+     * formula class.
+     *
+     * @return list of all formula annotation values, empty list if there are
+     * none yet
+     */
     List<AnnotationValue> getAllForFormulas();
+
+    /**
+     * Method obtains all annotation values from database that belongs to
+     * canonic output class.
+     *
+     * @return list of all canonic output annotation values, emptt list if there
+     * are none yet
+     */
     List<AnnotationValue> getAllForCanonicOutputs();
 }
