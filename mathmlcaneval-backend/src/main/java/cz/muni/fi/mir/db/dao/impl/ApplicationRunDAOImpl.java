@@ -82,7 +82,7 @@ public class ApplicationRunDAOImpl extends GenericDAOImpl<ApplicationRun, Long> 
             else
             {
                 List<Object[]> results
-                        = entityManager.createQuery("SELECT apr,COUNT(co) FROM applicationRun apr LEFT JOIN FETCH apr.configuration, canonicOutput co WHERE co.applicationRun = apr GROUP BY apr.id")
+                        = entityManager.createQuery("SELECT apr,COUNT(co) FROM applicationRun apr LEFT JOIN FETCH apr.configuration, canonicOutput co WHERE co.applicationRun = apr GROUP BY apr.id, configuration_id")
                         .getResultList();
 
                 for (Object[] row : results)
