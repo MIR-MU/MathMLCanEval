@@ -84,7 +84,7 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
         InputChecker.checkInput(applicationRun);
         
         //phase one obtain all outputs that belongs to run
-        List<CanonicOutput> canonicOutputs = canonicOutputDAO.getCanonicOutputByAppRun(applicationRun);
+        List<CanonicOutput> canonicOutputs = canonicOutputDAO.getCanonicOutputByAppRun(applicationRun).getResults();
 
         // if we do not wish to delete formulas
         if (!deleteFormulas)

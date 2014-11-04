@@ -22,9 +22,9 @@ import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
-import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
+import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 
@@ -114,7 +114,7 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
      * @param pagination current page of similarity result.
      * @return response based on given parameters
      */
-    FormulaSearchResponse findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination);
+    SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination);
 
     /**
      * Search method used to obtained filtered result from entire set of
@@ -125,7 +125,7 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
      * @param pagination current step of search
      * @return container holding result of request
      */
-    FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination);
+    SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination);
 
     /**
      * Method returns formula of which is given canonicOutput descendant.

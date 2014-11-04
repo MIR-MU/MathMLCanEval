@@ -6,52 +6,62 @@
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">
         <div class="container content">
-    <div class="row">
-        <div class="col-lg-10 pull-right">
-            <form method="get" action="${pageContext.request.contextPath}/canonicoutput/search/" class="form-inline">
-                <div class="form-group">
-                    <input type="text" name="keywords" class="form-control search-bar" />
-                </div>
-                <button type="submit" class="btn btn-primary" disabled><spring:message code="general.label.search" /></button>
-            </form>
-        </div>
-    </div>
-    <div class="row text-center">
-       <a href="${pageContext.request.contextPath}/canonicoutput/view/${reference.id}" class="img-thumbnail">
-           <div class="preview">
-               <c:out value="${reference.outputForm}" escapeXml="false" />
-           </div>
-       </a>
-    </div>
-    <div class="row pull-top-50 text-center">
-        <c:choose>
-            <c:when test="${fn:length(outputList) gt 0}">
-               <c:forEach items="${outputList}" var="entry">
-                   <a href="${pageContext.request.contextPath}/canonicoutput/view/${entry.id}" class="img-thumbnail">
-                       <div class="preview">
-                           <c:out value="${entry.outputForm}" escapeXml="false" />
-                       </div>
-                   </a>
-               </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <h2 class="text-center"><spring:message code="general.table.norecords" /></h2>
-            </c:otherwise>
-        </c:choose>
-    </div>
-    <div class="text-center">
-        <ul class="pagination pagination-sm">
-          <li<c:if test="${pagination.startPage == 1}"> class="disabled"</c:if>>
-            <a href="?pageNumber=${pagination.startPage - 1}">&laquo;</a>
-          </li>
-          <c:forEach var="i" begin="${pagination.startPage}" end="${pagination.startPage + pagination.pages - 1}">
-          <li<c:if test="${pagination.pageNumber == i}"> class="active"</c:if>>
-            <a href="?pageNumber=${i}">${i}</a>
-          </li>
-          </c:forEach>
-          <li><a href="?pageNumber=${pagination.startPage + pagination.pages}">&raquo;</a></li>
-        </ul>
-    </div>
+            <div class="row pull-top-50">
+                <c:choose>
+                    <c:when test="${fn:length(outputList) gt 0}">
+                        <c:forEach items="${outputList}" var="entry" varStatus="i">
+                            <c:if test="${not i.first and i.index % 4 == 0}">
+                            </div>
+                            <div class="row">
+                            </c:if>
+                            <div class="col-md-3 img-thumbnail">
+                                <a href="${pageContext.request.contextPath}/canonicoutput/view/${entry.id}">
+                                    <div class="preview text-center">
+                                        <c:out value="${entry.outputForm}" escapeXml="false" />
+                                    </div>
+                                </a>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="col-md-12 text-center">
+                            <h2 class="text-center"><spring:message code="general.table.norecords" /></h2>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <!-- pagination -->
+            <div class="text-center"> 
+                <form:form method="get" action="${pageContext.request.contextPath}/formula/search/" commandName="pagination">
+                    <ul class="pager">
+                        <c:if test="${pagination.pageSize != pagination.defaultPageSize}">
+                            <c:set var="size" value="&pageSize=${pagination.pageSize}" />
+                            <form:hidden path="pageSize" />
+                        </c:if>
+                        <li><a href="?pageNumber=1${size}">&laquo;</a></li>
+                            <c:choose>
+                                <c:when test="${pagination.pageNumber == 1}">
+                                <li class="disabled"><a href="javascript:;">&lsaquo;</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                <li><a href="?pageNumber=${pagination.pageNumber - 1}${size}">&lsaquo;</a></li>
+                                </c:otherwise>
+                            </c:choose>
+                        <li><form:input type="text" path="pageNumber" size="2" /></li>
+                        <li><button type="submit" class="btn btn-primary btn-sm"><spring:message code="pagination.go" /></button></li>
+                        <li>/ ${pagination.pages}</li>
+                            <c:choose>
+                                <c:when test="${pagination.pageNumber == pagination.pages}">
+                                <li class="disabled"><a href="javascript:;">&rsaquo;</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                <li><a href="?pageNumber=${pagination.pageNumber + 1}${size}">&rsaquo;</a></li>
+                                </c:otherwise>
+                            </c:choose>
+                        <li><a href="?pageNumber=${pagination.pages}${size}">&raquo;</a></li>
+                    </ul>
+                </form:form>
+            </div>
 </div>
     </tiles:putAttribute>
 </tiles:insertDefinition>

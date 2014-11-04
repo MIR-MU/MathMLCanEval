@@ -17,25 +17,21 @@ package cz.muni.fi.mir.db.domain;
 
 import java.util.List;
 
-/**
- *
- * @author emptak
- */
-public class FormulaSearchResponse
+public class SearchResponse<T>
 {
-    private List<Formula> formulas;
+    private List<T> results;
     private int totalResultSize;
     private int viewSize;
     private int offset;
 
-    public List<Formula> getFormulas()
+    public List<T> getResults()
     {
-        return formulas;
+        return results;
     }
 
-    public void setFormulas(List<Formula> formulas)
+    public void setResults(List<T> results)
     {
-        this.formulas = formulas;
+        this.results = results;
     }
 
     public int getTotalResultSize()
@@ -67,7 +63,4 @@ public class FormulaSearchResponse
     {
         this.offset = offset;
     }
-    
-    
-    
 }

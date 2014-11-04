@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -27,6 +28,8 @@ import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.domain.Pagination;
+import cz.muni.fi.mir.db.domain.SearchResponse;
 
 /**
  *
@@ -43,20 +46,46 @@ public class CanonicOutputDAOImpl extends GenericDAOImpl<CanonicOutput, Long> im
     }
 
     @Override
-    public List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun)
+    public SearchResponse<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun)
     {
+        SearchResponse<CanonicOutput> sr = new SearchResponse<CanonicOutput>();
         List<CanonicOutput> resultList = Collections.emptyList();
         try
         {
             resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :appRun", CanonicOutput.class)
-                    .setParameter("appRun", applicationRun).getResultList();
+                    .setParameter("appRun", applicationRun)
+                    .getResultList();
+            sr.setTotalResultSize(resultList.size());
+            sr.setResults(resultList);
         }
         catch (NoResultException nre)
         {
             logger.debug(nre);
         }
 
-        return resultList;
+        return sr;
+    }
+
+    @Override
+    public SearchResponse<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun, Pagination pagination)
+    {
+        SearchResponse<CanonicOutput> sr = new SearchResponse<CanonicOutput>();
+        List<CanonicOutput> resultList = Collections.emptyList();
+        try
+        {
+            Query query = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :appRun", CanonicOutput.class)
+                    .setParameter("appRun", applicationRun);
+            sr.setTotalResultSize(query.getResultList().size());
+            sr.setResults(query.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1))
+                               .setMaxResults(pagination.getPageSize())
+                               .getResultList());
+        }
+        catch (NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+
+        return sr;
     }
 
     @Override

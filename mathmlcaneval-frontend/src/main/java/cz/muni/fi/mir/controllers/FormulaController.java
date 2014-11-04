@@ -10,6 +10,7 @@ import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
+import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.ConfigurationService;
@@ -24,7 +25,6 @@ import cz.muni.fi.mir.forms.FormulaForm;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
-import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
 import cz.muni.fi.mir.db.service.ElementService;
 import cz.muni.fi.mir.forms.ElementFormRow;
@@ -52,7 +52,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -309,14 +308,14 @@ public class FormulaController
         Formula requestFormula = formulaService.getFormulaByID(form.getFormulaID());
         
         logger.info(form);
-        FormulaSearchResponse response = formulaService.findSimilar(
+        SearchResponse<Formula> response = formulaService.findSimilar(
                 requestFormula,
                 generateSimilarityProperties(form),
                 form.isOverride(),
                 form.isDirectWrite(),
                 pagination
         );
-        List<Formula> similars = response.getFormulas();
+        List<Formula> similars = response.getResults();
         pagination.setNumberOfRecords(response.getTotalResultSize());
 //        
         ModelMap mm = new ModelMap();
@@ -374,10 +373,10 @@ public class FormulaController
             request.setElements(map);
         }
 
-        FormulaSearchResponse response = formulaService.findFormulas(request, pagination);
+        SearchResponse<Formula> response = formulaService.findFormulas(request, pagination);
         pagination.setNumberOfRecords(response.getTotalResultSize());
 
-        mm.addAttribute("formulaList", response.getFormulas());
+        mm.addAttribute("formulaList", response.getResults());
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("formulaSearchRequestForm", formulaSearchRequestForm);
         mm.addAttribute("massDelete", true);
@@ -422,10 +421,10 @@ public class FormulaController
             request.setElements(map);
         }
 
-        FormulaSearchResponse response = formulaService.findFormulas(request, pagination);
+        SearchResponse<Formula> response = formulaService.findFormulas(request, pagination);
         pagination.setNumberOfRecords(response.getTotalResultSize());
 
-        mm.addAttribute("formulaList", response.getFormulas());
+        mm.addAttribute("formulaList", response.getResults());
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("formulaSearchRequestForm", formulaSearchRequestForm);
         mm.addAttribute("applicationRunForm", new ApplicationRunForm());
@@ -483,10 +482,10 @@ public class FormulaController
             request.setElements(map);
         }
         
-        FormulaSearchResponse response = formulaService.findFormulas(request, pagination);
+        SearchResponse<Formula> response = formulaService.findFormulas(request, pagination);
         pagination.setNumberOfRecords(response.getTotalResultSize());
         
-        mm.addAttribute("formulaList", response.getFormulas());
+        mm.addAttribute("formulaList", response.getResults());
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("formulaSearchRequestForm", formulaSearchRequestForm);
         mm.addAttribute("searchMode", true);

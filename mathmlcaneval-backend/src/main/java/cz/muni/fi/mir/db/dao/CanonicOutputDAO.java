@@ -15,11 +15,11 @@
  */
 package cz.muni.fi.mir.db.dao;
 
-import java.util.List;
-
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.domain.Pagination;
+import cz.muni.fi.mir.db.domain.SearchResponse;
 
 /**
  *
@@ -29,13 +29,23 @@ public interface CanonicOutputDAO extends GenericDAO<CanonicOutput, Long>
 {
 
     /**
-     * Method returns all canonic outputs that belong ti given application run
+     * Method returns all canonic outputs that belong to given application run
      *
      * @param applicationRun under which canonic outputs were made
      * @return list of canonic outputs created under given application run.
      * Empty list if none were made.
      */
-    List<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun);
+    SearchResponse<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun);
+
+    /**
+     * Method returns all canonic outputs that belong to given application run
+     *
+     * @param applicationRun under which canonic outputs were made
+     * @param pagination used for showing only subset of result
+     * @return list of canonic outputs created under given application run.
+     * Empty list if none were made.
+     */
+    SearchResponse<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun, Pagination pagination);
 
     /**
      * Method fetches canonic output based on given annotation from database.

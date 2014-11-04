@@ -26,7 +26,10 @@ import cz.muni.fi.mir.db.dao.AnnotationDAO;
 import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
 import cz.muni.fi.mir.db.dao.FormulaDAO;
 import cz.muni.fi.mir.db.domain.Annotation;
+import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.domain.Pagination;
+import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 
 /**
@@ -82,6 +85,13 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     public CanonicOutput getCanonicOutputByAnnotation(Annotation annotation) throws IllegalArgumentException
     {
         return canonicOutputDAO.getCanonicOutputByAnnotation(annotation);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SearchResponse<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun, Pagination pagination) throws IllegalArgumentException
+    {
+        return canonicOutputDAO.getCanonicOutputByAppRun(applicationRun, pagination);
     }
 
     @Override

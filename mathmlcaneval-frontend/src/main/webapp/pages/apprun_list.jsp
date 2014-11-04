@@ -37,7 +37,7 @@
                                 <td><c:out value="${entry.user.username}" /></td>
                                 <td><a href="${pageContext.request.contextPath}/configuration/view/<c:out value="${entry.configuration.id}" />/"><c:out value="${entry.configuration.name}" /></a></td>
                                 <td><c:out value="${entry.revision.revisionHash}" /></td>
-                                <td><c:out value="${entry.canonicOutputCount}" /></td>
+                                <td><a href="${pageContext.request.contextPath}/canonicoutput/list/apprun=${entry.id}"><c:out value="${entry.canonicOutputCount}" /></td>
                                 <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                                     <td>
                                         <a href="${pageContext.request.contextPath}/appruns/delete/<c:out value="${entry.id}" />/">X</a>

@@ -39,9 +39,9 @@ import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
-import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
+import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.FormulaService;
@@ -268,7 +268,7 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
     }
 
     @Override
-    public FormulaSearchResponse findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination)
+    public SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination)
     {        
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         org.hibernate.search.jpa.FullTextQuery ftq = null;
@@ -381,7 +381,7 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
         
         
         
-        FormulaSearchResponse fsr = new FormulaSearchResponse();
+        SearchResponse<Formula> fsr = new SearchResponse<Formula>();
         fsr.setTotalResultSize(ftq.getResultSize());
         List<Formula> resultList = ftq.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1))
                 .setMaxResults(pagination.getPageSize())
@@ -415,13 +415,13 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
             super.update(formula);
         }
         
-        fsr.setFormulas(resultList);
+        fsr.setResults(resultList);
         
         return fsr;
     }
 
     @Override
-    public FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination)
+    public SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination)
     {
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         org.hibernate.search.jpa.FullTextQuery ftq = null;  // actual query hitting database
@@ -512,7 +512,7 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
             isEmpty = false;
         }
         
-        FormulaSearchResponse fsr = new FormulaSearchResponse();
+        SearchResponse<Formula> fsr = new SearchResponse<Formula>();
         
         if(!isEmpty)
         {
@@ -524,12 +524,12 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
             
             ftq.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1));
             ftq.setMaxResults(pagination.getPageSize());
-            fsr.setFormulas(ftq.getResultList());
+            fsr.setResults(ftq.getResultList());
         }
         else
         {
             fsr.setTotalResultSize(getNumberOfRecords());
-            fsr.setFormulas(getAllFormulas(pagination));
+            fsr.setResults(getAllFormulas(pagination));
         }
         
         return fsr;        

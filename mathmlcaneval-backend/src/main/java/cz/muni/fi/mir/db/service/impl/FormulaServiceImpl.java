@@ -38,10 +38,10 @@ import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
-import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
+import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
@@ -226,7 +226,7 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = false)
-    public FormulaSearchResponse findSimilar(Formula formula,
+    public SearchResponse<Formula> findSimilar(Formula formula,
             Map<String,String> properties, boolean override,
             boolean directWrite, Pagination pagination) throws IllegalArgumentException
     {
@@ -343,7 +343,7 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional(readOnly = true)
-    public FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination) throws IllegalArgumentException
+    public SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination) throws IllegalArgumentException
     {
         InputChecker.checkInput(pagination);
         if(formulaSearchRequest == null)

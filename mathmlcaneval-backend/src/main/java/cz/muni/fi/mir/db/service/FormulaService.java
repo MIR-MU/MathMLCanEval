@@ -16,6 +16,7 @@
 package cz.muni.fi.mir.db.service;
 
 import cz.muni.fi.mir.db.audit.FormulaAuditor;
+
 import java.util.List;
 import java.util.Map;
 
@@ -23,10 +24,10 @@ import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
-import cz.muni.fi.mir.db.domain.FormulaSearchResponse;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.Program;
 import cz.muni.fi.mir.db.domain.Revision;
+import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.domain.SourceDocument;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.services.FileDirectoryService;
@@ -190,7 +191,7 @@ public interface FormulaService
      * @throws IllegalArgumentException if any of input is null, empty, or does
      * not have valid id
      */
-    FormulaSearchResponse findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination) throws IllegalArgumentException;
+    SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination) throws IllegalArgumentException;
 
     /**
      * TODO refactors similarIDs to list of formulas. Method attaches to given
@@ -246,7 +247,7 @@ public interface FormulaService
      * entities stored in request is not null, but does not have set valid id.
      * If its null then its ignored.
      */
-    FormulaSearchResponse findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination) throws IllegalArgumentException;
+    SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination) throws IllegalArgumentException;
 
     /**
      * Method executes mass canonicalization upon given list of formulas stored
