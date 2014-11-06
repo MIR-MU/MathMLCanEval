@@ -13,6 +13,7 @@
         <class>cz.muni.fi.mir.db.domain.Formula</class>
         <class>cz.muni.fi.mir.db.domain.Annotation</class>
         <class>cz.muni.fi.mir.db.domain.Statistics</class>
+        <class>cz.muni.fi.mir.db.domain.StatisticsHolder</class>
         <class>cz.muni.fi.mir.db.audit.DatabaseEvent</class>
         <class>cz.muni.fi.mir.db.domain.AnnotationValue</class>
         <properties/>

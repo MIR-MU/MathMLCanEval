@@ -43,43 +43,31 @@
                         <tr>
                             <td><spring:message code="statistics.date" /></td>
                             <td><joda:format value="${statistics.calculationDate}" style="S-" pattern="dd.M.yyyy" /></td>
-                        </tr>
+                        </tr>                        
                         <tr>
                             <td><spring:message code="statistics.total.formulas" /></td>
                             <td><c:out value="${statistics.totalFormulas}" /></td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="statistics.formulaswithoutput" /></td>
-                            <td><c:out value="${statistics.totalFormulasWithCanonicOutput}" /></td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="statistics.total.canonic" /></td>
-                            <td><c:out value="${statistics.totalCanonicalized}" /></td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="statistics.total.valid" /></td>
-                            <td><c:out value="${statistics.totalValid}" /></td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="statistics.total.invalid" /></td>
-                            <td><c:out value="${statistics.totalInvalid}" /></td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="statistics.total.uncertain" /></td>
-                            <td><c:out value="${statistics.totalUncertain}" /></td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="statistics.total.remove" /></td>
-                            <td><c:out value="${statistics.totalRemove}" /></td>
-                        </tr>        
-                        <tr>
-                            <td><spring:message code="statistics.total.formula.remove" /></td>
-                            <td><c:out value="${statistics.totalFormulaRemove}" /></td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="statistics.total.formula.meaningless" /></td>
-                            <td><c:out value="${statistics.totalFormulaMeaningless}" /></td>
-                        </tr>        
+                        </tr>                        
+                    </table>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td>a</td>
+                                <c:forEach items="${statisticsColumns}" var="entry">
+                                    <td>
+                                        <c:out value="${entry}" />
+                                    </td>
+                                </c:forEach>
+                            </tr>
+                            <c:forEach items="${statisticsMap}" var="statEntry">
+                                <tr>
+                                    <td><c:out value="${statEntry.key.key.name}" />,<c:out value="${statEntry.key.value.revisionHash}" /></td>
+                                    <c:forEach items="${statEntry.value}" var="cell">
+                                        <td><c:out value="${cell.value}" /></td>
+                                    </c:forEach>
+                                </tr>
+                            </c:forEach>
+                        </thead>
                     </table>
                 </div>
                 <div class="col-md-4 stats-panel-body">

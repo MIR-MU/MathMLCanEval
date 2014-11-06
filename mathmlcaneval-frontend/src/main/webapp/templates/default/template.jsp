@@ -272,29 +272,7 @@
                             'container': 'body'
                         });
 
-            <c:if test="${not empty statistics}">
-                        $(function () {
-
-                            var data = [["isValid", <c:out value="${statistics.totalValid}" />],
-                                ["isInvalid", <c:out value="${statistics.totalInvalid}" />],
-                                ["uncertain", <c:out value="${statistics.totalUncertain}" />],
-                                ["removeResult", <c:out value="${statistics.totalRemove}" />]];
-
-                            $.plot("#flot-placeholder", [data], {
-                                series: {
-                                    bars: {
-                                        show: true,
-                                        barWidth: 0.6,
-                                        align: "center"
-                                    }
-                                },
-                                xaxis: {
-                                    mode: "categories",
-                                    tickLength: 0
-                                }
-                            });
-                        });
-            </c:if>
+          
 
 
             <c:if test="${massDelete eq true}">

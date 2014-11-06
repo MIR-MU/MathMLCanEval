@@ -122,17 +122,7 @@
     <bean id="longRunningTaskFactory" class="cz.muni.fi.mir.scheduling.LongRunningTaskFactory">
         <lookup-method name="createTask" bean="canonicalizationTask" />
         <lookup-method name="createImportTask" bean="formulaImportTask" />
-    </bean>
-    
-    
-    <bean id="statisticsService" class="cz.muni.fi.mir.db.service.impl.StatisticsServiceImpl"
-        p:coIsInvalid="#isInvalid"
-        p:coIsValid="#isValid"
-        p:coRemove="#removeResult"
-        p:coUncertain="#uncertain"
-        p:formulaMeaningless="#formulaMeaningless"
-        p:formulaRemove="#formulaRemove"
-    />
+    </bean>    
     
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
         p:protocol="smtp"

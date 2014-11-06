@@ -445,6 +445,17 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
             
             isEmpty = false;
         }
+        
+//        if(formulaSearchRequest.getConfiguration() != null && formulaSearchRequest.getConfiguration().getId() != null)
+//        {
+//            junction.must(qb.keyword()
+//                    .onField("configuration.id")
+//                    .matching(formulaSearchRequest.getConfiguration().getId())
+//                    .createQuery()
+//            );
+//            
+//            isEmpty = false;
+//        }
 
         if (formulaSearchRequest.getProgram() != null && formulaSearchRequest.getProgram().getId() != null)
         {
