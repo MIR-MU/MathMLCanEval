@@ -11,20 +11,17 @@ import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.Revision;
 import cz.muni.fi.mir.db.domain.Statistics;
 import cz.muni.fi.mir.db.domain.StatisticsHolder;
-import cz.muni.fi.mir.db.service.ConfigurationService;
-import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.StatisticsService;
 import cz.muni.fi.mir.tools.Pair;
 import cz.muni.fi.mir.tools.SiteTitle;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,8 +44,7 @@ public class StatisticsController
     @SiteTitle("{statistics.title}")
     public ModelAndView list()
     {
-        ModelMap mm = prepareModelMap();
-        mm.addAttribute("statistics", statisticsService.getLatestStatistics());
+        ModelMap mm = prepareStatisticsModelMap(statisticsService.getLatestStatistics(),statisticsService.getStatisticsMap());
         
         return new ModelAndView("statistics",mm);
     }
@@ -66,32 +62,25 @@ public class StatisticsController
             }
         };
         
-        new Thread(r).start();
-        ModelMap mm = prepareModelMap();
-        mm.addAttribute("statisticsMessage", "statistics.calc.started");
-        mm.addAttribute("statistics", statisticsService.getLatestStatistics());
+        new Thread(r).start();        
         
-        return new ModelAndView("statistics",mm);
+        return new ModelAndView("redirect:/statistics/");
     }
     
     @RequestMapping(value = "/{id}/",method = RequestMethod.GET)
     @SiteTitle("{statistics.title}")
     public ModelAndView viewStats(@PathVariable Long id)
     {
+        ModelMap mm = prepareStatisticsModelMap(statisticsService.getStatisticsByID(id),statisticsService.getStatisticsMap());  
+        
+        return new ModelAndView("statistics", mm);
+    }
+    
+    private ModelMap prepareStatisticsModelMap(Statistics stat,Map<Long, DateTime> dropdownMap)
+    {
         Map<Pair<Configuration,Revision>,SortedMap<String,Integer>> map = new HashMap<>();
+        Map<String,Integer> graph = new HashMap<>();
         SortedSet<String> columns = new TreeSet<>();
-        
-//        for(Configuration c : configs)
-//        {
-//            for(Revision r : revisions)
-//            {
-//                map.put(new Pair<>(c, r), null);
-//            }
-//        }
-        
-        
-        
-        Statistics stat = statisticsService.getStatisticsByID(id);
         
         for(StatisticsHolder sh : stat.getStatisticsHolders())
         {
@@ -102,19 +91,15 @@ public class StatisticsController
             if(map.containsKey(key))
             {
                 keyValues = map.get(key);
-                if(keyValues.containsKey(sh.getAnnotation()))
-                {
-                    keyValues.put(sh.getAnnotation(), keyValues.get(sh.getAnnotation())+sh.getCount());
-                }
-                else
-                {
-                    keyValues.put(sh.getAnnotation(), sh.getCount());
-                }
+                
+                addOrIncrement(sh.getAnnotation(), sh.getCount(), keyValues);
+                addOrIncrement(sh.getAnnotation(), sh.getCount(), graph);
             }
             else
             {
                 keyValues = new TreeMap<>();
                 keyValues.put(sh.getAnnotation(), sh.getCount());
+                addOrIncrement(sh.getAnnotation(), sh.getCount(), graph);
             }
             
             
@@ -137,27 +122,29 @@ public class StatisticsController
             map.put(pair, values);
         }
         
-        ModelMap mm = prepareModelMap();
+        ModelMap mm = new ModelMap();
+        
         mm.addAttribute("statisticsMap", map);
         mm.addAttribute("statisticsColumns",columns);
-        
-        return new ModelAndView("statistics", mm);
-    }
-
-    @Secured("ROLE_ADMINISTRATOR")
-    @RequestMapping(value = {"/logger/", "/logger"})
-    public ModelAndView logger()
-    {
-        ModelMap mm = new ModelMap();
-
-        return new ModelAndView("logger",mm);
-    }
-    
-    private ModelMap prepareModelMap()
-    {
-        ModelMap mm = new ModelMap();
-        mm.addAttribute("statisticsList", statisticsService.getStatisticsMap());
+        mm.addAttribute("statisticsDate",stat.getCalculationDate());
+        mm.addAttribute("formulaCount", stat.getTotalFormulas());
+        mm.addAttribute("coCount", stat.getTotalCanonicOutputs());
+        mm.addAttribute("graph", graph);
+        mm.addAttribute("statisticsDropdown", dropdownMap);
         
         return mm;
     }
+
+    private void addOrIncrement(String key, Integer value ,Map<String,Integer> map)
+    {
+        if(map.containsKey(key))
+        {
+            map.put(key,map.get(key)+value);
+        }
+        else
+        {
+            map.put(key,value);
+        }
+    }
+    
 }

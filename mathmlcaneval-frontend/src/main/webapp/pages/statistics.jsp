@@ -23,56 +23,86 @@
                         </c:choose>                    
                     </p>
                 </div>
-            </sec:authorize>
-            <form method="get" action="${pageContext.request.contextPath}/statistics/" class="form-inline" id="statisticsForm">
-                <div class="form-group">
-                    <label class="col-sm-5 control-label" for="statID"><spring:message code="statistics.choose" /></label>
-                    <div class="col-sm-7">
-                        <select class="form-control" name="id" id="statID">
-                            <c:forEach items="${statisticsList}" var="entry">
-                                <option value="${entry.key}"><joda:format value="${entry.value}" style="LS" /></option>
-                            </c:forEach>
-                        </select>
-                    </div>                            
-                </div>
-            </form> 
+            </sec:authorize>            
 
             <div class="row pull-top-50">
-                <div class="col-md-8">
+                <div class="col-md-5">
+                    <form method="get" action="${pageContext.request.contextPath}/statistics/" class="form-inline" id="statisticsForm">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label" for="statID"><spring:message code="statistics.choose" /></label>
+                            <div class="col-sm-7">
+                                <select class="form-control" name="id" id="statID">
+                                    <c:forEach items="${statisticsDropdown}" var="entry">
+                                        <option value="${entry.key}"><joda:format value="${entry.value}" style="LS" /></option>
+                                    </c:forEach>
+                                </select>
+                            </div>                            
+                        </div>
+                    </form> 
+                    <hr />
                     <table class="table">
                         <tr>
                             <td><spring:message code="statistics.date" /></td>
-                            <td><joda:format value="${statistics.calculationDate}" style="S-" pattern="dd.M.yyyy" /></td>
+                            <td><joda:format value="${statisticsDate}" style="LS" /></td>
                         </tr>                        
                         <tr>
                             <td><spring:message code="statistics.total.formulas" /></td>
-                            <td><c:out value="${statistics.totalFormulas}" /></td>
+                            <td><c:out value="${formulaCount}" /></td>
+                        </tr>                        
+                        <tr>
+                            <td><spring:message code="statistics.total.canonic" /></td>
+                            <td><c:out value="${coCount}" /></td>
                         </tr>                        
                     </table>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <td>a</td>
-                                <c:forEach items="${statisticsColumns}" var="entry">
-                                    <td>
-                                        <c:out value="${entry}" />
-                                    </td>
-                                </c:forEach>
-                            </tr>
-                            <c:forEach items="${statisticsMap}" var="statEntry">
+                </div>
+                <div class="col-md-7">
+                    <div class="stats-panel-body">
+                        <!-- http://www.flotcharts.org/-->
+                        <div id="flot-placeholder" style="width:400px;height:600px"></div> 
+                    </div>
+                </div>
+            </div>
+            <div class="row pull-top-50">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered disable-word-wrap">
+                            <thead>
                                 <tr>
-                                    <td><c:out value="${statEntry.key.key.name}" />,<c:out value="${statEntry.key.value.revisionHash}" /></td>
-                                    <c:forEach items="${statEntry.value}" var="cell">
-                                        <td><c:out value="${cell.value}" /></td>
+                                    <td></td>
+                                    <c:forEach items="${statisticsColumns}" var="entry">
+                                        <td>
+                                            <c:out value="${entry}" />
+                                        </td>
                                     </c:forEach>
                                 </tr>
-                            </c:forEach>
-                        </thead>
-                    </table>
-                </div>
-                <div class="col-md-4 stats-panel-body">
-                    <!-- http://www.flotcharts.org/-->
-                    <div id="flot-placeholder" style="width:400px;height:300px"></div> 
+                                <c:forEach items="${statisticsMap}" var="statEntry">
+                                    <tr>
+                                        <td><c:out value="${statEntry.key.key.name}" />,<br /><c:out value="${fn:substring(statEntry.key.value.revisionHash,0,8)}" /></td>
+                                            <c:forEach items="${statEntry.value}" var="cell">
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${cell.value ne 0}">
+                                                        <%-- small workaround TODO in future :)
+                                                        # from annotationTag has to be removed and replaced with
+                                                        urlencoded version %23
+                                                        thus we drop first symbol which is for sure # and add %23
+                                                        as hardcoded string --%>
+                                                        <spring:url value="/formula/search/?configuration=${statEntry.key.key.id}&revision=${statEntry.key.value.id}&annotationContent=%23${fn:substring(cell.key,1,fn:length(cell.key))}" var="myUrl" htmlEscape="true"/>                                                                
+                                                        <a href="${myUrl}">
+                                                            <c:out value="${cell.value}" />
+                                                        </a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:out value="${cell.value}" />
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                        </c:forEach>
+                                    </tr>
+                                </c:forEach>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
 

@@ -38,6 +38,7 @@ import cz.muni.fi.mir.db.domain.Statistics;
 import cz.muni.fi.mir.db.domain.StatisticsHolder;
 import cz.muni.fi.mir.db.service.StatisticsService;
 import java.util.ArrayList;
+import javax.persistence.NoResultException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -122,6 +123,20 @@ public class StatisticsServiceImpl implements StatisticsService
         statistics.setStatisticsHolders(holders);
         statistics.setCalculationDate(DateTime.now());
         statistics.setTotalFormulas(formulaDAO.getNumberOfRecords());
+        
+        int totalCanon = 0;
+        
+        try
+        {
+            totalCanon = entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co", Long.class)
+                    .getSingleResult().intValue();
+        }
+        catch(NoResultException nre)
+        {
+            logger.info(nre);
+        }
+        
+        statistics.setTotalCanonicOutputs(totalCanon);
         
         entityManager.persist(statistics);        
     }

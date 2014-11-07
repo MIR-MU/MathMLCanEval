@@ -63,6 +63,7 @@
         <script type="text/javascript" src="<c:url value="/resources/js/difflib.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.categories.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.tickrotor.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/simple-slider.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/select2.min.js" />"></script>
         <script type="text/javascript">
@@ -272,7 +273,30 @@
                             'container': 'body'
                         });
 
-          
+          <c:if test="${not empty graph}">
+                        $(function () {
+                            var data = [
+                                  <c:forEach items="${graph}" var="entry" varStatus="status">
+                                              ["<c:out value="${entry.key}" />",<c:out value="${entry.value}" />]<c:if test="${not status.last}"><c:out value="," /></c:if>
+                                  </c:forEach>];
+
+                            $.plot("#flot-placeholder", [data], {
+                                series: {
+                                    bars: {
+                                        show: true,
+                                        barWidth: 0.6,
+                                        align: "center"
+                                    }
+                                },
+                                xaxis: {
+                                    mode: "categories",
+                                    tickLength: 0,
+                                    rotateTicks: 120,
+                                    margin: 30
+                                }
+                            });
+                        });
+            </c:if>
 
 
             <c:if test="${massDelete eq true}">

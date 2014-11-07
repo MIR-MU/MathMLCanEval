@@ -88,14 +88,14 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-md-offset-1">
+<!--                                <div class="col-md-6 col-md-offset-1">
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><spring:message code="index.page.briefstats" /></div>
                                         <div class="panel-body stats-panel-body">
                                             <div id="flot-placeholder"></div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </sec:authorize>
                         <div class="row">
