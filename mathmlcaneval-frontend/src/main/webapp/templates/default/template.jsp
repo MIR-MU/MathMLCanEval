@@ -272,6 +272,38 @@
                             'placement': 'right',
                             'container': 'body'
                         });
+                        
+                        $("#loadMoreAppRuns").click(function(e){
+                            var start = $("#applicationRunsTable > tbody > tr").length;
+                            $.ajax({
+                                type: "GET",
+                                url: "${pageContext.request.contextPath}/appruns/load/",
+                                data: {'start' : start,'end' : start+10},
+                                dataType: 'json',
+                                async: true,
+                                success: function (response){
+                                    $.each(response,function(index,value){
+                                        var $tr = $("<tr>").append(
+                                            $('<td>').text(value.id),
+                                            $('<td>').text(formatDate(value.startTime)),
+                                            $('<td>').text(formatDate(value.stopTime)),
+                                            $('<td>').text(value.user.username),
+                                            $('<td>').text(value.configuration),
+                                            $('<td>').text(value.revision.revisionHash),
+                                            $('<td>').text(value.canonicOutputCount),
+                                            $('<td>').append($('<input type="checkbox" />').attr('value',value.id)),
+                                            $('<td>').text('x')
+                                        ).appendTo("#applicationRunsTable > tbody:last");
+                                        
+                                        
+                                        
+                                        console.log(value);
+                                    });
+                                }
+                            });
+                            e.preventDefault()
+                            console.log($("#applicationRunsTable > tbody > tr").length);
+                        });
 
           <c:if test="${not empty graph}">
                         $(function () {
@@ -493,6 +525,15 @@
                             $(this).html($(this).html().replace(regEx2, appendLabel));
                         });
                         }
+                    }
+                    
+                    function formatDate(inputDate)
+                    {
+                        var outputDate = inputDate.monthOfYear;
+                        outputDate += '/'+inputDate.dayOfMonth+"/"+inputDate.yearOfCentury+' ';
+                        outputDate += inputDate.hourOfDay+':'+inputDate.minuteOfHour;
+                        
+                        return outputDate;
                     }
         </script>
     </body>

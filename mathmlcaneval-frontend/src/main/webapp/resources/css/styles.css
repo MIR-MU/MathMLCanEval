@@ -140,3 +140,8 @@ footer
 {
     white-space: nowrap;
 }
+
+#loadMoreAppRuns
+{
+    cursor: pointer;
+}

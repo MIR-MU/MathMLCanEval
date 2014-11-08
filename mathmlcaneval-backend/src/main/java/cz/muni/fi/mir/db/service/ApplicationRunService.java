@@ -87,11 +87,13 @@ public interface ApplicationRunService
     ApplicationRun getApplicationRunByID(Long id) throws IllegalArgumentException;
 
     /**
-     * TODO PAGINATION + rename to getFromRange Method obtains all application
-     * runs from database.
+     * TODO PAGINATION
      *
+     * @param start starting position
+     * @param end ending position
+     * @param reversed whether output returned by database should be reversed or not
      * @return all application runs from database, empty list if there are no
      * runs yet.
      */
-    List<ApplicationRun> getAllApplicationRuns();
+    List<ApplicationRun> getAllApplicationRunsFromRange(int start, int end, boolean reversed);
 }

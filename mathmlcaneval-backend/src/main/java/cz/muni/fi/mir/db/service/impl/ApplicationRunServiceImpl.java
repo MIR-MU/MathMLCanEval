@@ -31,6 +31,7 @@ import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
+import java.util.Collections;
 
 /**
  *
@@ -195,8 +196,18 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
 
     @Override
     @Transactional(readOnly = true)
-    public List<ApplicationRun> getAllApplicationRuns() 
+    public List<ApplicationRun> getAllApplicationRunsFromRange(int start, int end,boolean reversed)
     {
-        return applicationRunDAO.getAllApplicationRuns();
+        if(reversed)
+        {
+            List<ApplicationRun> result = applicationRunDAO.getAllApplicationRunsFromRange(start, end);
+            Collections.reverse(result);
+            
+            return result;
+        }
+        else
+        {
+            return applicationRunDAO.getAllApplicationRunsFromRange(start, end);
+        }        
     }
 }

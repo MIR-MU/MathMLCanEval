@@ -34,14 +34,14 @@ public interface ApplicationRunDAO extends GenericDAO<ApplicationRun, Long>
     void createApplicationRunWithFlush(ApplicationRun applicationRun);
 
     /**
-     * Method obtains all ApplicationRuns from database in <b>DESCENDING</b>
-     * order. Newer ApplicationRuns are therefore in front and the old ones are
-     * in the back.
+     * TODO PAGINATION
      *
-     * @return List of all ApplicationRuns in descending order. If there are no
-     * ApplicationRuns yet, empty List is returned.
+     * @param start starting position
+     * @param end ending position
+     * @return all application runs from database, empty list if there are no
+     * runs yet.
      */
-    List<ApplicationRun> getAllApplicationRuns();
+    List<ApplicationRun> getAllApplicationRunsFromRange(int start, int end);
 
     /**
      * Method returns number of canonicalizations for given application run.

@@ -162,7 +162,7 @@ public class ApplicationRunTest
             applicationRunService.createApplicationRun(apRun,false);
         }
 
-        List<ApplicationRun> result = applicationRunService.getAllApplicationRuns();
+        List<ApplicationRun> result = applicationRunService.getAllApplicationRunsFromRange(0, 5,false);
 
         assertEquals(TestTools.ERROR_LIST_SIZE, appruns.size(), result.size());
 
