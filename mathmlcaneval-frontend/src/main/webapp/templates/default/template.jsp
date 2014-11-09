@@ -50,7 +50,7 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="<c:url value="/resources/js/jquery.2.1.1.min.js" />"></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
         <script type='text/javascript' src="<c:url value="/resources/js/jquery-fileupload/vendor/jquery.ui.widget.js" />"></script>
         <script type='text/javascript' src="<c:url value="/resources/js/jquery-fileupload/jquery.iframe-transport.js" />"></script>
