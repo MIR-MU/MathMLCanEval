@@ -51,6 +51,9 @@ public class CanonicOutput implements Serializable,Auditable
 
     @Column(name = "outputForm",columnDefinition = "TEXT",length = 10000)
     private String outputForm;
+    
+    @Column(name="hashValue",length = 40)
+    private String hashValue;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="parents_id")
@@ -126,6 +129,16 @@ public class CanonicOutput implements Serializable,Auditable
         this.annotations = annotations;
     }
 
+    public String getHashValue()
+    {
+        return hashValue;
+    }
+
+    public void setHashValue(String hashValue)
+    {
+        this.hashValue = hashValue;
+    }
+
     @Override
     public int hashCode()
     {
@@ -152,8 +165,8 @@ public class CanonicOutput implements Serializable,Auditable
     @Override
     public String toString()
     {
-        return "CanonicOutput{" + "id=" + id + ", outputForm=" + outputForm + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
-    }
+        return "CanonicOutput{" + "hashValue=" + hashValue + '}';
+    }    
 
     @PreRemove
     private void removeOutputFromParents()

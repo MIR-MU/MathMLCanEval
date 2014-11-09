@@ -10,6 +10,7 @@ import cz.muni.fi.mir.db.domain.Configuration;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
 import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
+import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
@@ -61,6 +62,8 @@ public class InstallController
     private RevisionService revisionService;
     @Autowired
     private AnnotationValueSerivce annotationValueSerivce;
+    @Autowired
+    private CanonicOutputService canonicOutputService;
     
     
     @Value("${mathml-canonicalizer.default.revision}")
@@ -233,13 +236,10 @@ public class InstallController
         return values;
     }
     
-    @RequestMapping("/av")
-    public ModelAndView setupAnnotationValues()
+    @RequestMapping("/co")
+    public ModelAndView setupCanonicOutputs()
     {
-        for(AnnotationValue av : provideAnnotaionValues())
-        {
-            annotationValueSerivce.createAnnotationValue(av);
-        }
+        canonicOutputService.recalculateHashes();
         
         return new ModelAndView("redirect:/");
     }

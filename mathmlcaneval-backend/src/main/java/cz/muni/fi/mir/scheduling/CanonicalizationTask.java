@@ -154,6 +154,7 @@ public class CanonicalizationTask extends ApplicationTask
                 for (Formula f : formulas)
                 {
                     CanonicOutput co = canonicalize(f, canonicalizer, canonicalize, applicationRun);
+                    co.setHashValue(Tools.getInstance().SHA1(co.getOutputForm()));
 
                     canonicOutputService.createCanonicOutput(co);
 

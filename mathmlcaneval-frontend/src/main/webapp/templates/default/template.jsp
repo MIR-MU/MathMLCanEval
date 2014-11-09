@@ -50,7 +50,7 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="<c:url value="/resources/js/jquery.2.1.1.min.js" />"></script>
         <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
         <script type='text/javascript' src="<c:url value="/resources/js/jquery-fileupload/vendor/jquery.ui.widget.js" />"></script>
         <script type='text/javascript' src="<c:url value="/resources/js/jquery-fileupload/jquery.iframe-transport.js" />"></script>
@@ -273,6 +273,19 @@
                             'container': 'body'
                         });
                         
+                        $("#b-submitCompare").click(function(e){
+                            var appRunsID = [];
+                            $("#applicationRunsTable input:checked").each(function(){
+                                appRunsID.push(parseInt($(this).attr('value')));
+                            });
+                            
+                            var $form = $("<form>",
+                            {
+                                action: '${pageContext.request.contextPath}/comparison/',
+                                method:'get'
+                            }).append($("#applicationRunsTable input:checked").clone()).submit();
+                        });
+                        
                         $("#loadMoreAppRuns").click(function(e){
                             var start = $("#applicationRunsTable > tbody > tr").length;
                             $.ajax({
@@ -288,10 +301,12 @@
                                             $('<td>').text(formatDate(value.startTime)),
                                             $('<td>').text(formatDate(value.stopTime)),
                                             $('<td>').text(value.user.username),
-                                            $('<td>').text(value.configuration),
+                                            $('<td>').append($('<a>',{
+                                                href:'${pageContext.request.contextPath}/configuration/view/'+value.configuration.id+'/'
+                                            }).text(value.configuration.name)),
                                             $('<td>').text(value.revision.revisionHash),
                                             $('<td>').text(value.canonicOutputCount),
-                                            $('<td>').append($('<input type="checkbox" />').attr('value',value.id)),
+                                            $('<td>').append($('<input type="checkbox" />').attr({'value':value.id,'name':'appRunsID'})),
                                             $('<td>').text('x')
                                         ).appendTo("#applicationRunsTable > tbody:last");
                                         
@@ -394,18 +409,31 @@
                             e.preventDefault();
                         });
             </c:if>
+                                <c:if test="${not empty compareDiff}">
+                                    <c:forEach items="${comparedResult}" var="entry">
+                                        diffView("#comp<c:out value="${entry.key.id}" />",
+                                        "#comp<c:out value="${entry.value.id}" />",
+                                        "comp<c:out value="${entry.key.id}" />comp<c:out value="${entry.value.id}" />");
+                                    </c:forEach>
+                                </c:if>
 
                     });//document.ready end
 
-                    function diffView() {
+                    function diffView(formula1,formula2,output) {
                         var byId = function (id) {
                             return document.getElementById(id);
-                        },
-                                base = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-2")).originalText),
-                                newtxt = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-1")).originalText),
-                                sm = new difflib.SequenceMatcher(base, newtxt),
-                                opcodes = sm.get_opcodes(),
-                                diffoutputdiv = byId("diff");
+                        }
+                        if(formula1 && formula2){
+                            console.log($(formula1).text());
+                            base = difflib.stringAsLines($(formula1).text());
+                            newtxt = difflib.stringAsLines($(formula2).text());
+                        }else{
+                            base = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-2")).originalText);
+                            newtxt = difflib.stringAsLines(MathJax.Hub.getJaxFor(byId("MathJax-Element-1")).originalText);
+                        }
+                        sm = new difflib.SequenceMatcher(base, newtxt);
+                        opcodes = sm.get_opcodes();
+                        diffoutputdiv = byId(output ? output : "diff");
 
                         diffoutputdiv.innerHTML = "";
                         diffoutputdiv.appendChild(diffview.buildView({

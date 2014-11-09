@@ -38,6 +38,7 @@
      
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
           p:defaultEncoding="UTF-8"
+          p:useCodeAsDefaultMessage="true"
           p:basenames="classpath:i18n/messages,classpath:i18n/validator"
     />
     

@@ -15,7 +15,6 @@
  */
 package cz.muni.fi.mir.db.dao.impl;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -38,6 +37,7 @@ import cz.muni.fi.mir.db.domain.SearchResponse;
 @Repository(value = "canonicOutputDAO")
 public class CanonicOutputDAOImpl extends GenericDAOImpl<CanonicOutput, Long> implements CanonicOutputDAO
 {
+
     private static final Logger logger = Logger.getLogger(CanonicOutputDAOImpl.class);
 
     public CanonicOutputDAOImpl()
@@ -46,46 +46,37 @@ public class CanonicOutputDAOImpl extends GenericDAOImpl<CanonicOutput, Long> im
     }
 
     @Override
-    public SearchResponse<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun)
+    public SearchResponse<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun, Pagination pagination)
     {
-        SearchResponse<CanonicOutput> sr = new SearchResponse<CanonicOutput>();
-        List<CanonicOutput> resultList = Collections.emptyList();
-        try
+        SearchResponse<CanonicOutput> sr = new SearchResponse<>();
+        if (pagination == null)
         {
-            resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :appRun", CanonicOutput.class)
+            List<CanonicOutput> resultList = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :appRun", CanonicOutput.class)
                     .setParameter("appRun", applicationRun)
                     .getResultList();
             sr.setTotalResultSize(resultList.size());
             sr.setResults(resultList);
+            
+            return sr;
         }
-        catch (NoResultException nre)
+        else
         {
-            logger.debug(nre);
-        }
+            try
+            {
+                Query query = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :appRun", CanonicOutput.class)
+                        .setParameter("appRun", applicationRun);
+                sr.setTotalResultSize(query.getResultList().size());
+                sr.setResults(query.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1))
+                        .setMaxResults(pagination.getPageSize())
+                        .getResultList());
+            }
+            catch (NoResultException nre)
+            {
+                logger.debug(nre);
+            }
 
-        return sr;
-    }
-
-    @Override
-    public SearchResponse<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun, Pagination pagination)
-    {
-        SearchResponse<CanonicOutput> sr = new SearchResponse<CanonicOutput>();
-        List<CanonicOutput> resultList = Collections.emptyList();
-        try
-        {
-            Query query = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :appRun", CanonicOutput.class)
-                    .setParameter("appRun", applicationRun);
-            sr.setTotalResultSize(query.getResultList().size());
-            sr.setResults(query.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1))
-                               .setMaxResults(pagination.getPageSize())
-                               .getResultList());
+            return sr;
         }
-        catch (NoResultException nre)
-        {
-            logger.debug(nre);
-        }
-
-        return sr;
     }
 
     @Override
@@ -103,5 +94,26 @@ public class CanonicOutputDAOImpl extends GenericDAOImpl<CanonicOutput, Long> im
             logger.debug(nre);
         }
         return result;
+    }
+
+    @Override
+    public CanonicOutput getCanonicOuputByHashValue(String hashValue)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getNumberOfCanonicOutputs()
+    {
+        return entityManager.createQuery("SELECT COUNT(co) FROM canonicOutput co", Long.class)
+                .getSingleResult().intValue();
+    }
+
+    @Override
+    public List<CanonicOutput> getSubListOfOutputs(int start, int end)
+    {
+        return entityManager.createQuery("SELECT co FROM canonicOutput co", CanonicOutput.class)
+                .setFirstResult(start).setMaxResults(end-start)
+                .getResultList();
     }
 }

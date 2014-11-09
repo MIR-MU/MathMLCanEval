@@ -20,6 +20,7 @@ import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.SearchResponse;
+import java.util.List;
 
 /**
  *
@@ -29,16 +30,8 @@ public interface CanonicOutputDAO extends GenericDAO<CanonicOutput, Long>
 {
 
     /**
-     * Method returns all canonic outputs that belong to given application run
-     *
-     * @param applicationRun under which canonic outputs were made
-     * @return list of canonic outputs created under given application run.
-     * Empty list if none were made.
-     */
-    SearchResponse<CanonicOutput> getCanonicOutputByAppRun(ApplicationRun applicationRun);
-
-    /**
-     * Method returns all canonic outputs that belong to given application run
+     * Method returns all canonic outputs that belong to given application run.
+     * If pagination is set to null, then all results are returned. 
      *
      * @param applicationRun under which canonic outputs were made
      * @param pagination used for showing only subset of result
@@ -55,4 +48,25 @@ public interface CanonicOutputDAO extends GenericDAO<CanonicOutput, Long>
      * no match.
      */
     CanonicOutput getCanonicOutputByAnnotation(Annotation annotation);
+    
+    /**
+     * Method obtains canonic output based on its input hash
+     * @param hashValue of canonic output
+     * @return canonic output with given hash, null if there is no match
+     */
+    CanonicOutput getCanonicOuputByHashValue(String hashValue);
+    
+    /**
+     * Method returns number of canonic outputs inside system.
+     * @return number of canonic outputs
+     */
+    int getNumberOfCanonicOutputs();
+    
+    /**
+     * Helper method of hashing
+     * @param start starting point
+     * @param end endin point
+     * @return  list from start to end of canonic outputs
+     */
+    List<CanonicOutput> getSubListOfOutputs(int start, int end);
 }

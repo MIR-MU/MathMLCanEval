@@ -31,6 +31,9 @@ import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
+import cz.muni.fi.mir.tools.Tools;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 
@@ -41,7 +44,9 @@ import cz.muni.fi.mir.db.service.CanonicOutputService;
 @Transactional(readOnly = false)
 public class CanonicOutputServiceImpl implements CanonicOutputService
 {
-
+    private static final Logger logger = Logger.getLogger(CanonicOutputServiceImpl.class);
+    @Value("${hibernate.jdbc.batch_size}")
+    private Integer batchSize;
     @Autowired
     private CanonicOutputDAO canonicOutputDAO;
     @Autowired
@@ -134,5 +139,27 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
         canonicOutputDAO.update(canonicOutput);
 
         annotationDAO.delete(annotation.getId());
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void recalculateHashes()
+    {
+        // TODO @RobSis pagination maybe ? :)
+        int totalCo = canonicOutputDAO.getNumberOfCanonicOutputs();
+        int calls = totalCo / batchSize;
+        
+        for(int i = 0; i < calls+1;i++)
+        {
+            logger.info(i*batchSize+"$"+((i+1)*batchSize));
+            List<CanonicOutput> list = canonicOutputDAO.getSubListOfOutputs(i*batchSize, (i+1)*batchSize);
+            
+            for(CanonicOutput co : list)
+            {
+                co.setHashValue(Tools.getInstance().SHA1(co.getOutputForm()));
+                
+                canonicOutputDAO.update(co);
+            }
+        }
     }
 }

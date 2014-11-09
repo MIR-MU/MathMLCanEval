@@ -20,7 +20,7 @@
                         <th><spring:message code="entity.appruns.outputs" /></th>
                             <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                             <th>
-                                !compare
+                                <spring:message code="general.label.compare" />
                             </th>
                             <th>
                                 <spring:message code="general.table.option" />
@@ -29,16 +29,16 @@
                     </tr>
                 </thead>
                 <tfoot>
-                    <tr id="loadMoreAppRuns">
+                    <tr>
                         <td colspan="6" class="info">
-                            <div class="text-center">
-                                !load more
+                            <div class="text-center" id="loadMoreAppRuns">
+                                <spring:message code="general.label.load.more" />
                             </div>                                    
                         </td>
                         <td>&nbsp;</td>
                         <sec:authorize access="hasRole('ROLE_USER')">
                             <td colspan="2">
-                                <a href="#" class="btn btn-primary">!compare selected</a>
+                                <a href="#" class="btn btn-primary" id="b-submitCompare"><spring:message code="general.label.compare.selected" /></a>
                             </td>
                         </sec:authorize>
                     </tr>
@@ -56,7 +56,7 @@
                                 <td><a href="${pageContext.request.contextPath}/canonicoutput/list/apprun=${entry.id}"><c:out value="${entry.canonicOutputCount}" /></td>
                                 <sec:authorize access="hasRole('ROLE_USER')">
                                     <td>
-                                        <input type="checkbox" value="<c:out value="${entry.id}" />" />
+                                        <input type="checkbox" value="<c:out value="${entry.id}" />" name="appRunsID" />
                                     </td>
                                 </sec:authorize>
                                 <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">

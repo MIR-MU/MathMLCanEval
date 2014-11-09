@@ -101,4 +101,9 @@ public interface CanonicOutputService
      * not have set id (null or less than one).
      */
     void deleteAnnotationFromCanonicOutput(CanonicOutput canonicOutput, Annotation annotation) throws IllegalArgumentException;
+    
+    /**
+     * Method recalculates hashes for all canonic outputs.
+     */
+    void recalculateHashes();
 }
