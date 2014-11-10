@@ -54,7 +54,6 @@ public class SimilarityFormConverter
         sf.setDefaultForm(canonicOutput.getOutputForm());
         sf.setCountForm(getElementCountMethod(canonicOutput.getOutputForm()));
         sf.setDistanceForm(getDistanceMethod(canonicOutput.getOutputForm()));
-        sf.setLongestBranch(getBranchMethod(canonicOutput.getOutputForm()));
 
         return sf;
     }
@@ -113,28 +112,6 @@ public class SimilarityFormConverter
         }
 
         return sb.toString();
-    }
-
-    /**
-     * Method returns lenght of longes branch in xml document.
-     *
-     * @param input
-     * @return
-     */
-    private String getBranchMethod(String input)
-    {
-        Document doc = stringToDoc(input);
-
-        MaxValue mv = new MaxValue(0);
-        if (doc != null)
-        {
-            int depth = 0;
-            branchTravel(doc.getDocumentElement(), depth, mv);
-        }
-
-        // lucene works only with strings and numbers should be padded
-        // at least by reference manual
-        return org.apache.commons.lang3.StringUtils.leftPad(Integer.toString(mv.getValue()), 4, "0");
     }
 
     /**
@@ -208,32 +185,6 @@ public class SimilarityFormConverter
         }
     }
 
-    private void branchTravel(Node node, int depth, MaxValue mv)
-    {
-        depth++;
-
-        if (depth > mv.getValue())
-        {
-            mv.setValue(depth);
-        }
-        if (node == null)
-        {
-            return;
-        }
-
-        NodeList nodeList = node.getChildNodes();
-
-        for (int i = 0; i < nodeList.getLength(); i++)
-        {
-            Node currentNode = nodeList.item(i);
-            if (currentNode.getNodeType() == Node.ELEMENT_NODE)
-            {
-                branchTravel(currentNode, depth, mv);
-
-            }
-        }
-    }
-
     /**
      * Method convers given input string into Document.
      *
@@ -243,46 +194,5 @@ public class SimilarityFormConverter
     private Document stringToDoc(String input)
     {
         return xmlUtils.parse(input);
-    }
-
-    // nasty workaround because int is immutable :)
-    // and we cannot use static variable, as this SimilarityFormCOnverter
-    // is singleton (shared accross many instances)
-    private class MaxValue
-    {
-
-        private int value;
-        private int position;   //specifies where the longest branch starts
-                                //not yet implemented
-
-        /**
-         * Sets new default max value
-         *
-         * @param value new max value
-         */
-        public MaxValue(int value)
-        {
-            this.value = value;
-        }
-
-        public int getValue()
-        {
-            return value;
-        }
-
-        public void setValue(int value)
-        {
-            this.value = value;
-        }
-
-        public int getPosition()
-        {
-            return position;
-        }
-
-        public void setPosition(int position)
-        {
-            this.position = position;
-        }
     }
 }

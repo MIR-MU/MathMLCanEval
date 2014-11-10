@@ -25,9 +25,9 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="checkbox">
-                                            <label>
-                                                <spring:message code="general.label.method.use" /> 
+                                            <label>                                                
                                                 <form:checkbox path="useDistance" /> 
+                                                <spring:message code="general.label.method.use" /> 
                                             </label>
                                         </div>                                    
                                     </div>
@@ -61,9 +61,9 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="checkbox">
-                                            <label>
-                                                <spring:message code="general.label.method.use" /> 
+                                            <label>                                                
                                                 <form:checkbox path="useCount"/> 
+                                                <spring:message code="general.label.method.use" /> 
                                             </label>                                           
                                         </div>                                    
                                     </div>
@@ -88,39 +88,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <hr />
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <h3 class="disable-top-margin"><spring:message code="similarity.method.branch" /></h3>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="checkbox">
-                                            <label>
-                                                <spring:message code="general.label.method.use" /> 
-                                                <form:checkbox path="useBranch" /> 
-                                            </label>
-                                        </div>                                    
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <form:select path="branchCondition" cssClass="form-control">
-                                            <form:option value="must"><spring:message code="general.label.logic.and" /></form:option>
-                                            <form:option value="should"><spring:message code="general.label.logic.or" /></form:option>
-                                        </form:select>                                                                                                             
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <h4 class="disable-top-margin"><spring:message code="similarity.method.branch.value" /></h4>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <form:input cssClass="form-control" path="branchMethodValue" />
-                                            </div>
-                                        </div>                                    
-                                    </div>
-                                </div>
+                                </div>                                
                                 <hr />
                                 <div class="row">
                                     <div class="col-md-12">
@@ -131,16 +99,16 @@
                                     <div class="col-md-6">
                                         <div class="checkbox">
                                             <label>
-                                                <spring:message code="similarity.override" />                                            
                                                 <form:checkbox path="override" />
+                                                <spring:message code="similarity.override" /> 
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="checkbox">
                                             <label>
-                                                <spring:message code="similarity.direct.import" />
                                                 <form:checkbox path="directWrite" />
+                                                <spring:message code="similarity.direct.import" />
                                             </label>
                                         </div>
                                     </div>
@@ -148,7 +116,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="general.label.close" /></button>
-                                <input type="submit" class="btn btn-default" value="<spring:message code="general.button.submit" />"/>
+                                <input type="submit" class="btn btn-warning" value="<spring:message code="general.button.submit" />"/>
                             </div>
                         </div>
                     </form:form>

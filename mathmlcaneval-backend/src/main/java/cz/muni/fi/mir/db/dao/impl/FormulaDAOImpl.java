@@ -361,19 +361,6 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
             }
         }
         
-        if(Boolean.valueOf(properties.get(FormulaService.USE_BRANCH)))
-        {
-            // we obtain user input from form which might be variable A
-            // case A = exact length
-            // case -A = [currentLength-A;currentLength]
-            // cae +A = [currentLength;currentLength+A]
-            // case +-A = [currentLength-A;currentLength+A]
-            // case -+A = same as above
-            //TODO
-            
-            //int branchLength = Integer.parseInt(sf.getLongestBranch());
-        }
-        
         Query query = junction.createQuery();
         logger.info(query);
         
@@ -381,7 +368,7 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
         
         
         
-        SearchResponse<Formula> fsr = new SearchResponse<Formula>();
+        SearchResponse<Formula> fsr = new SearchResponse<>();
         fsr.setTotalResultSize(ftq.getResultSize());
         List<Formula> resultList = ftq.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1))
                 .setMaxResults(pagination.getPageSize())

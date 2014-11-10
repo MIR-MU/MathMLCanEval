@@ -18,25 +18,14 @@ package cz.muni.fi.mir.similarity;
 import java.util.Map;
 
 /**
- *
- * @author emptak
+ * 
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public class SimilarityForms
 {
     private String defaultForm;
     private String distanceForm;
-    private Map<String,Integer> countForm;
-    private String longestBranch;
-
-    public String getLongestBranch()
-    {
-        return longestBranch;
-    }
-
-    public void setLongestBranch(String longestBranch)
-    {
-        this.longestBranch = longestBranch;
-    }
+    private Map<String,Integer> countForm;    
 
     public String getDefaultForm()
     {
@@ -71,6 +60,6 @@ public class SimilarityForms
     @Override
     public String toString()
     {
-        return "SimilarityForms{" + "defaultForm=" + defaultForm + ", distanceForm=" + distanceForm + ", countForm=" + countForm + ", longestBranch=" + longestBranch + '}';
+        return "SimilarityForms{" + "defaultForm=" + defaultForm + ", distanceForm=" + distanceForm + ", countForm=" + countForm + '}';
     }
 }

@@ -92,8 +92,6 @@ public class FormulaController
     @Autowired
     private RevisionService revisionService;
     @Autowired
-    private ApplicationRunService applicationRunService;
-    @Autowired
     private AnnotationValueSerivce annotationValueSerivce;
     @Autowired
     private ElementService elementService;
@@ -541,16 +539,13 @@ public class FormulaController
         //booleans
         properties.put(FormulaService.USE_DISTANCE, Boolean.toString(findSimilarForm.isUseDistance()));
         properties.put(FormulaService.USE_COUNT,Boolean.toString(findSimilarForm.isUseCount()));
-        properties.put(FormulaService.USE_BRANCH, Boolean.toString(findSimilarForm.isUseBranch()));
         properties.put(FormulaService.USE_OVERRIDE,Boolean.toString(findSimilarForm.isOverride()));
         // conditions
         properties.put(FormulaService.CONDITION_DISTANCE, findSimilarForm.getDistanceCondition());
         properties.put(FormulaService.CONDITION_COUNT, findSimilarForm.getCountCondition());
-        properties.put(FormulaService.CONDITION_BRANCH,findSimilarForm.getBranchCondition());
         // actual evaluation values
         properties.put(FormulaService.VALUE_DISTANCEMETHOD,findSimilarForm.getDistanceMethodValue());
         properties.put(FormulaService.VALUE_COUNTELEMENTMETHOD,findSimilarForm.getCountElementMethodValue());
-        properties.put(FormulaService.VALUE_BRANCHMETHOD,findSimilarForm.getBranchMethodValue());
         properties.put(FormulaService.DIRECT_WRITE,Boolean.toString(findSimilarForm.isDirectWrite()));
         
         return properties;
@@ -615,6 +610,7 @@ public class FormulaController
      /**
       * Constructor for session attribute FindSimilarForm.
       * We keep it in session to not lose it when changing the page.
+     * @return 
       */
      @ModelAttribute("findSimilarForm")
      public FindSimilarForm getFindSimilarForm() {

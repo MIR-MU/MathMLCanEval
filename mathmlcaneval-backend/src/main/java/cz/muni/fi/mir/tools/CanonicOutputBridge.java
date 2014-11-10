@@ -82,8 +82,6 @@ public class CanonicOutputBridge implements FieldBridge
             document.add(newField("co.element", s+"="+sf.getCountForm().get(s), luceneOptions, keywordAnalyzer)); 
         }
         
-        document.add(newField("co.longestBranch",String.valueOf(sf.getLongestBranch()),luceneOptions,null));
-        
         logger.info("Canonic output ["+canonicOutput.getId()+"] indexed.");
     }
     

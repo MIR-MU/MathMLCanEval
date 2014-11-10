@@ -14,18 +14,15 @@ public class FindSimilarForm
 {
     private boolean useDistance;
     private boolean useCount;
-    private boolean useBranch;
     
     private boolean override;
     private boolean directWrite;
     
     private String distanceCondition;
     private String countCondition;
-    private String branchCondition;
     
     private String distanceMethodValue;
     private String countElementMethodValue;
-    private String branchMethodValue;
     
     
     private Long formulaID;
@@ -50,16 +47,6 @@ public class FindSimilarForm
         this.useCount = useCount;
     }
 
-    public boolean isUseBranch()
-    {
-        return useBranch;
-    }
-
-    public void setUseBranch(boolean useBranch)
-    {
-        this.useBranch = useBranch;
-    }
-
     public String getDistanceCondition()
     {
         return distanceCondition;
@@ -78,16 +65,6 @@ public class FindSimilarForm
     public void setCountCondition(String countCondition)
     {
         this.countCondition = countCondition;
-    }
-
-    public String getBranchCondition()
-    {
-        return branchCondition;
-    }
-
-    public void setBranchCondition(String branchCondition)
-    {
-        this.branchCondition = branchCondition;
     }
 
     public String getDistanceMethodValue()
@@ -130,16 +107,6 @@ public class FindSimilarForm
         this.countElementMethodValue = countElementMethodValue;
     }
 
-    public String getBranchMethodValue()
-    {
-        return branchMethodValue;
-    }
-
-    public void setBranchMethodValue(String branchMethodValue)
-    {
-        this.branchMethodValue = branchMethodValue;
-    }
-
     public boolean isDirectWrite()
     {
         return directWrite;
@@ -156,12 +123,12 @@ public class FindSimilarForm
     public String toString()
     {
         return "FindSimilarForm{" + "useDistance=" + useDistance + 
-                ", useCount=" + useCount + ", useBranch=" + useBranch + 
+                ", useCount=" + useCount +  
                 ", override=" + override + ", distanceCondition=" + 
                 distanceCondition + ", countCondition=" + countCondition + 
-                ", branchCondition=" + branchCondition + ", distanceMethodValue=" + 
+                ", distanceMethodValue=" + 
                 distanceMethodValue + ", countElementMethodValue=" + countElementMethodValue + 
-                ", branchMethodValue=" + branchMethodValue + ", formulaID=" + formulaID + '}';
+                ", formulaID=" + formulaID + '}';
     }
     
 }
