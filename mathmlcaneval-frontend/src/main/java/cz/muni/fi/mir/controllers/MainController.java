@@ -32,14 +32,9 @@ public class MainController
     public ModelAndView handleIndex()
     {
         ModelMap mm = new ModelMap();
-        mm.addAttribute("statistics", statisticsService.getLatestStatistics());
         mm.addAttribute("minifeed", auditorService.getLatestEvents());
         return new ModelAndView("index",mm);
     }
-    
-    
-    
-    
     
     @Secured("ROLE_ADMINISTRATOR")
     @RequestMapping(value = {"/logger/", "/logger"})
