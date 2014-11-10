@@ -52,6 +52,7 @@ import cz.muni.fi.mir.scheduling.LongRunningTaskFactory;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.services.TaskService;
 import cz.muni.fi.mir.tools.EntityFactory;
+import cz.muni.fi.mir.tools.IndexTools;
 import cz.muni.fi.mir.tools.Tools;
 
 /**
@@ -82,6 +83,8 @@ public class FormulaServiceImpl implements FormulaService
     private TaskService taskService;
     @Autowired
     private ElementService elementService;
+    @Autowired
+    private IndexTools indexTools;
 
     @Override
     @Transactional(readOnly = false)
@@ -219,9 +222,10 @@ public class FormulaServiceImpl implements FormulaService
 
     @Override
     @Transactional
-    public void reindex()
+    public void reindexAndOptimize()
     {
-        formulaDAO.reindex();
+        indexTools.reIndexClass(Formula.class);
+        indexTools.optimize(Formula.class);
     }
 
     @Override

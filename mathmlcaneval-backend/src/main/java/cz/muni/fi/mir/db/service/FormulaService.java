@@ -171,7 +171,7 @@ public interface FormulaService
     /**
      * Method reindexes database into index.
      */
-    void reindex();
+    void reindexAndOptimize();
 
     /**
      * Method attempts to find similar formulas based on given input parameters

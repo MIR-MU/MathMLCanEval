@@ -31,6 +31,7 @@ import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
+import cz.muni.fi.mir.tools.IndexTools;
 import cz.muni.fi.mir.tools.Tools;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,6 +54,8 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     private AnnotationDAO annotationDAO;
     @Autowired
     private FormulaDAO formulaDAO;
+    @Autowired
+    private IndexTools indexTools;
 
     @Override
     public void createCanonicOutput(CanonicOutput canonicOutput) throws IllegalArgumentException
@@ -121,7 +124,7 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
         
         canonicOutputDAO.update(canonicOutput);     
         
-        formulaDAO.index(formulaDAO.getFormulaByCanonicOutput(canonicOutput));
+        indexTools.index(formulaDAO.getFormulaByCanonicOutput(canonicOutput));
     }
 
     @Override

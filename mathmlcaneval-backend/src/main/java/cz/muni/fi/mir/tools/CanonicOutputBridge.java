@@ -63,6 +63,20 @@ public class CanonicOutputBridge implements FieldBridge
     {
         SimilarityForms sf = SimilarityFormConverterWrapper.getConverter().process(canonicOutput);             
                 
+        document.add(newField("co.configuration", 
+                canonicOutput.getApplicationRun().getConfiguration().getId().toString(), 
+                luceneOptions, 
+                new StandardAnalyzer(Version.LUCENE_36)
+            )
+        );
+        
+        document.add(newField("co.revision", 
+                canonicOutput.getApplicationRun().getRevision().getId().toString(), 
+                luceneOptions, 
+                new StandardAnalyzer(Version.LUCENE_36)
+            )
+        );
+        
         if(canonicOutput.getAnnotations() != null && !canonicOutput.getAnnotations().isEmpty())
         {
             for(Annotation a : canonicOutput.getAnnotations())

@@ -99,11 +99,6 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
     Long exists(String hash);
 
     /**
-     * Method calls hibernate search and reindexes entire database.
-     */
-    void reindex();
-
-    /**
      * Method attempts to find similar formulas based on given input parameters
      * (specified in <b>properties</b>). Similarity is always calculated from
      * <b>LAST</b> canonic output.
@@ -136,16 +131,7 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
      * @return formula containing given canonic output. null if there is no
      * match (which should not occur)
      */
-    Formula getFormulaByCanonicOutput(CanonicOutput canonicOutput);
-
-    /**
-     * Method manually indexes given formula. For indexing entire database use {@link #reindex()
-     * }. Writing to index occurs only after transaction is commit, therefore TX
-     * has to be managed on upper level.
-     *
-     * @param f to be indexed.
-     */
-    void index(Formula f);
+    Formula getFormulaByCanonicOutput(CanonicOutput canonicOutput);    
 
     /**
      * Method obtains list of formulas belonging to given source document.

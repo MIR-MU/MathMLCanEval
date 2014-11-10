@@ -292,7 +292,7 @@ public class FormulaController
     @RequestMapping(value = {"/reindex/","/reindex"},method = RequestMethod.GET)
     public ModelAndView reindex()
     {
-        formulaService.reindex();
+        formulaService.reindexAndOptimize();
         
         return new ModelAndView("redirect:/");
     }

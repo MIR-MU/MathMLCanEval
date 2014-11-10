@@ -253,21 +253,6 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
     }
 
     @Override
-    public void reindex()
-    {
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-        try
-        {
-            logger.info("Reindexing has started");
-            fullTextEntityManager.createIndexer(Formula.class).startAndWait();
-        }
-        catch (InterruptedException ex)
-        {
-            logger.fatal(ex);
-        }
-    }
-
-    @Override
     public SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination)
     {        
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
@@ -549,14 +534,7 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
         
         return f;
     }
-
-    @Override
-    public void index(Formula f)
-    {
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-        fullTextEntityManager.index(f);
-    }
-
+    
     @Override
     public List<Formula> getFormulasByCanonicOutputHash(String hash)
     {
