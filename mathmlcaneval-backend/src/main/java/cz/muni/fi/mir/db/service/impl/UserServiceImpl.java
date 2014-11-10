@@ -23,9 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cz.muni.fi.mir.db.dao.UserDAO;
+import cz.muni.fi.mir.db.dao.UserRoleDAO;
 import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.domain.UserRole;
 import cz.muni.fi.mir.db.service.UserService;
+import cz.muni.fi.mir.tools.EntityFactory;
 
 /**
  *
@@ -38,6 +40,9 @@ public class UserServiceImpl implements UserService
 
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private UserRoleDAO userRoleDAO;
+    private User systemUser;
 
     //temp hack bez zistim ako docasne
     //vypnut security pri vytvarani admin uctu
@@ -107,5 +112,24 @@ public class UserServiceImpl implements UserService
         InputChecker.checkInput(userRole);
         
         return userDAO.getUsersByRole(userRole);
+    }
+
+    @Override
+    public User getSystemUser()
+    {
+        if(systemUser == null)
+        {
+            User system = userDAO.getUserByUsername("system");
+            if(system == null)
+            {
+                throw new RuntimeException("SYSTEM USER IS NOT PRESENT. Create user with username [system]");
+            }
+            else
+            {
+                systemUser = system;
+            }
+        }
+        
+        return systemUser;               
     }
 }

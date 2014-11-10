@@ -25,6 +25,17 @@ public interface AnnotationService
 {
 
     /**
+     * Method creates given annotations inside system. This should be called
+     * only by Tasks. For annotation formula, or canonic output use either {@link FormulaService#annotateFormula(cz.muni.fi.mir.db.domain.Formula, cz.muni.fi.mir.db.domain.Annotation)
+     * } or {@link CanonicOutputService#annotateCannonicOutput(cz.muni.fi.mir.db.domain.CanonicOutput, cz.muni.fi.mir.db.domain.Annotation)
+     * }.
+     *
+     * @param annotation to be crated
+     * @throws IllegalArgumentException if annotation is null, or does not have proper fields set.
+     */
+    void createAnnotation(Annotation annotation) throws IllegalArgumentException;
+
+    /**
      * Method obtains given annotation based on input id.
      *
      * @param id of annotation to be obtained

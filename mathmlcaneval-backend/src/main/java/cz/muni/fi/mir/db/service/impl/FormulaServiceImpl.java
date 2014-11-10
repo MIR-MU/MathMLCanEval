@@ -467,4 +467,16 @@ public class FormulaServiceImpl implements FormulaService
             }
         }
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Formula> getFormulasByCanonicOutputHash(String hash) throws IllegalArgumentException
+    {
+        if(hash == null || hash.length() != 40)
+        {
+            throw new IllegalArgumentException("Wrong sha1 fingerprint. Length should be 40 but was ["+hash+"]");
+        }
+        
+        return formulaDAO.getFormulasByCanonicOutputHash(hash);
+    }
 }

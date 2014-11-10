@@ -15,6 +15,7 @@
  */
 package cz.muni.fi.mir.scheduling;
 
+import cz.muni.fi.mir.db.domain.Annotation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -32,12 +33,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.service.AnnotationService;
 import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.FormulaService;
+import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.scheduling.TaskStatus.TaskType;
 import cz.muni.fi.mir.services.MailService;
 import cz.muni.fi.mir.tools.Tools;
+import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * TODO SIMALIRITY FORM CONVERSION
@@ -54,12 +59,19 @@ public class CanonicalizationTask extends ApplicationTask
     private ApplicationRun applicationRun;
     private Class mainClass;
 
+    @Value("${annotation.sameoutput}")
+    private String sameOutputAnnotation;
+    
     @Autowired
     private CanonicOutputService canonicOutputService;
     @Autowired
     private FormulaService formulaService;
     @Autowired
     private ApplicationRunService applicationRunService;
+    @Autowired
+    private AnnotationService annotationService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private MailService mailService;
 
@@ -154,11 +166,54 @@ public class CanonicalizationTask extends ApplicationTask
                 for (Formula f : formulas)
                 {
                     CanonicOutput co = canonicalize(f, canonicalizer, canonicalize, applicationRun);
-                    co.setHashValue(Tools.getInstance().SHA1(co.getOutputForm()));
-
-                    canonicOutputService.createCanonicOutput(co);
+                    co.setHashValue(Tools.getInstance().SHA1(co.getOutputForm()));                  
 
                     f.getOutputs().add(co);
+                    
+                    List<Formula> sameHashFormulas = formulaService.getFormulasByCanonicOutputHash(co.getHashValue());
+                    
+                    logger.info(sameHashFormulas);
+                    
+                    if(!sameHashFormulas.isEmpty())
+                    {
+                        for(Formula shf : sameHashFormulas)
+                        {
+                            if(shf.equals(f))
+                            {
+                                sameHashFormulas.remove(f);
+                                break;
+                            }
+                        }
+                        if(!sameHashFormulas.isEmpty())
+                        {
+                            Annotation a = new Annotation();
+                            a.setUser(userService.getSystemUser());
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(sameOutputAnnotation)
+                                    .append(" [");
+                            for(Formula shf : sameHashFormulas)
+                            {
+                                sb.append(shf.getId()).append(", ");
+                            }
+                            sb.append("]");
+                            a.setAnnotationContent(sb.toString());
+
+                            annotationService.createAnnotation(a);
+
+                            co.setAnnotations(Arrays.asList(a));
+
+                            List<Formula> parents = new ArrayList<>(co.getParents());
+                            parents.addAll(sameHashFormulas);
+                            co.setParents(parents);
+                        }
+                        else
+                        {
+                            logger.info("No same matches found for canonic output ["+co.getHashValue()+"]");
+                        }
+                    }
+                    
+                    
+                    canonicOutputService.createCanonicOutput(co);
 
                     formulaService.updateFormula(f);
 

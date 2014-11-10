@@ -82,15 +82,17 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
      * @return formula with given annotation, null if there is no match.
      */
     Formula getFormulaByAnnotation(Annotation annotation);
-    
+
     /**
      * Method returns number of formulas in system.
+     *
      * @return number of formulas in system
      */
     int getNumberOfRecords();
 
     /**
      * Method checks if formula with given hash exists
+     *
      * @param hash of formulas
      * @return ID of formula with given hash, null if there is no match
      */
@@ -168,4 +170,13 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
      * @return list of formulas from given user, empty list if there are none.
      */
     List<Formula> getFormulasByUser(User user);
+
+    /**
+     * Method fetches formulas whose canonic output has given hash. List may
+     * contain same formula multiple times.
+     *
+     * @param hash of canonic output
+     * @return list of of formulas whose co has input hash
+     */
+    List<Formula> getFormulasByCanonicOutputHash(String hash);
 }

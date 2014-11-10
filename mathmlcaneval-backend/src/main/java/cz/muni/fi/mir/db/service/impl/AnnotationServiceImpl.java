@@ -32,7 +32,19 @@ import cz.muni.fi.mir.db.service.AnnotationService;
 public class AnnotationServiceImpl implements AnnotationService
 {
     @Autowired 
-    private AnnotationDAO annotationDAO;        
+    private AnnotationDAO annotationDAO;    
+    
+    @Override
+    @Transactional(readOnly = false)
+    public void createAnnotation(Annotation annotation) throws IllegalArgumentException
+    {
+        if(annotation == null)
+        {
+            throw new IllegalArgumentException("Given annotation is null.");
+        }
+        
+        annotationDAO.create(annotation);
+    }
 
     @Override    
     public Annotation getAnnotationByID(Long id) throws IllegalArgumentException

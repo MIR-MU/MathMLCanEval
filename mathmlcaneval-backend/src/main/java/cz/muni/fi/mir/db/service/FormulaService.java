@@ -288,4 +288,14 @@ public interface FormulaService
      * id.
      */
     List<Formula> getFormulasByUser(User user) throws IllegalArgumentException;
+    
+    /**
+     * Method fetches formulas whose canonic output has given hash. 
+     *
+     * @param hash of canonic output
+     * @return list of of formulas whose co has input hash
+     * @throws IllegalArgumentException if hash is null or size is not 40
+     * characters.
+     */
+    List<Formula> getFormulasByCanonicOutputHash(String hash) throws IllegalArgumentException;
 }

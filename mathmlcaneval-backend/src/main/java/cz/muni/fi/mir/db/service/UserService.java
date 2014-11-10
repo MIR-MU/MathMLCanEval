@@ -77,4 +77,11 @@ public interface UserService
      * @throws IllegalArgumentException if user role is null, or does not have valid id.
      */
     List<User> getUsersByRole(UserRole userRole) throws IllegalArgumentException;
+    
+    /**
+     * Method returns system user which is responsible for automatic annotations.
+     * 
+     * @return system user.
+     */
+    User getSystemUser();
 }

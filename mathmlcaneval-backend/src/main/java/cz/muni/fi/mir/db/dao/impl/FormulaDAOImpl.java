@@ -556,4 +556,11 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         fullTextEntityManager.index(f);
     }
+
+    @Override
+    public List<Formula> getFormulasByCanonicOutputHash(String hash)
+    {
+        return entityManager.createQuery("SELECT DISTINCT f FROM formula f LEFT JOIN f.outputs o WHERE o.hashValue = :hashValue", Formula.class)
+                .setParameter("hashValue", hash).getResultList();
+    }
 }

@@ -13,7 +13,6 @@ import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.db.service.ConfigurationService;
 import cz.muni.fi.mir.db.service.RevisionService;
-import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.db.service.UserRoleService;
 import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.UserForm;
@@ -27,7 +26,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
@@ -143,9 +141,12 @@ public class InstallController
             }
             User u = EntityFactory.createUser(username, pass1, username, email, roles);
             
+            User u2 = EntityFactory.createUser("system", null, "system", "webmias@fi.muni.cz", roles);
+            
             u.setPassword(Tools.getInstance().SHA1(u.getPassword()));
 
             userService.createUser(u);
+            userService.createUser(u2);
             
             revisionService.createRevision(
                     EntityFactory
@@ -236,10 +237,13 @@ public class InstallController
         return values;
     }
     
-    @RequestMapping("/co")
+    @RequestMapping("/update")
     public ModelAndView setupCanonicOutputs()
     {
         canonicOutputService.recalculateHashes();
+        
+        User u2 = EntityFactory.createUser("system", null, "system", "webmias@fi.muni.cz", userRoleService.getAllUserRoles());
+        userService.createUser(u2);
         
         return new ModelAndView("redirect:/");
     }
