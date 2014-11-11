@@ -33,13 +33,22 @@
                     <label class="col-sm-3 control-label"><spring:message code="entity.appruns.selected" /></label>
                 </div>
 
+                <!-- mass selection buttons -->
                 <div class="row pull-top-50">
-                    <div class="col-md-12">
-                        <div class="pull-right">
-                            <a href="${pageContext.request.contextPath}/formula/search/" class="btn btn-danger"><spring:message code="general.label.goback" /></a>
+                    <div class="col-md-2">
+                        <div class="pull-left">
+                            <a href="${pageContext.request.contextPath}/formula/search/" class="btn btn-default"><spring:message code="general.label.goback" /></a>
                         </div>
+                    </div>
+                    <div class="col-md-10">
                         <div class="pull-right">
                             <a href="#" class="btn btn-default invert-selection-button"><spring:message code="general.button.invert" /></a>
+                        </div>
+                        <div class="pull-right"> 
+                            <input type="submit" name="selected" value="<spring:message code="entity.formula.button.masscanonicalize.selected" />" class="btn btn-warning"/>
+                        </div>
+                        <div class="pull-right">
+                            <input type="submit" name="searchresult" value="<spring:message code="entity.formula.button.masscanonicalize.searchresult" />" class="btn btn-danger"/>
                         </div>
                     </div>
                 </div>
@@ -70,13 +79,6 @@
                             </div>
                         </c:otherwise>
                     </c:choose>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="text-center pull-top-50"> 
-                            <input type="submit" value="<spring:message code="entity.appruns.button.canonicalize" />" class="btb btn-warning btn-lg"/>
-                        </div>
-                    </div>
                 </div>
             </form:form>
             <!-- pagination -->

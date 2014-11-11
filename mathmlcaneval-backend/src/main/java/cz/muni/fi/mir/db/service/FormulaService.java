@@ -152,6 +152,15 @@ public interface FormulaService
     List<Formula> getAllFormulas(Pagination pagination) throws IllegalArgumentException;
 
     /**
+     * Method obtains filtered list of formulas based on current position in
+     * pagination.
+     *
+     * @return list of formulas from given page.
+     * @throws IllegalArgumentException if pagination is null
+     */
+    List<Formula> getAllFormulas() throws IllegalArgumentException;
+
+    /**
      * Method obtains formula, that has given annotation in relation.
      *
      * @param annotation of formula
@@ -245,6 +254,19 @@ public interface FormulaService
      * If its null then its ignored.
      */
     SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination) throws IllegalArgumentException;
+
+    /**
+     * Search method used to obtained filtered result from entire set of
+     * formulas.
+     *
+     * @param formulaSearchRequest request containing values on which result
+     * will be filtered
+     * @return container holding result of request
+     * @throws IllegalArgumentException if any of input is null, or if any of
+     * entities stored in request is not null, but does not have set valid id.
+     * If its null then its ignored.
+     */
+    SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest) throws IllegalArgumentException;
 
     /**
      * Method executes mass canonicalization upon given list of formulas stored

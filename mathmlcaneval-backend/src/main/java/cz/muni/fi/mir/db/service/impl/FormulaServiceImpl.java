@@ -148,6 +148,13 @@ public class FormulaServiceImpl implements FormulaService
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Formula> getAllFormulas() throws IllegalArgumentException
+    {
+        return formulaDAO.getAllFormulas();
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void massFormulaImport(String path, String filter, Revision revision, 
             Configuration configuration, Program program, 
@@ -352,6 +359,18 @@ public class FormulaServiceImpl implements FormulaService
         }
         
         return formulaDAO.findFormulas(formulaSearchRequest, pagination);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest) throws IllegalArgumentException
+    {
+        if(formulaSearchRequest == null)
+        {
+            throw new IllegalArgumentException("Given request is empty.");
+        }
+
+        return formulaDAO.findFormulas(formulaSearchRequest);
     }
 
     @Override

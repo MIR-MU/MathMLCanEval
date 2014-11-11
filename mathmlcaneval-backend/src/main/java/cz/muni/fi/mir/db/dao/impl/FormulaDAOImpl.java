@@ -213,6 +213,23 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
     }
 
     @Override
+    public List<Formula> getAllFormulas()
+    {
+        List<Formula> resultList = Collections.emptyList();
+        try
+        {
+            resultList = entityManager.createQuery("SELECT f FROM formula f ORDER BY f.id DESC", Formula.class)
+                    .getResultList();
+        }
+        catch (NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+
+        return resultList;
+    }
+
+    @Override
     public int getNumberOfRecords()
     {
         int result = 0;
@@ -408,6 +425,12 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
     }
 
     @Override
+    public SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest)
+    {
+        return findFormulas(formulaSearchRequest, null);
+    }
+
+    @Override
     public SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination)
     {
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
@@ -520,14 +543,23 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
             ftq = fullTextEntityManager.createFullTextQuery(query, Formula.class);
             fsr.setTotalResultSize(ftq.getResultSize());
             
-            ftq.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1));
-            ftq.setMaxResults(pagination.getPageSize());
+            if (pagination != null)
+            {
+                ftq.setFirstResult(pagination.getPageSize() * (pagination.getPageNumber() - 1));
+                ftq.setMaxResults(pagination.getPageSize());
+            }
             fsr.setResults(ftq.getResultList());
         }
         else
         {
+            if (pagination != null)
+            {
+                fsr.setResults(getAllFormulas(pagination));
+            } else
+            {
+                fsr.setResults(getAllFormulas());
+            }
             fsr.setTotalResultSize(getNumberOfRecords());
-            fsr.setResults(getAllFormulas(pagination));
         }
         
         return fsr;        
