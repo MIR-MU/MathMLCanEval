@@ -6,20 +6,27 @@
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">
         <div class="container content">
-            <div class="row pull-top-50">
-                <div class="col-md-12">
-                    <div class="pull-right">
-                        <a href="${pageContext.request.contextPath}/formula/search/" class="btn btn-danger"><spring:message code="general.label.goback" /></a>
+            <form method="POST" action="${pageContext.request.contextPath}/formula/massdelete/run">
+                <!-- mass selection buttons -->
+                <div class="row pull-top-50">
+                    <div class="col-md-2">
+                        <div class="pull-left">
+                            <a href="${pageContext.request.contextPath}/formula/search/" class="btn btn-default"><spring:message code="general.label.goback" /></a>
+                        </div>
                     </div>
-                    <div class="pull-right">
-                        <a href="#" class="btn btn-default invert-selection-button"><spring:message code="general.button.invert" /></a>
+                    <div class="col-md-10">
+                        <div class="pull-right">
+                            <a href="#" class="btn btn-default invert-selection-button"><spring:message code="general.button.invert" /></a>
+                        </div>
+                        <div class="pull-right">
+                            <input type="submit" name="selected" value="<spring:message code="entity.formula.button.massdelete.selected" />" class="btn btn-warning"/>
+                        </div>
+                        <div class="pull-right">
+                            <input type="submit" name="searchresult" value="<spring:message code="entity.formula.button.massdelete.searchresult" />" class="btn btn-danger"/>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-            </div>
-            <form method="POST" action="${pageContext.request.contextPath}/formula/massdelete/">
                 <div class="row">
                     <c:choose>
                         <c:when test="${fn:length(formulaList) gt 0}">
@@ -45,13 +52,6 @@
                             </div>
                         </c:otherwise>
                     </c:choose>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="text-center pull-top-50"> 
-                            <input type="submit" value="<spring:message code="entity.formula.button.massdelete"/>" class="btb btn-warning btn-lg"/>
-                        </div>
-                    </div>
                 </div>
             </form>
             <!-- pagination -->

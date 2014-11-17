@@ -76,6 +76,14 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
     List<Formula> getAllFormulas(Pagination pagination);
 
     /**
+     * Method obtains filtered list of formulas based on current position in
+     * pagination.
+     *
+     * @return list of formulas from given page.
+     */
+    List<Formula> getAllFormulas();
+
+    /**
      * Method obtains formula, that has given annotation in relation.
      *
      * @param annotation of formula
@@ -123,6 +131,16 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
      * @return container holding result of request
      */
     SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination);
+
+    /**
+     * Search method used to obtained filtered result from entire set of
+     * formulas.
+     *
+     * @param formulaSearchRequest request containing values on which result
+     * will be filtered
+     * @return container holding result of request
+     */
+    SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest);
 
     /**
      * Method returns formula of which is given canonicOutput descendant.
