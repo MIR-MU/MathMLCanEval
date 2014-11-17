@@ -15,23 +15,16 @@
  */
 package cz.muni.fi.mir.services;
 
-import java.util.List;
-
-import cz.muni.fi.mir.db.domain.ApplicationRun;
-import cz.muni.fi.mir.db.domain.Formula;
-
 /**
- * 
+ *
  * @author Dominik Szalai - emptulik at gmail.com
- * @author Rober Siska - xsiska2 at mail.muni.cz
  */
-public interface MathCanonicalizerLoader
-{    
+public interface FileService
+{
     /**
-     * 
-     * @param formulas
-     * @param applicationRun
-     * @throws IllegalStateException if revision hash from application run does not exists
+     * Method checks whether given canonicalizer with specified revision hash exists in file directory.
+     * @param revisionHash of canonicalizer which presence is checked
+     * @return true if canonicalizer exists, false otherwise.
      */
-    void execute(List<Formula> formulas, ApplicationRun applicationRun) throws IllegalStateException;    
+    boolean canonicalizerExists(String revisionHash);
 }

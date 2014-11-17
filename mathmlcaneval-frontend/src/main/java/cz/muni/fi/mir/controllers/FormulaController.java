@@ -17,7 +17,6 @@ import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.db.service.ProgramService;
 import cz.muni.fi.mir.db.service.RevisionService;
 import cz.muni.fi.mir.db.service.SourceDocumentService;
-import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.forms.ApplicationRunForm;
 import cz.muni.fi.mir.forms.FindSimilarForm;
 import cz.muni.fi.mir.forms.FormulaForm;
@@ -28,6 +27,7 @@ import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
 import cz.muni.fi.mir.db.service.ElementService;
 import cz.muni.fi.mir.forms.ElementFormRow;
 import cz.muni.fi.mir.forms.FormulaSearchRequestForm;
+import cz.muni.fi.mir.services.FileService;
 import cz.muni.fi.mir.tools.AnnotationAction;
 import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
@@ -77,8 +77,6 @@ public class FormulaController
     @Autowired
     private ProgramService programService;
     @Autowired
-    private UserService userService;
-    @Autowired
     private SourceDocumentService sourceDocumentService;
     @Autowired
     private SecurityContextFacade securityContext;
@@ -94,6 +92,8 @@ public class FormulaController
     private AnnotationValueSerivce annotationValueSerivce;
     @Autowired
     private ElementService elementService;
+    @Autowired
+    private FileService fileService;
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaController.class);
 
@@ -103,16 +103,6 @@ public class FormulaController
     {
         ModelMap mm = prepareModelMap(true, true, true, true,false);        
         mm.addAttribute("formulaForm", new FormulaForm());
-        
-        try
-        {
-            mathCanonicalizerLoader.jarFileExists();
-        }
-        catch(FileNotFoundException fnfe)
-        {
-            mm.addAttribute("jarFileErrorMessage", fnfe.getMessage());
-        }
-        
 
         return new ModelAndView("formula_create", mm);
     }
@@ -134,19 +124,24 @@ public class FormulaController
             return new ModelAndView("formula_create", mm);
         } 
         else
-        {  
-            if (!StringUtils.isBlank(formulaForm.getXml()))
+        { 
+            if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
             {
-                // canonicalize on import
-                if (formulaForm.getRevisionForm() != null && formulaForm.getConfigurationForm() != null)
+                if(!fileService.canonicalizerExists(formulaForm.getRevisionForm().getRevisionHash()))
                 {
-                    formulaService.simpleFormulaImport(formulaForm.getXml(), 
-                            mapper.map(formulaForm.getRevisionForm(), Revision.class), 
-                            mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
-                            mapper.map(formulaForm.getProgramForm(),Program.class), 
-                            mapper.map(formulaForm.getSourceDocumentForm(),SourceDocument.class),
-                            securityContext.getLoggedEntityUser());
+                    throw new IllegalStateException("Given canonicalizer with revision ["+formulaForm.getRevisionForm().getRevisionHash()+"] does not exists.");
                 }
+            }
+            
+            if (!StringUtils.isBlank(formulaForm.getXml()))
+            {                
+                formulaService.simpleFormulaImport(formulaForm.getXml(), 
+                        mapper.map(formulaForm.getRevisionForm(), Revision.class), 
+                        mapper.map(formulaForm.getConfigurationForm(), Configuration.class), 
+                        mapper.map(formulaForm.getProgramForm(),Program.class), 
+                        mapper.map(formulaForm.getSourceDocumentForm(),SourceDocument.class),
+                        securityContext.getLoggedEntityUser()
+                );                
             }
 
             for (MultipartFile file : formulaForm.getUploadedFiles())
@@ -198,9 +193,12 @@ public class FormulaController
     @RequestMapping(value = {"/run", "/run/"}, method = RequestMethod.GET)
     public @ResponseBody void canonicalizeFormula(@RequestParam("formulaId") String formulaId, @ModelAttribute("applicationRunForm") ApplicationRunForm applicationRunForm) throws Exception
     {
-        Formula formula = formulaService.getFormulaByID(new Long(formulaId));
+        if(!fileService.canonicalizerExists(applicationRunForm.getRevisionForm().getRevisionHash()))
+        {
+            throw new IllegalStateException("Given canonicalizer with revision ["+applicationRunForm.getRevisionForm().getRevisionHash()+"] does not exists.");
+        }
 
-        formulaService.massCanonicalize(Arrays.asList(new Long(formulaId)),
+        formulaService.massCanonicalize(Arrays.asList(Long.valueOf(formulaId)),
                     mapper.map(applicationRunForm.getRevisionForm(), Revision.class),
                     mapper.map(applicationRunForm.getConfigurationForm(), Configuration.class),
                     securityContext.getLoggedEntityUser());
@@ -243,17 +241,7 @@ public class FormulaController
     public ModelAndView massImport()
     {
         ModelMap mm = prepareModelMap(true,true,true,true,false);
-        mm.addAttribute("formulaForm", new FormulaForm());
-        
-        try
-        {
-            mathCanonicalizerLoader.jarFileExists();
-        }
-        catch(FileNotFoundException fnfe)
-        {
-            mm.addAttribute("jarFileErrorMessage", fnfe.getMessage());
-        }
-        
+        mm.addAttribute("formulaForm", new FormulaForm());        
 
         return new ModelAndView("formula_create_mass", mm);        
     }
@@ -276,6 +264,10 @@ public class FormulaController
         }
         else
         {
+            if(!fileService.canonicalizerExists(formulaForm.getRevisionForm().getRevisionHash()))
+            {
+                throw new IllegalStateException("Given canonicalizer with revision ["+formulaForm.getRevisionForm().getRevisionHash()+"] does not exists.");
+            }
             // @Async call
             formulaService.massFormulaImport(path, filter,
                     mapper.map(formulaForm.getRevisionForm(), Revision.class), 
@@ -439,6 +431,11 @@ public class FormulaController
 
             return new ModelAndView("formula_mass_canonicalize",mm);
         } else {
+            if(!fileService.canonicalizerExists(applicationRunForm.getRevisionForm().getRevisionHash()))
+            {
+                throw new IllegalStateException("Given canonicalizer with revision ["+applicationRunForm.getRevisionForm().getRevisionHash()+"] does not exists.");
+            }
+            
             List<Long> toCanonicalize = new ArrayList<>();
             for(String formulaID : formulaCanonicalizeIDs)
             {
@@ -474,6 +471,10 @@ public class FormulaController
 
             return new ModelAndView("formula_mass_canonicalize",mm);
         } else {
+            if(!fileService.canonicalizerExists(applicationRunForm.getRevisionForm().getRevisionHash()))
+            {
+                throw new IllegalStateException("Given canonicalizer with revision ["+applicationRunForm.getRevisionForm().getRevisionHash()+"] does not exists.");
+            }
             List<Long> toCanonicalize = new ArrayList<>();
 
             FormulaSearchRequest request = deepMapSearchRequest(formulaSearchRequestForm);

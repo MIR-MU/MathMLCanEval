@@ -15,23 +15,27 @@
  */
 package cz.muni.fi.mir.services;
 
-import java.util.List;
-
-import cz.muni.fi.mir.db.domain.ApplicationRun;
-import cz.muni.fi.mir.db.domain.Formula;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
- * 
+ *
  * @author Dominik Szalai - emptulik at gmail.com
- * @author Rober Siska - xsiska2 at mail.muni.cz
  */
-public interface MathCanonicalizerLoader
-{    
-    /**
-     * 
-     * @param formulas
-     * @param applicationRun
-     * @throws IllegalStateException if revision hash from application run does not exists
-     */
-    void execute(List<Formula> formulas, ApplicationRun applicationRun) throws IllegalStateException;    
+@Component
+public class FileServiceImpl implements FileService
+{
+    @Value("${mathml-canonicalizer.default.jarFolder}")
+    private String jarsFolder;
+
+    @Override
+    public boolean canonicalizerExists(String revisionHash)
+    {
+        Path temp = FileSystems.getDefault().getPath(this.jarsFolder, revisionHash + ".jar");
+        
+        return Files.exists(temp);
+    }
 }

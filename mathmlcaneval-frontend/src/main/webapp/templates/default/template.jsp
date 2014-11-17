@@ -319,6 +319,21 @@
                             e.preventDefault()
                             console.log($("#applicationRunsTable > tbody > tr").length);
                         });
+                        
+                        $("#revisionForm").change(function(){
+                            var revisionHash = $("#revisionForm option:selected").text();
+                            $.ajax({
+                                type : 'get',
+                                url : '${pageContext.request.contextPath}/ajax/revisionexists/',
+                                data : {'revisionHash' : revisionHash},
+                                success : function(response){
+                                    if(response == false)
+                                    {
+                                        alert('Given canonicalizer with revision ['+revisionHash+'] does not exists.');
+                                    }
+                                }
+                            });
+                        });
 
           <c:if test="${not empty graph}">
                         $(function () {

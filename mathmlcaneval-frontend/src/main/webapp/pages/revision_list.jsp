@@ -34,6 +34,10 @@
                                 <td><c:out value="${entry.note}" /></td>
                                 <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
                                     <td>
+                                        <a href="${pageContext.request.contextPath}/ajax/revisionexists/?revisionHash=<c:out value="${entry.revisionHash}" />"
+                                           target="_blank">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </a>
                                         <a href="${pageContext.request.contextPath}/revision/edit/<c:out value="${entry.id}" />/">
                                             <span class="glyphicon glyphicon-wrench"></span>
                                         </a>

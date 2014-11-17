@@ -100,11 +100,7 @@
     
     <bean id="documentBuilder" class="javax.xml.parsers.DocumentBuilder" factory-bean="documentBuilderFactory" factory-method="newDocumentBuilder" />
     
-    <bean id="mathCanonicalizerLoader" class="cz.muni.fi.mir.services.MathCanonicalizerLoaderImpl" factory-method="newInstance">        
-        <constructor-arg name="revision" value="${mathml-canonicalizer.default.revision}"/>
-        <constructor-arg name="mainClassName" value="${mathml-canonicalizer.default.mainclass}"/>
-        <constructor-arg name="jarFolder" value="${mathml-canonicalizer.default.jarFolder}"/>
-    </bean>
+    <bean id="mathCanonicalizerLoader" class="cz.muni.fi.mir.services.MathCanonicalizerLoaderImpl" factory-method="newInstance" />
     
     <task:scheduler id="mathScheduler" pool-size="${scheduler.pool-size}" />
     
