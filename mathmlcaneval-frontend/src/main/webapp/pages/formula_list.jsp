@@ -4,6 +4,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">
         <div class="container content">
@@ -51,6 +52,17 @@
                                                 </div>                                       
                                             </div>
                                             <div class="row form-row">
+                                                <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.applicationrun.revision" /></label>
+                                                <div class="col-md-6">
+                                                    <form:select path="revision" cssClass="form-control">
+                                                        <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
+                                                        <c:forEach items="${revisionList}" var="entry">
+                                                            <form:option value="${entry.id}" label="${entry.revisionHash}" />
+                                                        </c:forEach>
+                                                    </form:select>
+                                                </div>                                       
+                                            </div>
+                                            <div class="row form-row">
                                                 <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.formula.sourceDocument" /></label>
                                                 <div class="col-md-6">
                                                     <form:select path="sourceDocument" cssClass="form-control">
@@ -60,7 +72,18 @@
                                                         </c:forEach>
                                                     </form:select>
                                                 </div>                                       
-                                            </div>
+                                            </div>  
+                                            <div class="row form-row">
+                                                <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.appruns" /></label>
+                                                <div class="col-md-6">
+                                                    <form:select path="applicationRun" cssClass="form-control">
+                                                        <form:option value="-1"><spring:message code="general.select.option.pickone" /></form:option>
+                                                        <c:forEach items="${applicationRunList}" var="entry">
+                                                            <form:option value="${entry.id}"><c:out value="${entry.id}" /> - <joda:format value="${entry.startTime}" style="SS" /></form:option>
+                                                        </c:forEach>
+                                                    </form:select>
+                                                </div>                                       
+                                            </div>  
                                             <div id="elementRowsDiv">
                                                 <c:choose>
                                                     <c:when test="${fn:length(formulaSearchRequestForm.elementRows) eq 0}">

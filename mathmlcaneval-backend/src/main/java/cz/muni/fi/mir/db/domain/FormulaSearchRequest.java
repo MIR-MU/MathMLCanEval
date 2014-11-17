@@ -26,9 +26,72 @@ public class FormulaSearchRequest
     private Program program;
     private SourceDocument sourceDocument;
     private Configuration configuration;
+    private Revision revision;
+    private ApplicationRun applicationRun;
     private String annotationContent;
     private String formulaContent;
     private Integer coRuns;
+    private Map<Element,Integer> elements;
+
+    public Program getProgram()
+    {
+        return program;
+    }
+
+    public void setProgram(Program program)
+    {
+        this.program = program;
+    }
+
+    public SourceDocument getSourceDocument()
+    {
+        return sourceDocument;
+    }
+
+    public void setSourceDocument(SourceDocument sourceDocument)
+    {
+        this.sourceDocument = sourceDocument;
+    }
+
+    public Configuration getConfiguration()
+    {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration)
+    {
+        this.configuration = configuration;
+    }
+
+    public Revision getRevision()
+    {
+        return revision;
+    }
+
+    public void setRevision(Revision revision)
+    {
+        this.revision = revision;
+    }
+
+    public ApplicationRun getApplicationRun()
+    {
+        return applicationRun;
+    }
+
+    public void setApplicationRun(ApplicationRun applicationRun)
+    {
+        this.applicationRun = applicationRun;
+    }
+
+    public String getAnnotationContent()
+    {
+        return annotationContent;
+    }
+
+    public void setAnnotationContent(String annotationContent)
+    {
+        this.annotationContent = annotationContent;
+    }
 
     public String getFormulaContent()
     {
@@ -49,9 +112,6 @@ public class FormulaSearchRequest
     {
         this.coRuns = coRuns;
     }
-    
-    
-    private Map<Element,Integer> elements;
 
     public Map<Element, Integer> getElements()
     {
@@ -61,59 +121,6 @@ public class FormulaSearchRequest
     public void setElements(Map<Element, Integer> elements)
     {
         this.elements = elements;
-    }
-
-    public String getAnnotationContent()
-    {
-        return annotationContent;
-    }
-
-    public void setAnnotationContent(String annotationContent)
-    {
-        this.annotationContent = annotationContent;
-    }
-    
-    
-
-    public Configuration getConfiguration()
-    {
-        return configuration;
-    }
-
-    public void setConfiguration(Configuration configuration)
-    {
-        this.configuration = configuration;
-    }
-    
-
-    public SourceDocument getSourceDocument()
-    {
-        return sourceDocument;
-    }
-
-    public void setSourceDocument(SourceDocument sourceDocument)
-    {
-        this.sourceDocument = sourceDocument;
-    }  
-
-    public Program getProgram()
-    {
-        return program;
-    }
-
-    public void setProgram(Program program)
-    {
-        this.program = program;
-    }
-
-    
-    
-    // Map<Element,Boolean> elements,List<String> annotations,Integer size,Integer runsCount
-
-    @Override
-    public String toString()
-    {
-        return "FormulaSearchRequest{" + "program=" + program + ", sourceDocument=" + sourceDocument + ", configuration=" + configuration + ", annotationContent=" + annotationContent + ", elements=" + elements + '}';
     }
 
     

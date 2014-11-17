@@ -24,6 +24,7 @@ import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
 import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
+import cz.muni.fi.mir.db.service.ApplicationRunService;
 import cz.muni.fi.mir.db.service.ElementService;
 import cz.muni.fi.mir.forms.ElementFormRow;
 import cz.muni.fi.mir.forms.FormulaSearchRequestForm;
@@ -83,8 +84,6 @@ public class FormulaController
     @Autowired
     private Mapper mapper;
     @Autowired
-    private MathCanonicalizerLoader mathCanonicalizerLoader;
-    @Autowired
     private ConfigurationService configurationService;
     @Autowired
     private RevisionService revisionService;
@@ -94,6 +93,8 @@ public class FormulaController
     private ElementService elementService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private ApplicationRunService applicationRunService;
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FormulaController.class);
 
@@ -101,7 +102,7 @@ public class FormulaController
     @SiteTitle("{entity.formula.create}")
     public ModelAndView createFormula()
     {
-        ModelMap mm = prepareModelMap(true, true, true, true,false);        
+        ModelMap mm = prepareModelMap(true, true, true, true,false,false);        
         mm.addAttribute("formulaForm", new FormulaForm());
 
         return new ModelAndView("formula_create", mm);
@@ -117,7 +118,7 @@ public class FormulaController
     {
         if (result.hasErrors())
         {
-            ModelMap mm = prepareModelMap(true, true, true, true,false);            
+            ModelMap mm = prepareModelMap(true, true, true, true,false,false);            
             mm.addAttribute("formulaForm", formulaForm);
             mm.addAttribute(model);
 
@@ -180,7 +181,7 @@ public class FormulaController
     @SiteTitle("{entity.formula.view}")
     public ModelAndView viewFormula(@PathVariable Long id)
     {
-        ModelMap mm = prepareModelMap(true, true, false, false,false);
+        ModelMap mm = prepareModelMap(true, true, false, false,false,false);
         mm.addAttribute("formulaEntry", formulaService.getFormulaByID(id));
         mm.addAttribute("applicationRunForm", new ApplicationRunForm());
         mm.addAttribute("annotationAction", new AnnotationAction());
@@ -227,7 +228,7 @@ public class FormulaController
             pagination.setNumberOfRecords(formulaService.getNumberOfRecords());
         }
 
-        ModelMap mm = prepareModelMap(true, true, true, true,true);
+        ModelMap mm = prepareModelMap(true, true, true, true,true,true);
         mm.addAttribute("pagination", pagination);
         mm.addAttribute("formulaList", formulaService.getAllFormulas(pagination));
         mm.addAttribute("formulaSearchRequestForm", new FormulaSearchRequestForm());
@@ -240,7 +241,7 @@ public class FormulaController
     @SiteTitle("{navigation.import.mass}")
     public ModelAndView massImport()
     {
-        ModelMap mm = prepareModelMap(true,true,true,true,false);
+        ModelMap mm = prepareModelMap(true,true,true,true,false,false);
         mm.addAttribute("formulaForm", new FormulaForm());        
 
         return new ModelAndView("formula_create_mass", mm);        
@@ -256,7 +257,7 @@ public class FormulaController
     {
         if(result.hasErrors())
         {
-            ModelMap mm = prepareModelMap(true,true,true,true,false);
+            ModelMap mm = prepareModelMap(true,true,true,true,false,false);
             mm.addAttribute("formulaForm", formulaForm);
             mm.addAttribute(model);          
             
@@ -392,7 +393,7 @@ public class FormulaController
     @SiteTitle("{entity.appruns.new}")
     public ModelAndView massCanonicalize(@ModelAttribute("formulaSearchRequestForm") FormulaSearchRequestForm formulaSearchRequestForm, @ModelAttribute("pagination") Pagination pagination, Model model)
     {
-        ModelMap mm = prepareModelMap(true, true, true, true,true);
+        ModelMap mm = prepareModelMap(true, true, true, true,true,true);
 
         FormulaSearchRequest request = deepMapSearchRequest(formulaSearchRequestForm);
         SearchResponse<Formula> response = formulaService.findFormulas(request, pagination);
@@ -413,7 +414,7 @@ public class FormulaController
     {
         if(result.hasErrors())
         {
-            ModelMap mm = prepareModelMap(true, true, true, true,true);
+            ModelMap mm = prepareModelMap(true, true, true, true,true,false);
 
             FormulaSearchRequest request = deepMapSearchRequest(formulaSearchRequestForm);
             SearchResponse<Formula> response = formulaService.findFormulas(request, pagination);
@@ -457,7 +458,7 @@ public class FormulaController
     {
         if(result.hasErrors())
         {
-            ModelMap mm = prepareModelMap(true, true, true, true,true);
+            ModelMap mm = prepareModelMap(true, true, true, true,true,false);
 
             FormulaSearchRequest request = deepMapSearchRequest(formulaSearchRequestForm);
             SearchResponse<Formula> response = formulaService.findFormulas(request, pagination);
@@ -495,7 +496,7 @@ public class FormulaController
     @RequestMapping(value = {"/search", "/search/"})
     public ModelAndView search(@ModelAttribute("formulaSearchRequestForm") FormulaSearchRequestForm formulaSearchRequestForm, @ModelAttribute("pagination") Pagination pagination)
     {
-        ModelMap mm = prepareModelMap(true, true, true, true,true);
+        ModelMap mm = prepareModelMap(true, true, true, true,true,true);
 
         FormulaSearchRequest request = deepMapSearchRequest(formulaSearchRequestForm); 
         SearchResponse<Formula> response = formulaService.findFormulas(request, pagination);
@@ -612,7 +613,8 @@ public class FormulaController
             boolean includeConfiguration, 
             boolean includeSourceDocument, 
             boolean includePrograms,
-            boolean includeElements)
+            boolean includeElements,
+            boolean includeAppRuns)
     {
         ModelMap mm = new ModelMap();
         if(includeRevision)
@@ -638,6 +640,11 @@ public class FormulaController
         if(includeElements)
         {
             mm.addAttribute("elementList", elementService.getAllElements());
+        }
+        
+        if(includeAppRuns)
+        {
+            mm.addAttribute("applicationRunList",applicationRunService.getAllApplicationRuns());
         }
         
         return mm;

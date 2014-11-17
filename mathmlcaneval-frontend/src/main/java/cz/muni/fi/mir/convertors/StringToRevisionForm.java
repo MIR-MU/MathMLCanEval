@@ -39,7 +39,7 @@ public class StringToRevisionForm implements Converter<String, RevisionForm>
             }
             else
             {
-                return mapper.map(revisionService.getRevisionByID(new Long(source)), RevisionForm.class);
+                return mapper.map(revisionService.getRevisionByID(Long.valueOf(source)), RevisionForm.class);
             }
         }
     }

@@ -52,4 +52,12 @@ public interface ApplicationRunDAO extends GenericDAO<ApplicationRun, Long>
      * @return number of canonic outputs
      */
     Integer getNumberOfCanonicalizations(ApplicationRun applicationRun);
+
+    /**
+     * Method obtains all applicationruns from database. Order is from latest to
+     * oldest.
+     *
+     * @return list of all applicationruns, empty list if there are none yet.
+     */
+    List<ApplicationRun> getAllApplicationRuns();
 }

@@ -20,62 +20,21 @@ public class FormulaSearchRequestForm
     private ProgramForm program;
     private SourceDocumentForm sourceDocument;
     private ConfigurationForm configuration;
+    private RevisionForm revision;
+    private ApplicationRunForm applicationRun;
     private String annotationContent;
     private String formulaContent;
     private Integer coRuns;
     private List<ElementFormRow> elementRows = LazyList.lazyList(new ArrayList<ElementFormRow>(), FactoryUtils.instantiateFactory(ElementFormRow.class));
 
-    public Integer getCoRuns()
+    public ProgramForm getProgram()
     {
-        return coRuns;
+        return program;
     }
 
-    public void setCoRuns(Integer coRuns)
+    public void setProgram(ProgramForm program)
     {
-        this.coRuns = coRuns;
-    }
-    
-    public String getFormulaContent()
-    {
-        return formulaContent;
-    }
-
-    public void setFormulaContent(String formulaContent)
-    {
-        this.formulaContent = formulaContent;
-    }
-
-    
-    
-    public List<ElementFormRow> getElementRows()
-    {
-        return elementRows;
-    }
-
-    public void setElementRows(List<ElementFormRow> elementRows)
-    {
-        this.elementRows = elementRows;
-    }
-
-    
-    public String getAnnotationContent()
-    {
-        return annotationContent;
-    }
-
-    public void setAnnotationContent(String annotationContent)
-    {
-        this.annotationContent = annotationContent;
-    }
-
-    public ConfigurationForm getConfiguration()
-    {
-        return configuration;
-    }
-
-    public void setConfiguration(ConfigurationForm configuration)
-    {
-        this.configuration = configuration;
+        this.program = program;
     }
 
     public SourceDocumentForm getSourceDocument()
@@ -88,18 +47,76 @@ public class FormulaSearchRequestForm
         this.sourceDocument = sourceDocument;
     }
 
-    public ProgramForm getProgram()
+    public ConfigurationForm getConfiguration()
     {
-        return program;
+        return configuration;
     }
 
-    public void setProgram(ProgramForm program)
+    public void setConfiguration(ConfigurationForm configuration)
     {
-        this.program = program;
+        this.configuration = configuration;
     }
 
-    // Map<Element,Boolean> elements,List<String> annotations,Integer size,Integer runsCount
+    public RevisionForm getRevision()
+    {
+        return revision;
+    }
 
+    public void setRevision(RevisionForm revision)
+    {
+        this.revision = revision;
+    }
+
+    public ApplicationRunForm getApplicationRun()
+    {
+        return applicationRun;
+    }
+
+    public void setApplicationRun(ApplicationRunForm applicationRun)
+    {
+        this.applicationRun = applicationRun;
+    }
+
+    public String getAnnotationContent()
+    {
+        return annotationContent;
+    }
+
+    public void setAnnotationContent(String annotationContent)
+    {
+        this.annotationContent = annotationContent;
+    }
+
+    public String getFormulaContent()
+    {
+        return formulaContent;
+    }
+
+    public void setFormulaContent(String formulaContent)
+    {
+        this.formulaContent = formulaContent;
+    }
+
+    public Integer getCoRuns()
+    {
+        return coRuns;
+    }
+
+    public void setCoRuns(Integer coRuns)
+    {
+        this.coRuns = coRuns;
+    }
+
+    public List<ElementFormRow> getElementRows()
+    {
+        return elementRows;
+    }
+
+    public void setElementRows(List<ElementFormRow> elementRows)
+    {
+        this.elementRows = elementRows;
+    }
+    
     @Override
     public String toString()
     {

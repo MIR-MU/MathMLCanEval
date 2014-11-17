@@ -39,7 +39,7 @@ public class StringToConfigurationForm implements Converter<String, Configuratio
             }
             else
             {
-                return mapper.map(configurationService.getConfigurationByID(new Long(source)), ConfigurationForm.class);
+                return mapper.map(configurationService.getConfigurationByID(Long.valueOf(source)), ConfigurationForm.class);
             }
         }
     }

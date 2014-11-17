@@ -106,6 +106,7 @@
                 <bean class="cz.muni.fi.mir.convertors.StringToUserRoleForm"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToRevisionForm"/>
                 <bean class="cz.muni.fi.mir.convertors.StringToConfigurationForm"/>
+                <bean class="cz.muni.fi.mir.convertors.StringToApplicationRunForm" />
             </list>
         </property>
     </bean>

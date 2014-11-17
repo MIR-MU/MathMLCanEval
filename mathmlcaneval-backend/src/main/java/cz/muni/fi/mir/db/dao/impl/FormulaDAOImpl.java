@@ -426,8 +426,7 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
                 .overridesForField("co.annotation", "standardAnalyzer")
                 .overridesForField("co.element", "keywordAnalyzer")
                 .get();
-
-        //logger.info("$"+qb.keyword().onField("annotation").ignoreFieldBridge().matching(formulaSearchRequest.getAnnotationContent()).createQuery().toString());
+        
         BooleanJunction<BooleanJunction> junction = qb.bool();
 
         if (formulaSearchRequest.getSourceDocument() != null && formulaSearchRequest.getSourceDocument().getId() != null)
@@ -441,16 +440,41 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
             isEmpty = false;
         }
         
-//        if(formulaSearchRequest.getConfiguration() != null && formulaSearchRequest.getConfiguration().getId() != null)
-//        {
-//            junction.must(qb.keyword()
-//                    .onField("configuration.id")
-//                    .matching(formulaSearchRequest.getConfiguration().getId())
-//                    .createQuery()
-//            );
-//            
-//            isEmpty = false;
-//        }
+        if(formulaSearchRequest.getConfiguration() != null && formulaSearchRequest.getConfiguration().getId() != null)
+        {
+            junction.must(qb.keyword()
+                    .onField("co.configuration.id")
+                    .ignoreFieldBridge()
+                    .matching(formulaSearchRequest.getConfiguration().getId())
+                    .createQuery()
+            );
+            
+            isEmpty = false;
+        }
+        
+        if(formulaSearchRequest.getRevision() != null && formulaSearchRequest.getRevision().getId() != null)
+        {
+            junction.must(qb.keyword()
+                    .onField("co.revision.id")
+                    .ignoreFieldBridge()
+                    .matching(formulaSearchRequest.getRevision().getId())
+                    .createQuery()
+            );
+            
+            isEmpty = false;
+        }
+        
+        if(formulaSearchRequest.getApplicationRun() != null && formulaSearchRequest.getApplicationRun().getId() != null)
+        {
+            junction.must(qb.keyword()
+                    .onField("co.applicationrun.id")
+                    .ignoreFieldBridge()
+                    .matching(formulaSearchRequest.getApplicationRun().getId())
+                    .createQuery()
+            );
+            
+            isEmpty = false;
+        }
 
         if (formulaSearchRequest.getProgram() != null && formulaSearchRequest.getProgram().getId() != null)
         {

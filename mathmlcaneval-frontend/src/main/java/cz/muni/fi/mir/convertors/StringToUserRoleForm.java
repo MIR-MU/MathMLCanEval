@@ -42,7 +42,7 @@ public class StringToUserRoleForm implements Converter<String, UserRoleForm>
             }
             else
             {
-                return mapper.map(userRoleService.getUserRoleByID(new Long(source)), UserRoleForm.class);
+                return mapper.map(userRoleService.getUserRoleByID(Long.valueOf(source)), UserRoleForm.class);
             }            
         }
     }    

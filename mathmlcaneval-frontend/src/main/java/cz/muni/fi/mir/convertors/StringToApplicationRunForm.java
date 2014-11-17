@@ -4,25 +4,28 @@
  */
 package cz.muni.fi.mir.convertors;
 
-import cz.muni.fi.mir.db.service.SourceDocumentService;
-import cz.muni.fi.mir.forms.SourceDocumentForm;
+import cz.muni.fi.mir.db.service.ApplicationRunService;
+import cz.muni.fi.mir.forms.ApplicationRunForm;
 import cz.muni.fi.mir.tools.Tools;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 
 /**
+ * Class responsible for converting values inside HTML &lt;select /&gt; tag. Since spring somehow
+ * is not able to determine type of object stored in &lt;select /&gt; tag we have to help
+ * it by registering this Converter.
  *
  * @author siska
  */
-public class StringToSourceDocumentForm implements Converter<String, SourceDocumentForm>
+public class StringToApplicationRunForm implements Converter<String, ApplicationRunForm>
 {
-    @Autowired private SourceDocumentService sourceDocumentService;
+    @Autowired private ApplicationRunService applicationRunService;
     @Autowired private Mapper mapper;
 
 
     @Override
-    public SourceDocumentForm convert(String source)
+    public ApplicationRunForm convert(String source)
     {
         if(Tools.getInstance().stringIsEmpty(source))
         {
@@ -36,7 +39,7 @@ public class StringToSourceDocumentForm implements Converter<String, SourceDocum
             }
             else
             {
-                return mapper.map(sourceDocumentService.getSourceDocumentByID(Long.valueOf(source)), SourceDocumentForm.class);
+                return mapper.map(applicationRunService.getApplicationRunByID(Long.valueOf(source)),ApplicationRunForm.class);
             }
         }
     }

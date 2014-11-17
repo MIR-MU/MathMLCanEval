@@ -210,4 +210,11 @@ public class ApplicationRunServiceImpl implements ApplicationRunService
             return applicationRunDAO.getAllApplicationRunsFromRange(start, end);
         }        
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ApplicationRun> getAllApplicationRuns()
+    {
+        return applicationRunDAO.getAllApplicationRuns();
+    }
 }

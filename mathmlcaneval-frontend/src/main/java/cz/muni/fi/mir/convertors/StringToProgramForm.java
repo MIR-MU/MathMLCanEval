@@ -36,7 +36,7 @@ public class StringToProgramForm implements Converter<String, ProgramForm>
             }
             else
             {
-                return mapper.map(programService.getProgramByID(new Long(source)), ProgramForm.class);
+                return mapper.map(programService.getProgramByID(Long.valueOf(source)), ProgramForm.class);
             }
         }
     }

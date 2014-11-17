@@ -25,7 +25,6 @@ import org.springframework.stereotype.Repository;
 
 import cz.muni.fi.mir.db.dao.ApplicationRunDAO;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
-import java.util.Collections;
 
 /**
  * 
@@ -89,5 +88,11 @@ public class ApplicationRunDAOImpl extends GenericDAOImpl<ApplicationRun, Long> 
         }
         
         return resultList;
+    }
+
+    @Override
+    public List<ApplicationRun> getAllApplicationRuns()
+    {
+        return entityManager.createQuery("SELECT apr FROM applicationRun apr ORDER BY apr.id DESC", ApplicationRun.class).getResultList();
     }
 }
