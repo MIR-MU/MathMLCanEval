@@ -278,12 +278,16 @@
                             $("#applicationRunsTable input:checked").each(function(){
                                 appRunsID.push(parseInt($(this).attr('value')));
                             });
-                            
+                                                        
                             var $form = $("<form>",
                             {
                                 action: '${pageContext.request.contextPath}/comparison/',
                                 method:'get'
-                            }).append($("#applicationRunsTable input:checked").clone()).submit();
+                            });
+                            
+                            $("#applicationRunsTable input:checked").clone().appendTo($form);
+                            
+                            $form.appendTo("body").submit();
                         });
                         
                         $("#loadMoreAppRuns").click(function(e){
@@ -309,10 +313,6 @@
                                             $('<td>').append($('<input type="checkbox" />').attr({'value':value.id,'name':'appRunsID'})),
                                             $('<td>').text('x')
                                         ).appendTo("#applicationRunsTable > tbody:last");
-                                        
-                                        
-                                        
-                                        console.log(value);
                                     });
                                 }
                             });
