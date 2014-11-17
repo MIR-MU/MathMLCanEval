@@ -122,6 +122,6 @@ public class Configuration implements Serializable
     @Override
     public String toString()
     {
-        return "Configuration{" + "id=" + id + ", config=" + config + ", name=" + name + ", note=" + note + '}';
+        return "Configuration{" + "id=" + id + ", name=" + name + ", note=" + note + '}';
     }
 }

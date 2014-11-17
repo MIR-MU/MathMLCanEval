@@ -103,7 +103,7 @@ public class Revision implements Serializable
     @Override
     public String toString()
     {
-        return "Revision{" + "id=" + id + ", revisionHash=" + revisionHash + ", note=" + note + '}';
+        return "Revision{" + "id=" + id + ", revisionHash=" + revisionHash + '}';
     }
 
 }
