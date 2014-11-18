@@ -153,7 +153,7 @@
                                                 <input type="hidden" name="clazz" value="formula" />
                                                 <input type="hidden" name="entityID" value="<c:out value="${formulaEntry.id}" />" />
                                                 <span class="input-group-btn">
-                                                    <input type="submit" class="btn btn-primary" value="<spring:message code="general.button.submit" />" />
+                                                    <input type="submit" class="btn btn-warning" value="<spring:message code="general.button.submit" />" />
                                                 </span>
                                             </div> <!--/input-group -->
                                         </div> <!-- /col-md-12-->

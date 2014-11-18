@@ -16,7 +16,6 @@
 package cz.muni.fi.mir.db.audit;
 
 import cz.muni.fi.mir.db.domain.ApplicationRun;
-import cz.muni.fi.mir.tools.Tools;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

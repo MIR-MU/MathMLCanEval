@@ -131,217 +131,253 @@
                 </div> <!-- /col-md-12>
             </div> <!-- /row -->
 
-            <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
-                <div class="row space-bottom-10">
-                    <div class="col-md-12">
-                        <div class="btn-group pull-right">                        
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#findSimilarModal">
-                                <spring:message code="entity.canonicOutput.findSimilar" />
-                            </button>                
-                            <a href="${pageContext.request.contextPath}/canonicoutput/delete/${canonicOutput.id}" class="btn btn-danger">
-                                <spring:message code="general.label.delete" />
-                            </a>                        
-                        </div> <!-- /btn-group -->
-                    </div> <!-- /col-md-12 -->
-                </div> <!-- /row -->
-            </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                    <div class="row space-bottom-10">
+                        <div class="col-md-12">
+                            <div class="btn-group pull-right">                        
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#findSimilarModal">
+                                    <spring:message code="entity.canonicOutput.findSimilar" />
+                                </button>                
+                                <a href="${pageContext.request.contextPath}/canonicoutput/delete/${canonicOutput.id}" class="btn btn-danger">
+                                    <spring:message code="general.label.delete" />
+                                </a>                        
+                            </div> <!-- /btn-group -->
+                        </div> <!-- /col-md-12 -->
+                    </div> <!-- /row -->
+                </sec:authorize>
 
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="panel panel-primary">                        
-                        <div class="panel-heading">
-                            <spring:message code="general.label.details" />
-                        </div>
-                        <table class="table table-bordered table-striped">
-                            <tr>
-                                <td><spring:message code="general.field.id" /></td>
-                                <td><c:out value="${canonicOutput.id}" /></td>
-                            </tr>
-                            <tr>
-                                <td><spring:message code="entity.canonicOutput.parents" /></td>
-                                <td>
-                                    <c:forEach items="${canonicOutput.parents}" var="parent" varStatus="loop">
-                                        <a href="${pageContext.request.contextPath}/formula/view/${parent.id}">${parent.id}</a>
-                                        ${!loop.last ? ', ' : ''}
-                                    </c:forEach>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><spring:message code="entity.formula.configuration" /></td>
-                                <td>
-                                    <a href="${pageContext.request.contextPath}/configuration/view/${canonicOutput.applicationRun.configuration.id}/">
-                                        <c:out value="${canonicOutput.applicationRun.configuration.name}" />
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><spring:message code="entity.revision.hash" /></td>
-                                <td>
-                                    <a href="${pageContext.request.contextPath}/revision/view/${canonicOutput.applicationRun.revision.id}/">
-                                        <c:out value="${canonicOutput.applicationRun.revision.revisionHash}" />
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div> <!-- /panel -->                
-                </div> <!-- /col-md-6 -->
-
-                <div class="col-md-7">
-                    <div class="panel panel-success">
-                        <div class="panel-heading">
-                            <spring:message code="entity.canonicOutput.annotations" />
-                        </div> <!-- /panel-heading -->
-                        <table id="annotationTable" class="table table-striped">
-                            <tbody>
-                                <c:choose>
-                                    <c:when test="${fn:length(canonicOutput.annotations) == 0}">
-                                        <tr class="empty-table">
-                                            <td>
-                                                <spring:message code="general.table.norecords" />
-                                            </td>
-                                        </tr>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <c:forEach items="${canonicOutput.annotations}" var="annotationRow">
-                                            <tr>
-                                                <td><c:out value="${annotationRow.user.username}" /></td>
-                                                <td class="annotation-note-cell"><c:out value="${annotationRow.annotationContent}" /></td>
-                                                <sec:authorize access="hasRole('ROLE_USER')">
-                                                <td><a href="#" class="annotation-remove" id="${annotationRow.id}"><span class="glyphicon glyphicon-remove"></span></a></td>
-                                                </sec:authorize>
-                                            </tr>
-                                        </c:forEach>
-                                    </c:otherwise>
-                                </c:choose>
-                            </tbody>
-                        </table>
-                        <sec:authorize access="hasRole('ROLE_USER')">
-                            <form:form method="POST" 
-                                       action="${pageContext.request.contextPath}/annotation/annotate/" 
-                                       modelAttribute="annotationAction"
-                                       id="annotationForm">
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="input-group">
-                                                <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                        <spring:message code="general.label.annotate" /> <span class="caret"></span>
-                                                    </button>
-
-                                                    <ul class="dropdown-menu" role="menu">
-                                                        <c:forEach items="${annotationValueList}" var="entry">
-                                                            <li>
-                                                            <a href="#" class="annotation-option" data-annotation="${entry.value}" data-description="${entry.description}">
-                                                                <span class="glyphicon glyphicon-${entry.icon}"></span> ${entry.value}
-                                                            </a>
-                                                        </li>
-                                                        </c:forEach>
-                                                        <li class="divider"></li>
-                                                        <li>
-                                                            <a href="#" id="clear-form">
-                                                                <spring:message code="general.label.clear.input" />
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div> <!--/input-group-btn --> 
-                                                <form:input type="text" id="annotation-value" path="annotationContent" cssClass="form-control" />                                                
-                                                <input type="hidden" name="clazz" value="canonicoutput" />
-                                                <input type="hidden" name="entityID" value="<c:out value="${canonicOutput.id}" />" />
-                                                <span class="input-group-btn">
-                                                    <input type="submit" class="btn btn-primary" value="<spring:message code="general.button.submit" />" />
-                                                </span>
-                                            </div> <!--/input-group -->
-                                        </div> <!-- /col-md-12-->
-                                    </div> <!-- /row -->
-                                </div> <!-- /panel-body -->
-                            </form:form>
-                        </sec:authorize>
-                    </div> <!-- /panel -->  
-                </div> <!-- /col-md-6 -->
-            </div> <!-- /row -->
-
-            <div class="row" id="formulaWindow">
-                <div class="col-md-12">
-
-
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <spring:message code="entity.formula.xml" />
-                            <div class="pull-right">
-                                <span class="glyphicon glyphicon-resize-full" id="resizeWindow"></span>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="panel panel-primary">                        
+                            <div class="panel-heading">
+                                <spring:message code="general.label.details" />
                             </div>
-                        </div> <!-- /panel-heading -->
-                        <div class="panel-body">
-                            <ul class="nav nav-tabs">
-                                <li>
-                                    <a href="#original" data-toggle="tab">
-                                        <spring:message code="entity.canonicOutput.original" />
-                                    </a>
-                                </li>
-                                <li class="active">
-                                    <a href="#canonicalized" data-toggle="tab">
-                                        <spring:message code="entity.canonicOutput.outputForm" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#diff" data-toggle="tab" onclick="diffView();">
-                                        <spring:message code="entity.canonicOutput.diff" />
-                                    </a>
-                                </li>
-                            </ul>
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <td><spring:message code="general.field.id" /></td>
+                                    <td><c:out value="${canonicOutput.id}" /></td>
+                                </tr>
+                                <tr>
+                                    <td><spring:message code="entity.revision.hash" /></td>
+                                    <td><c:out value="${canonicOutput.hashValue}" /></td>
+                                </tr>
+                                <tr>
+                                    <td><spring:message code="entity.canonicOutput.parents" /></td>
+                                    <td>
+                                        <c:forEach items="${canonicOutput.parents}" var="parent" varStatus="loop">
+                                            <a href="${pageContext.request.contextPath}/formula/view/${parent.id}">${parent.id}</a>
+                                            ${!loop.last ? ', ' : ''}
+                                        </c:forEach>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><spring:message code="entity.formula.configuration" /></td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/configuration/view/${canonicOutput.applicationRun.configuration.id}/">
+                                            <c:out value="${canonicOutput.applicationRun.configuration.name}" />
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><spring:message code="entity.revision.hash" /></td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/revision/view/${canonicOutput.applicationRun.revision.id}/">
+                                            <c:out value="${canonicOutput.applicationRun.revision.revisionHash}" />
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div> <!-- /panel -->                
+                    </div> <!-- /col-md-6 -->
 
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="canonicalized">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><spring:message code="entity.formula.rendered" /></div>
-                                        <div class="panel-body">
-                                            <div class="well-sm">
-                                                <c:out value="${canonicOutput.outputForm}" escapeXml="false" />
+                    <div class="col-md-7">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <spring:message code="entity.canonicOutput.annotations" />
+                            </div> <!-- /panel-heading -->
+                            <table id="annotationTable" class="table table-striped">
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${fn:length(canonicOutput.annotations) == 0}">
+                                            <tr class="empty-table">
+                                                <td>
+                                                    <spring:message code="general.table.norecords" />
+                                                </td>
+                                            </tr>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:forEach items="${canonicOutput.annotations}" var="annotationRow">
+                                                <tr>
+                                                    <td><c:out value="${annotationRow.user.username}" /></td>
+                                                    <td class="annotation-note-cell"><c:out value="${annotationRow.annotationContent}" /></td>
+                                                    <sec:authorize access="hasRole('ROLE_USER')">
+                                                        <td><a href="#" class="annotation-remove" id="${annotationRow.id}"><span class="glyphicon glyphicon-remove"></span></a></td>
+                                                            </sec:authorize>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </tbody>
+                            </table>
+                            <sec:authorize access="hasRole('ROLE_USER')">
+                                <form:form method="POST" 
+                                           action="${pageContext.request.contextPath}/annotation/annotate/" 
+                                           modelAttribute="annotationAction"
+                                           id="annotationForm">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="input-group">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                            <spring:message code="general.label.annotate" /> <span class="caret"></span>
+                                                        </button>
+
+                                                        <ul class="dropdown-menu" role="menu">
+                                                            <c:forEach items="${annotationValueList}" var="entry">
+                                                                <li>
+                                                                    <a href="#" class="annotation-option" data-annotation="${entry.value}" data-description="${entry.description}">
+                                                                        <span class="glyphicon glyphicon-${entry.icon}"></span> ${entry.value}
+                                                                    </a>
+                                                                </li>
+                                                            </c:forEach>
+                                                            <li class="divider"></li>
+                                                            <li>
+                                                                <a href="#" id="clear-form">
+                                                                    <spring:message code="general.label.clear.input" />
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div> <!--/input-group-btn --> 
+                                                    <form:input type="text" id="annotation-value" path="annotationContent" cssClass="form-control" />                                                
+                                                    <input type="hidden" name="clazz" value="canonicoutput" />
+                                                    <input type="hidden" name="entityID" value="<c:out value="${canonicOutput.id}" />" />
+                                                    <span class="input-group-btn">
+                                                        <input type="submit" class="btn btn-warning" value="<spring:message code="general.button.submit" />" />                                                    
+                                                    </span>
+                                                </div> <!--/input-group -->
+                                            </div> <!-- /col-md-12-->
+                                        </div> <!-- /row -->
+                                    </div> <!-- /panel-body -->
+                                    <c:if test="${not empty nextCanonicOutput or not empty previousCanonicOutput}">
+                                        <div class="panel-footer">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <c:if test="${not empty firstCanonicOutput}">
+                                                        <a href="${pageContext.request.contextPath}/canonicoutput/view/${firstCanonicOutput.id}" class="btn btn-primary">
+                                                            <span class="glyphicon glyphicon-fast-backward"></span> <spring:message code="general.label.first" />
+                                                        </a>
+                                                    </c:if> 
+                                                    <c:if test="${not empty previousCanonicOutput}">
+                                                        <a href="${pageContext.request.contextPath}/canonicoutput/view/${previousCanonicOutput.id}" class="btn btn-primary">
+                                                            <span class="glyphicon glyphicon-step-backward"></span><spring:message code="general.label.previous" />
+                                                        </a>
+                                                    </c:if>                                                    
+                                                </div>
+                                                <div class="col-md-5 col-md-offset-2">
+                                                    <div class="pull-right">
+                                                        <c:if test="${not empty nextCanonicOutput}">
+                                                            <a href="${pageContext.request.contextPath}/canonicoutput/view/${nextCanonicOutput.id}" class="btn btn-primary">
+                                                                <spring:message code="general.label.next" /><span class="glyphicon glyphicon-forward"></span>
+                                                            </a>
+                                                        </c:if>
+                                                        <c:if test="${not empty lastCanonicOutput}">
+                                                        <a href="${pageContext.request.contextPath}/canonicoutput/view/${lastCanonicOutput.id}" class="btn btn-primary">
+                                                            <span class="glyphicon glyphicon glyphicon-fast-forward"></span> <spring:message code="general.label.last" />
+                                                        </a>
+                                                    </c:if>
+                                                    </div>                                            
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><spring:message code="entity.formula.xml" /></div>
-                                        <div class="panel-body">
-                                            <pre class="brush: xml">
-                                                <c:out value="${canonicOutput.outputForm}" />
-                                            </pre>
-                                        </div>
-                                    </div>
+                                    </c:if>
+                                </form:form>
+                            </sec:authorize>
+                        </div> <!-- /panel -->  
+                    </div> <!-- /col-md-6 -->
+                </div> <!-- /row -->
+
+                <div class="row" id="formulaWindow">
+                    <div class="col-md-12">
+
+
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <spring:message code="entity.formula.xml" />
+                                <div class="pull-right">
+                                    <span class="glyphicon glyphicon-resize-full" id="resizeWindow"></span>
                                 </div>
+                            </div> <!-- /panel-heading -->
+                            <div class="panel-body">
+                                <ul class="nav nav-tabs">
+                                    <li>
+                                        <a href="#original" data-toggle="tab">
+                                            <spring:message code="entity.canonicOutput.original" />
+                                        </a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#canonicalized" data-toggle="tab">
+                                            <spring:message code="entity.canonicOutput.outputForm" />
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#diff" data-toggle="tab" onclick="diffView();">
+                                            <spring:message code="entity.canonicOutput.diff" />
+                                        </a>
+                                    </li>
+                                </ul>
 
-                                <div class="tab-pane" id="original">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><spring:message code="entity.formula.rendered" /></div>
-                                        <div class="panel-body">
-                                            <div class="well-sm">
-                                                <c:out value="${canonicOutput.parents[0].xml}" escapeXml="false" />
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="canonicalized">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading"><spring:message code="entity.formula.rendered" /></div>
+                                            <div class="panel-body">
+                                                <div class="well-sm">
+                                                    <c:out value="${canonicOutput.outputForm}" escapeXml="false" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading"><spring:message code="entity.formula.xml" /></div>
+                                            <div class="panel-body">
+                                                <pre class="brush: xml">
+                                                    <c:out value="${canonicOutput.outputForm}" />
+                                                </pre>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><spring:message code="entity.formula.xml" /></div>
-                                        <div class="panel-body">
-                                            <pre class="brush: xml">
-                                                <c:out value="${canonicOutput.parents[0].xml}" />
-                                            </pre>
-                                        </div>
-                                    </div>
-                                </div> <!-- /tab-pane -->
 
-                                <div class="tab-pane" id="diff">
-                                    <!--see footer for the javascript  -->
-                                </div> <!-- /tab-pane -->
-                            </div> <!-- /tab-content--> 
-                        </div> <!-- /panel-body -->
-                    </div><!-- /panel -->
-                </div> <!--/col-md-12 -->
-            </div> <!-- /row -->
-            
-            <!-- moveMe is for javascript to find next element which is moved when
-                            xml preview is set to page wide-->
-            <div class="moveMe"></div>
-        </div> <!-- /container -->
-    </tiles:putAttribute>
-</tiles:insertDefinition>
+                                    <div class="tab-pane" id="original">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading"><spring:message code="entity.formula.rendered" /></div>
+                                            <div class="panel-body">
+                                                <div class="well-sm">
+                                                    <c:out value="${canonicOutput.parents[0].xml}" escapeXml="false" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading"><spring:message code="entity.formula.xml" /></div>
+                                            <div class="panel-body">
+                                                <pre class="brush: xml">
+                                                    <c:out value="${canonicOutput.parents[0].xml}" />
+                                                </pre>
+                                            </div>
+                                        </div>
+                                    </div> <!-- /tab-pane -->
+
+                                    <div class="tab-pane" id="diff">
+                                        <!--see footer for the javascript  -->
+                                    </div> <!-- /tab-pane -->
+                                </div> <!-- /tab-content--> 
+                            </div> <!-- /panel-body -->
+                        </div><!-- /panel -->
+                    </div> <!--/col-md-12 -->
+                </div> <!-- /row -->
+
+                <!-- moveMe is for javascript to find next element which is moved when
+                                xml preview is set to page wide-->
+                <div class="moveMe"></div>
+            </div> <!-- /container -->
+        </tiles:putAttribute>
+    </tiles:insertDefinition>

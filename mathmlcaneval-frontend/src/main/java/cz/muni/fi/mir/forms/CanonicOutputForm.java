@@ -19,6 +19,7 @@ public class CanonicOutputForm
     private Set<FormulaForm> parents;
     private long runningTime;
     private ApplicationRunForm applicationRunForm;
+    private String hashValue;
     private Set<AnnotationForm> annotationForms;
 
     public Long getId()
@@ -89,6 +90,26 @@ public class CanonicOutputForm
     public void setSimilarForm(String similarForm)
     {
         this.similarForm = similarForm;
+    }
+
+    public ApplicationRunForm getApplicationRunForm()
+    {
+        return applicationRunForm;
+    }
+
+    public void setApplicationRunForm(ApplicationRunForm applicationRunForm)
+    {
+        this.applicationRunForm = applicationRunForm;
+    }
+
+    public String getHashValue()
+    {
+        return hashValue;
+    }
+
+    public void setHashValue(String hashValue)
+    {
+        this.hashValue = hashValue;
     }
 
     @Override

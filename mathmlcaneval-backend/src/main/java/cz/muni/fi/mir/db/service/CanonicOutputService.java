@@ -101,9 +101,55 @@ public interface CanonicOutputService
      * not have set id (null or less than one).
      */
     void deleteAnnotationFromCanonicOutput(CanonicOutput canonicOutput, Annotation annotation) throws IllegalArgumentException;
-    
+
     /**
      * Method recalculates hashes for all canonic outputs.
      */
     void recalculateHashes();
+
+    /**
+     * Method returns next canonic output subsequent to given one belonging to
+     * same application run.
+     *
+     * @param current current pointer in movement
+     * @return subsequent canonic output to given one in same application run,
+     * null if there is none
+     * @throws IllegalArgumentException if current is null, or does not have id.
+     */
+    CanonicOutput nextInRun(CanonicOutput current) throws IllegalArgumentException;
+
+    /**
+     * Method returns previous canonic output precedent to given one belonging
+     * to same application run.
+     *
+     * @param current current pointer in movement
+     * @return precedent canonic output to given one in same application run,
+     * null if there is none
+     * @throws IllegalArgumentException if current is null, or does not have id.
+     */
+    CanonicOutput previousInRun(CanonicOutput current) throws IllegalArgumentException;
+
+    /**
+     * Method returns first canonic output in given run based on id in the same
+     * application run.
+     *
+     * @param current current pointer in application run
+     * @return first canonic output in given application run based on pointer,
+     * null if current is first one
+     * @throws IllegalArgumentException if current is null or does not have
+     * valid id.
+     */
+    CanonicOutput firstInRun(CanonicOutput current) throws IllegalArgumentException;
+
+    /**
+     * Method returns last canonic output in given run based on id in the same
+     * application run.
+     *
+     * @param current current pointer in application run
+     * @return last canonic output in given application run based on pointer,
+     * null if current is last one
+     * @throws IllegalArgumentException if current is null or does not have
+     * valid id.
+     */
+    CanonicOutput lastInRun(CanonicOutput current) throws IllegalArgumentException;
 }

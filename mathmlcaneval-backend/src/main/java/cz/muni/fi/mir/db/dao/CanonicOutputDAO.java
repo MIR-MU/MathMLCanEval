@@ -31,7 +31,7 @@ public interface CanonicOutputDAO extends GenericDAO<CanonicOutput, Long>
 
     /**
      * Method returns all canonic outputs that belong to given application run.
-     * If pagination is set to null, then all results are returned. 
+     * If pagination is set to null, then all results are returned.
      *
      * @param applicationRun under which canonic outputs were made
      * @param pagination used for showing only subset of result
@@ -48,25 +48,72 @@ public interface CanonicOutputDAO extends GenericDAO<CanonicOutput, Long>
      * no match.
      */
     CanonicOutput getCanonicOutputByAnnotation(Annotation annotation);
-    
+
     /**
      * Method obtains canonic output based on its input hash
+     *
      * @param hashValue of canonic output
      * @return canonic output with given hash, null if there is no match
      */
     CanonicOutput getCanonicOuputByHashValue(String hashValue);
-    
+
     /**
      * Method returns number of canonic outputs inside system.
+     *
      * @return number of canonic outputs
      */
     int getNumberOfCanonicOutputs();
-    
+
     /**
      * Helper method of hashing
+     *
      * @param start starting point
      * @param end endin point
-     * @return  list from start to end of canonic outputs
+     * @return list from start to end of canonic outputs
      */
     List<CanonicOutput> getSubListOfOutputs(int start, int end);
+
+    /**
+     * Method returns next canonic output subsequent to given one belonging to
+     * same application run. Method also requires to current have the
+     * application run set.
+     *
+     * @param current current pointer in movement
+     * @return subsequent canonic output to given one in same application run,
+     * null if there is none
+     */
+    CanonicOutput nextInRun(CanonicOutput current);
+
+    /**
+     * Method returns previous canonic output precedent to given one belonging
+     * to same application run. Method also requires to current have the
+     * application run set.
+     *
+     * @param current current pointer in movement
+     * @return precedent canonic output to given one in same application run,
+     * null if there is none
+     */
+    CanonicOutput previousInRun(CanonicOutput current);
+
+    /**
+     * Method returns first canonic output in given run based on id in the same
+     * application run. Given current canonic output has to have set its
+     * application run.
+     *
+     * @param current current pointer in application run
+     * @return first canonic output in given application run based on pointer,
+     * null if current is first one
+     */
+    CanonicOutput firstInRun(CanonicOutput current);
+
+    /**
+     * Method returns last canonic output in given run based on id in the same
+     * application run. Given current canonic output has to have set its
+     * application run.
+     *
+     * @param current current pointer in application run
+     * @return last canonic output in given application run based on pointer,
+     * null if current is last one
+     */
+    CanonicOutput lastInRun(CanonicOutput current);
 }

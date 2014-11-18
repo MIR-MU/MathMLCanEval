@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -50,10 +51,6 @@ public class CanonicOutputController
     @Autowired
     private ApplicationRunService applicationRunService;
 
-    @Autowired
-    private Mapper mapper;
-    @Autowired
-    private SecurityContextFacade securityContext;
 
     @RequestMapping(value = {"/view/{id}", "/view/{id}/"}, method = RequestMethod.GET)
     @SiteTitle("{entity.canonicOutput.view}")
@@ -66,6 +63,10 @@ public class CanonicOutputController
         mm.addAttribute("annotationForm", new AnnotationForm());
         mm.addAttribute("findSimilarForm", new FindSimilarForm());
         mm.addAttribute("annotationAction", new AnnotationAction());
+        mm.addAttribute("nextCanonicOutput", canonicOutputService.nextInRun(canonicOutput));
+        mm.addAttribute("firstCanonicOutput", canonicOutputService.firstInRun(canonicOutput));
+        mm.addAttribute("lastCanonicOutput", canonicOutputService.lastInRun(canonicOutput));
+        mm.addAttribute("previousCanonicOutput", canonicOutputService.previousInRun(canonicOutput));
         mm.addAttribute("annotationValueList", annotationValueSerivce.getAllForCanonicOutputs());
         
         

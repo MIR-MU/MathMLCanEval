@@ -116,4 +116,100 @@ public class CanonicOutputDAOImpl extends GenericDAOImpl<CanonicOutput, Long> im
                 .setFirstResult(start).setMaxResults(end-start)
                 .getResultList();
     }
+
+    @Override
+    public CanonicOutput nextInRun(CanonicOutput current) throws IllegalArgumentException
+    {
+        CanonicOutput result = null;
+        
+        try
+        {
+            result = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :appRun AND co.id > :coID ORDER BY co.id ASC", CanonicOutput.class)
+                    .setParameter("coID",current.getId())
+                    .setParameter("appRun", current.getApplicationRun())
+                    .setMaxResults(1)
+                    .getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return result;
+    }
+
+    @Override
+    public CanonicOutput previousInRun(CanonicOutput current) throws IllegalArgumentException
+    {
+        CanonicOutput result = null;
+        
+        try
+        {
+            result = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :appRun AND co.id < :coID ORDER BY co.id DESC", CanonicOutput.class)
+                    .setParameter("coID",current.getId())
+                    .setParameter("appRun", current.getApplicationRun())
+                    .setMaxResults(1)
+                    .getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        return result;
+    }
+
+    @Override
+    public CanonicOutput firstInRun(CanonicOutput current)
+    {
+        CanonicOutput result = null;
+        
+        try
+        {
+            result = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :apprun ORDER BY co.id ASC", CanonicOutput.class)
+                    .setParameter("apprun", current.getApplicationRun())
+                    .setMaxResults(1)
+                    .getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        if(current.equals(result))
+        {
+            return null;
+        }
+        else
+        {
+            return result;
+        }
+    }
+
+    @Override
+    public CanonicOutput lastInRun(CanonicOutput current)
+    {
+        CanonicOutput result = null;
+        
+        try
+        {
+            result = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE co.applicationRun = :apprun ORDER BY co.id DESC", CanonicOutput.class)
+                    .setParameter("apprun", current.getApplicationRun())
+                    .setMaxResults(1)
+                    .getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+        
+        if(current.equals(result))
+        {
+            return null;
+        }
+        else
+        {
+            return result;
+        }
+    }
 }

@@ -145,7 +145,6 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void recalculateHashes()
     {
         // TODO @RobSis pagination maybe ? :)
@@ -164,5 +163,41 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
                 canonicOutputDAO.update(co);
             }
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CanonicOutput nextInRun(CanonicOutput current) throws IllegalArgumentException
+    {
+        InputChecker.checkInput(current);
+        
+        return canonicOutputDAO.nextInRun(canonicOutputDAO.getByID(current.getId()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CanonicOutput previousInRun(CanonicOutput current) throws IllegalArgumentException
+    {
+        InputChecker.checkInput(current);
+        
+        return canonicOutputDAO.previousInRun(canonicOutputDAO.getByID(current.getId()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CanonicOutput firstInRun(CanonicOutput current) throws IllegalArgumentException
+    {
+        InputChecker.checkInput(current);
+        
+        return canonicOutputDAO.firstInRun(canonicOutputDAO.getByID(current.getId()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CanonicOutput lastInRun(CanonicOutput current) throws IllegalArgumentException
+    {
+        InputChecker.checkInput(current);
+        
+        return canonicOutputDAO.lastInRun(canonicOutputDAO.getByID(current.getId()));
     }
 }

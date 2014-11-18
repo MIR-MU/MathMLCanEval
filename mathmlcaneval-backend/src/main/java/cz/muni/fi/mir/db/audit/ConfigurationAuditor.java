@@ -26,8 +26,8 @@ import org.springframework.stereotype.Component;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class ConfigurationAuditor
 {
     @Autowired private AuditorService auditorService;
