@@ -86,7 +86,7 @@ public class RevisionController
     @RequestMapping(value = {"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
     public ModelAndView deleteRevision(@PathVariable Long id)
     {
-        revisionService.deleteRevision(EntityFactory.createRevision(id));
+        revisionService.deleteRevision(revisionService.getRevisionByID(id));
         
         return new ModelAndView("redirect:/revision/list/");
     }

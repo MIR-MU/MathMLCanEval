@@ -63,29 +63,7 @@ public class ConfigurationTest
 
         deepCompare(configs.get(0), result);
     }
-
-    @Test
-    public void testUpdateConfiguration()
-    {
-        logger.info("Running ConfigurationTest#testUpdateConfiguration()");
-
-        configurationService.createConfiguration(configs.get(0));
-
-        Configuration result = configurationService.getConfigurationByID(ID);
-
-        assertNotNull("Configuration object was not created.", result);
-
-        result.setName("hello");
-        result.setNote("1:2 nakoniec");
-        result.setConfig(DataTestTools.getConfig(false, false, true));
-
-        configurationService.updateConfiguration(result);
-
-        Configuration updatedResult = configurationService.getConfigurationByID(ID);
-
-        deepCompare(result, updatedResult);
-    }
-
+    
     @Test
     public void testDeleteConfiguration()
     {

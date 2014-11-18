@@ -44,15 +44,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
         }
         configurationDAO.create(configuration);
     }
-
-    @Override
-    public void updateConfiguration(Configuration configuration) throws IllegalArgumentException
-    {
-        InputChecker.checkInput(configuration);
-        
-        configurationDAO.update(configuration);
-    }
-
+    
     @Override
     public void deleteConfiguration(Configuration configuration) throws IllegalArgumentException
     {

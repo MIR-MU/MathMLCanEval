@@ -30,7 +30,7 @@ import javax.persistence.SequenceGenerator;
  * @author emptak
  */
 @Entity(name = "revision")
-public class Revision implements Serializable
+public class Revision implements Serializable, Auditable
 {
 
     private static final long serialVersionUID = -2258957018668800641L;
@@ -47,6 +47,7 @@ public class Revision implements Serializable
     @Column(name = "note")
     private String note;
 
+    @Override
     public Long getId()
     {
         return id;

@@ -30,7 +30,7 @@ import javax.persistence.SequenceGenerator;
  * @author Empt
  */
 @Entity(name = "program")
-public class Program implements Serializable
+public class Program implements Serializable, Auditable
 {
 
     private static final long serialVersionUID = 7394481046699929994L;
@@ -50,6 +50,7 @@ public class Program implements Serializable
     @Column(name = "note")
     private String note;
 
+    @Override
     public Long getId()
     {
         return id;

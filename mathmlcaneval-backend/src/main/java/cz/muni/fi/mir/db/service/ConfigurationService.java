@@ -32,16 +32,7 @@ public interface ConfigurationService
      * @param configuration to be created
      * @throws IllegalArgumentException if input is null
      */
-    void createConfiguration(Configuration configuration) throws IllegalArgumentException;
-
-    /**
-     * Method updates configuration.
-     *
-     * @param configuration to be updated
-     * @throws IllegalArgumentException if input is null, or does not have valid
-     * id.
-     */
-    void updateConfiguration(Configuration configuration) throws IllegalArgumentException;
+    void createConfiguration(Configuration configuration) throws IllegalArgumentException;    
 
     /**
      * Method deletes configuration.

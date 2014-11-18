@@ -85,7 +85,7 @@ public class ProgramController
     @RequestMapping(value={"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
     public ModelAndView deleteProgram(@PathVariable Long id)
     {
-        programService.deleteProgram(EntityFactory.createProgram(id));
+        programService.deleteProgram(programService.getProgramByID(id));
         
         return new ModelAndView("redirect:/program/list/");
     }

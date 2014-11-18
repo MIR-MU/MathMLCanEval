@@ -94,7 +94,8 @@ public class ConfigurationController
     @RequestMapping(value={"/delete/{id}","/delete/{id}/"},method = RequestMethod.GET)
     public ModelAndView deleteConfiguration(@PathVariable Long id)
     {
-        configurationService.deleteConfiguration(EntityFactory.createConfiguration(id));
+        // select first so auditor has name 
+        configurationService.deleteConfiguration(configurationService.getConfigurationByID(id));
 
         return new ModelAndView("redirect:/configuration/list/");
     }

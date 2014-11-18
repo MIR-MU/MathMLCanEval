@@ -36,7 +36,7 @@ import javax.persistence.SequenceGenerator;
  * @since 1.0
  */
 @Entity(name = "configuration")
-public class Configuration implements Serializable
+public class Configuration implements Serializable, Auditable
 {
 
     private static final long serialVersionUID = -4875490381198661605L;
@@ -56,6 +56,7 @@ public class Configuration implements Serializable
     @Column(name = "note")
     private String note;
 
+    @Override
     public Long getId()
     {
         return id;

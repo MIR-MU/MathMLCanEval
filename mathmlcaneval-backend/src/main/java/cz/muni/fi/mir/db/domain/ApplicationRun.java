@@ -42,7 +42,7 @@ import org.joda.time.DateTime;
  * @since 1.0
  */
 @Entity(name = "applicationRun")
-public class ApplicationRun implements Serializable
+public class ApplicationRun implements Serializable, Auditable
 {
 
     private static final long serialVersionUID = -6547413491097181885L;
@@ -72,6 +72,7 @@ public class ApplicationRun implements Serializable
     @ManyToOne(fetch = FetchType.EAGER)
     private Revision revision;
 
+    @Override
     public Long getId()
     {
         return id;

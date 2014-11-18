@@ -16,10 +16,12 @@
 package cz.muni.fi.mir.db.domain;
 
 /**
+ * Interface used for simplifying Auditing service.
  *
- * @author emptak
+ * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface Auditable
 {
-    Long getId();   
+
+    Long getId();
 }
