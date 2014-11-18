@@ -33,6 +33,7 @@ import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
 import cz.muni.fi.mir.tools.IndexTools;
 import cz.muni.fi.mir.tools.Tools;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -145,6 +146,13 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
     }
 
     @Override
+    public void updateCanonicOutput(CanonicOutput canonicOutput) throws IllegalArgumentException
+    {
+        canonicOutputDAO.update(canonicOutput);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public void recalculateHashes()
     {
         // TODO @RobSis pagination maybe ? :)

@@ -16,6 +16,7 @@
 package cz.muni.fi.mir.scheduling;
 
 import cz.muni.fi.mir.db.domain.Annotation;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -25,7 +26,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,9 @@ import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.scheduling.TaskStatus.TaskType;
 import cz.muni.fi.mir.services.MailService;
 import cz.muni.fi.mir.tools.Tools;
+
 import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -61,6 +63,9 @@ public class CanonicalizationTask extends ApplicationTask
 
     @Value("${annotation.sameoutput}")
     private String sameOutputAnnotation;
+
+    @Value("${annotation.copyprefix}")
+    private String copyPrefixAnnotation;
     
     @Autowired
     private CanonicOutputService canonicOutputService;
@@ -166,8 +171,27 @@ public class CanonicalizationTask extends ApplicationTask
                 for (Formula f : formulas)
                 {
                     CanonicOutput co = canonicalize(f, canonicalizer, canonicalize, applicationRun);
-                    co.setHashValue(Tools.getInstance().SHA1(co.getOutputForm()));                  
+                    String hashValue = Tools.getInstance().SHA1(co.getOutputForm());
+                    co.setHashValue(hashValue);
+                    List<Annotation> copiedAnnotations = new ArrayList<Annotation>();
+                    for (CanonicOutput prevco : f.getOutputs())
+                      {
+                          if (hashValue.equals(prevco.getHashValue()))
+                          {
+                              for (Annotation a : prevco.getAnnotations())
+                              {
+                                  if (!a.getAnnotationContent().startsWith(copyPrefixAnnotation) && !copiedAnnotations.contains(a))
+                                  {
+                                      Annotation copy = new Annotation();
+                                      copy.setUser(a.getUser());
+                                      copy.setAnnotationContent(copyPrefixAnnotation + a.getAnnotationContent().substring(1));
+                                      copiedAnnotations.add(copy);
 
+                                      annotationService.createAnnotation(copy);
+                                  }
+                              }
+                          }
+                      }
                     f.getOutputs().add(co);
                     
                     List<Formula> sameHashFormulas = formulaService.getFormulasByCanonicOutputHash(co.getHashValue());
@@ -215,6 +239,12 @@ public class CanonicalizationTask extends ApplicationTask
                     
                     canonicOutputService.createCanonicOutput(co);
 
+                    if (copiedAnnotations.size() > 0)
+                    {
+                        co.setAnnotations(copiedAnnotations);
+                        canonicOutputService.updateCanonicOutput(co);
+                        logger.info(copiedAnnotations.size() + " annotations copied to canonicoutput " + co.getId());
+                    }
                     formulaService.updateFormula(f);
 
                     logger.info(String.format("Formula %d canonicalized.", f.getId()));

@@ -401,6 +401,10 @@ public class FormulaServiceImpl implements FormulaService
             // for some reason, the session is already closed in the task,
             // so we need to fetch to lazy collection while we have it...
             Hibernate.initialize(formula.getOutputs());
+            for (CanonicOutput co : formula.getOutputs())
+            {
+                Hibernate.initialize(co.getAnnotations());
+            }
             toCanonicalize.add(formula);
         }
         if (!toCanonicalize.isEmpty())
