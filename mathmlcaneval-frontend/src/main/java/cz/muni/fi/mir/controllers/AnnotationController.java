@@ -21,7 +21,6 @@ import cz.muni.fi.mir.tools.AnnotationAction;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/annotation")
@@ -65,6 +64,7 @@ public class AnnotationController
         return true;
     }
     
+    @Secured("ROLE_USER")
     @RequestMapping(value = {"/annotate/","/annotate"},
             method = RequestMethod.POST,
             produces = "application/json; charset=utf-8")
