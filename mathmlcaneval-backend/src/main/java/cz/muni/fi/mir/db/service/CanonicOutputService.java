@@ -19,6 +19,7 @@ import cz.muni.fi.mir.db.audit.CanonicOutputAuditor;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.SearchResponse;
 
@@ -161,4 +162,13 @@ public interface CanonicOutputService
      * valid id.
      */
     CanonicOutput lastInRun(CanonicOutput current) throws IllegalArgumentException;
+
+    /**
+     * Method returns last canonic output of given formula.
+     *
+     * @param formula
+     * @return last canonic output chronologically
+     * @throws IllegalArgumentException if formula is null or does not have valid id.
+     */
+    CanonicOutput lastOfFormula(Formula formula) throws IllegalArgumentException;
 }

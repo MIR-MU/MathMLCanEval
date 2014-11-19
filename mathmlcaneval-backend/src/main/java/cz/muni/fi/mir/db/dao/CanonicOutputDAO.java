@@ -18,8 +18,10 @@ package cz.muni.fi.mir.db.dao;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.SearchResponse;
+
 import java.util.List;
 
 /**
@@ -116,4 +118,12 @@ public interface CanonicOutputDAO extends GenericDAO<CanonicOutput, Long>
      * null if current is last one
      */
     CanonicOutput lastInRun(CanonicOutput current);
+
+    /**
+     * Method returns last canonic output of given formula.
+     *
+     * @param formula
+     * @return last canonic output chronologically
+     */
+    CanonicOutput lastOfFormula(Formula formula);
 }

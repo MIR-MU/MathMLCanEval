@@ -27,6 +27,7 @@ import cz.muni.fi.mir.db.dao.CanonicOutputDAO;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.SearchResponse;
 
@@ -211,5 +212,25 @@ public class CanonicOutputDAOImpl extends GenericDAOImpl<CanonicOutput, Long> im
         {
             return result;
         }
+    }
+
+    @Override
+    public CanonicOutput lastOfFormula(Formula formula)
+    {
+        CanonicOutput result = null;
+
+        try
+        {
+            result = entityManager.createQuery("SELECT co FROM canonicOutput co WHERE :formulaID MEMBER of co.parents ORDER BY co.applicationRun.stopTime DESC", CanonicOutput.class)
+                    .setParameter("formulaID", formula.getId())
+                    .setMaxResults(1)
+                    .getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            logger.debug(nre);
+        }
+
+        return result;
     }
 }

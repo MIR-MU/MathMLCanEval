@@ -66,6 +66,9 @@ public class CanonicalizationTask extends ApplicationTask
 
     @Value("${annotation.copyprefix}")
     private String copyPrefixAnnotation;
+
+    @Value("${annotation.changedetected}")
+    private String changeDetectedAnnotation;
     
     @Autowired
     private CanonicOutputService canonicOutputService;
@@ -173,29 +176,42 @@ public class CanonicalizationTask extends ApplicationTask
                     CanonicOutput co = canonicalize(f, canonicalizer, canonicalize, applicationRun);
                     String hashValue = Tools.getInstance().SHA1(co.getOutputForm());
                     co.setHashValue(hashValue);
-                    List<Annotation> copiedAnnotations = new ArrayList<Annotation>();
+                    List<Annotation> autoAnnotations = new ArrayList<Annotation>();
+                    
                     for (CanonicOutput prevco : f.getOutputs())
-                      {
-                          if (hashValue.equals(prevco.getHashValue()))
-                          {
-                              for (Annotation a : prevco.getAnnotations())
-                              {
-                                  if (!a.getAnnotationContent().startsWith(copyPrefixAnnotation) && !copiedAnnotations.contains(a))
-                                  {
-                                      Annotation copy = new Annotation();
-                                      copy.setUser(a.getUser());
-                                      copy.setAnnotationContent(copyPrefixAnnotation + a.getAnnotationContent().substring(1));
-                                      copiedAnnotations.add(copy);
+                    {
+                        if (hashValue.equals(prevco.getHashValue()))
+                        {
+                            for (Annotation a : prevco.getAnnotations())
+                            {
+                                if (!a.getAnnotationContent().startsWith(copyPrefixAnnotation) && !autoAnnotations.contains(a))
+                                {
+                                    Annotation copy = new Annotation();
+                                    copy.setUser(a.getUser());
+                                    copy.setAnnotationContent(copyPrefixAnnotation + a.getAnnotationContent().substring(1));
+                                    autoAnnotations.add(copy);
 
-                                      annotationService.createAnnotation(copy);
-                                  }
-                              }
-                          }
-                      }
-                    f.getOutputs().add(co);
-                    
+                                    annotationService.createAnnotation(copy);
+                                }
+                            }
+                        }
+                    }
+
+                    CanonicOutput previousCo = canonicOutputService.lastOfFormula(f);
+                    if (previousCo != null)
+                    {
+                        if (!hashValue.equals(previousCo.getHashValue()))
+                        {
+                            Annotation a = new Annotation();
+                            a.setUser(userService.getSystemUser());
+                            a.setAnnotationContent(changeDetectedAnnotation);
+                            autoAnnotations.add(a);
+
+                            annotationService.createAnnotation(a);
+                        }
+                    }
+
                     List<Formula> sameHashFormulas = formulaService.getFormulasByCanonicOutputHash(co.getHashValue());
-                    
                     logger.info(sameHashFormulas);
                     
                     if(!sameHashFormulas.isEmpty())
@@ -224,7 +240,7 @@ public class CanonicalizationTask extends ApplicationTask
 
                             annotationService.createAnnotation(a);
 
-                            co.setAnnotations(Arrays.asList(a));
+                            autoAnnotations.add(a);
 
                             List<Formula> parents = new ArrayList<>(co.getParents());
                             parents.addAll(sameHashFormulas);
@@ -236,14 +252,15 @@ public class CanonicalizationTask extends ApplicationTask
                         }
                     }
                     
+                    f.getOutputs().add(co);
                     
                     canonicOutputService.createCanonicOutput(co);
 
-                    if (copiedAnnotations.size() > 0)
+                    if (autoAnnotations.size() > 0)
                     {
-                        co.setAnnotations(copiedAnnotations);
+                        co.setAnnotations(autoAnnotations);
                         canonicOutputService.updateCanonicOutput(co);
-                        logger.info(copiedAnnotations.size() + " annotations copied to canonicoutput " + co.getId());
+                        logger.info(autoAnnotations.size() + " automatic annotations added to canonicoutput " + co.getId());
                     }
                     formulaService.updateFormula(f);
 

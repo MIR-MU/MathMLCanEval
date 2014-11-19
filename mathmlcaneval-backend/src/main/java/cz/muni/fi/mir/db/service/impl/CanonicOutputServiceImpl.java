@@ -28,6 +28,7 @@ import cz.muni.fi.mir.db.dao.FormulaDAO;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;
+import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.domain.Pagination;
 import cz.muni.fi.mir.db.domain.SearchResponse;
 import cz.muni.fi.mir.db.service.CanonicOutputService;
@@ -207,5 +208,13 @@ public class CanonicOutputServiceImpl implements CanonicOutputService
         InputChecker.checkInput(current);
         
         return canonicOutputDAO.lastInRun(canonicOutputDAO.getByID(current.getId()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CanonicOutput lastOfFormula(Formula formula) throws IllegalArgumentException
+    {
+        InputChecker.checkInput(formula);
+        return canonicOutputDAO.lastOfFormula(formula);
     }
 }
