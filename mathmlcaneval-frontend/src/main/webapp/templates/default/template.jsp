@@ -61,10 +61,11 @@
         </script>
         <script type="text/javascript" src="<c:url value="/resources/js/diffview.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/difflib.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.min.js" />"></script>
+<!--        <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.categories.min.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.tickrotor.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.tickrotor.js" />"></script>-->
         <script type="text/javascript" src="<c:url value="/resources/js/simple-slider.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/flotr2.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/select2.min.js" />"></script>
         <script type="text/javascript">
                     /*
@@ -82,7 +83,7 @@
                         $("#teest").select2();
 
                         $("#flot-placeholder").css('width', $(".stats-panel-body").width());
-                        $("#flot-placeholder").css('height', $(".stats-panel-body").width() * 0.8);
+//                        $("#flot-placeholder").css('height', $(".stats-panel-body").width() * 0.8);
 
                         $("#statisticsForm ").on('change', function () {
                             var val = $("option:selected", this).val();
@@ -336,28 +337,34 @@
                         });
 
           <c:if test="${not empty graph}">
-                        $(function () {
-                            var data = [
+                (function drawCharts(container){
+                    var data = [
                                   <c:forEach items="${graph}" var="entry" varStatus="status">
-                                              ["<c:out value="${entry.key}" />",<c:out value="${entry.value}" />]<c:if test="${not status.last}"><c:out value="," /></c:if>
+                                              [<c:out value="${status.index}" />,<c:out value="${entry.value}" />]<c:if test="${not status.last}"><c:out value="," /></c:if>
                                   </c:forEach>];
-
-                            $.plot("#flot-placeholder", [data], {
-                                series: {
-                                    bars: {
-                                        show: true,
-                                        barWidth: 0.6,
-                                        align: "center"
-                                    }
-                                },
-                                xaxis: {
-                                    mode: "categories",
-                                    tickLength: 0,
-                                    rotateTicks: 120,
-                                    margin: 30
-                                }
-                            });
-                        });
+                    var graph;
+                    
+                    graph = Flotr.draw(container, [data],{
+                        bars : {
+                        show : true,
+                        horizontal : false,
+                        shadowSize : 0,
+                        barWidth : 1
+                      },
+                        xaxis: {
+                            minorTickFreq: 0,
+                            ticks : [
+                                <c:forEach items="${graph}" var="entry" varStatus="status">
+                                              [<c:out value="${status.index}" />,"<c:out value="${entry.key}" />"]<c:if test="${not status.last}"><c:out value="," /></c:if>
+                                  </c:forEach>
+                            ],
+                            labelsAngle : 45
+                        }, 
+                        grid: {
+                          minorVerticalLines: true
+                        }
+                    });
+                })(document.getElementById("flot-placeholder"));
             </c:if>
 
 
