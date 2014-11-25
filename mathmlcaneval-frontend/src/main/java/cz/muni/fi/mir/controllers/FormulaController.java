@@ -286,7 +286,7 @@ public class FormulaController
     {
         formulaService.reindexAndOptimize();
         
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/dashboard/");
     }
     
     @RequestMapping(value = {"/similar/","/similar"})
