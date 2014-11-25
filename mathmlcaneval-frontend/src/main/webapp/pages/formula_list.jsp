@@ -28,7 +28,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                     <div class="panel-body">
-                                        <form:form action="${pageContext.request.contextPath}/formula/search/" method="get" commandName="formulaSearchRequestForm">
+                                        <form:form action="${pageContext.request.contextPath}/formula/search/" method="post" commandName="formulaSearchRequestForm">
                                             <div class="row form-row">
                                                 <label for="program" class="col-md-2 col-md-offset-2 control-label"><spring:message code="entity.formula.program" /></label>
                                                 <div class="col-md-6">
