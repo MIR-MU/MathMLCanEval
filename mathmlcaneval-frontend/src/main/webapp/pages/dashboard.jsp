@@ -31,9 +31,17 @@
                                 <td><spring:message code="dashboard.appStatus.uptime" /></td>
                                 <td><c:out value="${uptime_h}" />:<c:out value="${uptime_m}" />:<c:out value="${uptime_s}" /></td>
                             </tr>
+                            <tr>
+                                <td>Application Git revision:</td>
+                                <td>${gitPropertiesModel.commitId}</td>
+                            </tr>
+                            <tr>
+                                <td>Date &amp; time:</td>
+                                <td>${gitPropertiesModel.commitTime}</td>
+                            </tr>
                         </table>
-                    </div>
-                </div>
+                    </div> 
+                </div>                
                 <div class="col-md-4">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><spring:message code="index.page.tools" /></div>                                      
