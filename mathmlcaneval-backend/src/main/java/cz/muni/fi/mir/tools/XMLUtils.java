@@ -28,6 +28,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import cz.muni.fi.mir.similarity.SimilarityFormConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  *
@@ -40,6 +41,7 @@ public class XMLUtils
     private static final Logger logger = Logger.getLogger(SimilarityFormConverter.class);
 
     @Autowired
+    @Qualifier(value = "documentBuilder")
     private DocumentBuilder documentBuilder; // wired bean used for creating documents
 
     /**

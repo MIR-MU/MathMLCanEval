@@ -66,10 +66,10 @@ public class DatabaseEventController
         );
         
        
-        for(String s : allRequestParams.keySet())
-        {
-            System.out.println(s+"$"+allRequestParams.get(s));
-        }
+//        for(String s : allRequestParams.keySet())
+//        {
+//            System.out.println(s+"$"+allRequestParams.get(s));
+//        }
         
         
         return result;
