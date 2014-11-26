@@ -15,12 +15,14 @@
  */
 package cz.muni.fi.mir.db.audit;
 
+import cz.muni.fi.mir.db.domain.SearchResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class AuditorServiceImpl implements AuditorService
 {
     @PersistenceContext
@@ -40,6 +42,7 @@ public class AuditorServiceImpl implements AuditorService
     private static final Logger logger = Logger.getLogger(AuditorServiceImpl.class);
     
     @Override
+    @Transactional(readOnly = false)
     public void createDatabaseEvent(DatabaseEvent databaseEvent)
     {        
         entityManager.persist(databaseEvent);
@@ -62,5 +65,48 @@ public class AuditorServiceImpl implements AuditorService
         
         return result;
     }
-    
+
+    @Override
+    public SearchResponse<DatabaseEvent> getLatestEvents(String user, String event, String keyword, int start, int end)
+    {
+        Query q = entityManager.createQuery("SELECT de FROM databaseEvent de WHERE de.message LIKE :message")
+                .setParameter("message", "%"+keyword+"%").setFirstResult(start)
+                .setMaxResults(end-start);
+        
+        Long count = entityManager.createQuery("SELECT count(de) FROM databaseEvent de WHERE de.message LIKE :message", Long.class)
+                .setParameter("message", "%"+keyword+"%").getSingleResult();
+        
+        
+        SearchResponse<DatabaseEvent> response = new SearchResponse<>();
+        response.setResults(q.getResultList());
+        response.setViewSize(count.intValue());
+        
+        
+        return response;
+    }
+
+    @Override
+    public Long getNumberOfEvents()
+    {
+        Long result = null;
+        
+        try
+        {
+            result = entityManager.createQuery("SELECT count(de) FROM databaseEvent de", Long.class)
+                    .getSingleResult();
+        }
+        catch(NoResultException nre)
+        {
+            
+        }
+        
+        if(result == null)
+        {
+            return Long.valueOf("-1");
+        }
+        else
+        {
+            return result;
+        }
+    }
 }

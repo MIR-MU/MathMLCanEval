@@ -15,6 +15,7 @@
  */
 package cz.muni.fi.mir.db.audit;
 
+import cz.muni.fi.mir.db.domain.SearchResponse;
 import java.util.List;
 
 /**
@@ -26,4 +27,8 @@ public interface AuditorService
     void createDatabaseEvent(DatabaseEvent databaseEvent);
     
     List<DatabaseEvent> getLatestEvents();
+    
+    SearchResponse<DatabaseEvent> getLatestEvents(String user, String event,String keyword,int start,int end);
+    
+    Long getNumberOfEvents();
 }

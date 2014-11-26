@@ -29,6 +29,8 @@
         <link href="<c:url value="/resources/css/simple-slider-volume.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/select2.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/select2-bootstrap.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/jquery.dataTables.min.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/dataTables.bootstrap.min.css" />" rel="stylesheet" type="text/css" />
 
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -61,12 +63,11 @@
         </script>
         <script type="text/javascript" src="<c:url value="/resources/js/diffview.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/difflib.js" />"></script>
-<!--        <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.min.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.categories.min.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/resources/js/jquery.flot.tickrotor.js" />"></script>-->
         <script type="text/javascript" src="<c:url value="/resources/js/simple-slider.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/flotr2.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/select2.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/jquery.dataTables.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/dataTables.bootstrap.js" />"></script>
         <script type="text/javascript">
                     /*
                      * http://stackoverflow.com/questions/229726/using-javascript-within-a-jsp-tag
@@ -79,6 +80,21 @@
 
                     //document.ready start
                     $(document).ready(function () {
+                        $("#minifeedtable").dataTable({
+                            "processing": true,
+                            "serverSide": true,
+                            "ajax": {
+                                "url": '${pageContext.request.contextPath}/databaseevent/list',
+                                "type": "GET",
+                                dataType: 'json'
+                            },
+                            "columns": [
+                                {data: "user"},
+                                {data: "message"},
+                                {data: "date"}
+                            ],
+                        });
+                        
                         $(".elementList").select2();
                         $("#teest").select2();
 

@@ -94,11 +94,41 @@
     
     <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager"
         p:entityManagerFactory-ref="entityManagerFactory"
-    />    
+    /> 
     
-    <bean id="documentBuilderFactory" class="javax.xml.parsers.DocumentBuilderFactory" factory-method="newInstance" />
     
-    <bean id="documentBuilder" class="javax.xml.parsers.DocumentBuilder" factory-bean="documentBuilderFactory" factory-method="newDocumentBuilder" />
+    <bean
+        id="documentBuilderFactory"
+        class="cz.muni.fi.mir.tools.MDocumentBuilderFactory"
+    >
+        <property name="entityResolver">
+            <bean
+                class="cz.muni.fi.mir.tools.MEntityResolver"
+                p:resource="classpath*:other/xhtml-math11-f.dtd"
+            />
+        </property>
+        <property name="documentBuilderFactory">
+            <bean 
+                class="javax.xml.parsers.DocumentBuilderFactory" 
+                factory-method="newInstance" 
+                p:namespaceAware="true"
+            />
+        </property>
+    </bean>
+    
+    <bean
+        id="documentBuilder"
+        class="javax.xml.parsers.DocumentBuilder"
+        factory-bean="documentBuilderFactory"
+        factory-method="newInstance"
+    />
+    
+    <bean
+        id="documentBuilderValidating"
+        class="javax.xml.parsers.DocumentBuilder"
+        factory-bean="documentBuilderFactory"
+        factory-method="newInstanceValidating"
+    />
     
     <bean id="mathCanonicalizerLoader" class="cz.muni.fi.mir.services.MathCanonicalizerLoaderImpl" factory-method="newInstance" />
     
