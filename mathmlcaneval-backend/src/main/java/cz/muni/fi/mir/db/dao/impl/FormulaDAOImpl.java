@@ -47,6 +47,7 @@ import cz.muni.fi.mir.db.domain.User;
 import cz.muni.fi.mir.db.service.FormulaService;
 import cz.muni.fi.mir.similarity.SimilarityFormConverter;
 import cz.muni.fi.mir.similarity.SimilarityForms;
+import cz.muni.fi.mir.tools.EntityFactory;
 
 /**
  *
@@ -270,7 +271,7 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
     }
 
     @Override
-    public SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination)
+    public SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean crosslink, boolean directWrite, Pagination pagination)
     {        
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         org.hibernate.search.jpa.FullTextQuery ftq = null;
@@ -378,35 +379,52 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
         
         // we would like to write results immediately
         if (directWrite)
-        {   // override old results ?
-            if (override)
+        {
+            Long[] ids = new Long[resultList.size()];
+            int i = 0;
+            for(Formula similar : resultList)
             {
-                formula.setSimilarFormulas(new ArrayList<>(resultList));
+                ids[i] = similar.getId();
+                i++;
             }
-            else
-            {   // check if null and append to earlier
-                List<Formula> similars = new ArrayList<>();
-                if (formula.getSimilarFormulas() != null)
+            if (crosslink)
+            {
+                for (Formula similar : resultList)
                 {
-                    similars.addAll(formula.getSimilarFormulas());
-                    similars.addAll(resultList);
-
-                    formula.setSimilarFormulas(similars);
+                    attachSimilarFormulas(similar, ids, override);
                 }
-                else
-                {
-                    similars.addAll(resultList);
-
-                    formula.setSimilarFormulas(similars);
-                }
+            } else {
+                attachSimilarFormulas(formula, ids, override);
             }
-            // update
-            super.update(formula);
         }
         
         fsr.setResults(resultList);
         
         return fsr;
+    }
+
+    @Override
+    public void attachSimilarFormulas(Formula formula, Long[] similarIDs, boolean override)
+    {
+        List<Formula> similarsToAdd = new ArrayList<>();
+        if(!override && formula.getSimilarFormulas() != null)
+        {
+            similarsToAdd.addAll(formula.getSimilarFormulas());
+        }
+
+        for(Long id : similarIDs)
+        {
+            if (!formula.getId().equals(id))
+            {
+                // because similar formulas are set
+                // as cascade refresh hibernate needs only IDs
+                Formula f  = EntityFactory.createFormula(id);
+                similarsToAdd.add(f);
+            }
+        }
+
+        formula.setSimilarFormulas(similarsToAdd);
+        super.update(formula);
     }
 
     @Override

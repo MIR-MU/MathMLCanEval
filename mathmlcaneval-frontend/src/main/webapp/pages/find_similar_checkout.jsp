@@ -34,6 +34,7 @@
                         </tbody>
                     </table>
                     <spring:message code="similarity.override" /> <input type="checkbox" name="overrideCurrent" />
+                    <spring:message code="similarity.crosslink" /> <input type="checkbox" name="crosslink" />
                     <input type="submit" class="btn btn-default "/>
                 </form>
                 <!-- pagination -->

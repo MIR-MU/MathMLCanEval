@@ -16,6 +16,7 @@ public class FindSimilarForm
     private boolean useCount;
     
     private boolean override;
+    private boolean crosslink;
     private boolean directWrite;
     
     private String distanceCondition;
@@ -85,6 +86,16 @@ public class FindSimilarForm
     public void setOverride(boolean override)
     {
         this.override = override;
+    }
+
+    public boolean isCrosslink()
+    {
+        return crosslink;
+    }
+
+    public void setCrosslink(boolean crosslink)
+    {
+        this.crosslink = crosslink;
     }
 
     public Long getFormulaID()

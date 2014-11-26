@@ -119,7 +119,7 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
      * @param pagination current page of similarity result.
      * @return response based on given parameters
      */
-    SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination);
+    SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean crosslink, boolean directWrite, Pagination pagination);
 
     /**
      * Search method used to obtained filtered result from entire set of
@@ -131,6 +131,18 @@ public interface FormulaDAO extends GenericDAO<Formula, Long>
      * @return container holding result of request
      */
     SearchResponse<Formula> findFormulas(FormulaSearchRequest formulaSearchRequest, Pagination pagination);
+
+    /**
+     * TODO refactors similarIDs to list of formulas. Method attaches to given
+     * formula formulas specified by array of IDs.
+     *
+     * @param formula parent for similar attach
+     * @param similarIDs array of formulas selected as similar
+     * @param override direct override without user prompt
+     * @throws IllegalArgumentException if formula is null, does not have id or
+     * similarIDs array is empty
+     */
+    public void attachSimilarFormulas(Formula formula, Long[] similarIDs, boolean override);
 
     /**
      * Search method used to obtained filtered result from entire set of

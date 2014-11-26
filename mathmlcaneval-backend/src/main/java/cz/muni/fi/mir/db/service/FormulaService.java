@@ -190,6 +190,7 @@ public interface FormulaService
      * @param formula source formula which holds the canonic outputs
      * @param properties holding criteria for similarity match
      * @param override whether old similar formulas should be remembered
+     * @param crosslink whether to crosslink similar formulas with each other
      * @param directWrite whether found similar forms are written without user
      * prompt.
      * @param pagination current page of similarity result.
@@ -197,7 +198,7 @@ public interface FormulaService
      * @throws IllegalArgumentException if any of input is null, empty, or does
      * not have valid id
      */
-    SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean directWrite, Pagination pagination) throws IllegalArgumentException;
+    SearchResponse<Formula> findSimilar(Formula formula, Map<String, String> properties, boolean override, boolean crosslink, boolean directWrite, Pagination pagination) throws IllegalArgumentException;
 
     /**
      * TODO refactors similarIDs to list of formulas. Method attaches to given

@@ -20,7 +20,6 @@ import cz.muni.fi.mir.db.service.SourceDocumentService;
 import cz.muni.fi.mir.forms.ApplicationRunForm;
 import cz.muni.fi.mir.forms.FindSimilarForm;
 import cz.muni.fi.mir.forms.FormulaForm;
-import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.tools.EntityFactory;
 import cz.muni.fi.mir.db.domain.FormulaSearchRequest;
 import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
@@ -33,7 +32,6 @@ import cz.muni.fi.mir.tools.AnnotationAction;
 import cz.muni.fi.mir.tools.SiteTitle;
 import cz.muni.fi.mir.wrappers.SecurityContextFacade;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -302,6 +300,7 @@ public class FormulaController
                 requestFormula,
                 generateSimilarityProperties(form),
                 form.isOverride(),
+                form.isCrosslink(),
                 form.isDirectWrite(),
                 pagination
         );
@@ -329,20 +328,31 @@ public class FormulaController
     @SiteTitle("{entity.canonicOutput.findSimilar}")
     public ModelAndView submitSimilarFormulas(@RequestParam(value = "similarFormulaID") String[] similarIds,
             @RequestParam(value = "requestFormula") String formulaID,
-            @RequestParam(value = "overrideCurrent",defaultValue = "off") String overrideCurrent
+            @RequestParam(value = "overrideCurrent",defaultValue = "off") String overrideCurrent,
+            @RequestParam(value = "crosslink", defaultValue = "off") String crosslink
     )
     {
-        Long[] ids = new Long[similarIds.length];
-        for(int i =0; i < similarIds.length;i++)
+        Long[] ids = new Long[similarIds.length + 1];
+        for(int i = 0; i < similarIds.length;i++)
         {
             ids[i] = Long.valueOf(similarIds[i]);
         }
-        
-        formulaService.attachSimilarFormulas(formulaService.getFormulaByID(Long.valueOf(formulaID)), ids,checkBoxToBool(overrideCurrent));
-        
+        ids[similarIds.length] = Long.valueOf(formulaID);
+
+        if (checkBoxToBool(crosslink))
+        {
+            for (Long id : ids)
+            {
+                Formula f = formulaService.getFormulaByID(id);
+                formulaService.attachSimilarFormulas(f, ids,checkBoxToBool(overrideCurrent));
+            }
+        } else
+        {
+            formulaService.attachSimilarFormulas(formulaService.getFormulaByID(Long.valueOf(formulaID)), ids, checkBoxToBool(overrideCurrent));
+        }
         return new ModelAndView("redirect:/formula/view/"+formulaID);
     }
-    
+
     @RequestMapping(value = {"/massdelete","/massdelete/"})
     @SiteTitle("{entity.formula.massdelete}")
     public ModelAndView massDelete(@ModelAttribute("formulaSearchRequestForm") FormulaSearchRequestForm formulaSearchRequestForm, @ModelAttribute("pagination") Pagination pagination, Model model)

@@ -238,7 +238,7 @@ public class FormulaServiceImpl implements FormulaService
     @Override
     @Transactional(readOnly = false)
     public SearchResponse<Formula> findSimilar(Formula formula,
-            Map<String,String> properties, boolean override,
+            Map<String,String> properties, boolean override, boolean crosslink,
             boolean directWrite, Pagination pagination) throws IllegalArgumentException
     {
         InputChecker.checkInput(pagination);
@@ -249,7 +249,7 @@ public class FormulaServiceImpl implements FormulaService
             throw new IllegalArgumentException("Given input map of properties is empty.");
         }
         
-        return formulaDAO.findSimilar(formula,properties,override,directWrite, pagination);
+        return formulaDAO.findSimilar(formula,properties,override,crosslink,directWrite, pagination);
     }
 
     @Override
@@ -265,30 +265,7 @@ public class FormulaServiceImpl implements FormulaService
         
         if(similarIDs.length > 0)
         {
-            d("Size is > 0. Starting attaching.");
-            List<Formula> similarsToAdd = new ArrayList<>();
-            if(!override && formula.getSimilarFormulas() != null)
-            {
-                d("Override disabled, adding previous similar forms.");
-                similarsToAdd.addAll(formula.getSimilarFormulas());
-            } 
-            
-            for(Long id : similarIDs)
-            {   // because similar formulas are set
-                // as cascade refresh hibernate needs only IDs
-                Formula f  = EntityFactory.createFormula(id);
-                d("Adding following formula: "+f);
-                similarsToAdd.add(f);
-            }
-            
-            formula.setSimilarFormulas(similarsToAdd);
-            
-            d("Task done with following output to be set:" 
-                    + formula.getSimilarFormulas());
-            //todo x sublist addition
-            //so if A{w,x,y} where w,x,y are similar then set
-            // x{w,y,A} w{A,x,y} and y{w,x,A} as similar
-            formulaDAO.update(formula);
+            formulaDAO.attachSimilarFormulas(formula, similarIDs, override);
         }
     }
     
