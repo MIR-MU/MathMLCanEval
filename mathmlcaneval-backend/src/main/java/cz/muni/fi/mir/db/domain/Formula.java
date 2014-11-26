@@ -108,7 +108,7 @@ public class Formula implements Serializable, Auditable
     })
     @Field(bridge = @FieldBridge(impl = CanonicOutputBridge.class), store = Store.YES, analyze = Analyze.YES)
     private List<CanonicOutput> outputs;         // 
-    @OneToMany
+    @ManyToMany
     private List<Formula> similarFormulas;
     @OneToMany(cascade =
     {
