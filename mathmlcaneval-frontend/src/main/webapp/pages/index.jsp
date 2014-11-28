@@ -54,20 +54,22 @@
                         </a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <table id="minifeedtable">
-                            <thead>
-                                <tr>
-                                    <th><spring:message code="entity.user.username" /></th>
-                                    <th><spring:message code="general.label.event" /></th>
-                                    <th><spring:message code="general.label.date" /></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                <sec:authorize access="hasRole('ROLE_USER')">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="minifeedtable">
+                                <thead>
+                                    <tr>
+                                        <th><spring:message code="entity.user.username" /></th>
+                                        <th><spring:message code="general.label.event" /></th>
+                                        <th><spring:message code="general.label.date" /></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                </sec:authorize>
                 <sec:authorize access="hasRole('ROLE_ANONYMOUS')">
                     <div class="row">
                         <div class="col-md-12">

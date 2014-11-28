@@ -40,10 +40,13 @@ import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.AnalyzerDef;
 import org.hibernate.search.annotations.AnalyzerDefs;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Parameter;
 import org.hibernate.search.annotations.TokenFilterDef;
 import org.hibernate.search.annotations.TokenizerDef;
+import org.hibernate.search.bridge.builtin.EnumBridge;
 
 /**
  *
@@ -96,6 +99,7 @@ public class DatabaseEvent implements Serializable
     private Long id;
     @Column(name = "dboperation")
     @Enumerated(EnumType.STRING)
+    @Field(bridge=@FieldBridge(impl=EnumBridge.class))
     private Operation operation;
     @Column(name = "targetID")
     private Long targetID;
@@ -104,8 +108,10 @@ public class DatabaseEvent implements Serializable
     @Analyzer(definition = "databaseEventAnalyzer")
     private String message;
     @ManyToOne
+    @IndexedEmbedded(includePaths = {"username"})
     private User user;
     @Column(name = "targetClass")
+    @Field
     private String targetClass;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")

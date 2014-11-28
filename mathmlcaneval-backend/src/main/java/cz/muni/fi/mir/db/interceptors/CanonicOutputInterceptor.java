@@ -41,7 +41,7 @@ public class CanonicOutputInterceptor
     private static final Pattern pattern = Pattern.compile("(#\\S+)");
     
     @Before("execution(* cz.muni.fi.mir.db.service.CanonicOutputService.annotateCannonicOutput(..)) && args(canonicOutput,annotation)")
-    public void aroundCreateAnnotation(CanonicOutput canonicOutput, Annotation annotation)
+    public void annotateCanonicOutput(CanonicOutput canonicOutput, Annotation annotation)
     {
         databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.UPDATE, 
@@ -68,7 +68,7 @@ public class CanonicOutputInterceptor
     }
 
     @Before("execution(* cz.muni.fi.mir.db.service.CanonicOutputService.deleteAnnotationFromCanonicOutput(..)) && args(canonicOutput,annotation)")
-    public void aroundDeleteAnnotation(CanonicOutput canonicOutput, Annotation annotation)
+    public void deAnotateCanonicOutput(CanonicOutput canonicOutput, Annotation annotation)
     {
         databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.DELETE,

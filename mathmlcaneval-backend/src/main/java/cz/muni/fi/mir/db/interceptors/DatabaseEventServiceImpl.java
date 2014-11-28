@@ -17,16 +17,20 @@ package cz.muni.fi.mir.db.interceptors;
 
 import cz.muni.fi.mir.db.domain.SearchResponse;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import org.apache.commons.lang3.StringUtils;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.search.Query;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.BooleanJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +47,9 @@ public class DatabaseEventServiceImpl implements DatabaseEventService
     @PersistenceContext
     private EntityManager entityManager;
     private static final Logger logger = Logger.getLogger(DatabaseEventServiceImpl.class);
+    private static final String USER_PREFIX = "u:";
+    private static final String OPERATION_PREFIX = "o:";
+    private static final String TARGET_CLASS_PREFIX = "c:";
     
     @Override
     @Transactional(readOnly = false)
@@ -82,6 +89,36 @@ public class DatabaseEventServiceImpl implements DatabaseEventService
         }
         else
         {
+            String[] keywordsSplit = keyword.split(" ");
+            String username = null;
+            String operation = null;
+            String targetClass = null;
+            Set<String> keywords = new HashSet<>();
+            
+            for(String s : keywordsSplit)
+            {
+                String trimmed = StringUtils.trimToEmpty(s);
+                if(trimmed.length() > 0)
+                {
+                    if(trimmed.startsWith(USER_PREFIX))
+                    {
+                        username = StringUtils.substringAfter(trimmed, USER_PREFIX);
+                    }
+                    else if(trimmed.startsWith(OPERATION_PREFIX))
+                    {
+                        operation = StringUtils.substringAfter(trimmed, OPERATION_PREFIX);
+                    }
+                    else if(trimmed.startsWith(TARGET_CLASS_PREFIX))
+                    {
+                        targetClass = StringUtils.substringAfter(trimmed, TARGET_CLASS_PREFIX);
+                    }
+                    else
+                    {
+                        keywords.add(trimmed);                                          
+                    }
+                }                
+            }
+            
             FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
             org.hibernate.search.jpa.FullTextQuery ftq = null;
 
@@ -91,8 +128,44 @@ public class DatabaseEventServiceImpl implements DatabaseEventService
                     .overridesForField("message", "databaseEventAnalyzerQuery")
                     .get();
         
-            Query query = qb.keyword().onField("message").matching(keyword).createQuery();
+            Query query = null;
+            if(username != null || operation != null || targetClass != null)
+            {
+                BooleanJunction<BooleanJunction> junction = qb.bool();
+                
+                if(username != null)
+                {
+                    junction.must(qb.keyword().onField("user.username").matching(username).createQuery());
+                }
+                if(operation != null)
+                {
+                    junction.must(qb.keyword().onField("operation").matching(DatabaseEvent.Operation.valueOf(operation.toUpperCase())).createQuery());
+                }
+                if(targetClass != null)
+                {
+                    junction.must(qb.keyword().onField("targetClass").matching(targetClass).createQuery());                    
+                }
+                
+                if(!keywords.isEmpty())
+                {
+                    StringBuilder sb = new StringBuilder();
+                    for(String s : keywords)
+                    {
+                        sb.append(s).append(" ");
+                    }
 
+                    junction.must(qb.keyword().onField("message").matching(sb.toString()).createQuery());
+                }                
+                
+                query = junction.createQuery();
+            }
+            else
+            {
+                query = qb.keyword().onField("message").matching(keyword).createQuery();
+            }
+            
+            logger.info("Minifeed Lucene query: "+query);
+            
             ftq = fullTextEntityManager.createFullTextQuery(query, DatabaseEvent.class);
 
             response.setViewSize(ftq.getResultSize());

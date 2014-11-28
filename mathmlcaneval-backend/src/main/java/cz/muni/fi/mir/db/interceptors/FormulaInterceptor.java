@@ -44,7 +44,7 @@ public class FormulaInterceptor
     
     
     @Before("execution(* cz.muni.fi.mir.db.service.FormulaService.annotateFormula(..)) && args(formula,annotation)")
-    public void aroundCreateAnnotation(Formula formula, Annotation annotation)
+    public void annotateFormula(Formula formula, Annotation annotation)
     {
         databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.UPDATE, 
@@ -71,7 +71,7 @@ public class FormulaInterceptor
     }
     
     @Before("execution(* cz.muni.fi.mir.db.service.FormulaService.deleteAnnotationFromFormula(..)) && args(formula,annotation)")
-    public void aroundDeleteAnnotation(Formula formula, Annotation annotation)
+    public void deAnnotateFormula(Formula formula, Annotation annotation)
     {
         databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.DELETE,

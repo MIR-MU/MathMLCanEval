@@ -27,6 +27,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
+import org.hibernate.search.annotations.Field;
 
 /**
  * @author Dominik Szalai
@@ -45,6 +46,7 @@ public class User implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "userid_seq")
     private Long id;
     @Column(name = "username", unique = true)
+    @Field
     private String username;
     @Column(name = "realName")
     private String realName;
