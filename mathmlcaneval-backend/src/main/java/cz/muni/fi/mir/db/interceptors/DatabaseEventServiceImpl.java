@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.db.audit;
+package cz.muni.fi.mir.db.interceptors;
 
 import cz.muni.fi.mir.db.domain.SearchResponse;
 import java.util.ArrayList;
@@ -22,9 +22,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.search.Query;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,11 +38,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class AuditorServiceImpl implements AuditorService
+public class DatabaseEventServiceImpl implements DatabaseEventService
 {
     @PersistenceContext
     private EntityManager entityManager;
-    private static final Logger logger = Logger.getLogger(AuditorServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(DatabaseEventServiceImpl.class);
     
     @Override
     @Transactional(readOnly = false)
@@ -69,20 +72,35 @@ public class AuditorServiceImpl implements AuditorService
     @Override
     public SearchResponse<DatabaseEvent> getLatestEvents(String user, String event, String keyword, int start, int end)
     {
-        Query q = entityManager.createQuery("SELECT de FROM databaseEvent de WHERE de.message LIKE :message")
-                .setParameter("message", "%"+keyword+"%").setFirstResult(start)
-                .setMaxResults(end-start);
-        
-        Long count = entityManager.createQuery("SELECT count(de) FROM databaseEvent de WHERE de.message LIKE :message", Long.class)
-                .setParameter("message", "%"+keyword+"%").getSingleResult();
-        
-        
         SearchResponse<DatabaseEvent> response = new SearchResponse<>();
-        response.setResults(q.getResultList());
-        response.setViewSize(count.intValue());
+        if(keyword == null || keyword.length() < 3)
+        {
+            List<DatabaseEvent> resultList = entityManager.createQuery("SELECT de FROM databaseEvent de ORDER BY de.id DESC", DatabaseEvent.class)
+                    .setFirstResult(start).setMaxResults(end).getResultList();
+            response.setResults(resultList);
+            response.setViewSize(getNumberOfEvents().intValue());
+        }
+        else
+        {
+            FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+            org.hibernate.search.jpa.FullTextQuery ftq = null;
+
+            QueryBuilder qb = fullTextEntityManager.getSearchFactory()
+                    .buildQueryBuilder()
+                    .forEntity(DatabaseEvent.class)
+                    .overridesForField("message", "databaseEventAnalyzerQuery")
+                    .get();
         
+            Query query = qb.keyword().onField("message").matching(keyword).createQuery();
+
+            ftq = fullTextEntityManager.createFullTextQuery(query, DatabaseEvent.class);
+
+            response.setViewSize(ftq.getResultSize());
+            response.setResults(ftq.setFirstResult(start).setMaxResults(end-start).getResultList());
+        }
         
         return response;
+        
     }
 
     @Override

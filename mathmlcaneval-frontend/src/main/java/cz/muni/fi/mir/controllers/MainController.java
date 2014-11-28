@@ -4,7 +4,6 @@
  */
 package cz.muni.fi.mir.controllers;
 
-import cz.muni.fi.mir.db.audit.AuditorService;
 import cz.muni.fi.mir.db.service.StatisticsService;
 import cz.muni.fi.mir.tools.SiteTitle;
 import org.apache.log4j.Logger;
@@ -25,14 +24,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController
 {
     private static final Logger logger = Logger.getLogger(MainController.class);
-    @Autowired private StatisticsService statisticsService;
-    @Autowired private AuditorService auditorService;
     
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView handleIndex()
     {
         ModelMap mm = new ModelMap();
-        mm.addAttribute("minifeed", auditorService.getLatestEvents());
         return new ModelAndView("index",mm);
     }
     

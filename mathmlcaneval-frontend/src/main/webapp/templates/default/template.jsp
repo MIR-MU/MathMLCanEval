@@ -68,6 +68,7 @@
         <script type="text/javascript" src="<c:url value="/resources/js/select2.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.dataTables.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/dataTables.bootstrap.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/dataTables.fnFilterOnReturn.js" />"></script>
         <script type="text/javascript">
                     /*
                      * http://stackoverflow.com/questions/229726/using-javascript-within-a-jsp-tag
@@ -93,7 +94,16 @@
                                 {data: "message"},
                                 {data: "date"}
                             ],
-                        });
+                            "columnDefs" :[
+                                {
+                                    "render" : function(data,type,row){
+                                        var entity = row.targetClass.toLowerCase();
+                                        console.log(entity);
+                                        return '<a href="${pageContext.request.contextPath}/'+entity+'/view/'+row.targetId+'/">'+row.message+'</a>';
+                                    },
+                                    "targets" : 1
+                                }]
+                        }).fnFilterOnReturn();
                         
                         $(".elementList").select2();
                         $("#teest").select2();

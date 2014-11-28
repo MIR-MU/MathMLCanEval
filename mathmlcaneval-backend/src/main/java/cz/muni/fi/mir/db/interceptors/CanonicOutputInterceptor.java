@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.db.audit;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package cz.muni.fi.mir.db.interceptors;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -25,8 +22,10 @@ import org.springframework.stereotype.Component;
 
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.AnnotationValue;
-import cz.muni.fi.mir.db.domain.Formula;
+import cz.muni.fi.mir.db.domain.CanonicOutput;
 import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -34,22 +33,20 @@ import cz.muni.fi.mir.db.service.AnnotationValueSerivce;
  */
 @Aspect
 @Component
-public class FormulaAuditor
+public class CanonicOutputInterceptor
 {
-    @Autowired private AuditorService auditorService;
-    @Autowired private AnnotationValueSerivce annotationValueSerivce;
+    @Autowired private DatabaseEventService databaseEventService;
     @Autowired private DatabaseEventFactory databaseEventFactory;
+    @Autowired private AnnotationValueSerivce annotationValueSerivce;
     private static final Pattern pattern = Pattern.compile("(#\\S+)");
     
-    
-    
-    @Before("execution(* cz.muni.fi.mir.db.service.FormulaService.annotateFormula(..)) && args(formula,annotation)")
-    public void aroundCreateAnnotation(Formula formula, Annotation annotation)
+    @Before("execution(* cz.muni.fi.mir.db.service.CanonicOutputService.annotateCannonicOutput(..)) && args(canonicOutput,annotation)")
+    public void aroundCreateAnnotation(CanonicOutput canonicOutput, Annotation annotation)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.UPDATE, 
-                        formula, 
-                        "Annotated formula with " + annotation.getAnnotationContent()
+                        canonicOutput, 
+                        "Annotated canonicoutput with " + annotation.getAnnotationContent()
                 )
         );
         
@@ -63,20 +60,20 @@ public class FormulaAuditor
             {
                 aValue = new AnnotationValue();
                 aValue.setValue(match);
-                aValue.setType(AnnotationValue.Type.FORMULA);
+                aValue.setType(AnnotationValue.Type.CANONICOUTPUT);
                 
                 annotationValueSerivce.createAnnotationValue(aValue);
             }
         }
     }
-    
-    @Before("execution(* cz.muni.fi.mir.db.service.FormulaService.deleteAnnotationFromFormula(..)) && args(formula,annotation)")
-    public void aroundDeleteAnnotation(Formula formula, Annotation annotation)
+
+    @Before("execution(* cz.muni.fi.mir.db.service.CanonicOutputService.deleteAnnotationFromCanonicOutput(..)) && args(canonicOutput,annotation)")
+    public void aroundDeleteAnnotation(CanonicOutput canonicOutput, Annotation annotation)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.DELETE,
-                        formula, 
-                        "Deleted annotation " + annotation.getAnnotationContent() + " from formula"
+                        canonicOutput, 
+                        "Deleted annotation " + annotation.getAnnotationContent() + " from canonicoutput"
                 )
         );
     }

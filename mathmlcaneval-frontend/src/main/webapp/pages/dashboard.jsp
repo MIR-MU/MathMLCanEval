@@ -48,7 +48,7 @@
 
                         <!-- List group -->
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="${pageContext.request.contextPath}/formula/reindex/"><spring:message code="index.page.reindex" /></a></li>                                            
+                            <li class="list-group-item"><a href="${pageContext.request.contextPath}/dashboard/reindex/"><spring:message code="index.page.reindex" /></a></li>                                            
                             <li class="list-group-item"><a href="#"><spring:message code="index.page.recalculate.hashes" /></a></li>                                         
                             <li class="list-group-item"><a href="${pageContext.request.contextPath}/statistics/calc/"><spring:message code="index.page.recalculate.statistics" /></a></li>                                           
                         </ul>

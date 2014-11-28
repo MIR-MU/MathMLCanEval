@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.db.audit;
+package cz.muni.fi.mir.db.interceptors;
 
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import org.aspectj.lang.annotation.After;
@@ -30,11 +30,11 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Component
-public class ApplicationRunAuditor
+public class ApplicationRunInterceptors
 {
 
     @Autowired
-    private AuditorService auditorService;
+    private DatabaseEventService databaseEventService;
     @Autowired
     private DatabaseEventFactory databaseEventFactory;
     private static final DateTimeFormatter dtfOut = DateTimeFormat.forPattern("MM/dd/yyyy");
@@ -57,13 +57,13 @@ public class ApplicationRunAuditor
 
         // because spring security is not propagated inside async calls somehow we have to set user manually
         de.setUser(applicationRun.getUser());
-        auditorService.createDatabaseEvent(de);
+        databaseEventService.createDatabaseEvent(de);
     }
 
     @Before("execution(* cz.muni.fi.mir.db.service.ApplicationRunService.createApplicationRun(..)) && args(applicationRun,deleteFormulas,deleteCanonicOutputs)")
     public void aroundDeleteApplicationRun(ApplicationRun applicationRun, boolean deleteFormulas, boolean deleteCanonicOutputs)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.DELETE,
                         applicationRun,
                         "Deleted application run " + applicationRun.getId()

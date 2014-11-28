@@ -15,7 +15,7 @@
  */
 package cz.muni.fi.mir.db.service;
 
-import cz.muni.fi.mir.db.audit.FormulaAuditor;
+import cz.muni.fi.mir.db.interceptors.FormulaInterceptor;
 
 import java.util.List;
 import java.util.Map;

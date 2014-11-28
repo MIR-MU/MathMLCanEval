@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.db.audit;
+package cz.muni.fi.mir.db.interceptors;
 
 import cz.muni.fi.mir.db.domain.SearchResponse;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public interface AuditorService
+public interface DatabaseEventService
 {
     void createDatabaseEvent(DatabaseEvent databaseEvent);
     

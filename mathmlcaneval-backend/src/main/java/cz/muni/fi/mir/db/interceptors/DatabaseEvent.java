@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.db.audit;
-
+package cz.muni.fi.mir.db.interceptors;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -33,24 +32,66 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import cz.muni.fi.mir.db.domain.User;
+import org.apache.solr.analysis.ASCIIFoldingFilterFactory;
+import org.apache.solr.analysis.EdgeNGramFilterFactory;
+import org.apache.solr.analysis.LowerCaseFilterFactory;
+import org.apache.solr.analysis.WhitespaceTokenizerFactory;
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.AnalyzerDef;
+import org.hibernate.search.annotations.AnalyzerDefs;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Parameter;
+import org.hibernate.search.annotations.TokenFilterDef;
+import org.hibernate.search.annotations.TokenizerDef;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Entity(name = "databaseEvent")
+@AnalyzerDefs(
+{
+    @AnalyzerDef(name = "databaseEventAnalyzer",
+            tokenizer = @TokenizerDef(factory
+                    = WhitespaceTokenizerFactory.class),
+            filters =
+            {
+                @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                @TokenFilterDef(factory = EdgeNGramFilterFactory.class,
+                        params =
+                        {
+                            @Parameter(name = "minGramSize", value = "3"),
+                            @Parameter(name = "maxGramSize", value = "50")
+                        }),
+                @TokenFilterDef(factory = ASCIIFoldingFilterFactory.class)
+            }),
+    @AnalyzerDef(name = "databaseEventAnalyzerQuery",
+            tokenizer = @TokenizerDef(factory
+                    = WhitespaceTokenizerFactory.class),
+            filters =
+            {
+                @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                @TokenFilterDef(factory = ASCIIFoldingFilterFactory.class)
+            })
+})
+@Indexed
 public class DatabaseEvent implements Serializable
 {
+
+    private static final long serialVersionUID = -1454282898406331578L;
+
     public enum Operation
     {
+
         INSERT,
         UPDATE,
         DELETE
     }
-    
+
     @Id
-    @Column(name = "databaseevent_id",nullable = false)
-    @SequenceGenerator(name="databaseeventid_seq", sequenceName="databaseeventid_seq")
+    @Column(name = "databaseevent_id", nullable = false)
+    @SequenceGenerator(name = "databaseeventid_seq", sequenceName = "databaseeventid_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "databaseeventid_seq")
     private Long id;
     @Column(name = "dboperation")
@@ -58,16 +99,18 @@ public class DatabaseEvent implements Serializable
     private Operation operation;
     @Column(name = "targetID")
     private Long targetID;
-    @Column(name="message")
+    @Column(name = "message")
+    @Field
+    @Analyzer(definition = "databaseEventAnalyzer")
     private String message;
     @ManyToOne
     private User user;
     @Column(name = "targetClass")
     private String targetClass;
-    
+
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "eventTime")
-    private DateTime eventTime; 
+    private DateTime eventTime;
 
     public Long getId()
     {
@@ -98,8 +141,6 @@ public class DatabaseEvent implements Serializable
     {
         this.targetID = targetID;
     }
-    
-     
 
     public String getMessage()
     {
@@ -146,7 +187,7 @@ public class DatabaseEvent implements Serializable
     {
         return "DatabaseEvent{" + "id=" + id + ", operation=" + operation + ", targetID=" + targetID + ", message=" + message + ", user=" + user + ", targetClass=" + targetClass + ", eventTime=" + eventTime + '}';
     }
-    
+
     @Override
     public int hashCode()
     {
@@ -169,6 +210,4 @@ public class DatabaseEvent implements Serializable
         final DatabaseEvent other = (DatabaseEvent) obj;
         return Objects.equals(this.id, other.id);
     }
-    
-    
 }

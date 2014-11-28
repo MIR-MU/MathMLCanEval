@@ -15,7 +15,7 @@
  */
 package cz.muni.fi.mir.db.service;
 
-import cz.muni.fi.mir.db.audit.CanonicOutputAuditor;
+import cz.muni.fi.mir.db.interceptors.CanonicOutputInterceptor;
 import cz.muni.fi.mir.db.domain.Annotation;
 import cz.muni.fi.mir.db.domain.ApplicationRun;
 import cz.muni.fi.mir.db.domain.CanonicOutput;

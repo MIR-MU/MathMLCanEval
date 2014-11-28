@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.db.audit;
+package cz.muni.fi.mir.db.interceptors;
 
 import cz.muni.fi.mir.db.domain.Configuration;
 import org.aspectj.lang.annotation.After;
@@ -26,17 +26,17 @@ import org.springframework.stereotype.Component;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-//@Aspect
-//@Component
-public class ConfigurationAuditor
+@Aspect
+@Component
+public class ConfigurationInterceptor
 {
-    @Autowired private AuditorService auditorService;
+    @Autowired private DatabaseEventService databaseEventService;
     @Autowired private DatabaseEventFactory databaseEventFactory;
     
     @After("execution(* cz.muni.fi.mir.db.service.ConfigurationService.createConfiguration(..)) && args(configuration)")
     public void aroundCreateConfiguration(Configuration configuration)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.INSERT, 
                         configuration, 
                         "Created configuration "+configuration.getName()
@@ -47,10 +47,10 @@ public class ConfigurationAuditor
     @Before("execution(* cz.muni.fi.mir.db.service.ConfigurationService.deleteConfiguration(..)) && args(configuration)")
     public void aroundDeleteConfiguration(Configuration configuration)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.DELETE, 
                         configuration, 
-                        "Deleted configuration "+configuration.getName()
+                        "Deleted configuration "+configuration.getName() //name can be used as it cannot be ever changed
                 )
         );
     }

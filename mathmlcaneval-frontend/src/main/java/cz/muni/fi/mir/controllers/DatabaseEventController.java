@@ -8,14 +8,12 @@ package cz.muni.fi.mir.controllers;
 import cz.muni.fi.mir.datatables.DataTablesDatabaseEvent;
 import cz.muni.fi.mir.datatables.DataTablesRequest;
 import cz.muni.fi.mir.datatables.DataTablesResponse;
-import cz.muni.fi.mir.db.audit.AuditorService;
-import cz.muni.fi.mir.db.audit.DatabaseEvent;
+import cz.muni.fi.mir.db.interceptors.DatabaseEvent;
+import cz.muni.fi.mir.db.interceptors.DatabaseEventService;
 import cz.muni.fi.mir.db.domain.SearchResponse;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,14 +30,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class DatabaseEventController
 {
     @Autowired
-    private AuditorService auditorService;
+    private DatabaseEventService databaseEventService;
     
     
     @RequestMapping(value = "/list",produces = "application/json; charset=utf-8")
-    public @ResponseBody DataTablesResponse<DataTablesDatabaseEvent> getAjaxData(@ModelAttribute DataTablesRequest dataTablesRequest,
-            @RequestParam Map<String,String> allRequestParams)
+    public @ResponseBody DataTablesResponse<DataTablesDatabaseEvent> getAjaxData(@ModelAttribute DataTablesRequest dataTablesRequest)
     {
-        SearchResponse<DatabaseEvent> response = auditorService.getLatestEvents(null, null, 
+        SearchResponse<DatabaseEvent> response = databaseEventService.getLatestEvents(null, null, 
                 dataTablesRequest.getSearchValue(),
                 dataTablesRequest.getStart(), 
                 dataTablesRequest.getStart()+dataTablesRequest.getLength());
@@ -49,28 +46,14 @@ public class DatabaseEventController
         
         for(DatabaseEvent de : response.getResults())
         {
-            DataTablesDatabaseEvent dtde = new DataTablesDatabaseEvent();
-            dtde.setMessage(de.getMessage());
-            if(de.getUser() != null)
-            {
-                dtde.setUser(de.getUser().getUsername());
-            }
-            
-            list.add(dtde);
+            list.add(new DataTablesDatabaseEvent(de));
         }
         
         DataTablesResponse<DataTablesDatabaseEvent> result = new DataTablesResponse<>(dataTablesRequest, 
                 list, 
-                auditorService.getNumberOfEvents().intValue(), 
+                databaseEventService.getNumberOfEvents().intValue(), 
                 response.getViewSize()
         );
-        
-       
-//        for(String s : allRequestParams.keySet())
-//        {
-//            System.out.println(s+"$"+allRequestParams.get(s));
-//        }
-        
         
         return result;
     }

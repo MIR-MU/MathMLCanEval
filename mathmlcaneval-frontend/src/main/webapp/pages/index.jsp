@@ -59,9 +59,9 @@
                         <table id="minifeedtable">
                             <thead>
                                 <tr>
-                                    <td>who</td>
-                                    <td>value</td>
-                                    <td>date</td>
+                                    <th><spring:message code="entity.user.username" /></th>
+                                    <th><spring:message code="general.label.event" /></th>
+                                    <th><spring:message code="general.label.date" /></th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

@@ -78,61 +78,68 @@ public class StatisticsController
     
     private ModelMap prepareStatisticsModelMap(Statistics stat,Map<Long, DateTime> dropdownMap)
     {
-        Map<Pair<Configuration,Revision>,SortedMap<String,Integer>> map = new HashMap<>();
-        Map<String,Integer> graph = new HashMap<>();
-        SortedSet<String> columns = new TreeSet<>();
-        
-        for(StatisticsHolder sh : stat.getStatisticsHolders())
+        if(stat != null)
         {
-            Pair<Configuration,Revision> key = new Pair<>(sh.getConfiguration(), sh.getRevision());
-            
-            SortedMap<String,Integer> keyValues = null;
-            
-            if(map.containsKey(key))
+            Map<Pair<Configuration,Revision>,SortedMap<String,Integer>> map = new HashMap<>();
+            Map<String,Integer> graph = new HashMap<>();
+            SortedSet<String> columns = new TreeSet<>();
+
+            for(StatisticsHolder sh : stat.getStatisticsHolders())
             {
-                keyValues = map.get(key);
-                
-                addOrIncrement(sh.getAnnotation(), sh.getCount(), keyValues);
-                addOrIncrement(sh.getAnnotation(), sh.getCount(), graph);
-            }
-            else
-            {
-                keyValues = new TreeMap<>();
-                keyValues.put(sh.getAnnotation(), sh.getCount());
-                addOrIncrement(sh.getAnnotation(), sh.getCount(), graph);
-            }
-            
-            
-            map.put(key,keyValues);
-            columns.add(sh.getAnnotation());
-        }
-        
-        //postprocessing to fill empty columns
-        for(Pair<Configuration,Revision> pair : map.keySet())
-        {
-            SortedMap<String,Integer> values = map.get(pair);
-            for(String s : columns)
-            {
-                if(!values.containsKey(s))
+                Pair<Configuration,Revision> key = new Pair<>(sh.getConfiguration(), sh.getRevision());
+
+                SortedMap<String,Integer> keyValues = null;
+
+                if(map.containsKey(key))
                 {
-                    values.put(s, 0);
+                    keyValues = map.get(key);
+
+                    addOrIncrement(sh.getAnnotation(), sh.getCount(), keyValues);
+                    addOrIncrement(sh.getAnnotation(), sh.getCount(), graph);
                 }
+                else
+                {
+                    keyValues = new TreeMap<>();
+                    keyValues.put(sh.getAnnotation(), sh.getCount());
+                    addOrIncrement(sh.getAnnotation(), sh.getCount(), graph);
+                }
+
+
+                map.put(key,keyValues);
+                columns.add(sh.getAnnotation());
             }
-            
-            map.put(pair, values);
+
+            //postprocessing to fill empty columns
+            for(Pair<Configuration,Revision> pair : map.keySet())
+            {
+                SortedMap<String,Integer> values = map.get(pair);
+                for(String s : columns)
+                {
+                    if(!values.containsKey(s))
+                    {
+                        values.put(s, 0);
+                    }
+                }
+
+                map.put(pair, values);
+            }
+
+            ModelMap mm = new ModelMap();
+
+            mm.addAttribute("statisticsMap", map);
+            mm.addAttribute("statisticsColumns",columns);
+            mm.addAttribute("statisticsDate",stat.getCalculationDate());
+            mm.addAttribute("formulaCount", stat.getTotalFormulas());
+            mm.addAttribute("coCount", stat.getTotalCanonicOutputs());
+            mm.addAttribute("graph", graph);
+            mm.addAttribute("statisticsDropdown", dropdownMap);
+
+            return mm;
         }
-        
-        ModelMap mm = new ModelMap();
-        
-        mm.addAttribute("statisticsMap", map);
-        mm.addAttribute("statisticsColumns",columns);
-        mm.addAttribute("statisticsDate",stat.getCalculationDate());
-        mm.addAttribute("formulaCount", stat.getTotalFormulas());
-        mm.addAttribute("coCount", stat.getTotalCanonicOutputs());
-        mm.addAttribute("graph", graph);
-        mm.addAttribute("statisticsDropdown", dropdownMap);
-        
-        return mm;
+        else
+        {
+            return new ModelMap();
+        }        
     }
 
     private void addOrIncrement(String key, Integer value ,Map<String,Integer> map)

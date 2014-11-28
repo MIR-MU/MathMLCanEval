@@ -1,6 +1,8 @@
 package cz.muni.fi.mir.controllers;
 
 
+import cz.muni.fi.mir.db.interceptors.DatabaseEvent;
+import cz.muni.fi.mir.db.domain.Formula;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.lang.management.OperatingSystemMXBean;
@@ -15,13 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import cz.muni.fi.mir.services.TaskService;
+import cz.muni.fi.mir.tools.IndexTools;
 
 @Controller
 @RequestMapping(value = "/dashboard")
 public class DashboardController
 {
     @Autowired
-    TaskService taskService;
+    private TaskService taskService;
+    @Autowired
+    private IndexTools indexTools;
 
     @RequestMapping(value = "/")
     @Secured("ROLE_USER")
@@ -59,6 +64,15 @@ public class DashboardController
     {
         taskService.removeFinishedTasks();
 
+        return new ModelAndView("redirect:/dashboard/");
+    }
+    
+    @RequestMapping(value={"/reindex","/reindex/"})
+    public ModelAndView reindex()
+    {
+        indexTools.reIndexClass(Formula.class);
+        indexTools.reIndexClass(DatabaseEvent.class);
+        
         return new ModelAndView("redirect:/dashboard/");
     }
 }

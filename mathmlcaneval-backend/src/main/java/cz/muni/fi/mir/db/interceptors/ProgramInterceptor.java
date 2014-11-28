@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.db.audit;
+package cz.muni.fi.mir.db.interceptors;
 
 import cz.muni.fi.mir.db.domain.Program;
 import org.aspectj.lang.annotation.After;
@@ -26,17 +26,17 @@ import org.springframework.stereotype.Component;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-//@Aspect
-//@Component
-public class ProgramAuditor
+@Aspect
+@Component
+public class ProgramInterceptor
 {
-    @Autowired private AuditorService auditorService;
+    @Autowired private DatabaseEventService databaseEventService;
     @Autowired private DatabaseEventFactory databaseEventFactory;
     
     @After("execution(* cz.muni.fi.mir.db.service.ProgramService.createProgram(..)) && args(program)")
     public void aroundCreateProgram(Program program)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.INSERT, 
                         program, 
                         "Created program "+program.getName()
@@ -47,7 +47,7 @@ public class ProgramAuditor
     @Before("execution(* cz.muni.fi.mir.db.service.ProgramService.deleteProgram(..)) && args(program)")
     public void aroundDeleteProgram(Program program)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.DELETE, 
                         program, 
                         "Deleted program "+program.getName()
@@ -58,10 +58,10 @@ public class ProgramAuditor
     @Before("execution(* cz.muni.fi.mir.db.service.ProgramService.updateProgram(..)) && args(program)")
     public void aroundUpdateProgram(Program program)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.UPDATE, 
                         program, 
-                        "Updated program "+program.getName()
+                        "Updated program "+program.getId().toString()
                 )
         );
     }

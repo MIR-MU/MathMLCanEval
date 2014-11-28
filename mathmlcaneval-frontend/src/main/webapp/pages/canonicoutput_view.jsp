@@ -166,8 +166,8 @@
                                     <td><c:out value="${canonicOutput.id}" /></td>
                                 </tr>
                                 <tr>
-                                    <td><spring:message code="entity.revision.hash" /></td>
-                                    <td><c:out value="${canonicOutput.hashValue}" /></td>
+                                    <td><spring:message code="entity.canonicOutput.hash" /></td>
+                                    <td><c:out value="${fn:substring(canonicOutput.hashValue,0,10)}" /></td>
                                 </tr>
                                 <tr>
                                     <td><spring:message code="entity.canonicOutput.parents" /></td>
@@ -190,7 +190,7 @@
                                     <td><spring:message code="entity.revision.hash" /></td>
                                     <td>
                                         <a href="${pageContext.request.contextPath}/revision/view/${canonicOutput.applicationRun.revision.id}/">
-                                            <c:out value="${canonicOutput.applicationRun.revision.revisionHash}" />
+                                            <c:out value="${fn:substring(canonicOutput.applicationRun.revision.revisionHash,0,8)}" />
                                         </a>
                                     </td>
                                 </tr>
@@ -286,12 +286,12 @@
                                                     <div class="pull-right">
                                                         <c:if test="${not empty nextCanonicOutput}">
                                                             <a href="${pageContext.request.contextPath}/canonicoutput/view/${nextCanonicOutput.id}" class="btn btn-primary">
-                                                                <spring:message code="general.label.next" /><span class="glyphicon glyphicon-forward"></span>
+                                                                <spring:message code="general.label.next" /> <span class="glyphicon glyphicon-forward"></span>
                                                             </a>
                                                         </c:if>
                                                         <c:if test="${not empty lastCanonicOutput}">
                                                         <a href="${pageContext.request.contextPath}/canonicoutput/view/${lastCanonicOutput.id}" class="btn btn-primary">
-                                                            <span class="glyphicon glyphicon glyphicon-fast-forward"></span> <spring:message code="general.label.last" />
+                                                            <spring:message code="general.label.last" /> <span class="glyphicon glyphicon glyphicon-fast-forward"> </span> 
                                                         </a>
                                                     </c:if>
                                                     </div>                                            

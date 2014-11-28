@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.db.audit;
+package cz.muni.fi.mir.db.interceptors;
 
 import cz.muni.fi.mir.db.domain.Revision;
 import org.aspectj.lang.annotation.After;
@@ -26,17 +26,17 @@ import org.springframework.stereotype.Component;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-//@Aspect
-//@Component
-public class RevisionAuditor
+@Aspect
+@Component
+public class RevisionInterceptor
 {
-    @Autowired private AuditorService auditorService;
+    @Autowired private DatabaseEventService databaseEventService;
     @Autowired private DatabaseEventFactory databaseEventFactory;
     
     @After("execution(* cz.muni.fi.mir.db.service.RevisionService.createRevision(..)) && args(revision)")
     public void aroundCreateRevision(Revision revision)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.INSERT, 
                         revision, 
                         "Created revision "+revision.getRevisionHash()
@@ -47,7 +47,7 @@ public class RevisionAuditor
     @Before("execution(* cz.muni.fi.mir.db.service.RevisionService.deleteRevision(..)) && args(revision)")
     public void aroundDeleteRevision(Revision revision)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.DELETE, 
                         revision, 
                         "Deleted revision "+revision.getId()
@@ -58,7 +58,7 @@ public class RevisionAuditor
     @Before("execution(* cz.muni.fi.mir.db.service.RevisionService.updateRevision(..)) && args(revision)")
     public void aroundUpdateProgram(Revision revision)
     {
-        auditorService.createDatabaseEvent(databaseEventFactory
+        databaseEventService.createDatabaseEvent(databaseEventFactory
                 .newInstance(DatabaseEvent.Operation.UPDATE, 
                         revision, 
                         "Updated revision "+revision.getId()
