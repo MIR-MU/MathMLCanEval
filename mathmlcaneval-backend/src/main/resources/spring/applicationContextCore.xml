@@ -22,22 +22,41 @@
                             http://www.springframework.org/schema/util 
                             http://www.springframework.org/schema/util/spring-util.xsd"
 >
+    <import 
+        resource="applicationContextFactories.xml" 
+    /> 
     
+    <import 
+        resource="applicationContextBeans.xml" 
+    /> 
     
-    
-    
-    <tx:annotation-driven transaction-manager="transactionManager" />    
-<!--    <cache:annotation-driven cache-manager="cacheManager"/>-->
+    <tx:annotation-driven 
+        transaction-manager="transactionManager" 
+    />  
                     
-    <context:component-scan base-package="cz.muni.fi.mir" />
+    <context:component-scan 
+        base-package="cz.muni.fi.mir" 
+    />
+    
     <context:spring-configured />
     
-    <!--<context:load-time-weaver weaver-class="org.springframework.instrument.classloading.ReflectiveLoadTimeWeaver" aspesctj-weaving="on"/>-->
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <aop:aspectj-autoproxy 
+        proxy-target-class="true"
+    />
     
-    <bean id="similarityFormWrapper" class="cz.muni.fi.mir.similarity.SimilarityFormConverterWrapper" factory-method="newInstance" />
+    <task:scheduler 
+        id="mathScheduler" 
+        pool-size="${scheduler.pool-size}" 
+    />
+    
+    <task:annotation-driven 
+        executor="taskExecutor" 
+        scheduler="mathScheduler"
+    /> 
     
     
+    
+    <!-- cache stuff -->
     <!-- http://forum.spring.io/forum/spring-projects/data/29626-how-to-turn-off-hibernate-cache-for-query-jpa -->
     <!-- http://stackoverflow.com/questions/13956224/spring-3-2-and-cache-abstraction-missing-ehcache-implementation -->
     <!-- http://stackoverflow.com/questions/13083987/spring3-1-and-hibernate4-eh-cache -->
@@ -45,7 +64,7 @@
     <!-- http://stackoverflow.com/questions/11905722/java-lang-noclassdeffounderror-org-hibernate-cache-entityregion-configuring-ehc -->
     <!-- TODO zistit ako to funguje je to daka novinka .. -->
     <!-- cache works but outside servlet, which closes SessionFactory app hangs -->
-    
+    <!--    <cache:annotation-driven cache-manager="cacheManager"/>-->
 <!--    <bean id="ehCacheManager"
         class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
         p:configLocation="classpath:META-INF/ehcache.xml"
@@ -55,125 +74,5 @@
 
     <bean id="cacheManager"
         class="org.springframework.cache.ehcache.EhCacheCacheManager"
-        p:cacheManager-ref="ehCacheManager" />-->
-    
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" 
-        destroy-method="close"
-        p:driverClass="${hibernate.connection.driver_class}"
-        p:jdbcUrl="${hibernate.connection.url}"
-        p:user="${hibernate.connection.username}"
-        p:password="${hibernate.connection.password}"
-        p:minPoolSize="${hibernate.c3p0.min_size}"
-        p:maxPoolSize="${hibernate.c3p0.max_size}"
-        p:checkoutTimeout="${hibernate.c3p0.timeout}"
-        p:maxStatements="${hibernate.c3p0.max_statements}"
-        p:idleConnectionTestPeriod="${hibernate.c3p0.idle_test_period}"
-    />
-    
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-        p:dataSource-ref="dataSource"
-    >
-        <property name="persistenceUnitName" value="mathcaneval" />
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
-                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
-                <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
-                <prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop> 
-                <prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop> 
-                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>  
-                <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>  
-                <prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>                  
-                <prop key="hibernate.search.default.directory_provider">${hibernate.search.default.directory_provider}</prop>
-                <prop key="hibernate.search.lucene_version">${hibernate.search.lucene_version}</prop>
-            </props>
-        </property>
-    </bean>
-    
-    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager"
-        p:entityManagerFactory-ref="entityManagerFactory"
-    /> 
-    
-    
-    <bean
-        id="documentBuilderFactory"
-        class="cz.muni.fi.mir.tools.MDocumentBuilderFactory"
-    >
-        <property name="entityResolver">
-            <bean
-                class="cz.muni.fi.mir.tools.MEntityResolver"
-                p:resource="classpath*:other/xhtml-math11-f.dtd"
-            />
-        </property>
-        <property name="documentBuilderFactory">
-            <bean 
-                class="javax.xml.parsers.DocumentBuilderFactory" 
-                factory-method="newInstance" 
-                p:namespaceAware="true"
-            />
-        </property>
-    </bean>
-    
-    <bean
-        id="documentBuilder"
-        class="javax.xml.parsers.DocumentBuilder"
-        factory-bean="documentBuilderFactory"
-        factory-method="newInstance"
-    />
-    
-    <bean
-        id="documentBuilderValidating"
-        class="javax.xml.parsers.DocumentBuilder"
-        factory-bean="documentBuilderFactory"
-        factory-method="newInstanceValidating"
-    />
-    
-    <bean id="mathCanonicalizerLoader" class="cz.muni.fi.mir.services.MathCanonicalizerLoaderImpl" factory-method="newInstance" />
-    
-    <task:scheduler id="mathScheduler" pool-size="${scheduler.pool-size}" />
-    
-    <task:annotation-driven executor="taskExecutor" scheduler="mathScheduler"/> 
-        
-    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
-        p:corePoolSize="${taskexecutor.corePoolSize}"
-        p:maxPoolSize="${taskexecutor.maxPoolSize}"
-        p:queueCapacity="${taskexecutor.queueCapacity}"
-    />
-    
-    <bean id="canonicalizationTask" class="cz.muni.fi.mir.scheduling.CanonicalizationTask" scope="prototype"/>
-    <bean id="formulaImportTask" class="cz.muni.fi.mir.scheduling.FormulaImportTask" scope="prototype" />
-    
-    <bean id="longRunningTaskFactory" class="cz.muni.fi.mir.scheduling.LongRunningTaskFactory">
-        <lookup-method name="createTask" bean="canonicalizationTask" />
-        <lookup-method name="createImportTask" bean="formulaImportTask" />
-    </bean>    
-    
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
-        p:protocol="smtp"
-        p:host="${mail.host}"
-        p:password="${mail.password}"
-        p:port="${mail.port}"
-        p:username="${mail.username}"
-    >
-        <property name="javaMailProperties">
-            <props>
-                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
-                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
-            </props>
-        </property>
-    </bean>
-    
-    
-    <bean id="mailService" class="cz.muni.fi.mir.services.MailServiceImpl"
-        p:enabled="${mail.enabled}"
-        p:mailSender-ref="mailSender"
-        p:sender="${mail.from}"
-        p:subjectPrefix="${mail.subject.prefix}"
-    />
-
-    <bean id="taskService" class="cz.muni.fi.mir.services.TaskServiceImpl" />
-    
-    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+        p:cacheManager-ref="ehCacheManager" />-->    
 </beans>

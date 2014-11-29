@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context 
+                            http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/util 
+                            http://www.springframework.org/schema/util/spring-util.xsd"
+>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" 
+        destroy-method="close"
+        p:driverClass="${hibernate.connection.driver_class}"
+        p:jdbcUrl="${hibernate.connection.url}"
+        p:user="${hibernate.connection.username}"
+        p:password="${hibernate.connection.password}"
+        p:minPoolSize="${hibernate.c3p0.min_size}"
+        p:maxPoolSize="${hibernate.c3p0.max_size}"
+        p:checkoutTimeout="${hibernate.c3p0.timeout}"
+        p:maxStatements="${hibernate.c3p0.max_statements}"
+        p:idleConnectionTestPeriod="${hibernate.c3p0.idle_test_period}"
+    />
+    
+    <bean 
+        id="transactionManager"
+        class="org.springframework.orm.jpa.JpaTransactionManager" 
+        p:entityManagerFactory-ref="entityManagerFactory"
+    /> 
+    
+    <bean 
+        class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" 
+    />
+    
+    
+    
+    <!-- our beans -->
+    <bean 
+        id="similarityFormWrapper" 
+        class="cz.muni.fi.mir.similarity.SimilarityFormConverterWrapper" 
+        factory-method="newInstance" 
+    />
+    
+    <bean
+        id="mathCanonicalizerLoader" 
+        class="cz.muni.fi.mir.services.MathCanonicalizerLoaderImpl" 
+        factory-method="newInstance" 
+    />
+    
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
+        p:corePoolSize="${taskexecutor.corePoolSize}"
+        p:maxPoolSize="${taskexecutor.maxPoolSize}"
+        p:queueCapacity="${taskexecutor.queueCapacity}"
+    />
+    
+    <bean 
+        id="canonicalizationTask" 
+        class="cz.muni.fi.mir.scheduling.CanonicalizationTask" 
+        scope="prototype"
+    />
+    
+    <bean 
+        id="formulaImportTask" 
+        class="cz.muni.fi.mir.scheduling.FormulaImportTask" 
+        scope="prototype" 
+    />
+    
+    <bean 
+        id="taskService" 
+        class="cz.muni.fi.mir.services.TaskServiceImpl" 
+    />
+    
+    <bean 
+        id="mailService" 
+        class="cz.muni.fi.mir.services.MailServiceImpl"
+        p:enabled="${mail.enabled}"
+        p:mailSender-ref="mailSender"
+        p:sender="${mail.from}"
+        p:subjectPrefix="${mail.subject.prefix}"
+    />    
+    
+    <bean 
+        id="mailSender" 
+        class="org.springframework.mail.javamail.JavaMailSenderImpl"
+        p:protocol="smtp"
+        p:host="${mail.host}"
+        p:password="${mail.password}"
+        p:port="${mail.port}"
+        p:username="${mail.username}"
+    >
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+            </props>
+        </property>
+    </bean>
+    
+</beans>
