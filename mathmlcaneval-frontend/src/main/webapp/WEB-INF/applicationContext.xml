@@ -14,14 +14,14 @@
                         http://www.springframework.org/schema/util/spring-util.xsd"
 >
                                                         
-    <context:component-scan base-package="cz.muni.fi.mir" />
+    <context:component-scan base-package="cz.muni.fi.mirmathmlevaluation" />
 
     <!-- the mvc resources tag does the magic -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
   
     <import resource="classpath*:/spring/applicationContext.xml" />
     
-    <bean id="gitProperties" class="cz.muni.fi.mir.tools.GitPropertiesModel"
+    <bean id="gitProperties" class="cz.muni.fi.mir.mathmlevaluation.tools.GitPropertiesModel"
           p:branch="${git.branch}" 
           p:describe="${git.commit.id.describe}"
           p:commitId="${git.commit.id}"
@@ -59,13 +59,13 @@
         <mvc:interceptor>
             <mvc:mapping path="/**" />
             <bean id="customInterceptor" 
-                  class="cz.muni.fi.mir.tools.CustomPageInterceptor" 
+                  class="cz.muni.fi.mir.mathmlevaluation.tools.CustomPageInterceptor" 
             />
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/**" />
             <bean id="siteTitleInterceptor"
-                class="cz.muni.fi.mir.tools.SiteTitleInterceptor"
+                class="cz.muni.fi.mir.mathmlevaluation.tools.SiteTitleInterceptor"
                 p:i18nEnabled="true"
                 p:messageSource-ref="messageSource"
             />
@@ -82,7 +82,7 @@
     
     <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
     
-    <bean id="userServiceProvider" class="cz.muni.fi.mir.tools.UserServiceProvider" />
+    <bean id="userServiceProvider" class="cz.muni.fi.mir.mathmlevaluation.tools.UserServiceProvider" />
     
     <bean id="mapper" class="org.dozer.DozerBeanMapper">
         <property name="mappingFiles">
@@ -99,14 +99,14 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <list>
-                <bean class="cz.muni.fi.mir.convertors.StringToProgramForm"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToElementForm"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToProgramForm"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToSourceDocumentForm"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToUserRoleForm"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToRevisionForm"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToConfigurationForm"/>
-                <bean class="cz.muni.fi.mir.convertors.StringToApplicationRunForm" />
+                <bean class="cz.muni.fi.mir.mathmlevaluation.convertors.StringToProgramForm"/>
+                <bean class="cz.muni.fi.mir.mathmlevaluation.convertors.StringToElementForm"/>
+                <bean class="cz.muni.fi.mir.mathmlevaluation.convertors.StringToProgramForm"/>
+                <bean class="cz.muni.fi.mir.mathmlevaluation.convertors.StringToSourceDocumentForm"/>
+                <bean class="cz.muni.fi.mir.mathmlevaluation.convertors.StringToUserRoleForm"/>
+                <bean class="cz.muni.fi.mir.mathmlevaluation.convertors.StringToRevisionForm"/>
+                <bean class="cz.muni.fi.mir.mathmlevaluation.convertors.StringToConfigurationForm"/>
+                <bean class="cz.muni.fi.mir.mathmlevaluation.convertors.StringToApplicationRunForm" />
             </list>
         </property>
     </bean>

@@ -8,7 +8,7 @@
         nutnost vlastnej konverzie, pretoze by default by hodilo hodnotu .now()
         -->
         <custom-converters>
-            <converter type="cz.muni.fi.mir.tools.JodaTimeConverter">
+            <converter type="cz.muni.fi.mir.mathmlevaluation.tools.JodaTimeConverter">
                 <class-a>org.joda.time.DateTime</class-a>
                 <class-b>org.joda.time.DateTime</class-b>
             </converter>  
@@ -16,24 +16,24 @@
     </configuration>
     
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.Annotation</class-a>
-        <class-b>cz.muni.fi.mir.forms.AnnotationForm</class-b>
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.Annotation</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.AnnotationForm</class-b>
     </mapping>
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.ApplicationRun</class-a>
-        <class-b>cz.muni.fi.mir.forms.ApplicationRunForm</class-b>
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.ApplicationRun</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.ApplicationRunForm</class-b>
     </mapping>
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.CanonicOutput</class-a>
-        <class-b>cz.muni.fi.mir.forms.CanonicOutputForm</class-b>
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.CanonicOutput</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.CanonicOutputForm</class-b>
     </mapping>
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.Configuration</class-a>
-        <class-b>cz.muni.fi.mir.forms.ConfigurationForm</class-b>
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.Configuration</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.ConfigurationForm</class-b>
     </mapping>
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.Formula</class-a>
-        <class-b>cz.muni.fi.mir.forms.FormulaForm</class-b>
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.Formula</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.FormulaForm</class-b>
         <field>
             <a>program</a>
             <b>programForm</b>
@@ -48,27 +48,27 @@
         </field>
     </mapping>
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.Program</class-a>
-        <class-b>cz.muni.fi.mir.forms.ProgramForm</class-b>
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.Program</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.ProgramForm</class-b>
     </mapping>
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.Revision</class-a>
-        <class-b>cz.muni.fi.mir.forms.RevisionForm</class-b>
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.Revision</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.RevisionForm</class-b>
     </mapping>
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.SourceDocument</class-a>
-        <class-b>cz.muni.fi.mir.forms.SourceDocumentForm</class-b>
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.SourceDocument</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.SourceDocumentForm</class-b>
     </mapping>
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.User</class-a>
-        <class-b>cz.muni.fi.mir.forms.UserForm</class-b>
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.User</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.UserForm</class-b>
         <field>
             <a>userRoles</a>
             <b>userRoleForms</b>
         </field>
     </mapping>
     <mapping>
-        <class-a>cz.muni.fi.mir.db.domain.UserRole</class-a>
-        <class-b>cz.muni.fi.mir.forms.UserRoleForm</class-b>        
+        <class-a>cz.muni.fi.mir.mathmlevaluation.db.domain.UserRole</class-a>
+        <class-b>cz.muni.fi.mir.mathmlevaluation.forms.UserRoleForm</class-b>        
     </mapping>
 </mappings>

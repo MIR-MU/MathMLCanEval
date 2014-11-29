@@ -57,13 +57,13 @@
     
     <bean 
         id="similarityFormWrapper" 
-        class="cz.muni.fi.mir.similarity.SimilarityFormConverterWrapper" 
+        class="cz.muni.fi.mir.mathmlevaluation.similarity.SimilarityFormConverterWrapper" 
         factory-method="newInstance" 
     />
     
     <bean
         id="mathCanonicalizerLoader" 
-        class="cz.muni.fi.mir.services.MathCanonicalizerLoaderImpl" 
+        class="cz.muni.fi.mir.mathmlevaluation.services.MathCanonicalizerLoaderImpl" 
         factory-method="newInstance" 
     />
     
@@ -75,24 +75,24 @@
     
     <bean 
         id="canonicalizationTask" 
-        class="cz.muni.fi.mir.scheduling.CanonicalizationTask" 
+        class="cz.muni.fi.mir.mathmlevaluation.scheduling.CanonicalizationTask" 
         scope="prototype"
     />
     
     <bean 
         id="formulaImportTask" 
-        class="cz.muni.fi.mir.scheduling.FormulaImportTask" 
+        class="cz.muni.fi.mir.mathmlevaluation.scheduling.FormulaImportTask" 
         scope="prototype" 
     />
     
     <bean 
         id="taskService" 
-        class="cz.muni.fi.mir.services.TaskServiceImpl" 
+        class="cz.muni.fi.mir.mathmlevaluation.services.TaskServiceImpl" 
     />
     
     <bean 
         id="mailService" 
-        class="cz.muni.fi.mir.services.MailServiceImpl"
+        class="cz.muni.fi.mir.mathmlevaluation.services.MailServiceImpl"
         p:enabled="${mail.enabled}"
         p:mailSender-ref="mailSender"
         p:sender="${mail.from}"

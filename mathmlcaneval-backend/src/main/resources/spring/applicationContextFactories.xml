@@ -38,7 +38,7 @@
     
     <bean 
         id="longRunningTaskFactory" 
-        class="cz.muni.fi.mir.scheduling.LongRunningTaskFactory"
+        class="cz.muni.fi.mir.mathmlevaluation.scheduling.LongRunningTaskFactory"
     >
         <lookup-method 
             name="createTask" 
