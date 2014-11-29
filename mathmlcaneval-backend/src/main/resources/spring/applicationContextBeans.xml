@@ -35,7 +35,26 @@
     
     
     
-    <!-- our beans -->
+    <!-- our beans --> 
+    <bean
+        id="documentBuilder"
+        class="javax.xml.parsers.DocumentBuilder"
+        factory-bean="documentBuilderFactory"
+        factory-method="newDocumentBuilder"
+    />
+    
+    <bean
+        id="xmlEvent"
+        class="javax.xml.stream.events.XMLEvent"
+        factory-bean="xmlEventFactory"
+        factory-method="createDTD"
+    >
+        <constructor-arg 
+            type="java.lang.String" 
+            value="${validating.doctype}" 
+        />
+    </bean>
+    
     <bean 
         id="similarityFormWrapper" 
         class="cz.muni.fi.mir.similarity.SimilarityFormConverterWrapper" 

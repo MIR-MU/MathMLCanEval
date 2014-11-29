@@ -41,8 +41,10 @@ import cz.muni.fi.mir.db.service.UserService;
 import cz.muni.fi.mir.scheduling.TaskStatus.TaskType;
 import cz.muni.fi.mir.services.MailService;
 import cz.muni.fi.mir.tools.Tools;
+import cz.muni.fi.mir.tools.xml.XMLUtils;
 
 import java.util.ArrayList;
+import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -82,6 +84,8 @@ public class CanonicalizationTask extends ApplicationTask
     private UserService userService;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private XMLUtils xmlUtils;
 
     private static final Logger logger = Logger.getLogger(CanonicalizationTask.class);
 
@@ -176,6 +180,9 @@ public class CanonicalizationTask extends ApplicationTask
                     CanonicOutput co = canonicalize(f, canonicalizer, canonicalize, applicationRun);
                     String hashValue = Tools.getInstance().SHA1(co.getOutputForm());
                     co.setHashValue(hashValue);
+                    
+                    validateAgainstDTD(co);
+                    
                     List<Annotation> autoAnnotations = new ArrayList<Annotation>();
                     
                     for (CanonicOutput prevco : f.getOutputs())
@@ -325,5 +332,30 @@ public class CanonicalizationTask extends ApplicationTask
 
         return co;
     }
-
+    
+    private void validateAgainstDTD(CanonicOutput co)
+    {
+        if(co.getOutputForm() != null && co.getOutputForm().length() > 0)
+        {
+            String message = xmlUtils.isValid(co.getOutputForm());
+            
+            if(message != null && !message.equals(StringUtils.EMPTY))
+            {
+                Annotation a = new Annotation();
+                a.setAnnotationContent("#isInvalid "+message);
+                a.setUser(userService.getSystemUser());
+                
+                annotationService.createAnnotation(a);
+                List<Annotation> annotations = new ArrayList<>();
+                if(co.getAnnotations() != null)
+                {
+                    annotations.addAll(co.getAnnotations());
+                }
+                
+                annotations.add(a);
+                
+                co.setAnnotations(annotations);
+            }
+        }
+    }
 }

@@ -49,4 +49,28 @@
             bean="formulaImportTask" 
         />
     </bean> 
+    
+    <bean
+        id="documentBuilderFactory"
+        class="javax.xml.parsers.DocumentBuilderFactory"
+        factory-method="newInstance"
+    /> 
+    
+    <bean 
+        id="xmlEventFactory"
+        class="javax.xml.stream.XMLEventFactory"
+        factory-method="newFactory"
+    />
+    
+    <bean
+        id="xmlInputFactory"
+        class="javax.xml.stream.XMLInputFactory"
+        factory-method="newFactory"
+    />
+    
+    <bean
+        id="xmlOutputFactory"
+        class="javax.xml.stream.XMLOutputFactory"
+        factory-method="newFactory"
+    />
 </beans>

@@ -51,7 +51,7 @@ import org.hibernate.search.annotations.TokenFilterDef;
 import org.hibernate.search.annotations.TokenizerDef;
 import org.joda.time.DateTime;
 
-import cz.muni.fi.mir.tools.CanonicOutputBridge;
+import cz.muni.fi.mir.tools.index.CanonicOutputBridge;
 
 /**
  *

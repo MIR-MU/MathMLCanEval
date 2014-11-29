@@ -52,7 +52,7 @@ import cz.muni.fi.mir.scheduling.LongRunningTaskFactory;
 import cz.muni.fi.mir.services.MathCanonicalizerLoader;
 import cz.muni.fi.mir.services.TaskService;
 import cz.muni.fi.mir.tools.EntityFactory;
-import cz.muni.fi.mir.tools.IndexTools;
+import cz.muni.fi.mir.tools.index.IndexTools;
 import cz.muni.fi.mir.tools.Tools;
 
 /**

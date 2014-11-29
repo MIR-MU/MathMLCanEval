@@ -32,7 +32,7 @@ import cz.muni.fi.mir.db.domain.Element;
 import cz.muni.fi.mir.db.domain.Formula;
 import cz.muni.fi.mir.db.service.ElementService;
 import cz.muni.fi.mir.tools.EntityFactory;
-import cz.muni.fi.mir.tools.XMLUtils;
+import cz.muni.fi.mir.tools.xml.XMLUtils;
 import java.util.HashSet;
 import java.util.Set;
 

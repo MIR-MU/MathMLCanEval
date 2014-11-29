@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.tools;
+package cz.muni.fi.mir.tools.index;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

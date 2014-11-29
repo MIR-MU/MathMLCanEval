@@ -27,7 +27,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import cz.muni.fi.mir.db.domain.CanonicOutput;
-import cz.muni.fi.mir.tools.XMLUtils;
+import cz.muni.fi.mir.tools.xml.XMLUtils;
 
 /**
  * Class responsible for converting given MathML input into some kind of value
