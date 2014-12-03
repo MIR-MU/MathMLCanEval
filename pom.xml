@@ -56,7 +56,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java-version>1.7</java-version>
-        <org.springframework-version>4.0.6.RELEASE</org.springframework-version>
+        <org.springframework-version>4.1.2.RELEASE</org.springframework-version>
         <org.springframework.security.version>3.2.1.RELEASE</org.springframework.security.version>        
         <org.hibernate-version>4.3.5.Final</org.hibernate-version>
         <org.hibernate-search>4.5.1.Final</org.hibernate-search>

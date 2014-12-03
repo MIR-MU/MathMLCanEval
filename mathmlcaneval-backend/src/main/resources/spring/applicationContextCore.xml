@@ -52,6 +52,7 @@
     <task:annotation-driven 
         executor="taskExecutor" 
         scheduler="mathScheduler"
+        exception-handler="uncaughtExceptionHandler"
     /> 
     
     

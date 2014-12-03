@@ -386,9 +386,7 @@ public class FormulaServiceImpl implements FormulaService
         }
         if (!toCanonicalize.isEmpty())
         {
-            logger.fatal("Attempt to create Application Run with flush mode to ensure its persisted.");
             applicationRunService.createApplicationRun(applicationRun,true);
-            logger.fatal("Operation withFlush called.");
 
             mathCanonicalizerLoader.execute(toCanonicalize, applicationRun);
         }

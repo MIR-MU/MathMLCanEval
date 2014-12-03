@@ -38,6 +38,7 @@ import cz.muni.fi.mir.mathmlevaluation.db.service.ApplicationRunService;
 import cz.muni.fi.mir.mathmlevaluation.db.service.CanonicOutputService;
 import cz.muni.fi.mir.mathmlevaluation.db.service.FormulaService;
 import cz.muni.fi.mir.mathmlevaluation.db.service.UserService;
+import cz.muni.fi.mir.mathmlevaluation.exceptions.CanonicalizerException;
 import cz.muni.fi.mir.mathmlevaluation.scheduling.TaskStatus.TaskType;
 import cz.muni.fi.mir.mathmlevaluation.services.MailService;
 import cz.muni.fi.mir.mathmlevaluation.tools.Tools;
@@ -128,7 +129,7 @@ public class CanonicalizationTask extends ApplicationTask
     }
 
     @Override
-    public TaskStatus call() throws IllegalStateException
+    public TaskStatus call() throws IllegalStateException, CanonicalizerException
     {
         String message = "";
             message += "formulas isSet? [" + (formulas != null) + "], ";
@@ -157,7 +158,7 @@ public class CanonicalizationTask extends ApplicationTask
             }
             catch (NoSuchMethodException | SecurityException ex)
             {
-                logger.fatal(ex);
+                throw new CanonicalizerException(ex.getMessage(),ex.getCause());
             }
 
             InputStream config = new ByteArrayInputStream(applicationRun.getConfiguration().getConfig().getBytes());
@@ -169,7 +170,8 @@ public class CanonicalizationTask extends ApplicationTask
                 }
                 catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException ex)
                 {
-                    logger.fatal(ex);
+                    logger.info(ex.getMessage(), ex.getCause());
+                    throw new CanonicalizerException(ex.getMessage(),ex.getCause());
                 }
 
                 DateTime startTime = DateTime.now();
@@ -183,7 +185,7 @@ public class CanonicalizationTask extends ApplicationTask
                     
                     validateAgainstDTD(co);
                     
-                    List<Annotation> autoAnnotations = new ArrayList<Annotation>();
+                    List<Annotation> autoAnnotations = new ArrayList<>();
                     
                     for (CanonicOutput prevco : f.getOutputs())
                     {
