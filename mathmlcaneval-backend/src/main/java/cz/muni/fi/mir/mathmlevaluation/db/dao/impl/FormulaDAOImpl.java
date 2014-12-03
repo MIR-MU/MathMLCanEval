@@ -511,6 +511,7 @@ public class FormulaDAOImpl extends GenericDAOImpl<Formula, Long> implements For
             for(Element e : formulaSearchRequest.getElements().keySet())
             {
                 junctionElements.must(qb.keyword()
+                        .wildcard()
                         .onField("co.element")
                         .ignoreFieldBridge()
                         .matching(e.getElementName()+"="+formulaSearchRequest.getElements().get(e))

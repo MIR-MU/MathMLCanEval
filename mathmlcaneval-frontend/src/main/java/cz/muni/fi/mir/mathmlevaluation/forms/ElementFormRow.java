@@ -14,7 +14,7 @@ import java.util.Objects;
 public class ElementFormRow
 {
     private ElementForm element;
-    private Integer value;
+    private String value;
 
     public ElementForm getElement()
     {
@@ -26,12 +26,12 @@ public class ElementFormRow
         this.element = element;
     }
 
-    public Integer getValue()
+    public String getValue()
     {
         return value;
     }
 
-    public void setValue(Integer value)
+    public void setValue(String value)
     {
         this.value = value;
     }

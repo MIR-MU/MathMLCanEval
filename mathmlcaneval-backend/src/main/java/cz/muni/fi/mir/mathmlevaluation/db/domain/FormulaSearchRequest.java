@@ -31,7 +31,7 @@ public class FormulaSearchRequest
     private String annotationContent;
     private String formulaContent;
     private Integer coRuns;
-    private Map<Element,Integer> elements;
+    private Map<Element,String> elements;
 
     public Program getProgram()
     {
@@ -113,12 +113,12 @@ public class FormulaSearchRequest
         this.coRuns = coRuns;
     }
 
-    public Map<Element, Integer> getElements()
+    public Map<Element, String> getElements()
     {
         return elements;
     }
 
-    public void setElements(Map<Element, Integer> elements)
+    public void setElements(Map<Element, String> elements)
     {
         this.elements = elements;
     }

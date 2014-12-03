@@ -586,7 +586,7 @@ public class FormulaController
 
         if(formulaSearchRequestForm.getElementRows()!= null && !formulaSearchRequestForm.getElementRows().isEmpty())
         {
-            Map<Element,Integer> map = new HashMap<>();
+            Map<Element,String> map = new HashMap<>();
             for(ElementFormRow efr :formulaSearchRequestForm.getElementRows())
             {
                 if(efr.getValue() != null)
