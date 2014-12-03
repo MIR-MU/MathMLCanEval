@@ -98,7 +98,6 @@
                                 {
                                     "render" : function(data,type,row){
                                         var entity = row.targetClass.toLowerCase();
-                                        console.log(entity);
                                         return '<a href="${pageContext.request.contextPath}/'+entity+'/view/'+row.targetId+'/">'+row.message+'</a>';
                                     },
                                     "targets" : 1
@@ -109,7 +108,6 @@
                         $("#teest").select2();
 
                         $("#flot-placeholder").css('width', $(".stats-panel-body").width());
-//                        $("#flot-placeholder").css('height', $(".stats-panel-body").width() * 0.8);
 
                         $("#statisticsForm ").on('change', function () {
                             var val = $("option:selected", this).val();
@@ -196,7 +194,6 @@
                             else
                             {
                                 alert('<spring:message code="validator.general.noinput" />');
-                                console.log('input empty');
                             }
 
                             event.preventDefault();
@@ -344,7 +341,6 @@
                                 }
                             });
                             e.preventDefault()
-                            console.log($("#applicationRunsTable > tbody > tr").length);
                         });
                         
                         $("#revisionForm").change(function(){
@@ -472,7 +468,6 @@
                             return document.getElementById(id);
                         }
                         if(formula1 && formula2){
-                            console.log($(formula1).text());
                             base = difflib.stringAsLines($(formula1).text());
                             newtxt = difflib.stringAsLines($(formula2).text());
                         }else{
@@ -605,11 +600,19 @@
                     
                     function formatDate(inputDate)
                     {
-                        var outputDate = inputDate.monthOfYear;
-                        outputDate += '/'+inputDate.dayOfMonth+"/"+inputDate.yearOfCentury+' ';
-                        outputDate += inputDate.hourOfDay+':'+inputDate.minuteOfHour;
+                        if(inputDate)
+                        {
+                            var outputDate = inputDate.monthOfYear;
+                            outputDate += '/'+inputDate.dayOfMonth+"/"+inputDate.yearOfCentury+' ';
+                            outputDate += inputDate.hourOfDay+':'+inputDate.minuteOfHour;
+
+                            return outputDate;
+                        }
+                        else
+                        {
+                            return '';
+                        }
                         
-                        return outputDate;
                     }
         </script>
     </body>
