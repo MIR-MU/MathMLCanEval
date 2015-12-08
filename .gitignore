@@ -1,0 +1,7 @@
+/mathmlcaneval-api/target/
+/mathmlcaneval-database/target/
+/mathmlcaneval-services/target/
+/mathmlcaneval-webapp/target/
+/mathmlcaneval-dependencies/target/
+
+nb-configuration.xml

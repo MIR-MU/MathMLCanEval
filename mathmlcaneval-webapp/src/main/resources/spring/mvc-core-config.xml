@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/task
+http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <mvc:view-resolvers>
+        <mvc:content-negotiation use-not-acceptable="true">
+            <mvc:default-views>	    		
+                <bean class="org.springframework.web.servlet.view.JstlView">
+                    <property name="url" value="" />
+                </bean>
+            </mvc:default-views>
+        </mvc:content-negotiation>
+	
+        <!-- Registering BeanNameViewResolver and InternalViewResolver -->
+        <mvc:bean-name />
+        <mvc:jsp prefix="/pages/" suffix=".jsp"/>
+        <!--<mvc:-->
+        <mvc:tiles view-class="org.springframework.web.servlet.view.tiles3.TilesView" />
+        <!--<mvc:jsp prefix="/pages/" suffix=".jsp"/>-->
+    </mvc:view-resolvers>
+    
+    <mvc:interceptors>
+        <ref bean="localeChangeInterceptor"/>
+    </mvc:interceptors>
+
+    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="lang"/>
+    </bean>
+    <!--
+        - POJOs labeled with the @Controller and @Service annotations are auto-detected.
+    -->
+    <context:component-scan
+        base-package="cz.muni.fi.mir.mathmlcaneval.webapp"/>
+
+    <mvc:annotation-driven conversion-service="conversionService" validator="validator"/>
+
+    <!--  all resources inside folder src/main/webapp/resources are mapped so they can be refered to inside JSP files
+    (see header.jsp for more details) -->
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    
+    <!--     <bean
+        id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+        p:defaultEncoding="UTF-8"
+        p:maxUploadSize="104857600"
+    />-->
+    
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+    </bean>
+    
+    <bean
+        id="localeResolver"
+        class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
+        p:defaultLocale="en"
+    />
+    
+    <bean
+        id="validator"
+        class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
+        p:validationMessageSource-ref="messageSource"
+    />
+
+    <!-- uses WebJars so Javascript and CSS libs can be declared as Maven dependencies (Bootstrap, jQuery...) -->
+    <!--<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>-->
+
+    <!--<mvc:view-controller path="/" view-name="welcome" />-->
+
+    <!-- serve static resources (*.html, ...) from src/main/webapp/ 
+    Required when both servlet-mapping is '/' and static resources need to be served -->
+    <mvc:default-servlet-handler />
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatters">
+            <set>
+                <bean class="sk.empt.shoxfblyzer.webapp.formatters.CustomerFormFormatter"/>
+                <bean class="sk.empt.shoxfblyzer.webapp.formatters.ProjectFormFormatter"/>
+            </set>
+        </property>
+    </bean>
+
+    <!--
+        - Message source for this context, loaded from localized "messages_xx" files.
+        - Files are stored inside src/main/resources
+    -->
+    <bean
+        id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+        p:defaultEncoding="UTF-8"
+        p:useCodeAsDefaultMessage="true"
+        p:basenames="classpath:i18n/messages,classpath:i18n/validator"
+    />
+    
+    <bean
+        id="tilesConfigurer"
+        class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"
+        p:definitions="/WEB-INF/tiles-configuration.xml"
+    />
+</beans>
