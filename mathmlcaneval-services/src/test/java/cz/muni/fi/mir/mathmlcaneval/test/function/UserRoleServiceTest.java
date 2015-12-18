@@ -263,8 +263,6 @@ public class UserRoleServiceTest
         UserRoleDTO ur = dTOFactory.newUserRole(null, "ROLE_ADMINISTRATOR");
         userRoleService.create(ur);
         UserRoleDTO dto = userRoleService.getByName("ROLE_ADMINISTRATOR");
-        System.out.println(ur);
-        System.out.println(dto);
         deepEquals(ur, dto);
     }
 

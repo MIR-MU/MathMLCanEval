@@ -128,7 +128,6 @@ public class UserRoleServiceImpl implements UserRoleService
         }
         
         UserRole dao = userRoleDAO.getByName(roleName);
-        System.out.println("$dao "+dao);
         
         if(dao != null)
         {
