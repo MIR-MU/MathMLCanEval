@@ -1,4 +1,4 @@
-package cz.muni.fi.mir.mathmlcaneval.test.mock;
+package cz.muni.fi.mir.mathmlcaneval.test.integration;
 
 /*
  * Copyright 2015 Dominik Szalai - emptulik at gmail.com.
@@ -17,9 +17,11 @@ package cz.muni.fi.mir.mathmlcaneval.test.mock;
  */
 
 import cz.muni.fi.mir.mathmlcaneval.api.dto.UserRoleDTO;
-import cz.muni.fi.mir.mathmlcaneval.api.impl.UserRoleServiceImpl;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
+import cz.muni.fi.mir.mathmlcaneval.database.factories.DomainFactory;
 import cz.muni.fi.mir.mathmlcaneval.database.impl.UserRoleDAOImpl;
+import cz.muni.fi.mir.mathmlcaneval.services.api.impl.UserRoleServiceImpl;
+import cz.muni.fi.mir.mathmlcaneval.services.factories.DTOFactory;
 import cz.muni.fi.mir.mathmlcaneval.services.impl.MapperImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +40,7 @@ import org.springframework.test.context.ContextConfiguration;
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @RunWith(MockitoJUnitRunner.class)
-@ContextConfiguration(locations = {})
+@ContextConfiguration(locations = {"classpath:spring/spring-database.xml","classpath:/spring/spring-services.xml"})
 @ActiveProfiles("test")
 public class UserRoleMockTest
 {
@@ -49,6 +51,9 @@ public class UserRoleMockTest
     @InjectMocks
     private UserRoleServiceImpl userRoleServiceImpl;
     
+    private final DomainFactory domainFactory = new DomainFactory();
+    private final DTOFactory dtoFactory = new DTOFactory();
+    
     @Before
     public void setUp()
     {
@@ -58,15 +63,44 @@ public class UserRoleMockTest
     @Test
     public void create()
     {
-        UserRole ur = new UserRole();
-        ur.setRoleName("test role");
-        UserRoleDTO dto = new UserRoleDTO();
-        dto.setRoleName("test role");
+        UserRole ur = domainFactory.newUserRole(null, "test role");
+        UserRoleDTO dto = dtoFactory.newUserRole(null, "test role");
         
         BDDMockito.given(mapper.map(dto, UserRole.class)).willReturn(ur);
         
         userRoleServiceImpl.create(dto);
         
-        Mockito.verify(userRoleServiceImpl).create(dto);
+        Mockito.verify(userRoleDAOImpl).create(ur);
+    }
+    
+    @Test
+    public void getByID()
+    {
+        UserRole ur = domainFactory.newUserRole(Long.valueOf("4"), "administrator");
+        UserRoleDTO dto = dtoFactory.newUserRole(Long.valueOf("4"), "administrator");
+        
+        BDDMockito.given(mapper.map(ur,UserRoleDTO.class)).willReturn(dto);
+        
+        UserRoleDTO result = userRoleServiceImpl.getByID(Long.valueOf("4"));
+        
+        Mockito.verify(userRoleDAOImpl).getByID(Long.valueOf("4"));
+    }
+    
+    @Test
+    public void getAll()
+    {
+        //todo
+    }
+    
+    @Test
+    public void update()
+    {
+        //todo
+    }
+    
+    @Test
+    public void delete()
+    {
+        //todo
     }
 }

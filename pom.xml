@@ -23,8 +23,8 @@
     </developers>
     
     <organization>
-        <name>Math</name>
-        <url>url</url>
+        <name>MIR@MU</name>
+        <url>https://mir.fi.muni.cz/</url>
     </organization>
  
     <licenses>
@@ -40,5 +40,30 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <org.springframework.version>4.2.3.RELEASE</org.springframework.version>
         <org.hibernate.version>5.0.5.Final</org.hibernate.version>
+        <main.basedir>${project.basedir}</main.basedir>
     </properties>
+    
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <build.profile.id>dev</build.profile.id>
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <build.profile.id>production</build.profile.id>
+            </properties>
+        </profile>
+        <profile>            
+            <id>test</id>
+            <properties>
+                <build.profile.id>test</build.profile.id>
+            </properties>            
+        </profile>
+    </profiles>
 </project>

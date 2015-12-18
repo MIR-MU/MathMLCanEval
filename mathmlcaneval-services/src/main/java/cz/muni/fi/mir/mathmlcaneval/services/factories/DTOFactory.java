@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Math.
+ * Copyright 2015 MIR@MU.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.mathmlcaneval.test.integration;
+package cz.muni.fi.mir.mathmlcaneval.services.factories;
+
+import cz.muni.fi.mir.mathmlcaneval.api.dto.UserRoleDTO;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class UserRoleServiceTest
+@Component
+public class DTOFactory
 {
+    public UserRoleDTO newUserRole()
+    {
+        return new UserRoleDTO();
+    }
     
+    public UserRoleDTO newUserRole(Long id)
+    {
+        UserRoleDTO ur = newUserRole();
+        ur.setId(id);
+        
+        return ur;
+    }
+    
+    public UserRoleDTO newUserRole(Long id, String roleName)
+    {
+        UserRoleDTO ur = newUserRole(id);
+        ur.setRoleName(roleName);
+        
+        return ur;
+    }
 }
+

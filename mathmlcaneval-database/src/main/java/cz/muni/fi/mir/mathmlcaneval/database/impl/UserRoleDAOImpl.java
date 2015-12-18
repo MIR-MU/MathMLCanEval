@@ -17,8 +17,10 @@ package cz.muni.fi.mir.mathmlcaneval.database.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.database.UserRoleDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
-import java.util.List;
 import javax.persistence.NoResultException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 /**
  *
@@ -27,34 +29,31 @@ import javax.persistence.NoResultException;
  * @version 2.0
  * @since 1.0
  */
+@Repository
 public class UserRoleDAOImpl extends GenericDAOImpl<UserRole, Long> implements UserRoleDAO
 {
+    private static final Logger LOG = LogManager.getLogger(UserRoleDAOImpl.class);
+
     public UserRoleDAOImpl()
     {
-        super(UserRole.class);
+        super(UserRole.class, "UserRole.getAll");
     }
-    
+
     @Override
-    public UserRole getByName(String roleName) throws IllegalArgumentException
+    public UserRole getByName(String roleName)
     {
         UserRole ur = null;
         try
         {
-            ur = entityManager.createQuery("SELECT ur FROM ", UserRole.class)
+            ur = entityManager.createNamedQuery("UserRole.getByName", UserRole.class)
                     .setParameter("rolename", roleName)
                     .getSingleResult();
         }
-        catch(NoResultException nre)
+        catch (NoResultException nre)
         {
-            
+            LOG.debug(nre.getMessage());
         }
         
         return ur;
     }
-
-    @Override
-    public List<UserRole> getAllRoles()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }    
 }

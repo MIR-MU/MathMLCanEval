@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.mathmlcaneval.api.impl;
+package cz.muni.fi.mir.mathmlcaneval.services.api.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.api.UserRoleService;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.UserRoleDTO;
@@ -23,12 +23,14 @@ import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Service
 public class UserRoleServiceImpl implements UserRoleService
 {
     @Autowired
@@ -40,19 +42,19 @@ public class UserRoleServiceImpl implements UserRoleService
     @Transactional(readOnly = false)
     public void create(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
-        if(userRoleDTO == null)
+        if (userRoleDTO == null)
         {
             throw new IllegalArgumentException("UserRole is null.");
         }
-        if(StringUtils.isEmpty(userRoleDTO.getRoleName()))
+        if (StringUtils.isEmpty(userRoleDTO.getRoleName()))
         {
             throw new IllegalArgumentException("UserRole has no roleName.");
         }
-        if(userRoleDTO.getId() != null)
+        if (userRoleDTO.getId() != null)
         {
             throw new IllegalArgumentException("UserRole already has an id.");
         }
-        
+
         UserRole ur = mapper.map(userRoleDTO, UserRole.class);
         userRoleDAO.create(ur);
         userRoleDTO.setId(ur.getId());
@@ -62,19 +64,19 @@ public class UserRoleServiceImpl implements UserRoleService
     @Transactional(readOnly = false)
     public void update(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
-        if(userRoleDTO == null)
+        if (userRoleDTO == null)
         {
             throw new IllegalArgumentException("UserRole is null.");
         }
-        if(StringUtils.isEmpty(userRoleDTO.getRoleName()))
+        if (StringUtils.isEmpty(userRoleDTO.getRoleName()))
         {
             throw new IllegalArgumentException("UserRole has no roleName.");
         }
-        if(userRoleDTO.getId() == null)
+        if (userRoleDTO.getId() == null)
         {
             throw new IllegalArgumentException("UserRole does not have valid id.");
         }
-        
+
         userRoleDAO.update(mapper.map(userRoleDTO, UserRole.class));
     }
 
@@ -82,46 +84,66 @@ public class UserRoleServiceImpl implements UserRoleService
     @Transactional(readOnly = false)
     public void delete(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
-        if(userRoleDTO == null)
+        if (userRoleDTO == null)
         {
             throw new IllegalArgumentException("UserRole is null.");
         }
-        if(userRoleDTO.getId() == null)
+        if (userRoleDTO.getId() == null)
         {
             throw new IllegalArgumentException("UserRole does not have valid id.");
         }
-        
+
         userRoleDAO.delete(userRoleDTO.getId());
+        userRoleDTO.setId(null);
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserRoleDTO getByID(Long id) throws IllegalArgumentException
     {
-        if(id == null)
+        if (id == null)
         {
             throw new IllegalArgumentException("Given id is null.");
         }
-        
-        return mapper.map(userRoleDAO.getByID(id),UserRoleDTO.class);
+
+        UserRole dao = userRoleDAO.getByID(id);
+
+        if (dao != null)
+        {
+            return mapper.map(dao, UserRoleDTO.class);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserRoleDTO getByName(String roleName) throws IllegalArgumentException
     {
-        if(StringUtils.isEmpty(roleName))
+        if (StringUtils.isEmpty(roleName))
         {
             throw new IllegalArgumentException("Given roleName is empty.");
         }
         
-        return mapper.map(userRoleDAO.getByName(roleName), UserRoleDTO.class);
+        UserRole dao = userRoleDAO.getByName(roleName);
+        System.out.println("$dao "+dao);
+        
+        if(dao != null)
+        {
+            return mapper.map(dao, UserRoleDTO.class);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<UserRoleDTO> getAll()
     {
-        return mapper.mapList(userRoleDAO.getAllRoles(), UserRoleDTO.class);
-    }    
+        return mapper.mapList(userRoleDAO.getAll(), UserRoleDTO.class);
+    }
 }

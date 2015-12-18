@@ -6,7 +6,6 @@
 package cz.muni.fi.mir.mathmlcaneval.database;
 
 import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
-import java.util.List;
 
 /**
  *
@@ -14,6 +13,12 @@ import java.util.List;
  */
 public interface UserRoleDAO extends GenericDAO<UserRole, Long>
 {
-    UserRole getByName(String roleName) throws IllegalArgumentException;
-    List<UserRole> getAllRoles();
+    /**
+     * Method takes {@code roleName} as input and returns matched
+     * {@code UserRole} as result.
+     *
+     * @param roleName to be found
+     * @return {@code UserRole} with {@code roleName} null if there is no match
+     */
+    UserRole getByName(String roleName);
 }

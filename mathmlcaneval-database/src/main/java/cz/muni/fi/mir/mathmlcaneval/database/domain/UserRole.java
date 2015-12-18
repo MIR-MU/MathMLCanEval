@@ -12,23 +12,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@NamedQueries(
+        {
+            @NamedQuery(name = "UserRole.getAll", query = "SELECT ur FROM UserRole ur"),
+            @NamedQuery(name = "UserRole.getByName", query = "SELECT ur FROM UserRole ur WHERE ur.roleName = :rolename")
+        })
 @Entity
 public class UserRole implements Serializable
 {
     private static final long serialVersionUID = -2286980006085077045L;
-    
+
     @Id
-    @Column(name = "userrole_id",nullable = false)
-    @SequenceGenerator(name="userroleid_seq", sequenceName="userroleid_seq")
+    @Column(name = "userrole_id", nullable = false)
+    @SequenceGenerator(name = "userroleid_seq", sequenceName = "userroleid_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "userroleid_seq")
     private Long id;
-    @Column(name="rolename")
+    @Column(name = "rolename")
     private String roleName;
 
     public Long getId()

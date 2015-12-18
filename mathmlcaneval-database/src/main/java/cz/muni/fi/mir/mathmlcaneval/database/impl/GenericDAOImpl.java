@@ -7,6 +7,7 @@ package cz.muni.fi.mir.mathmlcaneval.database.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.database.GenericDAO;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -21,10 +22,12 @@ public class GenericDAOImpl<T, PK extends Serializable> implements GenericDAO<T,
     @PersistenceContext
     protected EntityManager entityManager;
     private final Class<T> type;
+    private final String findAllQueryName;
     
-    public GenericDAOImpl(Class<T> type)
+    public GenericDAOImpl(Class<T> type, String findAllQueryName)
     {
         this.type = type;
+        this.findAllQueryName = findAllQueryName;
     }
 
     @Override
@@ -53,6 +56,12 @@ public class GenericDAOImpl<T, PK extends Serializable> implements GenericDAO<T,
         {
             this.entityManager.remove(deletable);
         }
+    }
+
+    @Override
+    public List<T> getAll()
+    {
+        return entityManager.createNamedQuery(findAllQueryName, type).getResultList();
     }
     
 }

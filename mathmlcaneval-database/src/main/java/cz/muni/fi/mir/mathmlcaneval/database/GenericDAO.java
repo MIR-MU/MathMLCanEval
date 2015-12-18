@@ -6,6 +6,7 @@
 package cz.muni.fi.mir.mathmlcaneval.database;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -19,4 +20,5 @@ public interface GenericDAO<T, PK extends Serializable>
     void update(T entity);
     T getByID(PK id);
     void delete(PK id);
+    List<T> getAll();
 }
