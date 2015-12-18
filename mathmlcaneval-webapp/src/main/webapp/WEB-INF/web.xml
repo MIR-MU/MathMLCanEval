@@ -34,7 +34,7 @@ limitations under the License.
     -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:spring/applicationContext-backend.xml</param-value>
+        <param-value>classpath:spring/spring-database.xml,classpath:spring/spring-services.xml</param-value>
     </context-param>
 
     <listener>

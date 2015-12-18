@@ -85,8 +85,7 @@ http://www.springframework.org/schema/task/spring-task.xsd
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="formatters">
             <set>
-                <bean class="sk.empt.shoxfblyzer.webapp.formatters.CustomerFormFormatter"/>
-                <bean class="sk.empt.shoxfblyzer.webapp.formatters.ProjectFormFormatter"/>
+                <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.UserRoleFormatter"/>
             </set>
         </property>
     </bean>

@@ -5,3 +5,4 @@
 /mathmlcaneval-dependencies/target/
 
 nb-configuration.xml
+/eval-webapp/nbproject/private/
