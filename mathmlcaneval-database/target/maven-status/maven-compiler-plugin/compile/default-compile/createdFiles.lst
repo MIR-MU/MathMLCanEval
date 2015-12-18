@@ -1,0 +1,7 @@
+cz\muni\fi\mir\mathmlcaneval\database\factories\DomainFactory.class
+cz\muni\fi\mir\mathmlcaneval\database\UserRoleDAO.class
+cz\muni\fi\mir\mathmlcaneval\database\GenericDAO.class
+cz\muni\fi\mir\mathmlcaneval\database\impl\GenericDAOImpl.class
+cz\muni\fi\mir\mathmlcaneval\database\domain\User.class
+cz\muni\fi\mir\mathmlcaneval\database\domain\UserRole.class
+cz\muni\fi\mir\mathmlcaneval\database\impl\UserRoleDAOImpl.class

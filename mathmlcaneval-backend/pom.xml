@@ -9,11 +9,12 @@
 
     <name>MathMLCanEval - Backend</name>
     
+    
     <parent>
         <groupId>cz.muni.fi.mir</groupId>
-        <artifactId>mathml-canonicalizer</artifactId>
+        <artifactId>mathmlcaneval</artifactId>
         <version>1.0-SNAPSHOT</version>
-    </parent>    
+    </parent>
     
     <build>
         <plugins>
