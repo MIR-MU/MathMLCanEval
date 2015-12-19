@@ -11,9 +11,9 @@
         base-package="cz.muni.fi.mir.mathmlcaneval.webapp"
     />
     
-    <mvc:resources
+<!--    <mvc:resources
         mapping="/resources/**"
         location="/resources/"
         cache-period="31556926"
-    />
+    />-->
 </beans>

@@ -31,6 +31,21 @@
             <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring4</artifactId>
+            <version>3.0.0.BETA01</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-extras</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-tiles2-spring4</artifactId>
+            <version>2.1.1.RELEASE</version>
+        </dependency>
+        <dependency>
             <groupId>cz.muni.fi.mir</groupId>
             <artifactId>mathmlcaneval-api</artifactId>
             <version>${project.version}</version>
@@ -76,7 +91,7 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <server>localhost</server>
-<!--                    <username>admin</username>
+                    <!--                    <username>admin</username>
                     <password>password</password>-->
                     <update>true</update> 
                     <path>/MathMLCanEval</path>

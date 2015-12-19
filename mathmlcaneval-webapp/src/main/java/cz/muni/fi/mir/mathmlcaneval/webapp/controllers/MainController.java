@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.mathmlcaneval.webapp;
+package cz.muni.fi.mir.mathmlcaneval.webapp.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -24,5 +26,9 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class MainController
 {
-    
+    @RequestMapping(value = "/")
+    public ModelAndView landingPage()
+    {
+        return new ModelAndView("index");
+    }
 }

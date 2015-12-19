@@ -19,10 +19,12 @@ limitations under the License.
     <definition name="default" template="/templates/default/template.jsp">
         <put-attribute name="navigation" value="/templates/default/navigation.jsp"/>
         <put-attribute name="sidebar" value="/templates/default/sidebar.jsp"/>
+        <put-attribute name="footer" value="/templates/default/footer.jsp"/>
+        <put-attribute name="footer-javascript" value="/templates/default/footer-javascript.jsp"/>
     </definition>
-    <definition name="errorTemplate" template="/templates/error/errortemplate.jsp">
+<!--    <definition name="errorTemplate" template="/templates/error/errortemplate.jsp">
         <put-attribute name="navigation" value="/templates/default/navigation.jsp"/>
-    </definition>
+    </definition>-->
     <!--    <definition name="login" template="/templates/login/login-template.jsp" />-->
     <!--    <definition name="error" template="/templates/error/error-template.jsp" />-->
 </tiles-definitions>
