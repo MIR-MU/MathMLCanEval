@@ -23,6 +23,7 @@ import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,7 @@ public class UserRoleServiceImpl implements UserRoleService
 
     @Override
     @Transactional(readOnly = false)
+    @Secured("test")
     public void create(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
         if (userRoleDTO == null)

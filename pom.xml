@@ -39,6 +39,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <org.springframework.version>4.2.3.RELEASE</org.springframework.version>
+        <org.springframework.security.version>4.0.3.RELEASE</org.springframework.security.version>
         <org.hibernate.version>5.0.5.Final</org.hibernate.version>
         <main.basedir>${project.basedir}</main.basedir>
     </properties>

@@ -31,19 +31,9 @@
             <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring4</artifactId>
-            <version>3.0.0.BETA01</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-extras</artifactId>
             <version>3.0.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-tiles2-spring4</artifactId>
-            <version>2.1.1.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>cz.muni.fi.mir</groupId>
@@ -59,11 +49,6 @@
             <groupId>cz.muni.fi.mir</groupId>
             <artifactId>mathmlcaneval-services</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tiles</groupId>
-            <artifactId>tiles-extras</artifactId>
-            <version>3.0.5</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

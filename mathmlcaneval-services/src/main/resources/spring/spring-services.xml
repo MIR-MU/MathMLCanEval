@@ -38,6 +38,14 @@ limitations under the License.
                             http://www.springframework.org/schema/util/spring-util.xsd"
 >
     <beans profile="production,test">
+        <context:property-placeholder
+            location="classpath:config/services.properties"
+            ignore-unresolvable="true"
+            order="2"
+            properties-ref="defaultProperties"
+            
+        />
+        
         <context:annotation-config />
     
         <context:component-scan 

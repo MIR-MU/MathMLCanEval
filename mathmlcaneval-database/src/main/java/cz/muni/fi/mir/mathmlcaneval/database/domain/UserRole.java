@@ -22,10 +22,10 @@ import javax.persistence.SequenceGenerator;
  */
 @NamedQueries(
         {
-            @NamedQuery(name = "UserRole.getAll", query = "SELECT ur FROM UserRole ur"),
-            @NamedQuery(name = "UserRole.getByName", query = "SELECT ur FROM UserRole ur WHERE ur.roleName = :rolename")
+            @NamedQuery(name = "UserRole.getAll", query = "SELECT ur FROM usersrole ur"),
+            @NamedQuery(name = "UserRole.getByName", query = "SELECT ur FROM usersrole ur WHERE ur.roleName = :rolename")
         })
-@Entity
+@Entity(name = "usersrole")
 public class UserRole implements Serializable
 {
     private static final long serialVersionUID = -2286980006085077045L;

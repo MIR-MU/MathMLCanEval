@@ -21,6 +21,7 @@ limitations under the License.
   <persistence-unit name="mathmlcanevalPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <class>cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole</class>
+    <class>cz.muni.fi.mir.mathmlcaneval.database.domain.User</class>
     <properties/>
   </persistence-unit>
 </persistence>

@@ -4,10 +4,11 @@
     Author     : Dominik Szalai - emptulik at gmail.com
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
     <a class="navbar-brand" href="#">
-        <span><img id="logo-img" src="logo.svg" alt="Rabbit Silhouette MIR Logo" style="height: 1.8em;"/></span>
+        <span><img id="logo-img" src="<c:url value="/resources/img/logo.svg" />" alt="Rabbit Silhouette MIR Logo" style="height: 1.8em;"/></span>
         <span>Mathmlcaneval</span></a>
     <ul class="nav navbar-nav">
         <li class="nav-item active">

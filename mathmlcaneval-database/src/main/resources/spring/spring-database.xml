@@ -18,7 +18,8 @@ limitations under the License.
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"        
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx" 
-       xmlns:p="http://www.springframework.org/schema/p"       
+       xmlns:p="http://www.springframework.org/schema/p"      
+       xmlns:util="http://www.springframework.org/schema/util" 
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
                             http://www.springframework.org/schema/beans/spring-beans.xsd
                             http://www.springframework.org/schema/context 
@@ -42,7 +43,9 @@ limitations under the License.
         />  
         <context:property-placeholder
             location="classpath:config/database-test.properties"
-            ignore-unresolvable="false"
+            ignore-unresolvable="true"
+            order="1"
+            properties-ref="defaultProperties"
         />
     </beans>
     
@@ -50,13 +53,15 @@ limitations under the License.
         profile="production">       
         <context:property-placeholder
             location="classpath:config/database.properties"
-            ignore-unresolvable="false"
+            ignore-unresolvable="true"
         />
     </beans>
     
     <beans
         profile="production,test"
     >
+        
+        <util:properties id="defaultProperties" />
         
         <context:annotation-config />
         
