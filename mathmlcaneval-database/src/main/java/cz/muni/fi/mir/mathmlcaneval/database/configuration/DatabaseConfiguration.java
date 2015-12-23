@@ -26,10 +26,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+//import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 
 /**
  *
@@ -56,7 +54,7 @@ public class DatabaseConfiguration
     {
         "classpath:config/database-test.properties"
     }, ignoreResourceNotFound = true)
-    @EnableTransactionManagement
+//    @EnableTransactionManagement
     static class Test
     {
 
@@ -110,13 +108,13 @@ public class DatabaseConfiguration
         return entityManagerFactory;
     }
 
-    @Bean(name = "transactionManager")
-    @Profile("test")
-    public AbstractPlatformTransactionManager txManager() throws Exception
-    {
-        JpaTransactionManager txManager = new JpaTransactionManager();
-        txManager.setEntityManagerFactory(getEntityManagerFactory().getObject());
-        
-        return txManager;
-    }
+//    @Bean(name = "transactionManager")
+//    @Profile("test")
+//    public AbstractPlatformTransactionManager txManager() throws Exception
+//    {
+//        JpaTransactionManager txManager = new JpaTransactionManager();
+//        txManager.setEntityManagerFactory(getEntityManagerFactory().getObject());
+//        
+//        return txManager;
+//    }
 }
