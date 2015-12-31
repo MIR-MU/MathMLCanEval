@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2015 MIR@MU.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/security 
+http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <security:global-method-security 
+        secured-annotations="enabled" 
+        pre-post-annotations="disabled" 
+    />
+
+    <security:authentication-manager>
+        <security:authentication-provider 
+            user-service-ref="cstomUserDetailsService"
+        >
+            <security:password-encoder 
+                hash="sha"
+            />
+        </security:authentication-provider>
+    </security:authentication-manager>
+    
+<!--    <bean
+        id="roleVoter"
+        class="org.springframework.security.access.vote.RoleHierarchyVoter"
+    >
+        <constructor-arg ref="roleHierarchy" />
+    </bean>
+        
+    <bean
+        id="roleHierarchy"
+        class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl"
+        p:hierarchy="ROLE_ADMIN > ROLE_STAFF ROLE_STAFF > ROLE_USER ROLE_USER > ROLE_GUEST"
+    />
+    -->
+</beans>

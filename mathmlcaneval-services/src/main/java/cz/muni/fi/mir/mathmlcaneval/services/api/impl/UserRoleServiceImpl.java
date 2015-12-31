@@ -41,7 +41,7 @@ public class UserRoleServiceImpl implements UserRoleService
 
     @Override
     @Transactional(readOnly = false)
-    @Secured("test")
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public void create(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
         if (userRoleDTO == null)
@@ -64,6 +64,7 @@ public class UserRoleServiceImpl implements UserRoleService
 
     @Override
     @Transactional(readOnly = false)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public void update(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
         if (userRoleDTO == null)
@@ -84,6 +85,7 @@ public class UserRoleServiceImpl implements UserRoleService
 
     @Override
     @Transactional(readOnly = false)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public void delete(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
         if (userRoleDTO == null)
@@ -101,6 +103,7 @@ public class UserRoleServiceImpl implements UserRoleService
 
     @Override
     @Transactional(readOnly = true)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public UserRoleDTO getByID(Long id) throws IllegalArgumentException
     {
         if (id == null)
@@ -122,6 +125,7 @@ public class UserRoleServiceImpl implements UserRoleService
 
     @Override
     @Transactional(readOnly = true)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public UserRoleDTO getByName(String roleName) throws IllegalArgumentException
     {
         if (StringUtils.isEmpty(roleName))
@@ -143,6 +147,7 @@ public class UserRoleServiceImpl implements UserRoleService
 
     @Override
     @Transactional(readOnly = true)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public List<UserRoleDTO> getAll()
     {
         return mapper.mapList(userRoleDAO.getAll(), UserRoleDTO.class);

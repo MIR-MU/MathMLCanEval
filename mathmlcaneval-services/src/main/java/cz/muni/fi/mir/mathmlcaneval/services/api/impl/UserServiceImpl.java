@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService
         }
         if (user.getRoles() == null || user.getRoles().isEmpty())
         {
-            throw new IllegalArgumentException("GIven user does not have set any role.");
+            throw new IllegalArgumentException("Given user does not have set any role.");
         }
     }
 

@@ -29,6 +29,10 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -36,6 +40,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.web.ServletTestExecutionListener;
 
 /**
  *
@@ -44,11 +49,11 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations =
 {
-    "classpath:spring/spring-database.xml", "classpath:/spring/spring-services.xml"
+    "classpath:spring/spring-database.xml", "classpath:/spring/spring-services.xml", "classpath:/spring/spring-security.xml"
 })
 @TestExecutionListeners(
         {
-            DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class
+            ServletTestExecutionListener.class, DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class, WithSecurityContextTestExecutionListener.class
         })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
@@ -61,6 +66,7 @@ public class UserRoleServiceTest
     private UserRoleService userRoleService;
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void testCreateError()
     {
         try
@@ -98,7 +104,21 @@ public class UserRoleServiceTest
         }
     }
 
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testCreateNoAuthorities()
+    {
+        userRoleService.create(dTOFactory.newUserRole(null, "I am not logged in"));
+    }
+    
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(authorities = {"ROLE_USER"})
+    public void testCreateMissingAuthority()
+    {
+        userRoleService.create(dTOFactory.newUserRole(null, "I don't have required rights"));
+    }
+
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void testCreate()
     {
         UserRoleDTO dto = dTOFactory.newUserRole(null, "ROLE_ADMINISTRATOR");
@@ -108,6 +128,7 @@ public class UserRoleServiceTest
     }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void updateError()
     {
         try
@@ -140,8 +161,24 @@ public class UserRoleServiceTest
 
         }
     }
+    
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testUpdateNoAuthorities()
+    {
+        UserRoleDTO ur = dTOFactory.newUserRole(Long.valueOf("1"), "ROLE_ADMINISTRATOR");
+        userRoleService.update(ur);
+    }
+    
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(authorities = {"ROLE_USER"})
+    public void testUpdateMissingAuthority()
+    {
+        UserRoleDTO ur = dTOFactory.newUserRole(Long.valueOf("1"), "ROLE_ADMINISTRATOR");
+        userRoleService.update(ur);
+    }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void update()
     {
         UserRoleDTO ur = dTOFactory.newUserRole(null, "ROLE_ADMINISTRATOR");
@@ -153,6 +190,7 @@ public class UserRoleServiceTest
     }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void deleteError()
     {
         try
@@ -173,8 +211,24 @@ public class UserRoleServiceTest
         {
         }
     }
+    
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testDeleteNoAuthorities()
+    {
+        UserRoleDTO ur = dTOFactory.newUserRole(Long.valueOf("1"), "ROLE_ADMINISTRATOR");
+        userRoleService.delete(ur);
+    }
+    
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(authorities = {"ROLE_USER"})
+    public void testDeleteMissingAuthority()
+    {
+        UserRoleDTO ur = dTOFactory.newUserRole(Long.valueOf("1"), "ROLE_ADMINISTRATOR");
+        userRoleService.delete(ur);
+    }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void delete()
     {
         UserRoleDTO ur = dTOFactory.newUserRole(null, "ROLE_USER");
@@ -185,8 +239,22 @@ public class UserRoleServiceTest
         Assert.assertNull("UserService did not remove id from deleted DTO", ur.getId());
         Assert.assertNull("UserService did not remove DTO from database", userRoleService.getByID(id));
     }
+    
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testGetByIDNoAuthorities()
+    {
+        userRoleService.getByID(Long.valueOf("1"));
+    }
+    
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(authorities = {"ROLE_USER"})
+    public void testGetByIDMissingAuthority()
+    {
+        userRoleService.getByID(Long.valueOf("1"));
+    }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void getByIDError()
     {
         try
@@ -213,6 +281,7 @@ public class UserRoleServiceTest
     }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void getByID()
     {
         UserRoleDTO ur = dTOFactory.newUserRole(null, "ROLE_USER");
@@ -224,6 +293,7 @@ public class UserRoleServiceTest
     }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void getByNameError()
     {
         try
@@ -256,8 +326,22 @@ public class UserRoleServiceTest
             fail("Returned null by DAO is not handled correctly.");
         }
     }
+    
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testGetByNameNoAuthorities()
+    {
+        userRoleService.getByName("ROLE_ADMINISTRATOR");
+    }
+    
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(authorities = {"ROLE_USER"})
+    public void testGetByNameMissingAuthority()
+    {
+        userRoleService.getByName("ROLE_ADMINISTRATOR");
+    }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void testGetByName()
     {
         UserRoleDTO ur = dTOFactory.newUserRole(null, "ROLE_ADMINISTRATOR");
@@ -267,6 +351,7 @@ public class UserRoleServiceTest
     }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void testGetAllError()
     {
         try
@@ -278,8 +363,22 @@ public class UserRoleServiceTest
             fail("Empty List returned by DAO is not handled correctly.");
         }
     }
+    
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testGetAllNoAuthorities()
+    {
+        userRoleService.getAll();
+    }
+    
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(authorities = {"ROLE_USER"})
+    public void testGetAllMissingAuthority()
+    {
+        userRoleService.getAll();
+    }
 
     @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
     public void testGetAll()
     {
         List<UserRoleDTO> list1 = new ArrayList<>(
@@ -289,24 +388,24 @@ public class UserRoleServiceTest
                         dTOFactory.newUserRole(null, "BB-8")
                 )
         );
-        
-        for(UserRoleDTO u : list1)
+
+        for (UserRoleDTO u : list1)
         {
             userRoleService.create(u);
         }
-        
+
         List<UserRoleDTO> list2 = userRoleService.getAll();
-        
+
         Assert.assertEquals("UserRoleService did not return the same number of UserRoles", list1.size(), list2.size());
         Collections.sort(list1, new UserRoleComparator());
         Collections.sort(list2, new UserRoleComparator());
-        
-        for(int i = 0; i < list1.size(); i++)
+
+        for (int i = 0; i < list1.size(); i++)
         {
             deepEquals(list1.get(i), list2.get(i));
         }
     }
-    
+
     private void deepEquals(UserRoleDTO expected, UserRoleDTO actual)
     {
         Assert.assertEquals("UserRoleService did not return UserRole with the same ID.", expected.getId(), actual.getId());

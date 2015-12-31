@@ -47,6 +47,11 @@ limitations under the License.
             order="1"
             properties-ref="defaultProperties"
         />
+        
+        <bean
+            id="podamFactory"
+            class="cz.muni.fi.mir.mathmlcaneval.test.support.PodamFactoryImpl"
+        />
     </beans>
     
     <beans

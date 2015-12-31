@@ -17,7 +17,8 @@ package cz.muni.fi.mir.mathmlcaneval.test.dao;
 
 import cz.muni.fi.mir.mathmlcaneval.database.UserRoleDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
-import cz.muni.fi.mir.mathmlcaneval.database.factories.DomainFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
+import uk.co.jemos.podam.api.PodamFactory;
 
 /**
  *
@@ -50,24 +52,24 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("test")
 public class UserRoleDAOTest
 {
+    private static final Logger LOG = LogManager.getLogger(UserRoleDAOTest.class);
     @Autowired
     private UserRoleDAO userRoleDAO;
     @Autowired
-    private DomainFactory domainFactory;
+    private PodamFactory podamFactory;
 
     @Test
     public void testCreate()
     {
-        UserRole ur = domainFactory.newUserRole(null, "admin");
+        UserRole ur = podamFactory.manufacturePojo(UserRole.class);
         userRoleDAO.create(ur);
-        
         Assert.assertNotNull("ID was not assigned by TX/DAO",ur.getId());
     }
     
     @Test
     public void getByID()
     {
-        UserRole ur = domainFactory.newUserRole(null, "admin");
+        UserRole ur = podamFactory.manufacturePojo(UserRole.class);
         
         userRoleDAO.create(ur);
         
@@ -75,13 +77,13 @@ public class UserRoleDAOTest
         
         Assert.assertNotNull("UserRoleDAO returned null.", result);
         Assert.assertNotNull("UserRoleDAO returned result with null ID.", result.getId());
-        Assert.assertEquals("UserRoleDAO returned invalid result based on equals().", result, result);
+        Assert.assertEquals("UserRoleDAO returned invalid result based on equals().", ur, result);
     }
     
     @Test
     public void delete()
     {
-        UserRole ur = domainFactory.newUserRole(null, "admin");
+        UserRole ur = podamFactory.manufacturePojo(UserRole.class);
         userRoleDAO.create(ur);
         Long id = ur.getId();
         userRoleDAO.delete(id);
@@ -92,7 +94,7 @@ public class UserRoleDAOTest
     @Test
     public void update()
     {
-        UserRole ur = domainFactory.newUserRole(null, "admin");
+        UserRole ur = podamFactory.manufacturePojo(UserRole.class);
         userRoleDAO.create(ur);
         UserRole update = userRoleDAO.getByID(ur.getId());
         update.setRoleName("user");
@@ -104,9 +106,10 @@ public class UserRoleDAOTest
     @Test
     public void getByName()
     {
-        UserRole ur = domainFactory.newUserRole(null, "aircraft carrier");
+        UserRole ur = podamFactory.manufacturePojo(UserRole.class);
+        String name = ur.getRoleName();
         userRoleDAO.create(ur);
-        UserRole result = userRoleDAO.getByName("aircraft carrier");
+        UserRole result = userRoleDAO.getByName(name);
         
         Assert.assertEquals("UserRoleDAO did not return UserRole with expected ID.", ur.getId(),result.getId());
         Assert.assertEquals("UserRoleDAO did not return UserRole with expected roleName.",ur.getRoleName(),result.getRoleName());
@@ -115,13 +118,10 @@ public class UserRoleDAOTest
     @Test
     public void getAll()
     {
-        UserRole ur = domainFactory.newUserRole(null, "role_1");
-        UserRole ur2 = domainFactory.newUserRole(null, "role_2");
-        UserRole ur3 = domainFactory.newUserRole(null, "role_3");
-        
-        userRoleDAO.create(ur);
-        userRoleDAO.create(ur2);
-        userRoleDAO.create(ur3);
+        Assert.assertEquals("Database should be empty.", 0, userRoleDAO.getAll().size());
+        userRoleDAO.create(podamFactory.manufacturePojo(UserRole.class));
+        userRoleDAO.create(podamFactory.manufacturePojo(UserRole.class));
+        userRoleDAO.create(podamFactory.manufacturePojo(UserRole.class));
         
         Assert.assertEquals("UserRoleDAO did not return expected number of entries.",3,userRoleDAO.getAll().size());
     }

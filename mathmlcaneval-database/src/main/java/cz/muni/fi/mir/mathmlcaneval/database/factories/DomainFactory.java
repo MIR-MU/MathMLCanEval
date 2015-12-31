@@ -15,7 +15,10 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.database.factories;
 
+import cz.muni.fi.mir.mathmlcaneval.database.domain.User;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 /**
@@ -46,5 +49,41 @@ public class DomainFactory
         
         return ur;
     }
+    
+    public User newUser()
+    {
+        return new User();
+    }
+    
+    public User newUser(Long id)
+    {
+        User u = newUser();
+        u.setId(id);
+        
+        return u;
+    }
+    
+    public User newUser(Long id, String username, String password, String email, String realName, List<UserRole> roles)
+    {
+        User u = newUser(id);
+        u.setEmail(email);
+        u.setPassword(password);
+        u.setRealName(realName);
+        u.setRoles(roles);
+        u.setUsername(username);
+        
+        return u;
+    }
+    
+    public User newUser(Long id, String username, String password, String email, String realName, UserRole role)
+    {
+        User u = newUser(id, username, password, email, realName, new ArrayList<UserRole>());
+        List<UserRole> roles = new ArrayList<>();
+        roles.add(role);
+        u.setRoles(roles);
+        
+        return u;
+    }
 }
+
 

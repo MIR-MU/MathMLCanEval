@@ -51,7 +51,7 @@ public class UserRoleDAOImpl extends GenericDAOImpl<UserRole, Long> implements U
         }
         catch (NoResultException nre)
         {
-            LOG.debug(nre.getMessage());
+            LOG.trace(nre.getMessage());
         }
         
         return ur;

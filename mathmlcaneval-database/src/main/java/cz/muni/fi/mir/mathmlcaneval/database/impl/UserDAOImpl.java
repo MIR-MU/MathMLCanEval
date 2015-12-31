@@ -49,7 +49,7 @@ public class UserDAOImpl extends GenericDAOImpl<User,Long> implements UserDAO
         }
         catch(NoResultException nre)
         {
-            LOG.debug(nre.getMessage());
+            LOG.trace(nre.getMessage());
         }
         
         return result;
