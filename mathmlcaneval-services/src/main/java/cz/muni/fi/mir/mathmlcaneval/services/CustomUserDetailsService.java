@@ -15,9 +15,8 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services;
 
-import cz.muni.fi.mir.mathmlcaneval.api.UserService;
-import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
-import cz.muni.fi.mir.mathmlcaneval.api.dto.UserRoleDTO;
+import cz.muni.fi.mir.mathmlcaneval.database.UserDAO;
+import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,22 +28,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Component(value = "cstomUserDetailsService")
+@Transactional(readOnly = true)
 public class CustomUserDetailsService implements UserDetailsService
 {
     @Autowired
-    private UserService userService;
+    private UserDAO userDAO;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
         UserDetails userDetails = null;
-        UserDTO result = userService.getByUsername(username);
+        cz.muni.fi.mir.mathmlcaneval.database.domain.User result = userDAO.getByUsername(username);
         if(result == null)
         {
             throw new UsernameNotFoundException(username);
@@ -58,10 +59,10 @@ public class CustomUserDetailsService implements UserDetailsService
         
     }
     
-    private Collection<GrantedAuthority> getAuthorities(UserDTO user)
+    private Collection<GrantedAuthority> getAuthorities(cz.muni.fi.mir.mathmlcaneval.database.domain.User user)
     {
         List<GrantedAuthority> authorities = new ArrayList<>(user.getRoles().size());
-        for(UserRoleDTO ur : user.getRoles())
+        for(UserRole ur : user.getRoles())
         {
             authorities.add(new SimpleGrantedAuthority(ur.getRoleName()));
         }

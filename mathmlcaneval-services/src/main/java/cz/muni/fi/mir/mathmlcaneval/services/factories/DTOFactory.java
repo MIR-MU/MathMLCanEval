@@ -15,7 +15,10 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.factories;
 
+import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.UserRoleDTO;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,6 +47,41 @@ public class DTOFactory
         ur.setRoleName(roleName);
         
         return ur;
+    }
+    
+    public UserDTO newUser()
+    {
+        return new UserDTO();
+    }
+    
+    public UserDTO newUser(Long id)
+    {
+        UserDTO u = newUser();
+        u.setId(id);
+        
+        return u;
+    }
+    
+    public UserDTO newUser(Long id, String username, String password, String email, String realName, List<UserRoleDTO> roles)
+    {
+        UserDTO u = newUser(id);
+        u.setEmail(email);
+        u.setPassword(password);
+        u.setRealName(realName);
+        u.setRoles(roles);
+        u.setUsername(username);
+        
+        return u;
+    }
+    
+    public UserDTO newUser(Long id, String username, String password, String email, String realName, UserRoleDTO role)
+    {
+        UserDTO u = newUser(id, username, password, email, realName, new ArrayList<UserRoleDTO>());
+        List<UserRoleDTO> roles = new ArrayList<>();
+        roles.add(role);
+        u.setRoles(roles);
+        
+        return u;
     }
 }
 

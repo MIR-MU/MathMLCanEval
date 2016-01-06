@@ -16,10 +16,21 @@
 package cz.muni.fi.mir.mathmlcaneval.test.function;
 
 import cz.muni.fi.mir.mathmlcaneval.api.UserRoleService;
+import cz.muni.fi.mir.mathmlcaneval.api.UserService;
+import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
+import cz.muni.fi.mir.mathmlcaneval.api.dto.UserRoleDTO;
 import cz.muni.fi.mir.mathmlcaneval.services.factories.DTOFactory;
+import java.util.ArrayList;
+import java.util.List;
+import org.dozer.MappingException;
+import static org.junit.Assert.fail;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,6 +38,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import uk.co.jemos.podam.api.PodamFactory;
 
 /**
  *
@@ -50,30 +62,164 @@ public class UserServiceTest
     private DTOFactory dTOFactory;
     @Autowired
     private UserRoleService userRoleService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PodamFactory podamFactory;
+    private List<UserRoleDTO> userRoles = new ArrayList<>();
+    
+    @Before
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void init()
+    {
+        userRoles = new ArrayList<>();
+        userRoles.add(podamFactory.manufacturePojo(UserRoleDTO.class));
+        userRoles.add(podamFactory.manufacturePojo(UserRoleDTO.class));
+        userRoles.add(podamFactory.manufacturePojo(UserRoleDTO.class));
+        
+        for(UserRoleDTO ur : userRoles)
+        {
+            userRoleService.create(ur);
+        }
+    }
 
     @Test
-    public void testCreateError(){}
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testCreateError()
+    {
+        try
+        {
+            userService.create(null);
+            fail("UserService allowed to create null user.");
+        }
+        catch(IllegalArgumentException iae)
+        {
+            
+        }
+        
+        try
+        {
+            userService.create(podamFactory.manufacturePojo(UserDTO.class));
+            fail("UserSerice allowed to create user user with null id");
+        }
+        catch(IllegalArgumentException ex)
+        {
+            
+        }
+    }
+
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testCreateNoCredentials()
+    {
+    }
+
     @Test
-    public void testGetByIdError(){}
+    public void testMissingCredentials()
+    {
+    }
+
     @Test
-    public void testDeleteError(){}
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testCreate()
+    {
+    }
+
     @Test
-    public void testUpdateError(){}
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testGetByIdError()
+    {
+    }
+
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testGetByIdNoCredentials()
+    {
+    }
+
     @Test
-    public void testGetAllError(){}
+    public void testGetByIdMissingCredentials()
+    {
+    }
+
     @Test
-    public void testGetByUsernameError(){}
-    
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testGetById()
+    {
+    }
+
     @Test
-    public void testCreate(){}
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testDeleteError()
+    {
+    }
+
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testDeleteNoCredentials()
+    {
+    }
+
     @Test
-    public void testGetById(){}
+    public void testDeleteMissingCredentials()
+    {
+    }
+
     @Test
-    public void testDelete(){}
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testDelete()
+    {
+    }
+
     @Test
-    public void testUpdate(){}
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testUpdateError()
+    {
+    }
+
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testUpdateNoCredentials()
+    {
+    }
+
     @Test
-    public void testGetAll(){}
+    public void testUpdateMissingCredentials()
+    {
+    }
+
     @Test
-    public void testGetByUsername(){}
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testUpdate()
+    {
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testGetAllError()
+    {
+        try
+        {
+            userService.getAll();
+        }
+        catch (MappingException me)
+        {
+            fail("Empty List returned by DAO is not handled correctly.");
+        }
+    }
+
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void testGetAllNoCredentials()
+    {
+        userService.getAll();
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(authorities = {"ROLE_USER"})
+    public void testGetAllMissingCredentials()
+    {
+        userService.getAll();
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ROLE_ADMINISTRATOR"})
+    public void testGetAll()
+    {
+    }
 }

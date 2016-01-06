@@ -52,14 +52,6 @@ public interface UserService
      * @throws IllegalArgumentException if id is null or less than one
      */
     UserDTO getByID(Long id) throws IllegalArgumentException;
-    
-    /**
-     * Method obtains user based on its username. 
-     * @param username of user
-     * @return user with given username, null if there no match
-     * @throws IllegalArgumentException if username is null or has zero characters
-     */
-    UserDTO getByUsername(String username) throws IllegalArgumentException;
    
     /**
      * Method obtains all users from database.

@@ -107,26 +107,6 @@ public class UserServiceImpl implements UserService
 
     @Override
     @Transactional(readOnly = true)
-    public UserDTO getByUsername(String username) throws IllegalArgumentException
-    {
-        if (StringUtils.isEmpty(username))
-        {
-            throw new IllegalArgumentException("Given username is empty.");
-        }
-
-        User u = userDAO.getByUsername(username);
-        if (u == null)
-        {
-            return null;
-        }
-        else
-        {
-            return mapper.map(u, UserDTO.class);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<UserDTO> getAll()
     {
         return mapper.mapList(userDAO.getAll(), UserDTO.class);
