@@ -22,14 +22,12 @@ import java.util.Objects;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class ConfigurationDTO implements Serializable
+public class GitBranchDTO implements Serializable
 {
-    private static final long serialVersionUID = 7924023515714999641L;
+    private static final long serialVersionUID = 1411567983243778087L;
     
     private Long id;
     private String name;
-    private String configuration;
-    private String note;
 
     public Long getId()
     {
@@ -51,31 +49,11 @@ public class ConfigurationDTO implements Serializable
         this.name = name;
     }
 
-    public String getConfiguration()
-    {
-        return configuration;
-    }
-
-    public void setConfiguration(String configuration)
-    {
-        this.configuration = configuration;
-    }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public void setNote(String note)
-    {
-        this.note = note;
-    }
-
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 61 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -90,13 +68,13 @@ public class ConfigurationDTO implements Serializable
         {
             return false;
         }
-        final ConfigurationDTO other = (ConfigurationDTO) obj;
+        final GitBranchDTO other = (GitBranchDTO) obj;
         return Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString()
     {
-        return "ConfigurationDTO{" + "id=" + id + ", name=" + name + ", configuration=" + configuration + ", note=" + note + '}';
+        return "GitBranchDTO{" + "id=" + id + ", name=" + name + '}';
     }
 }

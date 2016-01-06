@@ -22,14 +22,12 @@ import java.util.Objects;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class ConfigurationDTO implements Serializable
+public class GitTagDTO implements Serializable
 {
-    private static final long serialVersionUID = 7924023515714999641L;
-    
+    private static final long serialVersionUID = -5218019972106918604L;
     private Long id;
-    private String name;
-    private String configuration;
-    private String note;
+    private String version;
+    private GitRevisionDTO gitRevision;
 
     public Long getId()
     {
@@ -41,41 +39,31 @@ public class ConfigurationDTO implements Serializable
         this.id = id;
     }
 
-    public String getName()
+    public String getVersion()
     {
-        return name;
+        return version;
     }
 
-    public void setName(String name)
+    public void setVersion(String version)
     {
-        this.name = name;
+        this.version = version;
     }
 
-    public String getConfiguration()
+    public GitRevisionDTO getGitRevision()
     {
-        return configuration;
+        return gitRevision;
     }
 
-    public void setConfiguration(String configuration)
+    public void setGitRevision(GitRevisionDTO gitRevision)
     {
-        this.configuration = configuration;
+        this.gitRevision = gitRevision;
     }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public void setNote(String note)
-    {
-        this.note = note;
-    }
-
+    
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 61 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -90,13 +78,13 @@ public class ConfigurationDTO implements Serializable
         {
             return false;
         }
-        final ConfigurationDTO other = (ConfigurationDTO) obj;
+        final GitTagDTO other = (GitTagDTO) obj;
         return Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString()
     {
-        return "ConfigurationDTO{" + "id=" + id + ", name=" + name + ", configuration=" + configuration + ", note=" + note + '}';
+        return "GitTagDTO{" + "id=" + id + ", version=" + version + ", gitRevision=" + gitRevision + '}';
     }
 }

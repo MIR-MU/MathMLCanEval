@@ -22,14 +22,13 @@ import java.util.Objects;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class ConfigurationDTO implements Serializable
+public class AnnotationTagDTO implements Serializable
 {
-    private static final long serialVersionUID = 7924023515714999641L;
-    
+    private static final long serialVersionUID = -2860804904918776363L;
     private Long id;
-    private String name;
-    private String configuration;
-    private String note;
+    private String color;
+    private String icon;
+    private Integer priority;
 
     public Long getId()
     {
@@ -41,41 +40,41 @@ public class ConfigurationDTO implements Serializable
         this.id = id;
     }
 
-    public String getName()
+    public String getColor()
     {
-        return name;
+        return color;
     }
 
-    public void setName(String name)
+    public void setColor(String color)
     {
-        this.name = name;
+        this.color = color;
     }
 
-    public String getConfiguration()
+    public String getIcon()
     {
-        return configuration;
+        return icon;
     }
 
-    public void setConfiguration(String configuration)
+    public void setIcon(String icon)
     {
-        this.configuration = configuration;
+        this.icon = icon;
     }
 
-    public String getNote()
+    public Integer getPriority()
     {
-        return note;
+        return priority;
     }
 
-    public void setNote(String note)
+    public void setPriority(Integer priority)
     {
-        this.note = note;
+        this.priority = priority;
     }
 
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 61 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -90,13 +89,13 @@ public class ConfigurationDTO implements Serializable
         {
             return false;
         }
-        final ConfigurationDTO other = (ConfigurationDTO) obj;
+        final AnnotationTagDTO other = (AnnotationTagDTO) obj;
         return Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString()
     {
-        return "ConfigurationDTO{" + "id=" + id + ", name=" + name + ", configuration=" + configuration + ", note=" + note + '}';
+        return "AnnotationTagDTO{" + "id=" + id + ", color=" + color + ", icon=" + icon + ", priority=" + priority + '}';
     }
 }

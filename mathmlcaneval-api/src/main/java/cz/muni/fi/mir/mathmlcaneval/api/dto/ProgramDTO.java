@@ -22,13 +22,12 @@ import java.util.Objects;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class ConfigurationDTO implements Serializable
+public class ProgramDTO implements Serializable
 {
-    private static final long serialVersionUID = 7924023515714999641L;
-    
+    private static final long serialVersionUID = 7651869747162095613L;
     private Long id;
     private String name;
-    private String configuration;
+    private String parameters;
     private String note;
 
     public Long getId()
@@ -51,14 +50,14 @@ public class ConfigurationDTO implements Serializable
         this.name = name;
     }
 
-    public String getConfiguration()
+    public String getParameters()
     {
-        return configuration;
+        return parameters;
     }
 
-    public void setConfiguration(String configuration)
+    public void setParameters(String parameters)
     {
-        this.configuration = configuration;
+        this.parameters = parameters;
     }
 
     public String getNote()
@@ -74,8 +73,8 @@ public class ConfigurationDTO implements Serializable
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 61 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -90,13 +89,13 @@ public class ConfigurationDTO implements Serializable
         {
             return false;
         }
-        final ConfigurationDTO other = (ConfigurationDTO) obj;
+        final ProgramDTO other = (ProgramDTO) obj;
         return Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString()
     {
-        return "ConfigurationDTO{" + "id=" + id + ", name=" + name + ", configuration=" + configuration + ", note=" + note + '}';
+        return "ProgramDTO{" + "id=" + id + ", name=" + name + ", parameters=" + parameters + ", note=" + note + '}';
     }
 }

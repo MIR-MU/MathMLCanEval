@@ -22,14 +22,14 @@ import java.util.Objects;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class ConfigurationDTO implements Serializable
+public class GitRevisionDTO implements Serializable
 {
-    private static final long serialVersionUID = 7924023515714999641L;
-    
+    private static final long serialVersionUID = -2978703782523234778L;
+
     private Long id;
-    private String name;
-    private String configuration;
+    private String revisionHash;
     private String note;
+    private GitBranchDTO gitBranch;
 
     public Long getId()
     {
@@ -41,24 +41,14 @@ public class ConfigurationDTO implements Serializable
         this.id = id;
     }
 
-    public String getName()
+    public String getRevisionHash()
     {
-        return name;
+        return revisionHash;
     }
 
-    public void setName(String name)
+    public void setRevisionHash(String revisionHash)
     {
-        this.name = name;
-    }
-
-    public String getConfiguration()
-    {
-        return configuration;
-    }
-
-    public void setConfiguration(String configuration)
-    {
-        this.configuration = configuration;
+        this.revisionHash = revisionHash;
     }
 
     public String getNote()
@@ -71,11 +61,21 @@ public class ConfigurationDTO implements Serializable
         this.note = note;
     }
 
+    public GitBranchDTO getGitBranch()
+    {
+        return gitBranch;
+    }
+
+    public void setGitBranch(GitBranchDTO gitBranch)
+    {
+        this.gitBranch = gitBranch;
+    }
+
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 61 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -90,13 +90,13 @@ public class ConfigurationDTO implements Serializable
         {
             return false;
         }
-        final ConfigurationDTO other = (ConfigurationDTO) obj;
+        final GitRevisionDTO other = (GitRevisionDTO) obj;
         return Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString()
     {
-        return "ConfigurationDTO{" + "id=" + id + ", name=" + name + ", configuration=" + configuration + ", note=" + note + '}';
+        return "GitRevisionDTO{" + "id=" + id + ", hash=" + revisionHash + ", note=" + note + ", gitBranch=" + gitBranch + '}';
     }
 }

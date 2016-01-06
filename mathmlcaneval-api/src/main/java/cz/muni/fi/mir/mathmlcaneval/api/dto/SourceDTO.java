@@ -16,20 +16,21 @@
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.Objects;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class ConfigurationDTO implements Serializable
+public class SourceDTO implements Serializable
 {
-    private static final long serialVersionUID = 7924023515714999641L;
-    
+    private static final long serialVersionUID = 5822993783336604997L;
     private Long id;
     private String name;
-    private String configuration;
     private String note;
+    private Path rootPath;
+    private ProgramDTO program;
 
     public Long getId()
     {
@@ -51,16 +52,6 @@ public class ConfigurationDTO implements Serializable
         this.name = name;
     }
 
-    public String getConfiguration()
-    {
-        return configuration;
-    }
-
-    public void setConfiguration(String configuration)
-    {
-        this.configuration = configuration;
-    }
-
     public String getNote()
     {
         return note;
@@ -71,11 +62,31 @@ public class ConfigurationDTO implements Serializable
         this.note = note;
     }
 
+    public Path getRootPath()
+    {
+        return rootPath;
+    }
+
+    public void setRootPath(Path rootPath)
+    {
+        this.rootPath = rootPath;
+    }
+
+    public ProgramDTO getProgram()
+    {
+        return program;
+    }
+
+    public void setProgram(ProgramDTO program)
+    {
+        this.program = program;
+    }
+
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 61 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -90,13 +101,13 @@ public class ConfigurationDTO implements Serializable
         {
             return false;
         }
-        final ConfigurationDTO other = (ConfigurationDTO) obj;
+        final SourceDTO other = (SourceDTO) obj;
         return Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString()
     {
-        return "ConfigurationDTO{" + "id=" + id + ", name=" + name + ", configuration=" + configuration + ", note=" + note + '}';
+        return "SourceDTO{" + "id=" + id + ", name=" + name + ", note=" + note + ", rootPath=" + rootPath + ", program=" + program + '}';
     }
 }
