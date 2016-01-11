@@ -88,7 +88,7 @@ limitations under the License.
             p:maxStatements="${database.hibernate.connection.max_statements}"
             p:idleConnectionTestPeriod="${database.hibernate.connection.idle_test_period}"
             p:initialPoolSize="${database.hibernate.connection.poolsize.init}"
-            p:preferredTestQuery="${database.hibernate.preferredTestQuery"
+            p:preferredTestQuery="${database.hibernate.preferredTestQuery}"
         />
         
         <bean
