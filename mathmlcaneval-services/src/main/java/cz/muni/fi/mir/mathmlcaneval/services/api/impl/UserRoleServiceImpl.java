@@ -111,16 +111,8 @@ public class UserRoleServiceImpl implements UserRoleService
             throw new IllegalArgumentException("Given id is null.");
         }
 
-        UserRole dao = userRoleDAO.getByID(id);
+        return mapper.map(userRoleDAO.getByID(id), UserRoleDTO.class);
 
-        if (dao != null)
-        {
-            return mapper.map(dao, UserRoleDTO.class);
-        }
-        else
-        {
-            return null;
-        }
     }
 
     @Override
@@ -132,17 +124,8 @@ public class UserRoleServiceImpl implements UserRoleService
         {
             throw new IllegalArgumentException("Given roleName is empty.");
         }
-        
-        UserRole dao = userRoleDAO.getByName(roleName);
-        
-        if(dao != null)
-        {
-            return mapper.map(dao, UserRoleDTO.class);
-        }
-        else
-        {
-            return null;
-        }
+
+        return mapper.map(userRoleDAO.getByName(roleName), UserRoleDTO.class);
     }
 
     @Override

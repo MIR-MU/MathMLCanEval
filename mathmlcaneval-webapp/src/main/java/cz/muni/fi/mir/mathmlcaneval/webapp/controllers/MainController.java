@@ -15,6 +15,8 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.webapp.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,9 +28,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController
 {
+    private static final Logger LOGGER = LogManager.getLogger(MainController.class);
+    
     @RequestMapping(value = "/")
     public ModelAndView landingPage()
     {
         return new ModelAndView("index");
-    }
+    }    
 }

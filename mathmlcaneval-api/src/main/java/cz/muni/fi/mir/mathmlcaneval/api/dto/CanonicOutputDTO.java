@@ -23,16 +23,17 @@ import java.util.Objects;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class CanonicOutputDTO implements Serializable
+public class CanonicOutputDTO implements Serializable, Searchable
 {
     private static final long serialVersionUID = -4779832594830201080L;
     private Long id;
-    private String outputContent;
+    private String content;
     private String outputHash;
     private Integer runningTime;
     private ApplicationRunDTO applicationRun;
     private List<AnnotationDTO> annotations;
 
+    @Override
     public Long getId()
     {
         return id;
@@ -43,14 +44,15 @@ public class CanonicOutputDTO implements Serializable
         this.id = id;
     }
 
-    public String getOutputContent()
+    @Override
+    public String getContent()
     {
-        return outputContent;
+        return content;
     }
 
-    public void setOutputContent(String outputContent)
+    public void setContent(String content)
     {
-        this.outputContent = outputContent;
+        this.content = content;
     }
 
     public String getOutputHash()
@@ -94,6 +96,12 @@ public class CanonicOutputDTO implements Serializable
     }
 
     @Override
+    public Class<?> getType()
+    {
+        return getClass();
+    }
+
+    @Override
     public int hashCode()
     {
         int hash = 7;
@@ -119,6 +127,6 @@ public class CanonicOutputDTO implements Serializable
     @Override
     public String toString()
     {
-        return "CanonicOutputDTO{" + "id=" + id + ", outputContent=" + outputContent + ", outputHash=" + outputHash + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
+        return "CanonicOutputDTO{" + "id=" + id + ", outputContent=" + content + ", outputHash=" + outputHash + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
     }
 }

@@ -92,6 +92,7 @@ limitations under the License.
     <filter>
         <filter-name>httpMethodFilter</filter-name>
         <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+        <async-supported>true</async-supported>
     </filter>
 
     <filter-mapping>

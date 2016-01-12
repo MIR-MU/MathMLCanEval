@@ -62,6 +62,5 @@ public class GenericDAOImpl<T, PK extends Serializable> implements GenericDAO<T,
     public List<T> getAll()
     {
         return entityManager.createNamedQuery(findAllQueryName, type).getResultList();
-    }
-    
+    }    
 }

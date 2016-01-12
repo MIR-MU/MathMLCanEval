@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Service
-@Transactional
 public class UserServiceImpl implements UserService
 {
     @Autowired
@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService
 
     @Override
     @Transactional(readOnly = false)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public void create(UserDTO user) throws IllegalArgumentException
     {
         checkUser(user);
@@ -66,6 +67,7 @@ public class UserServiceImpl implements UserService
 
     @Override
     @Transactional(readOnly = false)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public void update(UserDTO user) throws IllegalArgumentException
     {
         checkUser(user);
@@ -76,37 +78,32 @@ public class UserServiceImpl implements UserService
 
     @Override
     @Transactional(readOnly = false)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public void delete(UserDTO user) throws IllegalArgumentException
     {
         checkNull(user);
         checkID(user);
 
         userDAO.delete(user.getId());
+        user.setId(null);
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public UserDTO getByID(Long id) throws IllegalArgumentException
     {
         if (id == null)
         {
             throw new IllegalArgumentException("Given id is null.");
         }
-
-        User u = userDAO.getByID(id);
-
-        if (u == null)
-        {
-            return null;
-        }
-        else
-        {
-            return mapper.map(u, UserDTO.class);
-        }
+        
+        return mapper.map(userDAO.getByID(id), UserDTO.class);
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public List<UserDTO> getAll()
     {
         return mapper.mapList(userDAO.getAll(), UserDTO.class);
@@ -114,23 +111,23 @@ public class UserServiceImpl implements UserService
 
     @Override
     @Transactional(readOnly = true)
+    @Secured(value = "ROLE_ADMINISTRATOR")
     public UserDTO getSystemUser() throws RuntimeException
     {
-        if(systemUser == null)
+        if (systemUser == null)
         {
             User u = userDAO.getByUsername(systemUsername);
-            
-            if(u == null)
+
+            if (u == null)
             {
-                throw new RuntimeException("There is no system user with specified username yet ["+systemUsername+"]");
+                throw new RuntimeException("There is no system user with specified username yet [" + systemUsername + "]");
             }
             else
             {
-                systemUser = mapper.map(u,UserDTO.class);
+                systemUser = mapper.map(u, UserDTO.class);
             }
         }
-        
-        
+
         return systemUser;
     }
 

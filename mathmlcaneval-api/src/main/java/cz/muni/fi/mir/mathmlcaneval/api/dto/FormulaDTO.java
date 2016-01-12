@@ -25,11 +25,11 @@ import org.joda.time.DateTime;
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class FormulaDTO implements Serializable
+public class FormulaDTO implements Serializable, Searchable
 {
     private static final long serialVersionUID = -6538649199225913330L;
     private Long id;
-    private String formulaContent;
+    private String content;
     private String formulaHash;
     private String note;
     private DateTime importTime;
@@ -39,6 +39,7 @@ public class FormulaDTO implements Serializable
     private UserDTO user;
     private List<CanonicOutputDTO> canonicOutputs;
 
+    @Override
     public Long getId()
     {
         return id;
@@ -49,14 +50,15 @@ public class FormulaDTO implements Serializable
         this.id = id;
     }
 
-    public String getFormulaContent()
+    @Override
+    public String getContent()
     {
-        return formulaContent;
+        return content;
     }
 
-    public void setFormulaContent(String formulaContent)
+    public void setContent(String content)
     {
-        this.formulaContent = formulaContent;
+        this.content = content;
     }
 
     public String getFormulaHash()
@@ -140,6 +142,12 @@ public class FormulaDTO implements Serializable
     }
 
     @Override
+    public Class<?> getType()
+    {
+        return getClass();
+    }
+
+    @Override
     public int hashCode()
     {
         int hash = 7;
@@ -165,10 +173,10 @@ public class FormulaDTO implements Serializable
     @Override
     public String toString()
     {
-        return "FormulaDTO{" + "id=" + id + ", formulaContent=" + formulaContent + ", formulaHash=" + formulaHash + ", note=" 
-                + note + ", importTime=" + importTime + ", path=" + path + ", annotations=" 
-                + annotations + ", source=" + source + ", user=" + user 
+        return "FormulaDTO{" + "id=" + id + ", formulaContent=" + content + ", formulaHash=" + formulaHash + ", note="
+                + note + ", importTime=" + importTime + ", path=" + path + ", annotations="
+                + annotations + ", source=" + source + ", user=" + user
                 + ", canonicOutputs=" + (canonicOutputs != null ? canonicOutputs.size() : 0) + '}';
     }
-    
+
 }

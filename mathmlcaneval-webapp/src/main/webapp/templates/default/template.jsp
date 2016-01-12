@@ -8,6 +8,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<c:set var="context" value="${pageContext.request.contextPath}" scope="application" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -23,32 +24,23 @@
 
         <!-- Bootstrap core CSS -->
         <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
-        <link href="<c:url value="/resources/css/styles.min.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/style.min.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/font-awesome.min.css" />" rel="stylesheet">
     </head>
 
     <body>
         <tiles:insertAttribute name="navigation" />  
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-2 col-xs-4">
+                <div class="col-xs-1 sidebar bg-inverse">
                     <tiles:insertAttribute name="sidebar" />  
                 </div>
-                <div class="col-md-6 col-xs-8">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <tiles:insertAttribute name="body" />  
-                        </div>
-                    </div>
+                <div class="col-xs-11 main col-xs-offset-1">
+                    <tiles:insertAttribute name="body" /> 
                 </div>
-            </div>            
-            <footer class="row">
-                <div class="col-md-6 col-xs-8 col-md-offset-2 col-xs-offset-4">
-                    <tiles:insertAttribute name="footer" />                    
-                </div>
-            </footer>
-        </div><!-- /.container -->
+            </div>
+        </div>
 
         <tiles:insertAttribute name="footer-javascript" />
-        
     </body>
 </html>

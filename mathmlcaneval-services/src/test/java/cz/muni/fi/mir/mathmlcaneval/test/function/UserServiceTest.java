@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,6 +39,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.web.ServletTestExecutionListener;
 import uk.co.jemos.podam.api.PodamFactory;
 
 /**
@@ -47,11 +49,11 @@ import uk.co.jemos.podam.api.PodamFactory;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations =
 {
-    "classpath:spring/spring-database.xml", "classpath:/spring/spring-services.xml"
+    "classpath:spring/spring-database.xml", "classpath:/spring/spring-services.xml", "classpath:/spring/spring-security.xml"
 })
 @TestExecutionListeners(
         {
-            DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class
+            ServletTestExecutionListener.class, DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class, WithSecurityContextTestExecutionListener.class
         })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
@@ -113,8 +115,9 @@ public class UserServiceTest
     {
     }
 
-    @Test
-    public void testMissingCredentials()
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(authorities = {"ROLE_USER"})
+    public void testCreateMissingCredentials()
     {
     }
 
@@ -133,6 +136,7 @@ public class UserServiceTest
     @Test(expected = AuthenticationCredentialsNotFoundException.class)
     public void testGetByIdNoCredentials()
     {
+        userService.getByID(Long.valueOf("5"));
     }
 
     @Test
@@ -155,6 +159,7 @@ public class UserServiceTest
     @Test(expected = AuthenticationCredentialsNotFoundException.class)
     public void testDeleteNoCredentials()
     {
+        userService.delete(podamFactory.manufacturePojo(UserDTO.class));
     }
 
     @Test
@@ -177,11 +182,14 @@ public class UserServiceTest
     @Test(expected = AuthenticationCredentialsNotFoundException.class)
     public void testUpdateNoCredentials()
     {
+        userService.update(podamFactory.manufacturePojo(UserDTO.class));
     }
-
-    @Test
+    
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(authorities = {"ROLE_USER"})
     public void testUpdateMissingCredentials()
     {
+        userService.update(podamFactory.manufacturePojo(UserDTO.class));
     }
 
     @Test

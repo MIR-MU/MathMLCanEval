@@ -53,7 +53,7 @@ public class User implements Serializable
     private String username;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
+    @Column(nullable = false,name = "realname")
     private String realName;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roles;

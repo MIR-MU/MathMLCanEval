@@ -15,11 +15,16 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services;
 
+import cz.muni.fi.mir.mathmlcaneval.api.dto.ApplicationRunDTO;
+import cz.muni.fi.mir.mathmlcaneval.api.dto.FormulaDTO;
+import cz.muni.fi.mir.mathmlcaneval.services.tasks.Task;
+import java.util.List;
+
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface FormulaCanonicalizerService
 {
-    
+    void canonicalize(List<FormulaDTO> formulas,ApplicationRunDTO applicationRun, Task task);
 }

@@ -15,11 +15,13 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services;
 
+import cz.muni.fi.mir.mathmlcaneval.services.tasks.Task;
+
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface FormulaLoaderService
 {
-    
+    void loadInput(Task task) throws IllegalArgumentException;
 }

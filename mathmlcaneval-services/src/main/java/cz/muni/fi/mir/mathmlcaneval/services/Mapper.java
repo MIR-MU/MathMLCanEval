@@ -24,6 +24,14 @@ import org.dozer.MappingException;
  */
 public interface Mapper extends org.dozer.Mapper
 {
-
+    /**
+     * Method converts given list of type U into list of type T
+     * @param <T>
+     * @param <U>
+     * @param input to be converted
+     * @param destinationClass target conversion class
+     * @return converted list
+     * @throws MappingException if any error occurs 
+     */
     <T, U> List<T> mapList(List<U> input, Class<T> destinationClass) throws MappingException;
 }

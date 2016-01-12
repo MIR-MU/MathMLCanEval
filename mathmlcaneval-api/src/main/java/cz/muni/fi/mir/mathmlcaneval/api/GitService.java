@@ -26,7 +26,19 @@ import java.util.List;
  */
 public interface GitService
 {
+    void createRevision(GitRevisionDTO gitRevision) throws IllegalArgumentException;
+
+    void deleteRevision(GitRevisionDTO gitRevision) throws IllegalArgumentException;
+
+    void createBranch(GitBranchDTO gitBranch) throws IllegalArgumentException;
+
+    void deleteBranch(GitBranchDTO gitBranch) throws IllegalArgumentException;
+
+    void createTag(GitTagDTO gitTag) throws IllegalArgumentException;
+
     List<GitBranchDTO> getBranches();
+
     List<GitRevisionDTO> getRevisions(GitBranchDTO gitBranchDTO);
+
     List<GitTagDTO> getTags();
 }

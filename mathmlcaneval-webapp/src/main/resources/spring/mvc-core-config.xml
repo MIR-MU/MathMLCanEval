@@ -86,6 +86,8 @@ http://www.springframework.org/schema/task/spring-task.xsd
         <property name="formatters">
             <set>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.UserRoleFormatter"/>
+                <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.ProgramFormatter"/>
+                <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.ConfigurationFormatter"/>
             </set>
         </property>
     </bean>

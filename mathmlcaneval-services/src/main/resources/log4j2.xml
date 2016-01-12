@@ -14,11 +14,10 @@
     <Logger name="org.apache.commons.digester" level="error"/>
     <Logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="info"/>
     <Logger name="org.hibernate.tool.hbm2ddl.SchemaExport" level="FATAL"/>
-    <Logger name="com.mchange.v2.c3p0" level="FATAL"/>
-    <Logger name="org.springframework" level="ERROR" />
-    <Logger name="org.springframework.security" level="INFO" />
-    <Logger name="org.springframework.security.config.SecurityNamespaceHandler" level="ERROR" />
-    <Root level="info">
+    <Logger name="com.mchange.v2" level="FATAL"/>
+    <Logger name="org.springframework" level="info" />
+    <Logger name="org.springframework.security" level="info" />
+    <Root level="debug">
       <AppenderRef ref="STDOUT"/>
     </Root>
   </Loggers>

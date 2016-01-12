@@ -30,6 +30,7 @@ public class ConfigurationDTO implements Serializable
     private String name;
     private String configuration;
     private String note;
+    private Boolean active;
 
     public Long getId()
     {
@@ -69,6 +70,16 @@ public class ConfigurationDTO implements Serializable
     public void setNote(String note)
     {
         this.note = note;
+    }
+
+    public Boolean getActive()
+    {
+        return active;
+    }
+
+    public void setActive(Boolean active)
+    {
+        this.active = active;
     }
 
     @Override

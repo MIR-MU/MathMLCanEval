@@ -76,6 +76,21 @@ limitations under the License.
                 </list>
             </property>
         </bean>
+        
+        <bean
+            id="backgroundFormulaConverter"
+            class="cz.muni.fi.mir.mathmlcaneval.services.impl.BackgroundFormulaConverter"
+        />
+        
+        <bean
+            id="backgroundFormulaConverterFactoryBean"
+            class="cz.muni.fi.mir.mathmlcaneval.services.impl.BackgroundFormulaConverterFactoryBean"
+        >
+            <lookup-method
+                name="backgroundFormulaConverter"
+                bean="backgroundFormulaConverter"
+            />
+                </bean>
                 
         <!--
         this has to be here not in servlet context
@@ -85,9 +100,14 @@ limitations under the License.
         <task:annotation-driven 
             executor="taskExecutor" 
             scheduler="myScheduler"
-            proxy-target-class="true"            
+            proxy-target-class="true" 
+            exception-handler="taskServiceExceptionHandler"           
         />
         <!--  exception-handler="exceptionHandlerForAsync" -->
+        <bean
+            id="taskServiceExceptionHandler"
+            class="cz.muni.fi.mir.mathmlcaneval.services.tasks.TaskServiceExceptionHandler"
+        />
         
         <!-- TODO move to config -->
         <bean

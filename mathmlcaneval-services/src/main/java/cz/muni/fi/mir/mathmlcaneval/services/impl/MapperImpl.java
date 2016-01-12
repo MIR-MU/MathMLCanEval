@@ -43,5 +43,17 @@ public class MapperImpl extends DozerBeanMapper implements Mapper
         
         return resultList;
     }
-    
+
+    @Override
+    public <T> T map(Object source, Class<T> destinationClass) throws MappingException
+    {
+        if(source == null)
+        {
+            return null;
+        }
+        else
+        {
+            return super.map(source, destinationClass);
+        }
+    }
 }

@@ -16,54 +16,100 @@
 package cz.muni.fi.mir.mathmlcaneval.services.api.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.api.GitService;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import cz.muni.fi.mir.mathmlcaneval.api.dto.GitBranchDTO;
+import cz.muni.fi.mir.mathmlcaneval.api.dto.GitRevisionDTO;
+import cz.muni.fi.mir.mathmlcaneval.api.dto.GitTagDTO;
+import cz.muni.fi.mir.mathmlcaneval.database.GitBranchDAO;
+import cz.muni.fi.mir.mathmlcaneval.database.GitRevisionDAO;
+import cz.muni.fi.mir.mathmlcaneval.database.GitTagDAO;
+import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
 import java.util.List;
-import java.util.Map;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.springframework.beans.factory.InitializingBean;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class GitServiceImpl implements GitService, InitializingBean
+@Service
+public class GitServiceImpl implements GitService
 {
-    private static final Path REPO_FOLDER = Paths.get("C:\\Users\\emptak\\Documents\\NetBeansProjects\\MathMLCan\\.git");
-    private Repository repository = null;
+    private static final Logger LOGGER = LogManager.getLogger(GitServiceImpl.class);
+    @Autowired
+    private GitRevisionDAO gitRevisionDAO;
+    @Autowired
+    private GitBranchDAO gitBranchDAO;
+    @Autowired
+    private GitTagDAO gitTagDAO;
+    @Autowired
+    private Mapper mapper;
     
-
     @Override
-    public List<String> getBranches()
+    @Transactional(readOnly = false)
+    @Secured(value = "ROLE_STAFF")
+    public List<GitBranchDTO> getBranches()
     {
-        List<String> branches = new ArrayList<>();
-        
-        Map<String,Ref> map = repository.getAllRefs();
-        
-        branches.addAll(map.keySet());
-        
-        return branches;
+        return mapper.mapList(gitBranchDAO.getAll(), GitBranchDTO.class);
     }
 
     @Override
-    public List<String> getRevisions(String branch)
+    @Transactional(readOnly = true)
+    @Secured(value = "ROLE_STAFF")
+    public List<GitRevisionDTO> getRevisions(GitBranchDTO gitBranchDTO)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<String> getTags(String branch)
+    @Transactional(readOnly = true)
+    @Secured(value = "ROLE_STAFF")
+    public List<GitTagDTO> getTags()
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception
+    @Transactional(readOnly = false)
+    @Secured(value = "ROLE_STAFF")
+    public void createRevision(GitRevisionDTO gitRevision) throws IllegalArgumentException
     {
-        repository = new FileRepositoryBuilder().setGitDir(REPO_FOLDER.toFile()).build();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    @Transactional(readOnly = false)
+    @Secured(value = "ROLE_STAFF")
+    public void deleteRevision(GitRevisionDTO gitRevision) throws IllegalArgumentException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    @Secured(value = "ROLE_STAFF")
+    public void createBranch(GitBranchDTO gitBranch) throws IllegalArgumentException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    @Secured(value = "ROLE_STAFF")
+    public void deleteBranch(GitBranchDTO gitBranch) throws IllegalArgumentException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    @Secured(value = "ROLE_STAFF")
+    public void createTag(GitTagDTO gitTag) throws IllegalArgumentException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
