@@ -90,7 +90,20 @@ limitations under the License.
                 name="backgroundFormulaConverter"
                 bean="backgroundFormulaConverter"
             />
-                </bean>
+        </bean>
+        
+        
+        <bean
+            id="taskFactory"
+            class="cz.muni.fi.mir.mathmlcaneval.services.tasks.TaskFactory"
+            scope="session"
+        >
+            <aop:scoped-proxy />
+            <lookup-method
+                name="abstractFormulaLoadTask"
+                bean="formulaLoadTask"
+            />
+        </bean>
                 
         <!--
         this has to be here not in servlet context

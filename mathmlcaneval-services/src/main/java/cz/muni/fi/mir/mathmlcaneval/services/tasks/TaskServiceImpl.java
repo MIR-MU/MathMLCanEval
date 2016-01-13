@@ -15,6 +15,7 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
+import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
 import cz.muni.fi.mir.mathmlcaneval.services.FormulaCanonicalizerService;
 import cz.muni.fi.mir.mathmlcaneval.services.FormulaLoaderService;
 import java.util.ArrayList;
@@ -37,74 +38,97 @@ import org.springframework.stereotype.Component;
 public class TaskServiceImpl implements TaskService
 {
     private static final Logger logger = LogManager.getLogger(TaskServiceImpl.class);
-    private static final Map<Long,Future<Task>> tasks = new ConcurrentHashMap<>();
+    private static final Map<String, TaskWrapper> tasks = new ConcurrentHashMap<>();
     private long lastCheck = System.currentTimeMillis();
     private TaskServiceStatus status = new TaskServiceStatus();
     @Autowired
     private FormulaLoaderService formulaLoaderService;
-    
+
     @Autowired
     private FormulaCanonicalizerService formulaCanonicalizerService;
-    
+
     @Async
     @Override
     public Future<Task> submitTask(Task task) throws IllegalArgumentException, InterruptedException
     {
-        logger.info("Asynchronous task stared with id {}",task.getId());
-        
-        checkTask(task);
-        
+        checkNull(task);
+        logger.info("Asynchronous task stared with id {}", task.getId());
+
         Future<Task> futureResult = new AsyncResult<>(task);
+
         logger.info("Future created.");
-        tasks.put(task.getId(), futureResult);
-        logger.info("Future added to tasks {}",tasks.size());
-//        try
-//        {
-            formulaLoaderService.loadInput(task);
-            //formulaLoaderService.loadInput(Paths.get("C:\\Users\\emptak\\Desktop\\MathMLCanEval\\testbase"), true);
-//        switch(task.getTaskOperation()){
-//            case CANONICALIZE:
-//                //do something
-//                break;
-//            case IMPORT_DATABASE:
-//                //do sth else
-//                break;
-//            case LOAD_SOURCE:
-//                //do sth
-//                break;
-//        }
-//        }
-//        catch (IOException ex)
-//        {
-//            logger.error(ex);
-//        }
-        
-        
-        
-//        formulaCanonicalizerService.canonicalize(null, null,task);
-        
+
+        tasks.put(task.getId(), new TaskWrapper(futureResult, task));
+        logger.info("Future added to tasks {}", tasks.size());
+
+        if (task instanceof FormulaLoadTask)
+        {
+            FormulaLoadTask loadTask = (FormulaLoadTask) task;
+            checkLoaderTask(loadTask);
+            formulaLoaderService.loadInput(loadTask);
+        }
+        else if (task instanceof FormulaCanonicalizeTask)
+        {
+
+        }
+        else
+        {
+            throw new ClassCastException("uh ");
+        }
+
         return futureResult;
     }
-    
-    
-    private void checkTask(Task task) throws IllegalArgumentException
+
+    private void addTaskToTasks(Task task)
     {
-        logger.info("Checking passed task {} for its values.",task.getId());
+        //tasks.put(task.getId(), new TaskWrapper(futureResult, task));
+    }
+
+    private void checkNull(Task task) throws IllegalArgumentException
+    {
+        if (task == null)
+        {
+            throw new IllegalArgumentException("Given task is null.");
+        }
+    }
+
+    private void checkLoaderTask(FormulaLoadTask task)
+    {
+        if (task.getSource() == null)
+        {
+            throw new IllegalArgumentException("Given task does not have valid source. Its null.");
+        }
+        if (task.getSource().getId() == null)
+        {
+            throw new IllegalArgumentException("Given task does not have valid source. Used source does not have valid ID.");
+        }
+        else
+        {
+            logger.debug("Task has source with following id {}.",task.getSource().getId());
+        }
+        if (task.getSource().getRootPath() == null)
+        {
+            throw new IllegalArgumentException("Given task does not have valid source. Used source does not have valid rootPath.");
+        }
+        else
+        {
+            logger.debug("Task has source with following path {}.",task.getSource().getRootPath());
+        }
     }
 
     @Override
     public List<Future<Task>> getFinishedTasks()
     {
         List<Future<Task>> finised = new ArrayList<>();
-        
-        for(Future<Task> task : tasks.values())
+
+        for (TaskWrapper tw : tasks.values())
         {
-            if(task.isDone())
+            if (tw.getFuture().isDone())
             {
-                finised.add(task);
+                finised.add(tw.getFuture());
             }
         }
-        
+
         return finised;
     }
 
@@ -117,7 +141,7 @@ public class TaskServiceImpl implements TaskService
     @Override
     public TaskServiceStatus getStatus()
     {
-        if(!shouldGenerateNewStatus())
+        if (!shouldGenerateNewStatus())
         {
             return status;
         }
@@ -125,30 +149,31 @@ public class TaskServiceImpl implements TaskService
         {
             int total = tasks.size();
             int finished = 0;
-            
-            for(Future<Task> task : tasks.values())
+
+            for (TaskWrapper tw : tasks.values())
             {
-                if(task.isDone())
+                if (tw.getFuture().isDone())
                 {
                     finished++;
                 }
             }
-            
+
             status = new TaskServiceStatus();
             status.setFinishedTasks(finished);
             status.setTotalTasks(total);
             lastCheck = System.currentTimeMillis();
-            
+
             return status;
         }
-    }    
-    
-    
+    }
+
     /**
      * Separate method allows to change behaviour in later development
+     *
      * @return true if system should generate new taskstatus
      */
-    private boolean shouldGenerateNewStatus(){
+    private boolean shouldGenerateNewStatus()
+    {
         long difference = 30 * 1000;
         return System.currentTimeMillis() > lastCheck + difference;
     }
@@ -156,10 +181,17 @@ public class TaskServiceImpl implements TaskService
     @Override
     public void logState()
     {
-        for(Long taskId : tasks.keySet())
+        for (String taskId : tasks.keySet())
         {
-            Future<Task> task = tasks.get(taskId);
-            logger.info("Task [{}] isDone? [{}] isCanceled? [{}]",taskId,task.isDone(),task.isCancelled());
+            TaskWrapper tw = tasks.get(taskId);
+            Future<Task> task = tw.getFuture();
+            logger.info("Task [{}] isDone? [{}] isCanceled? [{}]", taskId, task.isDone(), task.isCancelled());
         }
+    }
+
+    @Override
+    public List<Future<Task>> getUserTask(UserDTO user) throws IllegalArgumentException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -15,18 +15,24 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
+import cz.muni.fi.mir.mathmlcaneval.api.dto.SourceDTO;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.Queue;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class FormulaLoadTask
+@Component(value = "formulaLoadTask")
+@Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class FormulaLoadTask extends Task
 {
     private Queue<Path> paths = new LinkedList<>();
-    private TaskStatus taskStatus = TaskStatus.NEW;
+    private SourceDTO source;
 
     public Queue<Path> getPaths()
     {
@@ -38,20 +44,19 @@ public class FormulaLoadTask
         this.paths = paths;
     }
 
-    public TaskStatus getTaskStatus()
+    public SourceDTO getSource()
     {
-        return taskStatus;
+        return source;
     }
 
-    public void setTaskStatus(TaskStatus taskStatus)
+    public void setSource(SourceDTO source)
     {
-        this.taskStatus = taskStatus;
+        this.source = source;
     }
 
     @Override
     public String toString()
     {
-        return "FormulaLoadTask{" + "paths=" + paths.size() + ", taskStatus=" + taskStatus + '}';
+        return "FormulaLoadTask{" + "paths=" + paths + ", source=" + source + '}';
     }
-
 }

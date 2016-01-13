@@ -17,7 +17,7 @@ package cz.muni.fi.mir.mathmlcaneval.services.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.api.FormulaService;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.FormulaDTO;
-import cz.muni.fi.mir.mathmlcaneval.services.tasks.Task;
+import cz.muni.fi.mir.mathmlcaneval.services.tasks.FormulaLoadTask;
 import cz.muni.fi.mir.mathmlcaneval.services.tasks.TaskStatus;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -36,15 +36,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BackgroundFormulaConverter implements Runnable
 {
     private static final Logger LOGGER = LogManager.getLogger(BackgroundFormulaConverter.class);
-    private Task task;
+    private FormulaLoadTask formulaLoadTask;
     @Autowired
     private FormulaService formulaService;
     private long startTime;
     private long timeout = 10000;
 
-    public void setTask(Task task)
+    public void setTask(FormulaLoadTask formulaLoadTask)
     {
-        this.task = task;
+        this.formulaLoadTask = formulaLoadTask;
     }
 
     public void setTimeout(long timeout)
@@ -66,7 +66,7 @@ public class BackgroundFormulaConverter implements Runnable
             while (loadedNumber != 50)
             {
                 LOGGER.info("Loading chunks");
-                Path path = task.getFormulaLoadTask().getPaths().poll();
+                Path path = formulaLoadTask.getPaths().poll();
                 if (path != null)
                 {
                     FormulaDTO f = new FormulaDTO();
@@ -86,8 +86,17 @@ public class BackgroundFormulaConverter implements Runnable
                     chunks[loadedNumber] = f;
                     loadedNumber++;
                 }
+                
+                try
+                {
+                    Thread.sleep(3000);
+                }
+                catch (InterruptedException ex)
+                {
+                    LOGGER.error(ex);
+                }
 
-                if (isQueueEmpty(task) && taskIsFinished(task))
+                if (isQueueEmpty() && taskIsFinished())
                 {
                     break;
                 }
@@ -95,7 +104,7 @@ public class BackgroundFormulaConverter implements Runnable
 
             formulaService.createFormulas(Arrays.asList(chunks));
 
-            if (isQueueEmpty(task) && taskIsFinished(task))
+            if (isQueueEmpty() && taskIsFinished())
             {
                 break;
             }
@@ -108,9 +117,9 @@ public class BackgroundFormulaConverter implements Runnable
      * @param task to be checked
      * @return true if task queue is empty, false otherwise
      */
-    private boolean isQueueEmpty(Task task)
+    private boolean isQueueEmpty()
     {
-        return task.getFormulaLoadTask().getPaths().isEmpty();
+        return formulaLoadTask.getPaths().isEmpty();
     }
 
     /**
@@ -119,8 +128,8 @@ public class BackgroundFormulaConverter implements Runnable
      * @param task to be checked
      * @return true if formula load task is finished, false otherwise
      */
-    private boolean taskIsFinished(Task task)
+    private boolean taskIsFinished()
     {
-        return task.getFormulaLoadTask().getTaskStatus().equals(TaskStatus.FINISHED);
+        return formulaLoadTask.getTaskStatus().equals(TaskStatus.FINISHED);
     }
 }

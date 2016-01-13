@@ -17,9 +17,8 @@ package cz.muni.fi.mir.mathmlcaneval.webapp.controllers;
 
 import cz.muni.fi.mir.mathmlcaneval.api.dto.SourceDTO;
 import cz.muni.fi.mir.mathmlcaneval.services.tasks.FormulaLoadTask;
-import cz.muni.fi.mir.mathmlcaneval.services.tasks.Task;
+import cz.muni.fi.mir.mathmlcaneval.services.tasks.TaskFactory;
 import cz.muni.fi.mir.mathmlcaneval.services.tasks.TaskService;
-import cz.muni.fi.mir.mathmlcaneval.services.tasks.TaskStatus;
 import java.nio.file.Paths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,41 +39,38 @@ public class TaskController
 
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private TaskFactory taskFactory;
 
     @RequestMapping(value = "/new/")
     public ModelAndView submitTasks()
     {
-//        for (int i = 0; i < 10; i++)
-//        {
-            Task task = new Task();
-            task.setId(System.currentTimeMillis());
-            task.setTaskStatus(TaskStatus.NEW);
-            FormulaLoadTask flt = new FormulaLoadTask();
-            task.setFormulaLoadTask(flt);
-            SourceDTO s = new SourceDTO();
-            s.setRootPath(Paths.get("C:\\Users\\emptak\\Desktop\\MathMLCanEval\\testbase"));
-            task.setSource(s);
+        SourceDTO sourceDTO = new SourceDTO();
+        sourceDTO.setId(Long.valueOf("1"));
+        sourceDTO.setRootPath(Paths.get("C:\\Users\\emptak\\Desktop\\MathMLCanEval\\testbase"));
 
-            try
-            {
-                taskService.submitTask(task);
-            }
-            catch (IllegalArgumentException | InterruptedException ex)
-            {
-                LOGGER.error(ex);
-            }
-//        }
+        taskFactory.setSource(sourceDTO);
+
+        FormulaLoadTask task = taskFactory.newFormulaLoadTask();
+
+        try
+        {
+            taskService.submitTask(task);
+        }
+        catch (IllegalArgumentException | InterruptedException ex)
+        {
+            LOGGER.error(ex);
+        }
 
         return new ModelAndView("redirect:/");
     }
-    
-    
-    @RequestMapping(value="/status/")
+
+    @RequestMapping(value = "/status/")
     public ModelAndView status()
     {
         LOGGER.info(taskService.getStatus());
         taskService.logState();
-        
+
         return new ModelAndView("redirect:/");
     }
 }

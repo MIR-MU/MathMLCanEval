@@ -15,10 +15,8 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
-import cz.muni.fi.mir.mathmlcaneval.api.dto.ConfigurationDTO;
-import cz.muni.fi.mir.mathmlcaneval.api.dto.GitRevisionDTO;
-import cz.muni.fi.mir.mathmlcaneval.api.dto.SourceDTO;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -26,21 +24,18 @@ import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
  */
 public class Task
 {
-    private Long id;
-    private UserDTO owner;
-    private TaskOperation taskOperation;
-    private TaskStatus taskStatus;
-    private FormulaLoadTask formulaLoadTask;
-    private ConfigurationDTO configuration;
-    private GitRevisionDTO revision;
-    private SourceDTO source;
+    protected String id;
+    protected UserDTO owner;    
+    protected TaskStatus taskStatus;    
+    protected DateTime start;
+    protected DateTime end;
 
-    public Long getId()
+    public String getId()
     {
         return id;
     }
 
-    public void setId(Long id)
+    public void setId(String id)
     {
         this.id = id;
     }
@@ -55,16 +50,6 @@ public class Task
         this.owner = owner;
     }
 
-    public TaskOperation getTaskOperation()
-    {
-        return taskOperation;
-    }
-
-    public void setTaskOperation(TaskOperation taskOperation)
-    {
-        this.taskOperation = taskOperation;
-    }
-
     public TaskStatus getTaskStatus()
     {
         return taskStatus;
@@ -75,45 +60,23 @@ public class Task
         this.taskStatus = taskStatus;
     }
 
-    public FormulaLoadTask getFormulaLoadTask()
+    public DateTime getStart()
     {
-        return formulaLoadTask;
+        return start;
     }
 
-    public void setFormulaLoadTask(FormulaLoadTask formulaLoadTask)
+    public void setStart(DateTime start)
     {
-        this.formulaLoadTask = formulaLoadTask;
+        this.start = start;
     }
 
-    public ConfigurationDTO getConfiguration()
+    public DateTime getEnd()
     {
-        return configuration;
+        return end;
     }
 
-    public void setConfiguration(ConfigurationDTO configuration)
+    public void setEnd(DateTime end)
     {
-        this.configuration = configuration;
+        this.end = end;
     }
-
-    public GitRevisionDTO getRevision()
-    {
-        return revision;
-    }
-
-    public void setRevision(GitRevisionDTO revision)
-    {
-        this.revision = revision;
-    }
-
-    public SourceDTO getSource()
-    {
-        return source;
-    }
-
-    public void setSource(SourceDTO source)
-    {
-        this.source = source;
-    }
-    
-    
 }

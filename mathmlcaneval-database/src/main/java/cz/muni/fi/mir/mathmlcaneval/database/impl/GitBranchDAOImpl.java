@@ -17,11 +17,13 @@ package cz.muni.fi.mir.mathmlcaneval.database.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.database.GitBranchDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.GitBranch;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Repository
 public class GitBranchDAOImpl extends GenericDAOImpl<GitBranch, Long> implements GitBranchDAO
 {
 

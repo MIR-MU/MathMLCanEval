@@ -15,7 +15,7 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services;
 
-import cz.muni.fi.mir.mathmlcaneval.services.tasks.Task;
+import cz.muni.fi.mir.mathmlcaneval.services.tasks.FormulaLoadTask;
 
 /**
  *
@@ -23,5 +23,5 @@ import cz.muni.fi.mir.mathmlcaneval.services.tasks.Task;
  */
 public interface FormulaLoaderService
 {
-    void loadInput(Task task) throws IllegalArgumentException;
+    void loadInput(FormulaLoadTask formulaLoadTask) throws IllegalArgumentException;
 }

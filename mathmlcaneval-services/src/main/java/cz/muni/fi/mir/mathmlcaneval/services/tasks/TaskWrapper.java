@@ -13,21 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.mathmlcaneval.services.impl;
+package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
-import cz.muni.fi.mir.mathmlcaneval.services.tasks.FormulaLoadTask;
+import java.util.concurrent.Future;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public abstract class BackgroundFormulaConverterFactoryBean
+public class TaskWrapper
 {
-    public abstract BackgroundFormulaConverter backgroundFormulaConverter();
-    public  BackgroundFormulaConverter backgroundFormulaConverter(FormulaLoadTask task){
-        BackgroundFormulaConverter bfc = backgroundFormulaConverter();
-        bfc.setTask(task);
-        
-        return bfc;
+    private Future<Task> future;
+    private Task task;
+
+    public TaskWrapper()
+    {
     }
+
+    public TaskWrapper(Future<Task> future, Task task)
+    {
+        this.future = future;
+        this.task = task;
+    }
+
+    public Future<Task> getFuture()
+    {
+        return future;
+    }
+
+    public void setFuture(Future<Task> future)
+    {
+        this.future = future;
+    }
+
+    public Task getTask()
+    {
+        return task;
+    }
+
+    public void setTask(Task task)
+    {
+        this.task = task;
+    }
+
 }

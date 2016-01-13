@@ -16,7 +16,7 @@
 package cz.muni.fi.mir.mathmlcaneval.services.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.services.FormulaLoaderService;
-import cz.muni.fi.mir.mathmlcaneval.services.tasks.Task;
+import cz.muni.fi.mir.mathmlcaneval.services.tasks.FormulaLoadTask;
 import cz.muni.fi.mir.mathmlcaneval.services.tasks.TaskStatus;
 import java.io.IOException;
 import java.nio.file.FileVisitor;
@@ -43,24 +43,24 @@ public class FormulaLoaderServiceImpl implements FormulaLoaderService
     private BackgroundFormulaConverterFactoryBean backgroundFormulaConverterFactoryBean;    
 
     @Override
-    public void loadInput(Task task) throws IllegalArgumentException
+    public void loadInput(FormulaLoadTask formulaLoadTask) throws IllegalArgumentException
     {
         LOGGER.info("Obtained task.");
-        FileVisitor<Path> visitor = new FolderVisitor(task, null);
+        FileVisitor<Path> visitor = new FolderVisitor(formulaLoadTask, null);
         LOGGER.info("visitor created");
         //LOGGER.info
-        taskExecutor.execute(backgroundFormulaConverterFactoryBean.backgroundFormulaConverter(task));
+        taskExecutor.execute(backgroundFormulaConverterFactoryBean.backgroundFormulaConverter(formulaLoadTask));
         LOGGER.info("Task submitted to task executor");
         try
         {
-            Files.walkFileTree(task.getSource().getRootPath(), visitor);
+            Files.walkFileTree(formulaLoadTask.getSource().getRootPath(), visitor);
         }
         catch (IOException ex)
         {
             LOGGER.error(ex);
         }
         LOGGER.info("Done loading folder");
-        task.getFormulaLoadTask().setTaskStatus(TaskStatus.FINISHED);
+        formulaLoadTask.setTaskStatus(TaskStatus.FINISHED);
         LOGGER.info("SuperDone loading folder.");
     }
 }

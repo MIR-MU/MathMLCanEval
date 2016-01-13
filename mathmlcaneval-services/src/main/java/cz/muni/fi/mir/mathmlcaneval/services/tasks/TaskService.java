@@ -15,6 +15,7 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
+import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -28,6 +29,6 @@ public interface TaskService
     List<Future<Task>> getFinishedTasks();
     void clearFinishedTasks() throws InterruptedException;
     TaskServiceStatus getStatus();
-    
+    List<Future<Task>> getUserTask(UserDTO user) throws IllegalArgumentException;
     void logState();
 }

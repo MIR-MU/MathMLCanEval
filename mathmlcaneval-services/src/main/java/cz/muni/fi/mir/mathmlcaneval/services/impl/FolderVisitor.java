@@ -15,7 +15,7 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.impl;
 
-import cz.muni.fi.mir.mathmlcaneval.services.tasks.Task;
+import cz.muni.fi.mir.mathmlcaneval.services.tasks.FormulaLoadTask;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -33,14 +33,14 @@ import org.apache.logging.log4j.Logger;
  */
 public class FolderVisitor extends SimpleFileVisitor<Path>
 {
-    private Task task;
+    private FormulaLoadTask formulaLoadTask;
     private static final Logger LOGGER = LogManager.getLogger(FolderVisitor.class);
-    private PathMatcher matcher;
+    private final PathMatcher matcher;
 
-    public FolderVisitor(Task task, String regex)
+    public FolderVisitor(FormulaLoadTask formulaLoadTask ,String regex)
     {
         LOGGER.info("constructor.");
-        this.task = task;
+        this.formulaLoadTask = formulaLoadTask;
         
         if(StringUtils.isEmpty(regex))
         {
@@ -68,7 +68,7 @@ public class FolderVisitor extends SimpleFileVisitor<Path>
         if (matcher.matches(file.getFileName()))
         {
             LOGGER.debug("VisitFileMathced");
-            task.getFormulaLoadTask().getPaths().offer(file);
+            formulaLoadTask.getPaths().offer(file);
         }
         
         return FileVisitResult.CONTINUE;
