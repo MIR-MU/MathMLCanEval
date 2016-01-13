@@ -39,6 +39,7 @@ public abstract class TaskFactory
     public FormulaLoadTask newFormulaLoadTask(){
         FormulaLoadTask task = abstractFormulaLoadTask();
         task.setSource(source);
+        task.setId(getTaskID());
         
         
         

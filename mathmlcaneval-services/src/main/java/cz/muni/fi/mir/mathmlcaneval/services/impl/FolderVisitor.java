@@ -33,23 +33,22 @@ import org.apache.logging.log4j.Logger;
  */
 public class FolderVisitor extends SimpleFileVisitor<Path>
 {
-    private FormulaLoadTask formulaLoadTask;
+    private final FormulaLoadTask formulaLoadTask;
     private static final Logger LOGGER = LogManager.getLogger(FolderVisitor.class);
     private final PathMatcher matcher;
 
     public FolderVisitor(FormulaLoadTask formulaLoadTask ,String regex)
     {
-        LOGGER.info("constructor.");
         this.formulaLoadTask = formulaLoadTask;
         
         if(StringUtils.isEmpty(regex))
         {
-            LOGGER.info("No regex. setting .xml");
+            LOGGER.info("No regex set for matcher. Using default one: *.xml");
             matcher = FileSystems.getDefault().getPathMatcher("glob:*.xml");
         }
         else
         {
-            LOGGER.info("Regex obtained {}",regex);
+            LOGGER.info("Following regex obtained for matcher {}.",regex);
             matcher = FileSystems.getDefault().getPathMatcher("glob:"+regex);
         }
     }
@@ -57,18 +56,21 @@ public class FolderVisitor extends SimpleFileVisitor<Path>
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException
     {
-        LOGGER.debug("PreVisit {}",dir);
+        LOGGER.debug("Entering directory {}",dir);
         return FileVisitResult.CONTINUE;
     }
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
     {
-        LOGGER.debug("VisitFile {}",file);
         if (matcher.matches(file.getFileName()))
         {
-            LOGGER.debug("VisitFileMathced");
+            LOGGER.debug("Following file matched as formula source {}",file);
             formulaLoadTask.getPaths().offer(file);
+        }
+        else
+        {
+            LOGGER.debug("Following file was denied by matcher {}",file);
         }
         
         return FileVisitResult.CONTINUE;
@@ -84,7 +86,6 @@ public class FolderVisitor extends SimpleFileVisitor<Path>
     @Override
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException
     {
-        LOGGER.debug("PostVistiDirectory {}",dir);
         return FileVisitResult.CONTINUE;
     }
 

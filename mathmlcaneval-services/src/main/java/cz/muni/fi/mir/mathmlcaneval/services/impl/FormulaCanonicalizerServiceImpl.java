@@ -90,7 +90,7 @@ public class FormulaCanonicalizerServiceImpl implements FormulaCanonicalizerServ
 
         //warm up canonicalier. if canonicalizer is not warmed up first executions
         // durate 10 times longer
-        canonicalizer.warmUp(10);
+        canonicalizer.warmUp();
 
         // prepare output
         List<CanonicOutputDTO> canonicOutputs = new ArrayList<>(formulas.size());
@@ -166,6 +166,7 @@ public class FormulaCanonicalizerServiceImpl implements FormulaCanonicalizerServ
         canonicalizer.setGitRevisionDTO(applicationRun.getGitRevision());
         canonicalizer.setExecutableMethod(executableMethod);
         canonicalizer.setName(canonicalizerName(applicationRun));
+        canonicalizer.setWarmupCount(10);
 
         return canonicalizer;
     }

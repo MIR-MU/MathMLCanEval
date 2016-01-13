@@ -17,9 +17,13 @@ package cz.muni.fi.mir.mathmlcaneval.services.api.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.api.FormulaService;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.FormulaDTO;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,11 +33,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class FormulaServiceImpl implements FormulaService
 {
+    private final Set<String> hashes = Collections.<String>synchronizedSet(new HashSet<String>());
     private static final Logger LOGGER = LogManager.getLogger(FormulaServiceImpl.class);
     @Override
+    @Async
     public void createFormulas(List<FormulaDTO> formulas) throws IllegalArgumentException
     {
-        LOGGER.info(formulas.size());
+        for(FormulaDTO f : formulas)
+        {
+            LOGGER.info("Hash {}, duplicate {}",f.getFormulaHash(),!hashes.add(f.getFormulaHash()));            
+        }
     }
     
 }

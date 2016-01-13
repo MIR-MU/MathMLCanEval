@@ -46,27 +46,47 @@
     
     <profiles>
         <profile>
-            <id>dev</id>
+            <id>develop</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
                 <build.profile.id>dev</build.profile.id>
+                <build.skip.tests>true</build.skip.tests>
             </properties>
         </profile>
         <profile>
             <id>production</id>
             <properties>
                 <build.profile.id>production</build.profile.id>
+                <build.skip.tests>false</build.skip.tests>
             </properties>
         </profile>
-        <profile>            
-            <id>test</id>
-            <properties>
-                <build.profile.id>test</build.profile.id>
-            </properties>            
-        </profile>
     </profiles>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <debug>true</debug>
+                    <debuglevel>lines,vars,source</debuglevel> 
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19</version>
+                <configuration>
+                    <skipTests>${build.skip.tests}</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     
     <repositories>
         <repository>

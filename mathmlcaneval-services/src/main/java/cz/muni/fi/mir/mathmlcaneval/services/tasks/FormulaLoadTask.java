@@ -33,6 +33,7 @@ public class FormulaLoadTask extends Task
 {
     private Queue<Path> paths = new LinkedList<>();
     private SourceDTO source;
+    private String pathMatcherRegex;
 
     public Queue<Path> getPaths()
     {
@@ -52,6 +53,16 @@ public class FormulaLoadTask extends Task
     public void setSource(SourceDTO source)
     {
         this.source = source;
+    }
+
+    public String getPathMatcherRegex()
+    {
+        return pathMatcherRegex;
+    }
+
+    public void setPathMatcherRegex(String pathMatcherRegex)
+    {
+        this.pathMatcherRegex = pathMatcherRegex;
     }
 
     @Override

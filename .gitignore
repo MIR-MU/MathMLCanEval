@@ -7,3 +7,6 @@
 nb-configuration.xml
 /eval-webapp/nbproject/private/
 /kate/nbproject/private/
+.project
+.settings
+.classpath

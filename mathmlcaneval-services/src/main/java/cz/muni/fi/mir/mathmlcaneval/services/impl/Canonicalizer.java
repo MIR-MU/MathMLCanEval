@@ -42,8 +42,9 @@ public class Canonicalizer
     private GitRevisionDTO gitRevisionDTO;
     private ConfigurationDTO gitConfigurationDTO;
     private String name;
+    private int warmupCount;
 
-    String warmupFormula = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    private static final String WARMUP_FORMULA = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             + "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n"
             + "  <msqrt>\n"
             + "    <mo>-</mo>\n"
@@ -60,6 +61,16 @@ public class Canonicalizer
     {
         this.canonicalizerPath = canonicalizerPath;
     }
+
+    public int getWarmupCount()
+    {
+        return warmupCount;
+    }
+
+    public void setWarmupCount(int warmupCount)
+    {
+        this.warmupCount = warmupCount;
+    }   
 
     public Object getCanonicalizer()
     {
@@ -113,18 +124,18 @@ public class Canonicalizer
 
     public String canonicalize(FormulaDTO formula)
     {
-        return executeMethod(name);
+        return invokeCanonicalizeMethod(name);
     }
 
-    public void warmUp(int times)
+    public void warmUp()
     {
-        for(int i = 0 ; i < times; i++)
+        for(int i = 0 ; i < warmupCount; i++)
         {
-            executeMethod(warmupFormula);
+            invokeCanonicalizeMethod(WARMUP_FORMULA);
         }
     }
 
-    private String executeMethod(String input)
+    private String invokeCanonicalizeMethod(String input)
     {
         // TODO: improve to make it reusable ? so object is not always created again
         try(InputStream is = new ByteArrayInputStream(input.getBytes()); OutputStream os = new ByteArrayOutputStream())

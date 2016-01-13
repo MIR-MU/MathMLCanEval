@@ -16,6 +16,7 @@
 package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
 import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
+import java.util.Objects;
 import org.joda.time.DateTime;
 
 /**
@@ -78,5 +79,32 @@ public class Task
     public void setEnd(DateTime end)
     {
         this.end = end;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Task other = (Task) obj;
+        return Objects.equals(this.id, other.id);
     }
 }

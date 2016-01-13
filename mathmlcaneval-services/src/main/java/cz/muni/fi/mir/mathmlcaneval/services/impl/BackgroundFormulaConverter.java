@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
@@ -56,16 +58,16 @@ public class BackgroundFormulaConverter implements Runnable
     public void run()
     {
         startTime = System.currentTimeMillis();
-        LOGGER.info("Run in background executed");
+        LOGGER.info("Path to formula process for task {} started.",formulaLoadTask.getId());
         while (true)
         {
-            LOGGER.info("Inside loop.");
+            LOGGER.info("Attempting to fill chunks.");
             FormulaDTO[] chunks = new FormulaDTO[50];
             int loadedNumber = 0;
 
             while (loadedNumber != 50)
             {
-                LOGGER.info("Loading chunks");
+                LOGGER.info("Loading chunk");
                 Path path = formulaLoadTask.getPaths().poll();
                 if (path != null)
                 {
@@ -76,6 +78,7 @@ public class BackgroundFormulaConverter implements Runnable
                         f.setContent(new String(Files.readAllBytes(path), Charset.forName("UTF-8")));
                         f.setPath(path);
                         f.setImportTime(DateTime.now());
+                        f.setFormulaHash(DigestUtils.sha1Hex(f.getContent()));
                         LOGGER.debug("Formula at path {} was added to chunks.", path);
                     }
                     catch (IOException ex)
@@ -85,16 +88,7 @@ public class BackgroundFormulaConverter implements Runnable
 
                     chunks[loadedNumber] = f;
                     loadedNumber++;
-                }
-                
-                try
-                {
-                    Thread.sleep(3000);
-                }
-                catch (InterruptedException ex)
-                {
-                    LOGGER.error(ex);
-                }
+                } 
 
                 if (isQueueEmpty() && taskIsFinished())
                 {
@@ -102,13 +96,14 @@ public class BackgroundFormulaConverter implements Runnable
                 }
             }
 
-            formulaService.createFormulas(Arrays.asList(chunks));
+            formulaService.createFormulas(arrayToList(chunks));
 
             if (isQueueEmpty() && taskIsFinished())
             {
                 break;
             }
         }
+        LOGGER.info("Path to formula process for task {} ended.",formulaLoadTask.getId());
     }
 
     /**
@@ -131,5 +126,20 @@ public class BackgroundFormulaConverter implements Runnable
     private boolean taskIsFinished()
     {
         return formulaLoadTask.getTaskStatus().equals(TaskStatus.FINISHED);
+    }
+    
+    private <T> List<T> arrayToList(T[] array)
+    {
+        List<T> result = new ArrayList<>();
+        
+        for(T t : array)
+        {
+            if(t!= null)
+            {
+                result.add(t);
+            }
+        }
+        
+        return result;
     }
 }

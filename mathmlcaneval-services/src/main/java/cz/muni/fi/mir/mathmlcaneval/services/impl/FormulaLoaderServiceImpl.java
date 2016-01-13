@@ -45,12 +45,11 @@ public class FormulaLoaderServiceImpl implements FormulaLoaderService
     @Override
     public void loadInput(FormulaLoadTask formulaLoadTask) throws IllegalArgumentException
     {
-        LOGGER.info("Obtained task.");
-        FileVisitor<Path> visitor = new FolderVisitor(formulaLoadTask, null);
-        LOGGER.info("visitor created");
-        //LOGGER.info
+        LOGGER.info("Starting FormulaLoader for task {}",formulaLoadTask.getId());
+        formulaLoadTask.setTaskStatus(TaskStatus.RUNNING);
+        FileVisitor<Path> visitor = new FolderVisitor(formulaLoadTask, formulaLoadTask.getPathMatcherRegex());
         taskExecutor.execute(backgroundFormulaConverterFactoryBean.backgroundFormulaConverter(formulaLoadTask));
-        LOGGER.info("Task submitted to task executor");
+        LOGGER.info("Task {} submitted to task executor.",formulaLoadTask.getId());
         try
         {
             Files.walkFileTree(formulaLoadTask.getSource().getRootPath(), visitor);
@@ -58,9 +57,10 @@ public class FormulaLoaderServiceImpl implements FormulaLoaderService
         catch (IOException ex)
         {
             LOGGER.error(ex);
+            formulaLoadTask.setTaskStatus(TaskStatus.INTERRUPTED);
         }
-        LOGGER.info("Done loading folder");
+        LOGGER.info("Done loading folder.");
         formulaLoadTask.setTaskStatus(TaskStatus.FINISHED);
-        LOGGER.info("SuperDone loading folder.");
+        LOGGER.info("FormulaLoder for task {} has finished.",formulaLoadTask.getId());
     }
 }
