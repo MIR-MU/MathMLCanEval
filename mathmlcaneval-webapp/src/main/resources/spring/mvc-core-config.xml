@@ -33,6 +33,7 @@ http://www.springframework.org/schema/task/spring-task.xsd
     
     <mvc:interceptors>
         <ref bean="localeChangeInterceptor"/>
+        <bean class="org.springframework.web.sitetitle.SiteTitleInterceptor" p:mainTitle="Mathmlcaneval" p:modelVariable="siteTitle" p:separator="|" />
     </mvc:interceptors>
 
     <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
@@ -88,6 +89,7 @@ http://www.springframework.org/schema/task/spring-task.xsd
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.UserRoleFormatter"/>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.ProgramFormatter"/>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.ConfigurationFormatter"/>
+                <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.UserFormatter" />
             </set>
         </property>
     </bean>

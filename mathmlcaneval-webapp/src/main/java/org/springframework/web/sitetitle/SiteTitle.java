@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 MIR@MU.
+ * Copyright 2014 Dominik Szalai - emptulik at gmail.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.mathmlcaneval.services;
+
+package org.springframework.web.sitetitle;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public interface MavenService
+@Retention(value = RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface SiteTitle
 {
-    void buildJar();
+    public String value() default "";
+    public String i18n() default "";
 }

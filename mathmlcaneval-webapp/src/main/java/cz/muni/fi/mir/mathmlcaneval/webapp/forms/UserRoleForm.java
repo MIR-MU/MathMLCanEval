@@ -16,6 +16,7 @@
 package cz.muni.fi.mir.mathmlcaneval.webapp.forms;
 
 import java.util.Objects;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -24,6 +25,7 @@ import java.util.Objects;
 public class UserRoleForm
 {
     private Long id;
+    @NotEmpty
     private String roleName;
 
     public Long getId()

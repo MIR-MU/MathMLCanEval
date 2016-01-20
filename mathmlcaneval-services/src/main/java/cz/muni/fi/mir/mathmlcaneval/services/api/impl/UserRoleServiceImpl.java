@@ -23,6 +23,8 @@ import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,7 @@ public class UserRoleServiceImpl implements UserRoleService
     @Override
     @Transactional(readOnly = false)
     @Secured(value = "ROLE_ADMINISTRATOR")
+    @CacheEvict(cacheNames = "userroles",allEntries = true)
     public void create(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
         if (userRoleDTO == null)
@@ -65,6 +68,7 @@ public class UserRoleServiceImpl implements UserRoleService
     @Override
     @Transactional(readOnly = false)
     @Secured(value = "ROLE_ADMINISTRATOR")
+    @CacheEvict(cacheNames = "userroles",allEntries = true)
     public void update(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
         if (userRoleDTO == null)
@@ -86,6 +90,7 @@ public class UserRoleServiceImpl implements UserRoleService
     @Override
     @Transactional(readOnly = false)
     @Secured(value = "ROLE_ADMINISTRATOR")
+    @CacheEvict(cacheNames = "userroles",allEntries = true)
     public void delete(UserRoleDTO userRoleDTO) throws IllegalArgumentException
     {
         if (userRoleDTO == null)
@@ -103,7 +108,7 @@ public class UserRoleServiceImpl implements UserRoleService
 
     @Override
     @Transactional(readOnly = true)
-    @Secured(value = "ROLE_ADMINISTRATOR")
+    @Secured(value = "ROLE_ADMINISTRATOR")    
     public UserRoleDTO getByID(Long id) throws IllegalArgumentException
     {
         if (id == null)
@@ -131,6 +136,7 @@ public class UserRoleServiceImpl implements UserRoleService
     @Override
     @Transactional(readOnly = true)
     @Secured(value = "ROLE_ADMINISTRATOR")
+    @Cacheable(cacheNames = "userroles")
     public List<UserRoleDTO> getAll()
     {
         return mapper.mapList(userRoleDAO.getAll(), UserRoleDTO.class);

@@ -34,7 +34,7 @@ public class MavenServiceImpl implements MavenService
 {
     // locking system
     @Override
-    public void buildJar(String branch, String revision)
+    public void buildJar()
     {
         InvocationRequest request = new DefaultInvocationRequest();
         request.setPomFile(Paths.get("C:\\Users\\emptak\\Documents\\NetBeansProjects\\MathMLCan\\pom.xml").toFile());

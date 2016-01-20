@@ -16,6 +16,11 @@
 package cz.muni.fi.mir.mathmlcaneval.services;
 
 import cz.muni.fi.mir.mathmlcaneval.api.GitService;
+import cz.muni.fi.mir.mathmlcaneval.api.dto.GitBranchDTO;
+import cz.muni.fi.mir.mathmlcaneval.api.dto.GitRevisionDTO;
+import cz.muni.fi.mir.mathmlcaneval.api.dto.GitTagDTO;
+import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -23,5 +28,9 @@ import cz.muni.fi.mir.mathmlcaneval.api.GitService;
  */
 public interface GitServiceIO extends GitService
 {
-    
+    public void pull() throws IOException;
+    public List<GitTagDTO> listTags() throws IOException;
+    public List<GitBranchDTO> listBranches() throws IOException;
+    public void checkout(GitRevisionDTO revision,GitBranchDTO branch) throws IOException;
+    public void checkout(GitBranchDTO gitBranch) throws IOException;
 }

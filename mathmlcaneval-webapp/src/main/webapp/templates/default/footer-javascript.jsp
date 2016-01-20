@@ -24,6 +24,25 @@
 
             $tr.appendTo($("#activityTable"));
         }
+
+        $(this).on('click', '.add-userrole', function () {
+//            var count = $("#userRoles tr").length;
+            var $row = $("#userRoles tr:last").clone();
+
+            $.each($row.find('select'), function () {
+                console.log(this);
+                var no = parseInt($(this).attr('name').match(/\d+/)) + 1;
+                $(this).attr('name', $(this).attr('name').replace(/(\d+)(?!.*\d)/g, no));
+                $(this).attr('id', $(this).attr('id').replace(/(\d+)(?!.*\d)/g, no));
+            });
+
+//            var $select = $row.find('select');
+//
+//            $select.attr('name', $select.attr('name').replace(/(\d+)(?!.*\d)/g, count));
+
+            $("#userRoles").append($row);
+
+        });
     });
 
 
@@ -35,14 +54,4 @@
             return s.charAt(Math.floor(Math.random() * s.length));
         }).join('');
     }
-    //            $(".navbar-toggler").click(function () {
-    //                $("#sideBarCollapse").collapse('toggle');
-    //                $(".sidebar").hide();
-    //                $(".main").addClass(".col-xs-offset-1");
-    //            });
-    //            
-    //            $(".hide-sidebar").click(function(){
-    //                $("#sideBarCollapse").collapse('toggle');
-    //                $(".sidebar").show();
-    //            });
 </script>

@@ -48,6 +48,7 @@ public class ConfigurationController
     public ModelAndView listEnabled()
     {
         ModelMap mm = new ModelMap("configurationList", configurationService.getAllEnabled());
+        mm.addAttribute("configurationForm", new ConfigurationForm());
         
         return new ModelAndView("configuration.list", mm);
     }
@@ -56,6 +57,7 @@ public class ConfigurationController
     public ModelAndView listAll()
     {
         ModelMap mm = new ModelMap("configurationList", configurationService.getAll());
+        mm.addAttribute("configurationForm", new ConfigurationForm());
         
         return new ModelAndView("configuration.list", mm);
     }
