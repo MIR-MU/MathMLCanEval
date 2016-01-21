@@ -44,11 +44,8 @@
                             </c:choose>          
                         </td>
                         <td>
-                            <a href="${context}/configuration/download/${entry.id}/" class="disable-link-color" title="<spring:message code="global.operation.download" />"">
+                            <a href="${context}/configuration/download/${entry.id}/" class="disable-link-color" title="<spring:message code="global.operation.download" />">
                                 <i class="fa fa-download"></i>
-                            </a>
-                            <a href="${context}/configuration/delete/${entry.id}/" class="disable-link-color" title="<spring:message code="global.operation.delete" />">
-                                <i class="fa fa-trash-o"></i>
                             </a>
                         </td>
                     </tr>

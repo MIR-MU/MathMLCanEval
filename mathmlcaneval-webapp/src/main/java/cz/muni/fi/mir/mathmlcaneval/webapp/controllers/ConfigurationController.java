@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.sitetitle.SiteTitle;
 
 /**
  *
@@ -55,6 +56,7 @@ public class ConfigurationController
     private static final Logger LOGGER = LogManager.getLogger(ConfigurationController.class);
 
     @RequestMapping("/")
+    @SiteTitle(value = "Configurations")
     public ModelAndView listEnabled()
     {
         ModelMap mm = new ModelMap("configurationList", configurationService.getAllEnabled());
@@ -70,14 +72,6 @@ public class ConfigurationController
         mm.addAttribute("configurationForm", new ConfigurationForm());
 
         return new ModelAndView("configuration.list", mm);
-    }
-
-    @RequestMapping(value = "/submit/", method = RequestMethod.GET)
-    public ModelAndView submit()
-    {
-        ModelMap mm = new ModelMap("configurationForm", new ConfigurationForm());
-
-        return new ModelAndView("configuration.submit", mm);
     }
 
     @RequestMapping(value = "/submit/", method = RequestMethod.POST)
