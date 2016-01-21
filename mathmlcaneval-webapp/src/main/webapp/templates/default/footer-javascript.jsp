@@ -11,10 +11,12 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+<script src="<c:url value="/resources/js/highlight.pack.min.js"/>"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 
 <script>
     $(document).ready(function () {
+        console.log($(document).height()+';'+$(window).height());
         for (var i = 0; i < 25; i++) {
             var $tr = $('<tr>').append(
                     $('<td>').text(randomString(5)),
@@ -26,7 +28,6 @@
         }
 
         $(this).on('click', '.add-userrole', function () {
-//            var count = $("#userRoles tr").length;
             var $row = $("#userRoles tr:last").clone();
 
             $.each($row.find('select'), function () {
@@ -36,12 +37,25 @@
                 $(this).attr('id', $(this).attr('id').replace(/(\d+)(?!.*\d)/g, no));
             });
 
-//            var $select = $row.find('select');
-//
-//            $select.attr('name', $select.attr('name').replace(/(\d+)(?!.*\d)/g, count));
-
             $("#userRoles").append($row);
 
+        });
+
+        $(".show-config").on('click', function () {
+            $.ajax({
+                url: '${context}/ajax/configuration/',
+                data: {'id': $(this).data('config')}
+            }).done(function (result) {
+                var $modal = $("#showConfigModal").modal({show: false});
+                $modal.find('.modal-body').css({
+                    'overflow-y':'scroll',
+                    'height' : ($(document).height()-200)
+                });
+                $configBody = $modal.find('code.xml');
+                $configBody.append(result.replace(/</g, '&lt;'));
+                hljs.highlightBlock($configBody.get(0));
+                $modal.modal('show');
+            });
         });
     });
 

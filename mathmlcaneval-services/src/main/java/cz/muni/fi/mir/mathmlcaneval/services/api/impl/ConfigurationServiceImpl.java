@@ -69,16 +69,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
     }
 
     @Override
-    @Transactional(readOnly = false)
-    @Secured(value = "ROLE_STAFF")
-    public void changeNote(ConfigurationDTO configuration) throws IllegalArgumentException
-    {
-        Configuration c = configurationDAO.getByID(configuration.getId());
-        c.setNote(configuration.getNote());
-        configurationDAO.update(c);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     @Secured(value = "ROLE_USER")
     public ConfigurationDTO getConfigurationByID(Long id) throws IllegalArgumentException

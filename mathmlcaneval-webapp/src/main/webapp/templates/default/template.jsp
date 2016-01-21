@@ -26,6 +26,7 @@
         <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
         <link href="<c:url value="/resources/css/style.min.css" />" rel="stylesheet">
         <link href="<c:url value="/resources/css/font-awesome.min.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/highlight.min.css" />" rel="stylesheet">
     </head>
 
     <body>

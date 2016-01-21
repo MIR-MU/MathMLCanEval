@@ -19,7 +19,14 @@ import cz.muni.fi.mir.mathmlcaneval.api.ConfigurationService;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.ConfigurationDTO;
 import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
 import cz.muni.fi.mir.mathmlcaneval.webapp.forms.ConfigurationForm;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +36,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -43,54 +51,80 @@ public class ConfigurationController
     private ConfigurationService configurationService;
     @Autowired
     private Mapper mapper;
-    
+
+    private static final Logger LOGGER = LogManager.getLogger(ConfigurationController.class);
+
     @RequestMapping("/")
     public ModelAndView listEnabled()
     {
         ModelMap mm = new ModelMap("configurationList", configurationService.getAllEnabled());
         mm.addAttribute("configurationForm", new ConfigurationForm());
-        
+
         return new ModelAndView("configuration.list", mm);
     }
-    
+
     @RequestMapping("/all/")
     public ModelAndView listAll()
     {
         ModelMap mm = new ModelMap("configurationList", configurationService.getAll());
         mm.addAttribute("configurationForm", new ConfigurationForm());
-        
+
         return new ModelAndView("configuration.list", mm);
     }
-    
-    @RequestMapping(value="/submit/",method = RequestMethod.GET)
+
+    @RequestMapping(value = "/submit/", method = RequestMethod.GET)
     public ModelAndView submit()
     {
         ModelMap mm = new ModelMap("configurationForm", new ConfigurationForm());
-        
+
         return new ModelAndView("configuration.submit", mm);
     }
-    @RequestMapping(value="/submit/",method = RequestMethod.POST)
-    public ModelAndView submit(@ModelAttribute("configurationForm")@Valid ConfigurationForm configurationForm,BindingResult result, Model model)
+
+    @RequestMapping(value = "/submit/", method = RequestMethod.POST)
+    public ModelAndView submit(@ModelAttribute("configurationForm") @Valid ConfigurationForm configurationForm, BindingResult result, Model model)
     {
         ConfigurationDTO config = mapper.map(configurationForm, ConfigurationDTO.class);
-        
+
         configurationService.createConfiguration(config);
-        
+
         return new ModelAndView("redirect:/configuration/");
     }
-    
-    @RequestMapping(value="/disable/{id}/",method = RequestMethod.GET)
+
+    @RequestMapping(value = "/disable/{id}/", method = RequestMethod.GET)
     public ModelAndView disableConfiguration(@PathVariable Long id)
     {
         ConfigurationDTO config = configurationService.getConfigurationByID(id);
         configurationService.disableConfiguration(config);
-        
+
         return new ModelAndView("redirect:/configuration/");
     }
-    
-    /*    
-    void enableConfiguration(ConfigurationDTO configuration) throws IllegalArgumentException;
-    void changeNote(ConfigurationDTO configuration) throws IllegalArgumentException;
-    ConfigurationDTO getConfigurationByID(Long id) throws IllegalArgumentException;
-    */
+
+    @RequestMapping(value = "/enable/{id}/", method = RequestMethod.GET)
+    public ModelAndView enableConfiguration(@PathVariable Long id)
+    {
+        ConfigurationDTO configuration = configurationService.getConfigurationByID(id);
+        configurationService.enableConfiguration(configuration);
+
+        return new ModelAndView("redirect:/configuration/");
+    }
+
+    @RequestMapping(value = "/download/{id}/", method = RequestMethod.GET)
+    public @ResponseBody
+    void download(@PathVariable Long id, HttpServletResponse servletResponse)
+    {
+        ConfigurationDTO configurationDTO = configurationService.getConfigurationByID(id);
+
+        try (InputStream is = new ByteArrayInputStream(configurationDTO.getConfiguration().getBytes()))
+        {
+            servletResponse.setHeader("Content-Disposition", "attachment; filename=configuration-"+configurationDTO.getName()+".xml");
+            IOUtils.copy(is, servletResponse.getOutputStream());
+
+            servletResponse.flushBuffer();
+        }
+        catch (IOException ex)
+        {
+            LOGGER.error(ex);
+        }
+
+    }
 }

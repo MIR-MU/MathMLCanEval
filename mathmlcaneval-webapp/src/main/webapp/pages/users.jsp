@@ -39,6 +39,10 @@
                                                 <c:out value="${subentry.roleName}"/> 
                                             </c:forEach>
                                         </td>
+                                        <td>
+                                            <i class="fa fa-pencil-square-o"></i>
+                                            <i class="fa fa-trash"></i>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -87,8 +91,8 @@
                                                     <form:select cssClass="form-control" path="roles[0]" items="${userRoleList}" itemLabel="roleName" itemValue="id"/>
                                                 </td>
                                                 <td>
-                                                    <a href="#" class="add-userrole">addable</a>
-                                                    <a href="#" class="remove-userrole">addable</a>
+                                                    <a href="#" class="add-userrole disable-link-color"><i class="fa fa-plus-square-o fa-2x"></i></a>
+                                                    <a href="#" class="remove-userrole disable-link-color"><i class="fa fa-minus-square-o fa-2x"></i></a>
                                                 </td>
                                             </tr>
                                         </table>

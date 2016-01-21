@@ -27,7 +27,6 @@ public interface ConfigurationService
     void createConfiguration(ConfigurationDTO configuration) throws IllegalArgumentException;
     void disableConfiguration(ConfigurationDTO configuration) throws IllegalArgumentException;
     void enableConfiguration(ConfigurationDTO configuration) throws IllegalArgumentException;
-    void changeNote(ConfigurationDTO configuration) throws IllegalArgumentException;
     ConfigurationDTO getConfigurationByID(Long id) throws IllegalArgumentException;
     List<ConfigurationDTO> getAll();
     List<ConfigurationDTO> getAllEnabled();
