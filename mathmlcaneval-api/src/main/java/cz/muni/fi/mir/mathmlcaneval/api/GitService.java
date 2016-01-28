@@ -17,7 +17,7 @@ package cz.muni.fi.mir.mathmlcaneval.api;
 
 import cz.muni.fi.mir.mathmlcaneval.api.dto.GitBranchDTO;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.GitRevisionDTO;
-import cz.muni.fi.mir.mathmlcaneval.api.dto.GitTagDTO;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -28,17 +28,19 @@ public interface GitService
 {
     void createRevision(GitRevisionDTO gitRevision) throws IllegalArgumentException;
 
-    void deleteRevision(GitRevisionDTO gitRevision) throws IllegalArgumentException;
+    List<GitRevisionDTO> getRevisions();
 
-    void createBranch(GitBranchDTO gitBranch) throws IllegalArgumentException;
+    List<GitBranchDTO> getBranches() throws IOException;
 
-    void deleteBranch(GitBranchDTO gitBranch) throws IllegalArgumentException;
+    void checkout(GitBranchDTO gitBranch) throws IOException;
 
-    void createTag(GitTagDTO gitTag) throws IllegalArgumentException;
+    void pull() throws IOException;
 
-    List<GitBranchDTO> getBranches();
+    void synchronize() throws IOException;
 
-    List<GitRevisionDTO> getRevisions(GitBranchDTO gitBranchDTO);
+    void buildRevision() throws IOException;
 
-    List<GitTagDTO> getTags();
+    List<GitRevisionDTO> listRevisions(GitBranchDTO gitBranch) throws IOException;
+
+    GitBranchDTO getCurrentBranch() throws IOException;
 }

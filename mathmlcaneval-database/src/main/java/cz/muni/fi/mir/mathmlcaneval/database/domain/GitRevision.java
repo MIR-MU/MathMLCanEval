@@ -17,18 +17,38 @@ package cz.muni.fi.mir.mathmlcaneval.database.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Entity(name = "gitrevision")
+@NamedQueries(
+{
+    @NamedQuery(name = "GitRevision.getAll", query = "SELECT gr FROM gitrevision gr ORDER BY gr.id DESC")
+})
 public class GitRevision implements Serializable
 {
     private static final long serialVersionUID = 8335998299183785102L;
-
+    @Id
+    @Column(name = "gitrevision_id", nullable = false)
+    @SequenceGenerator(name = "gitrevisionid_seq", sequenceName = "gitrevisionid_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "gitrevisionid_seq")
     private Long id;
+    @Column(name = "revisionhash")
     private String revisionHash;
+    @Column(name = "note")
     private String note;
+    @ManyToOne
     private GitBranch gitBranch;
 
     public Long getId()

@@ -15,13 +15,15 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.webapp.controllers;
 
+import cz.muni.fi.mir.mathmlcaneval.api.GitService;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.GitBranchDTO;
-import cz.muni.fi.mir.mathmlcaneval.services.GitServiceIO;
 import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,24 +37,66 @@ public class GitController
 {
     private static final Logger LOGGER = LogManager.getLogger(GitController.class);
     @Autowired
-    private GitServiceIO gitServiceIO;
-
-    @RequestMapping("/branches/")
-    public ModelAndView branches()
+    private GitService gitService;
+    
+    @RequestMapping("/")
+    public ModelAndView list()
     {
+        ModelMap mm = new ModelMap();
         try
         {
-            for (GitBranchDTO gb : gitServiceIO.listBranches())
-            {
-                LOGGER.info(gb.getName());
-            }
+            mm.addAttribute("currentBranch", gitService.getCurrentBranch());
+            mm.addAttribute("branches", gitService.getBranches());
+            mm.addAttribute("persistedRevisions", gitService.getRevisions());
+            mm.addAttribute("revisions", gitService.listRevisions(gitService.getCurrentBranch()));
         }
         catch (IOException ex)
         {
-            LOGGER.fatal(ex);
+            LOGGER.error(ex);
         }
-
+        return new ModelAndView("git", mm);
+    }
+    
+    @RequestMapping("/branch/{branch}/checkout/")
+    public ModelAndView checkout(@PathVariable("branch") String branch) throws IOException
+    {
+        GitBranchDTO gitBranchDTO = new GitBranchDTO();
+        gitBranchDTO.setName(branch);
+        
+        gitService.checkout(gitBranchDTO);
+        
         return new ModelAndView("redirect:/");
-
+    }
+    
+    @RequestMapping("/pull/")
+    public ModelAndView pull()
+    {
+        return null;
+    }
+    
+    @RequestMapping("/synchronize/")
+    public ModelAndView synchronize() throws IOException
+    {
+        gitService.synchronize();
+        
+        return new ModelAndView("redirect:/git/");
+    }
+    
+    @RequestMapping("/build/")
+    public ModelAndView build()
+    {
+        return null;
+    }
+    
+    @RequestMapping("/revision/{revision}/persist/")
+    public ModelAndView persistRevision(@PathVariable("revision") String revision)
+    {
+        return null;
+    }
+    
+    @RequestMapping("/branch/{branch}revision/")
+    public ModelAndView listRevisions(@PathVariable("branch") String branch)
+    {
+        return null;
     }
 }

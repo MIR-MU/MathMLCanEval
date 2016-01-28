@@ -24,6 +24,9 @@
             <a class="nav-link" href="${context}/users/">Users &amp; roles</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="${context}/git/">Git control</a>
+        </li>
+<!--        <li class="nav-item">
             <div class="dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Git control &amp; revisions</a>
                 <div class="dropdown-menu">
@@ -32,7 +35,7 @@
                     <a class="dropdown-item" href="#">Revisions</a>
                 </div>
             </div>
-        </li>
+        </li>-->
         <li class="nav-item">
             <div class="dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources &amp; programs</a>

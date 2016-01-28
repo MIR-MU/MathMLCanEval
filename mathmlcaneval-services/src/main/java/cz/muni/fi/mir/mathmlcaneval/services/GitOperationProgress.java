@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.mathmlcaneval.database;
-
-import cz.muni.fi.mir.mathmlcaneval.database.domain.GitTag;
+package cz.muni.fi.mir.mathmlcaneval.services;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public interface GitTagDAO extends GenericDAO<GitTag, Long>
+public interface GitOperationProgress
 {
-    
+    void lock() throws IllegalStateException;
+
+    void unlock() throws IllegalStateException;
+
+    boolean locked();
 }

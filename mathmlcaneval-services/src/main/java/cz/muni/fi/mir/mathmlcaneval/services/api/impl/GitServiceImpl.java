@@ -18,16 +18,35 @@ package cz.muni.fi.mir.mathmlcaneval.services.api.impl;
 import cz.muni.fi.mir.mathmlcaneval.api.GitService;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.GitBranchDTO;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.GitRevisionDTO;
-import cz.muni.fi.mir.mathmlcaneval.api.dto.GitTagDTO;
 import cz.muni.fi.mir.mathmlcaneval.database.GitBranchDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.GitRevisionDAO;
-import cz.muni.fi.mir.mathmlcaneval.database.GitTagDAO;
+import cz.muni.fi.mir.mathmlcaneval.database.domain.GitBranch;
+import cz.muni.fi.mir.mathmlcaneval.database.domain.GitRevision;
+import cz.muni.fi.mir.mathmlcaneval.services.GitOperationProgress;
 import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
+import cz.muni.fi.mir.mathmlcaneval.services.MavenService;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jgit.api.CreateBranchCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Service
-public class GitServiceImpl implements GitService
+public class GitServiceImpl implements GitService, InitializingBean, DisposableBean
 {
     private static final Logger LOGGER = LogManager.getLogger(GitServiceImpl.class);
     @Autowired
@@ -44,72 +63,290 @@ public class GitServiceImpl implements GitService
     @Autowired
     private GitBranchDAO gitBranchDAO;
     @Autowired
-    private GitTagDAO gitTagDAO;
+    private GitOperationProgress gitOperationProgress;
     @Autowired
     private Mapper mapper;
-    
-    @Override
-    @Transactional(readOnly = false)
-    @Secured(value = "ROLE_STAFF")
-    public List<GitBranchDTO> getBranches()
-    {
-        return mapper.mapList(gitBranchDAO.getAll(), GitBranchDTO.class);
-    }
+    private static final Path REPO_FOLDER = Paths.get("C:\\Users\\emptak\\Documents\\NetBeansProjects\\MathMLCan\\.git");
+    private Repository repository = null;
+    private Git git = null;
+
+    @Autowired
+    private MavenService mavenService;
 
     @Override
     @Transactional(readOnly = true)
-    @Secured(value = "ROLE_STAFF")
-    public List<GitRevisionDTO> getRevisions(GitBranchDTO gitBranchDTO)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    @Secured(value = "ROLE_STAFF")
-    public List<GitTagDTO> getTags()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    @Secured(value = "ROLE_STAFF")
     public void createRevision(GitRevisionDTO gitRevision) throws IllegalArgumentException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        GitRevision revision = mapper.map(gitRevision, GitRevision.class);
+        gitRevisionDAO.create(revision);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<GitRevisionDTO> getRevisions()
+    {
+        return mapper.mapList(gitRevisionDAO.getAll(), GitRevisionDTO.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<GitBranchDTO> getBranches() throws IOException
+    {
+        List<GitBranchDTO> result = new ArrayList<>();
+        for (GitBranch gb : gitBranchDAO.getAll())
+        {
+            GitBranchDTO dto = mapper.map(gb, GitBranchDTO.class);
+            if (dto.getName().equals(getCurrentBranch().getName()))
+            {
+                dto.setActive(true);
+            }
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @Override
+    public void checkout(GitBranchDTO gitBranch) throws IOException
+    {
+        GitBranch dbBranch = gitBranchDAO.getBranchByName(gitBranch.getName());
+
+        //TODO
+        // fetch branches from database
+        // check branches on filesystem
+        // if branch exist on filesysystem && exists in database
+        // do checkout
+        // if branch does not exist in database create and do checkout
+        // throw exception because branch does not exist
+        boolean isLocal = false;
+
+        try
+        {
+            for (Ref ref : listLocalBranches())
+            {
+                LOGGER.info("Going thru branch {}", ref.getName());
+                if (ref.getName().startsWith("refs/heads/" + gitBranch.getName()))
+                {
+                    LOGGER.info("Requested branch is local");
+                    isLocal = true;
+
+                    break;
+                }
+            }
+            if (!isLocal)
+            {
+                LOGGER.info("Request branch is remote");
+                Ref ref = git.checkout().setCreateBranch(true).setName(gitBranch.getName())
+                        .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK)
+                        .setStartPoint("origin/" + gitBranch.getName())
+                        .call();
+            }
+            else
+            {
+                LOGGER.info("Checking out local branch");
+                git.checkout().setName(gitBranch.getName()).call();
+            }
+
+        }
+        catch (GitAPIException ex)
+        {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public void pull() throws IOException
+    {
+        try
+        {
+            git.pull().call();
+        }
+        catch (GitAPIException ex)
+        {
+            LOGGER.error(ex);
+        }
     }
 
     @Override
     @Transactional(readOnly = false)
-    @Secured(value = "ROLE_STAFF")
-    public void deleteRevision(GitRevisionDTO gitRevision) throws IllegalArgumentException
+    public void synchronize() throws IOException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<GitBranch> persistedBranches = gitBranchDAO.getAll();
+        GitBranchDTO currentBranchDTO = getCurrentBranch();
+        Collection<Ref> branches = null;
+
+        try
+        {
+            branches = listAllBranches();
+        }
+        catch (GitAPIException ex)
+        {
+            LOGGER.fatal(ex);
+        }
+        Map<String, Boolean> remotes = new HashMap<>();
+        List<String> localBranches = new ArrayList<>();
+
+        for (Ref ref : branches)
+        {
+            if (ref.getName().startsWith("refs/heads/"))
+            {
+                localBranches.add(StringUtils.substringAfter(ref.getName(), "refs/heads/"));
+                LOGGER.debug("Branch {} added to local branches.", ref.getName());
+            }
+            else if (ref.getName().startsWith("refs/remotes/origin/") && !ref.getName().endsWith("HEAD"))
+            {
+                remotes.put(StringUtils.substringAfter(ref.getName(), "refs/remotes/origin/"), Boolean.FALSE);
+                LOGGER.debug("Branch {} added to remotes.", ref.getName());
+            }
+            else
+            {
+                LOGGER.debug("Ref is head {}", ref.getName());
+            }
+        }
+
+        for (String local : localBranches)
+        {
+            if (remotes.containsKey(local))
+            {
+                remotes.put(local, Boolean.TRUE);
+            }
+        }
+
+        for (Map.Entry<String, Boolean> entry : remotes.entrySet())
+        {
+            if (entry.getValue().equals(Boolean.FALSE))
+            {
+                GitBranchDTO branchDTO = new GitBranchDTO();
+                branchDTO.setName(entry.getKey());
+                try
+                {
+                    remoteCheckout(branchDTO);
+                    LOGGER.info("Checkouting following branch {} because its not local.", branchDTO.getName());
+                    localBranches.add(branchDTO.getName());
+                }
+                catch (GitAPIException ex)
+                {
+                    LOGGER.error(ex);
+                }
+            }
+        }
+
+        Map<String, Boolean> persisted = new HashMap<>();
+
+        for (String local : localBranches)
+        {
+            persisted.put(local, Boolean.FALSE);
+        }
+
+        for (GitBranch branch : persistedBranches)
+        {
+            if (persisted.containsKey(branch.getName()))
+            {
+                persisted.put(branch.getName(), Boolean.TRUE);
+            }
+        }
+
+        for (Map.Entry<String, Boolean> entry : persisted.entrySet())
+        {
+            if (!entry.getValue())
+            {
+                GitBranch newBranch = new GitBranch();
+                newBranch.setName(entry.getKey());
+                gitBranchDAO.create(newBranch);
+                LOGGER.debug("{} persisted.", newBranch.getName());
+            }
+        }
+
+        checkout(currentBranchDTO);
     }
 
     @Override
-    @Transactional(readOnly = false)
-    @Secured(value = "ROLE_STAFF")
-    public void createBranch(GitBranchDTO gitBranch) throws IllegalArgumentException
+    public void buildRevision() throws IOException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        mavenService.buildJar();
     }
 
     @Override
-    @Transactional(readOnly = false)
-    @Secured(value = "ROLE_STAFF")
-    public void deleteBranch(GitBranchDTO gitBranch) throws IllegalArgumentException
+    @Transactional(readOnly = true)
+    public List<GitRevisionDTO> listRevisions(GitBranchDTO gitBranch) throws IOException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<GitRevisionDTO> result = new ArrayList<>(15);
+        if (getCurrentBranch().equals(gitBranch))
+        {
+            try
+            {
+                for (RevCommit commit : git.log().setMaxCount(15).call())
+                {
+                    GitRevisionDTO rev = new GitRevisionDTO();
+                    rev.setRevisionHash(commit.getName());
+                    result.add(rev);
+                }
+            }
+            catch (GitAPIException ex)
+            {
+                throw new IOException(ex);
+            }
+        }
+        else
+        {
+            //todo
+        }
+
+        return result;
+    }
+
+    //http://stackoverflow.com/a/16327910/1203690
+    private Collection<Ref> listLocalBranches() throws GitAPIException
+    {
+        Collection<Ref> toFilter = listAllBranches();
+        toFilter.removeAll(listRemoteBranches());
+        return toFilter;
     }
 
     @Override
-    @Transactional(readOnly = false)
-    @Secured(value = "ROLE_STAFF")
-    public void createTag(GitTagDTO gitTag) throws IllegalArgumentException
+    public void afterPropertiesSet() throws Exception
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        repository = new FileRepositoryBuilder().setGitDir(REPO_FOLDER.toFile()).build();
+        git = new Git(repository);
     }
 
+    @Override
+    public void destroy() throws Exception
+    {
+        git.close();
+    }
+
+    private void remoteCheckout(GitBranchDTO gitBranch) throws GitAPIException
+    {
+        git.checkout().setCreateBranch(true).setName(gitBranch.getName())
+                .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK)
+                .setStartPoint("origin/" + gitBranch.getName())
+                .call();
+    }
+
+    private Collection<Ref> listRemoteBranches() throws GitAPIException
+    {
+        return listBranches(ListBranchCommand.ListMode.REMOTE);
+    }
+
+    private Collection<Ref> listAllBranches() throws GitAPIException
+    {
+        return listBranches(ListBranchCommand.ListMode.ALL);
+    }
+
+    private Collection<Ref> listBranches(ListBranchCommand.ListMode listModes) throws GitAPIException
+    {
+        return git.branchList().setListMode(listModes).call();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public GitBranchDTO getCurrentBranch() throws IOException
+    {
+        String branchName = git.getRepository().getBranch();
+
+//        GitBranch gitBranch = gitBranchDAO.getBranchByName(branchName);
+        GitBranchDTO dto = mapper.map(gitBranchDAO.getBranchByName(branchName),GitBranchDTO.class);
+        dto.setActive(true);
+        return dto;
+    }
 }

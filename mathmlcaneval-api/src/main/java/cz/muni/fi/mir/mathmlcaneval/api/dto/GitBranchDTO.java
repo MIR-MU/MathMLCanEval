@@ -25,9 +25,10 @@ import java.util.Objects;
 public class GitBranchDTO implements Serializable
 {
     private static final long serialVersionUID = 1411567983243778087L;
-    
+
     private Long id;
     private String name;
+    private boolean active = false;
 
     public Long getId()
     {
@@ -47,6 +48,16 @@ public class GitBranchDTO implements Serializable
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public boolean isActive()
+    {
+        return active;
+    }
+
+    public void setActive(boolean active)
+    {
+        this.active = active;
     }
 
     @Override
@@ -75,6 +86,6 @@ public class GitBranchDTO implements Serializable
     @Override
     public String toString()
     {
-        return "GitBranchDTO{" + "id=" + id + ", name=" + name + '}';
+        return "GitBranchDTO{" + "id=" + id + ", name=" + name + ", active=" + active + '}';
     }
 }

@@ -97,6 +97,6 @@ public class GitRevisionDTO implements Serializable
     @Override
     public String toString()
     {
-        return "GitRevisionDTO{" + "id=" + id + ", hash=" + revisionHash + ", note=" + note + ", gitBranch=" + gitBranch + '}';
+        return "GitRevisionDTO{" + "id=" + id + ", revisionHash=" + revisionHash + ", note=" + note + ", gitBranch=" + gitBranch + '}';
     }
 }

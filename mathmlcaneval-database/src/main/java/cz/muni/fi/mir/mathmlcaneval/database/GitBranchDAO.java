@@ -23,5 +23,5 @@ import cz.muni.fi.mir.mathmlcaneval.database.domain.GitBranch;
  */
 public interface GitBranchDAO extends GenericDAO<GitBranch, Long>
 {
-    
+    GitBranch getBranchByName(String branchName);
 }
