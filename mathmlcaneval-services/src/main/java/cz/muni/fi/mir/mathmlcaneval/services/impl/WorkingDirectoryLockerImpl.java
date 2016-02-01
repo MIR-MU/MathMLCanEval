@@ -15,16 +15,16 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.impl;
 
-import cz.muni.fi.mir.mathmlcaneval.services.GitOperationProgress;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
+import cz.muni.fi.mir.mathmlcaneval.services.WorkingDirectoryLocker;
 
 @Component
-public class GitOperationProgressImpl implements GitOperationProgress
+public class WorkingDirectoryLockerImpl implements WorkingDirectoryLocker
 {
     private boolean operationRunning = false;
-    private static final Logger LOGGER = LogManager.getLogger(GitOperationProgressImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(WorkingDirectoryLockerImpl.class);
 
     @Override
     public synchronized void lock() throws IllegalStateException

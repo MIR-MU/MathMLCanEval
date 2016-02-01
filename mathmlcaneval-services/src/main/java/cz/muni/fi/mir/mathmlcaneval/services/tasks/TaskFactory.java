@@ -15,11 +15,9 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
-import cz.muni.fi.mir.mathmlcaneval.api.dto.ConfigurationDTO;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.SourceDTO;
-import cz.muni.fi.mir.mathmlcaneval.database.domain.GitRevision;
+import java.util.List;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Lookup;
 
 /**
  *
@@ -27,41 +25,27 @@ import org.springframework.beans.factory.annotation.Lookup;
  */
 public abstract class TaskFactory
 {
-    private SourceDTO source;
-    private GitRevision revision;
-    private ConfigurationDTO configurationDTO;
-    
     public abstract Task newAbstractTask();
-    @Lookup(value = "formulaLoadTask")
     public abstract FormulaLoadTask abstractFormulaLoadTask();
     public abstract FormulaCanonicalizeTask abstractFormulaCanonicalizeTask();
+    public abstract MavenTask abstractMavenTask();
     
-    public FormulaLoadTask newFormulaLoadTask(){
+    public FormulaLoadTask newFormulaLoadTask(SourceDTO source){
         FormulaLoadTask task = abstractFormulaLoadTask();
         task.setSource(source);
         task.setId(getTaskID());
         
-        
-        
         return task;
     }
 
-    public void setSource(SourceDTO source)
+    public MavenTask newMavenTask(List<String> goals)
     {
-        this.source = source;
+        MavenTask task = abstractMavenTask();
+        task.setUserGoals(goals);
+        task.setId(getTaskID());
+        
+        return task;
     }
-
-    public void setRevision(GitRevision revision)
-    {
-        this.revision = revision;
-    }
-
-    public void setConfigurationDTO(ConfigurationDTO configurationDTO)
-    {
-        this.configurationDTO = configurationDTO;
-    }
-
-    
     
     
     private String getTaskID(){

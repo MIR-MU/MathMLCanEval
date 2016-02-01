@@ -15,11 +15,13 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services;
 
+import cz.muni.fi.mir.mathmlcaneval.services.tasks.MavenTask;
+
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface MavenService
 {
-    void buildJar();
+    void buildJar(MavenTask mavenTask);
 }

@@ -13,17 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.mathmlcaneval.services;
+package cz.muni.fi.mir.mathmlcaneval.services.tasks;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public interface GitOperationProgress
+public class MavenTask extends Task
 {
-    void lock() throws IllegalStateException;
+    private final List<String> defaultGoals = Arrays.asList("clean install");
+    private List<String> userGoals = new ArrayList<>();
 
-    void unlock() throws IllegalStateException;
+    public List<String> getUserGoals()
+    {
+        return userGoals;
+    }
 
-    boolean locked();
+    public void setUserGoals(List<String> userGoals)
+    {
+        this.userGoals = userGoals;
+    }
 }

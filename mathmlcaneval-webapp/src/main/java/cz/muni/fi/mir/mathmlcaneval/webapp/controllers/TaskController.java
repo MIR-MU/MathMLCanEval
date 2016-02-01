@@ -49,9 +49,7 @@ public class TaskController
         sourceDTO.setId(Long.valueOf("1"));
         sourceDTO.setRootPath(Paths.get("C:\\Users\\emptak\\Desktop\\MathMLCanEval\\testbase"));
 
-        taskFactory.setSource(sourceDTO);
-
-        FormulaLoadTask task = taskFactory.newFormulaLoadTask();
+        FormulaLoadTask task = taskFactory.newFormulaLoadTask(sourceDTO);
 
         try
         {

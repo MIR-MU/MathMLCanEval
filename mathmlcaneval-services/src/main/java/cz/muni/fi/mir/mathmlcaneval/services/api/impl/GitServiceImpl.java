@@ -22,9 +22,9 @@ import cz.muni.fi.mir.mathmlcaneval.database.GitBranchDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.GitRevisionDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.GitBranch;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.GitRevision;
-import cz.muni.fi.mir.mathmlcaneval.services.GitOperationProgress;
 import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
 import cz.muni.fi.mir.mathmlcaneval.services.MavenService;
+import cz.muni.fi.mir.mathmlcaneval.services.WorkingDirectoryLocker;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -63,7 +63,7 @@ public class GitServiceImpl implements GitService, InitializingBean, DisposableB
     @Autowired
     private GitBranchDAO gitBranchDAO;
     @Autowired
-    private GitOperationProgress gitOperationProgress;
+    private WorkingDirectoryLocker gitOperationProgress;
     @Autowired
     private Mapper mapper;
     private static final Path REPO_FOLDER = Paths.get("C:\\Users\\emptak\\Documents\\NetBeansProjects\\MathMLCan\\.git");
@@ -257,12 +257,6 @@ public class GitServiceImpl implements GitService, InitializingBean, DisposableB
         }
 
         checkout(currentBranchDTO);
-    }
-
-    @Override
-    public void buildRevision() throws IOException
-    {
-        mavenService.buildJar();
     }
 
     @Override

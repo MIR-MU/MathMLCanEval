@@ -15,9 +15,11 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
+import cz.muni.fi.mir.mathmlcaneval.api.GitService;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
 import cz.muni.fi.mir.mathmlcaneval.services.FormulaCanonicalizerService;
 import cz.muni.fi.mir.mathmlcaneval.services.FormulaLoaderService;
+import cz.muni.fi.mir.mathmlcaneval.services.MavenService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,10 @@ public class TaskServiceImpl implements TaskService
     private TaskServiceStatus status = new TaskServiceStatus();
     @Autowired
     private FormulaLoaderService formulaLoaderService;
+    @Autowired
+    private GitService gitService;
+    @Autowired
+    private MavenService mavenService;
 
     @Autowired
     private FormulaCanonicalizerService formulaCanonicalizerService;
@@ -70,6 +76,10 @@ public class TaskServiceImpl implements TaskService
         else if (task instanceof FormulaCanonicalizeTask)
         {
 
+        }
+        else if(task instanceof MavenTask)
+        {
+            mavenService.buildJar((MavenTask) task);
         }
         else
         {

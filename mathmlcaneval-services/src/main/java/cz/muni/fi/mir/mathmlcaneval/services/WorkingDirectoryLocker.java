@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.muni.fi.mir.mathmlcaneval.services.tasks;
+package cz.muni.fi.mir.mathmlcaneval.services;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public enum TaskOperation
+public interface WorkingDirectoryLocker
 {
-    LOAD_SOURCE, IMPORT_DATABASE, CANONICALIZE
+    void lock() throws IllegalStateException;
+
+    void unlock() throws IllegalStateException;
+
+    boolean locked();
 }

@@ -38,8 +38,6 @@ public interface GitService
 
     void synchronize() throws IOException;
 
-    void buildRevision() throws IOException;
-
     List<GitRevisionDTO> listRevisions(GitBranchDTO gitBranch) throws IOException;
 
     GitBranchDTO getCurrentBranch() throws IOException;

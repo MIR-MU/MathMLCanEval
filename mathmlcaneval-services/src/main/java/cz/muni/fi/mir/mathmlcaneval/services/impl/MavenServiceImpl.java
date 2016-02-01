@@ -16,8 +16,10 @@
 package cz.muni.fi.mir.mathmlcaneval.services.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.services.MavenService;
+import cz.muni.fi.mir.mathmlcaneval.services.tasks.MavenTask;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
@@ -25,6 +27,7 @@ import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,13 +37,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class MavenServiceImpl implements MavenService
 {
+    private static final List<String> DEFAULT_GOALS = Arrays.asList("clean","install");
     // locking system
     @Override
-    public void buildJar()
+    @Async
+    public void buildJar(MavenTask mavenTask)
     {
         InvocationRequest request = new DefaultInvocationRequest();
         request.setPomFile(Paths.get("C:\\Users\\emptak\\Documents\\NetBeansProjects\\MathMLCan\\pom.xml").toFile());
-        request.setGoals(Arrays.asList("clean","package"));
+        if(mavenTask.getUserGoals() == null || mavenTask.getUserGoals().isEmpty())
+        {
+            request.setGoals(DEFAULT_GOALS);
+        }
+        else
+        {
+            request.setGoals(mavenTask.getUserGoals());
+        }
+        
+        
         
         Invoker invoker = new DefaultInvoker();
         try
