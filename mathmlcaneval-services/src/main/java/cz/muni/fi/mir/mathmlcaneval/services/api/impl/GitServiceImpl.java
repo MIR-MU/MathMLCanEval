@@ -340,6 +340,22 @@ public class GitServiceImpl implements GitService, InitializingBean, DisposableB
 
 //        GitBranch gitBranch = gitBranchDAO.getBranchByName(branchName);
         GitBranchDTO dto = mapper.map(gitBranchDAO.getBranchByName(branchName),GitBranchDTO.class);
+        if(dto == null)
+        {
+            if(!StringUtils.isEmpty(branchName))
+            {
+                GitBranch branch = new GitBranch();
+                branch.setName(branchName);
+                gitBranchDAO.create(branch);
+                
+                dto = mapper.map(gitBranchDAO.getBranchByName(branchName),GitBranchDTO.class);
+            }
+        }
+        
+        if(dto == null)
+        {
+            throw new RuntimeException("Unable to get current branch.");
+        }
         dto.setActive(true);
         return dto;
     }
