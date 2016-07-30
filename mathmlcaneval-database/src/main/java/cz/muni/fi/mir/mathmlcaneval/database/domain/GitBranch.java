@@ -15,6 +15,8 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.database.domain;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -27,15 +29,15 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Entity(name = "gitbranch")
 @NamedQueries(
-{
-    @NamedQuery(name = "GitBranch.getAll", query = "SELECT gb FROM gitbranch gb ORDER BY gb.id DESC"),
-    @NamedQuery(name = "GitBranch.getByName", query = "SELECT gb FROM gitbranch gb WHERE gb.name = :branchname")
-})
+        {
+                @NamedQuery(name = "GitBranch.getAll", query = "SELECT gb FROM gitbranch gb ORDER BY gb.id DESC"),
+                @NamedQuery(name = "GitBranch.getByName", query = "SELECT gb FROM gitbranch gb WHERE gb.name = :branchname")
+        })
+@Data
 public class GitBranch implements Serializable
 {
     private static final long serialVersionUID = 1532327614785162342L;
@@ -47,53 +49,4 @@ public class GitBranch implements Serializable
     private Long id;
     @Column(name = "name")
     private String name;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final GitBranch other = (GitBranch) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "GitBranchDTO{" + "id=" + id + ", name=" + name + '}';
-    }
 }

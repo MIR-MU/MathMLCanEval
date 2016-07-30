@@ -15,6 +15,8 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.database.domain;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -28,14 +30,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Entity(name = "gitrevision")
 @NamedQueries(
-{
-    @NamedQuery(name = "GitRevision.getAll", query = "SELECT gr FROM gitrevision gr ORDER BY gr.id DESC")
-})
+        {
+                @NamedQuery(name = "GitRevision.getAll", query = "SELECT gr FROM gitrevision gr ORDER BY gr.id DESC")
+        })
+@Data
 public class GitRevision implements Serializable
 {
     private static final long serialVersionUID = 8335998299183785102L;
@@ -50,73 +52,4 @@ public class GitRevision implements Serializable
     private String note;
     @ManyToOne
     private GitBranch gitBranch;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getRevisionHash()
-    {
-        return revisionHash;
-    }
-
-    public void setRevisionHash(String revisionHash)
-    {
-        this.revisionHash = revisionHash;
-    }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public void setNote(String note)
-    {
-        this.note = note;
-    }
-
-    public GitBranch getGitBranch()
-    {
-        return gitBranch;
-    }
-
-    public void setGitBranch(GitBranch gitBranch)
-    {
-        this.gitBranch = gitBranch;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 73 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final GitRevision other = (GitRevision) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "GitRevisionDTO{" + "id=" + id + ", hash=" + revisionHash + ", note=" + note + ", gitBranch=" + gitBranch + '}';
-    }
 }

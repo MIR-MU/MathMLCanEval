@@ -15,6 +15,8 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.database.domain;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -30,15 +32,15 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @NamedQueries(
-{
-    @NamedQuery(name = "User.getAll", query = "SELECT u FROM users u"),
-    @NamedQuery(name = "User.getByUsername", query = "SELECT u FROM users u WHERE u.username = :username")
-})
+        {
+                @NamedQuery(name = "User.getAll", query = "SELECT u FROM users u"),
+                @NamedQuery(name = "User.getByUsername", query = "SELECT u FROM users u WHERE u.username = :username")
+        })
 @Entity(name = "users")
+@Data
 public class User implements Serializable
 {
     private static final long serialVersionUID = -2685542470279397388L;
@@ -53,102 +55,8 @@ public class User implements Serializable
     private String username;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false,name = "realname")
+    @Column(nullable = false, name = "realname")
     private String realName;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roles;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
-
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public String getRealName()
-    {
-        return realName;
-    }
-
-    public void setRealName(String realName)
-    {
-        this.realName = realName;
-    }
-
-    public List<UserRole> getRoles()
-    {
-        return roles;
-    }
-
-    public void setRoles(List<UserRole> roles)
-    {
-        this.roles = roles;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final User other = (User) obj;
-        if (!Objects.equals(this.id, other.id))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "User{" + "id=" + id + ", email=" + email + ", username=" + username + ", password=" + password + ", realName=" + realName + ", roles=" + roles + '}';
-    }
-
 }

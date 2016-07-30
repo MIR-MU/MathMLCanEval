@@ -15,6 +15,8 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.database.domain;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,14 +35,14 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @NamedQueries(
-{
-    @NamedQuery(name = "Source.getAll", query = "SELECT s FROM source s ORDER BY s.id DESC")
-})
+        {
+                @NamedQuery(name = "Source.getAll", query = "SELECT s FROM source s ORDER BY s.id DESC")
+        })
 @Entity(name = "source")
+@Data
 public class Source implements Serializable
 {
     private static final long serialVersionUID = -8062769058303589060L;
@@ -70,94 +72,5 @@ public class Source implements Serializable
     private void handlePathLoad()
     {
         rootPath = Paths.get(rootPathString);
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public void setNote(String note)
-    {
-        this.note = note;
-    }
-
-    public Path getRootPath()
-    {
-        return rootPath;
-    }
-
-    public void setRootPath(Path rootPath)
-    {
-        this.rootPath = rootPath;
-    }
-
-    public Program getProgram()
-    {
-        return program;
-    }
-
-    public void setProgram(Program program)
-    {
-        this.program = program;
-    }
-
-    public String getRootPathString()
-    {
-        return rootPathString;
-    }
-
-    public void setRootPathString(String rootPathString)
-    {
-        this.rootPathString = rootPathString;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final Source other = (Source) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Source{" + "id=" + id + ", name=" + name + ", note=" + note + ", rootPath=" + rootPath + ", program=" + program + ", rootPathString=" + rootPathString + '}';
     }
 }

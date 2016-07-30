@@ -15,6 +15,8 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.database.domain;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -27,14 +29,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @NamedQueries(
-{
-    @NamedQuery(name = "Program.getAll", query = "SELECT p FROM program p ORDER BY p.id DESC"),
-})
+        {
+                @NamedQuery(name = "Program.getAll", query = "SELECT p FROM program p ORDER BY p.id DESC"),
+        })
 @Entity(name = "program")
+@Data
 public class Program implements Serializable
 {
     private static final long serialVersionUID = 5678608279618167973L;
@@ -45,77 +47,8 @@ public class Program implements Serializable
     private Long id;
     @Column(name = "name")
     private String name;
-    @Column(name ="programparameters")
+    @Column(name = "programparameters")
     private String parameters;
     @Column(name = "note")
     private String note;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getParameters()
-    {
-        return parameters;
-    }
-
-    public void setParameters(String parameters)
-    {
-        this.parameters = parameters;
-    }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public void setNote(String note)
-    {
-        this.note = note;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final Program other = (Program) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Program{" + "id=" + id + ", name=" + name + ", parameters=" + parameters + ", note=" + note + '}';
-    }
 }
