@@ -31,10 +31,8 @@ import javax.persistence.SequenceGenerator;
 /**
  * @author Dominik Szalai - emptulik at gmail.com
  */
-@NamedQueries(
-        {
-                @NamedQuery(name = "Program.getAll", query = "SELECT p FROM program p ORDER BY p.id DESC"),
-        })
+
+@NamedQuery(name = "Program.getAll", query = "SELECT p FROM program p ORDER BY p.id DESC")
 @Entity(name = "program")
 @Data
 public class Program implements Serializable

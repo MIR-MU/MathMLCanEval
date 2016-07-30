@@ -6,28 +6,26 @@
 package cz.muni.fi.mir.mathmlcaneval.database.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.database.GenericDAO;
-import java.io.Serializable;
-import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.Serializable;
+import java.util.List;
 
 /**
- *
- * @author Dominik Szalai - emptulik at gmail.com
  * @param <T>
  * @param <PK>
+ * @author Dominik Szalai - emptulik at gmail.com
  */
-public class GenericDAOImpl<T, PK extends Serializable> implements GenericDAO<T, PK>
+public abstract class AbstractDAO<T, PK extends Serializable> implements GenericDAO<T, PK>
 {
     @PersistenceContext
-    protected EntityManager entityManager;
-    protected final Class<T> type;
+    private EntityManager entityManager;
     private final String findAllQueryName;
-    
-    public GenericDAOImpl(Class<T> type, String findAllQueryName)
+
+    public AbstractDAO()
     {
-        this.type = type;
-        this.findAllQueryName = findAllQueryName;
+        this.findAllQueryName = getClassType().getSimpleName() + ".getAll";
     }
 
     @Override
@@ -43,24 +41,32 @@ public class GenericDAOImpl<T, PK extends Serializable> implements GenericDAO<T,
     }
 
     @Override
-    public T getByID(PK pk)
+    public T getById(PK id)
     {
-        return entityManager.find(type, pk);
+        return entityManager.find(getClassType(), id);
     }
 
     @Override
     public void delete(PK pk)
     {
-        T deletable = getByID(pk);
-        if(deletable != null)
+        T goodbye = getById(pk);
+        if (goodbye != null)
         {
-            this.entityManager.remove(deletable);
+            this.entityManager.remove(goodbye);
         }
     }
 
     @Override
     public List<T> getAll()
     {
-        return entityManager.createNamedQuery(findAllQueryName, type).getResultList();
-    }    
+        return entityManager.createNamedQuery(findAllQueryName, getClassType()).getResultList();
+    }
+
+    @Override
+    public abstract Class<T> getClassType();
+
+    protected EntityManager getEntityManager()
+    {
+        return entityManager;
+    }
 }

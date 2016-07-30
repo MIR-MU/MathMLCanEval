@@ -19,14 +19,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-@NamedQueries(
-        {
-            @NamedQuery(name = "UserRole.getAll", query = "SELECT ur FROM usersrole ur"),
-            @NamedQuery(name = "UserRole.getByName", query = "SELECT ur FROM usersrole ur WHERE ur.roleName = :rolename")
-        })
+@NamedQuery(name = "UserRole.getAll", query = "SELECT ur FROM usersrole ur")
 @Entity(name = "usersrole")
 @Data
 public class UserRole implements Serializable

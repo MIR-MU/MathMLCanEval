@@ -19,7 +19,7 @@ package cz.muni.fi.mir.mathmlcaneval.test.integration;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.UserRoleDTO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
 import cz.muni.fi.mir.mathmlcaneval.database.factories.DomainFactory;
-import cz.muni.fi.mir.mathmlcaneval.database.impl.UserRoleDAOImpl;
+import cz.muni.fi.mir.mathmlcaneval.database.UserRoleDAO;
 import cz.muni.fi.mir.mathmlcaneval.services.api.impl.UserRoleServiceImpl;
 import cz.muni.fi.mir.mathmlcaneval.services.factories.DTOFactory;
 import cz.muni.fi.mir.mathmlcaneval.services.impl.MapperImpl;
@@ -45,7 +45,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class UserRoleMockTest
 {
     @Mock
-    private UserRoleDAOImpl userRoleDAOImpl;
+    private UserRoleDAO userRoleDAOImpl;
     @Mock
     private MapperImpl mapper;
     @InjectMocks
@@ -83,7 +83,7 @@ public class UserRoleMockTest
         
         UserRoleDTO result = userRoleServiceImpl.getByID(Long.valueOf("4"));
         
-        Mockito.verify(userRoleDAOImpl).getByID(Long.valueOf("4"));
+        Mockito.verify(userRoleDAOImpl).getById(Long.valueOf("4"));
     }
     
     @Test

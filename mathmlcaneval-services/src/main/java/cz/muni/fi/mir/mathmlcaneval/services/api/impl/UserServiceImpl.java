@@ -20,14 +20,15 @@ import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
 import cz.muni.fi.mir.mathmlcaneval.database.UserDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.User;
 import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
-import java.util.List;
-import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  *
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService
             throw new IllegalArgumentException("Given id is null.");
         }
         
-        return mapper.map(userDAO.getByID(id), UserDTO.class);
+        return mapper.map(userDAO.getById(id), UserDTO.class);
     }
 
     @Override

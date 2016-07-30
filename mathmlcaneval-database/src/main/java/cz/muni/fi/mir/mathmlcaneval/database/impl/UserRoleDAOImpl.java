@@ -17,43 +17,39 @@ package cz.muni.fi.mir.mathmlcaneval.database.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.database.UserRoleDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
-import javax.persistence.NoResultException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
+
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  * @author Robert Siska
  * @version 2.0
  * @since 1.0
  */
 @Repository
-public class UserRoleDAOImpl extends GenericDAOImpl<UserRole, Long> implements UserRoleDAO
+public class UserRoleDAOImpl extends AbstractDAO<UserRole, Long> implements UserRoleDAO
 {
-    private static final Logger LOG = LogManager.getLogger(UserRoleDAOImpl.class);
-
-    public UserRoleDAOImpl()
-    {
-        super(UserRole.class, "UserRole.getAll");
-    }
 
     @Override
     public UserRole getByName(String roleName)
     {
-        UserRole ur = null;
         try
         {
-            ur = entityManager.createNamedQuery("UserRole.getByName", type)
+            return getEntityManager()
+                    .createQuery("SELECT ur FROM usersrole ur WHERE ur.roleName = :rolename", getClassType())
                     .setParameter("rolename", roleName)
                     .getSingleResult();
         }
         catch (NoResultException nre)
         {
-            LOG.trace(nre.getMessage());
+            return null;
         }
-        
-        return ur;
+    }
+
+    @Override
+    public Class<UserRole> getClassType()
+    {
+        return UserRole.class;
     }
 }

@@ -18,24 +18,27 @@ package cz.muni.fi.mir.mathmlcaneval.database.impl;
 import cz.muni.fi.mir.mathmlcaneval.database.GitRevisionDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.GitBranch;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.GitRevision;
-import java.util.List;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Repository
-public class GitRevisionDAOImpl extends GenericDAOImpl<GitRevision, Long> implements GitRevisionDAO
+public class GitRevisionDAOImpl extends AbstractDAO<GitRevision, Long> implements GitRevisionDAO
 {
-    public GitRevisionDAOImpl()
-    {
-        super(GitRevision.class, "GitRevision.getAll");
-    }
 
     @Override
     public List<GitRevision> getRevisionsForBranch(GitBranch gitBranch)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Class<GitRevision> getClassType()
+    {
+        return GitRevision.class;
     }
 }

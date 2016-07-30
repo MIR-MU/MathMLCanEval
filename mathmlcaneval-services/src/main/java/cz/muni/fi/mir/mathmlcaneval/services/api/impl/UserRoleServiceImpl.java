@@ -20,7 +20,6 @@ import cz.muni.fi.mir.mathmlcaneval.api.dto.UserRoleDTO;
 import cz.muni.fi.mir.mathmlcaneval.database.UserRoleDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
 import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -28,6 +27,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  *
@@ -116,7 +117,7 @@ public class UserRoleServiceImpl implements UserRoleService
             throw new IllegalArgumentException("Given id is null.");
         }
 
-        return mapper.map(userRoleDAO.getByID(id), UserRoleDTO.class);
+        return mapper.map(userRoleDAO.getById(id), UserRoleDTO.class);
 
     }
 

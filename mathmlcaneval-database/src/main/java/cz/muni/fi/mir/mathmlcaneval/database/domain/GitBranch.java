@@ -32,11 +32,7 @@ import javax.persistence.SequenceGenerator;
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Entity(name = "gitbranch")
-@NamedQueries(
-        {
-                @NamedQuery(name = "GitBranch.getAll", query = "SELECT gb FROM gitbranch gb ORDER BY gb.id DESC"),
-                @NamedQuery(name = "GitBranch.getByName", query = "SELECT gb FROM gitbranch gb WHERE gb.name = :branchname")
-        })
+@NamedQuery(name = "GitBranch.getAll", query = "SELECT gb FROM gitbranch gb ORDER BY gb.id DESC")
 @Data
 public class GitBranch implements Serializable
 {

@@ -33,10 +33,7 @@ import javax.persistence.SequenceGenerator;
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Entity(name = "gitrevision")
-@NamedQueries(
-        {
-                @NamedQuery(name = "GitRevision.getAll", query = "SELECT gr FROM gitrevision gr ORDER BY gr.id DESC")
-        })
+@NamedQuery(name = "GitRevision.getAll", query = "SELECT gr FROM gitrevision gr ORDER BY gr.id DESC")
 @Data
 public class GitRevision implements Serializable
 {

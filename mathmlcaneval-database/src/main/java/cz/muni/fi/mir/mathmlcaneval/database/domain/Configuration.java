@@ -31,11 +31,7 @@ import javax.persistence.SequenceGenerator;
 /**
  * @author Dominik Szalai - emptulik at gmail.com
  */
-@NamedQueries(
-        {
-                @NamedQuery(name = "Configuration.getAll", query = "SELECT c FROM configuration c ORDER BY c.id DESC"),
-                @NamedQuery(name = "Configuration.getAllEnabled", query = "SELECT c FROM configuration c WHERE c.active = true ORDER BY c.id DESC")
-        })
+@NamedQuery(name = "Configuration.getAll", query = "SELECT c FROM configuration c ORDER BY c.id DESC")
 @Entity(name = "configuration")
 @Data
 public class Configuration implements Serializable

@@ -20,12 +20,13 @@ import cz.muni.fi.mir.mathmlcaneval.api.dto.ProgramDTO;
 import cz.muni.fi.mir.mathmlcaneval.database.ProgramDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.Program;
 import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  *
@@ -82,7 +83,7 @@ public class ProgramServiceImpl implements ProgramService
         {
             throw new IllegalArgumentException("Invalid ID. Should not be null.");
         }
-        return mapper.map(programDAO.getByID(id), ProgramDTO.class);
+        return mapper.map(programDAO.getById(id), ProgramDTO.class);
 
     }
 

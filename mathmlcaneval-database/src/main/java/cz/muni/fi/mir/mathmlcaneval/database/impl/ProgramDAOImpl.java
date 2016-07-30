@@ -24,10 +24,11 @@ import org.springframework.stereotype.Repository;
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Repository
-public class ProgramDAOImpl extends GenericDAOImpl<Program, Long> implements ProgramDAO
+public class ProgramDAOImpl extends AbstractDAO<Program, Long> implements ProgramDAO
 {
-    public ProgramDAOImpl()
+    @Override
+    public Class<Program> getClassType()
     {
-        super(Program.class, "Program.getAll");
+        return Program.class;
     }
 }

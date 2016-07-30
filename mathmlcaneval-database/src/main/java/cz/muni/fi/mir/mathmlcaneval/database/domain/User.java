@@ -34,11 +34,7 @@ import javax.persistence.SequenceGenerator;
 /**
  * @author Dominik Szalai - emptulik at gmail.com
  */
-@NamedQueries(
-        {
-                @NamedQuery(name = "User.getAll", query = "SELECT u FROM users u"),
-                @NamedQuery(name = "User.getByUsername", query = "SELECT u FROM users u WHERE u.username = :username")
-        })
+@NamedQuery(name = "User.getAll", query = "SELECT u FROM users u")
 @Entity(name = "users")
 @Data
 public class User implements Serializable

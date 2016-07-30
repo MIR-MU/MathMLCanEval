@@ -20,11 +20,12 @@ import cz.muni.fi.mir.mathmlcaneval.api.dto.ConfigurationDTO;
 import cz.muni.fi.mir.mathmlcaneval.database.ConfigurationDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.Configuration;
 import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  *
@@ -53,7 +54,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
     @Secured(value = "ROLE_STAFF")
     public void disableConfiguration(ConfigurationDTO configuration) throws IllegalArgumentException
     {
-        Configuration c = configurationDAO.getByID(configuration.getId());
+        Configuration c = configurationDAO.getById(configuration.getId());
         c.setActive(Boolean.FALSE);
         configurationDAO.update(c);
     }
@@ -63,7 +64,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
     @Secured(value = "ROLE_STAFF")
     public void enableConfiguration(ConfigurationDTO configuration) throws IllegalArgumentException
     {
-        Configuration c = configurationDAO.getByID(configuration.getId());
+        Configuration c = configurationDAO.getById(configuration.getId());
         c.setActive(Boolean.TRUE);
         configurationDAO.update(c);
     }
@@ -73,7 +74,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
     @Secured(value = "ROLE_USER")
     public ConfigurationDTO getConfigurationByID(Long id) throws IllegalArgumentException
     {
-        return mapper.map(configurationDAO.getByID(id), ConfigurationDTO.class);
+        return mapper.map(configurationDAO.getById(id), ConfigurationDTO.class);
     }
 
     @Override

@@ -37,10 +37,8 @@ import javax.persistence.Transient;
 /**
  * @author Dominik Szalai - emptulik at gmail.com
  */
-@NamedQueries(
-        {
-                @NamedQuery(name = "Source.getAll", query = "SELECT s FROM source s ORDER BY s.id DESC")
-        })
+
+@NamedQuery(name = "Source.getAll", query = "SELECT s FROM source s ORDER BY s.id DESC")
 @Entity(name = "source")
 @Data
 public class Source implements Serializable

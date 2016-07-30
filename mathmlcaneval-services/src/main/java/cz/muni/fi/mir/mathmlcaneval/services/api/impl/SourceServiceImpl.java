@@ -20,7 +20,6 @@ import cz.muni.fi.mir.mathmlcaneval.api.dto.SourceDTO;
 import cz.muni.fi.mir.mathmlcaneval.database.SourceDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.Source;
 import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  *
@@ -82,7 +83,7 @@ public class SourceServiceImpl implements SourceService
             throw new IllegalArgumentException("Given is is invalid.");
         }
 
-        return mapper.map(sourceDAO.getByID(id),SourceDTO.class);
+        return mapper.map(sourceDAO.getById(id),SourceDTO.class);
     }
 
     private void checkNull(SourceDTO source) throws IllegalArgumentException

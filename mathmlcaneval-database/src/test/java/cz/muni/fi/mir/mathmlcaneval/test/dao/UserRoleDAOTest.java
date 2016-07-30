@@ -73,7 +73,7 @@ public class UserRoleDAOTest
         
         userRoleDAO.create(ur);
         
-        UserRole result = userRoleDAO.getByID(ur.getId());
+        UserRole result = userRoleDAO.getById(ur.getId());
         
         Assert.assertNotNull("UserRoleDAO returned null.", result);
         Assert.assertNotNull("UserRoleDAO returned result with null ID.", result.getId());
@@ -88,7 +88,7 @@ public class UserRoleDAOTest
         Long id = ur.getId();
         userRoleDAO.delete(id);
         
-        Assert.assertNull("UserRoleDAO did not delete UserRole properly.", userRoleDAO.getByID(id));
+        Assert.assertNull("UserRoleDAO did not delete UserRole properly.", userRoleDAO.getById(id));
     }
     
     @Test
@@ -96,7 +96,7 @@ public class UserRoleDAOTest
     {
         UserRole ur = podamFactory.manufacturePojo(UserRole.class);
         userRoleDAO.create(ur);
-        UserRole update = userRoleDAO.getByID(ur.getId());
+        UserRole update = userRoleDAO.getById(ur.getId());
         update.setRoleName("user");
         userRoleDAO.update(update);
         

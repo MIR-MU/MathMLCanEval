@@ -17,41 +17,37 @@ package cz.muni.fi.mir.mathmlcaneval.database.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.database.UserDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.User;
-import javax.persistence.NoResultException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
+
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  * @author Rober Siska - xsiska2 at mail.muni.cz
  */
 @Repository
-public class UserDAOImpl extends GenericDAOImpl<User,Long> implements UserDAO
+public class UserDAOImpl extends AbstractDAO<User, Long> implements UserDAO
 {
-    private static final Logger LOG = LogManager.getLogger(UserDAOImpl.class);
-    public UserDAOImpl()
-    {
-        super(User.class,"User.getAll");
-    }
 
     @Override
     public User getByUsername(String username)
     {
-        User result = null;
         try
         {
-            result = entityManager
-                    .createNamedQuery("User.getByUsername", type)
+            return getEntityManager()
+                    .createQuery("SELECT u FROM users u WHERE u.username = :username", getClassType())
                     .setParameter("username", username)
                     .getSingleResult();
         }
-        catch(NoResultException nre)
+        catch (NoResultException nre)
         {
-            LOG.trace(nre.getMessage());
+            return null;
         }
-        
-        return result;
-    }    
+    }
+
+    @Override
+    public Class<User> getClassType()
+    {
+        return User.class;
+    }
 }

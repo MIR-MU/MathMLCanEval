@@ -17,26 +17,28 @@ package cz.muni.fi.mir.mathmlcaneval.database.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.database.ConfigurationDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.Configuration;
-import java.util.List;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Repository
-public class ConfigurationDAOImpl extends GenericDAOImpl<Configuration, Long> implements ConfigurationDAO
+public class ConfigurationDAOImpl extends AbstractDAO<Configuration, Long> implements ConfigurationDAO
 {
-
-    public ConfigurationDAOImpl()
-    {
-        super(Configuration.class, "Configuration.getAll");
-    }
 
     @Override
     public List<Configuration> getAllEnabled()
     {
-        return entityManager.createNamedQuery("Configuration.getAllEnabled", type).getResultList();
+        return getEntityManager()
+                .createQuery("SELECT c FROM configuration c WHERE c.active = true ORDER BY c.id DESC", getClassType())
+                .getResultList();
     }
-    
+
+    @Override
+    public Class<Configuration> getClassType()
+    {
+        return Configuration.class;
+    }
 }

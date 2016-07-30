@@ -74,7 +74,7 @@ public class ConfigurationDAOTest
         
         configurationDAO.update(configuration);
         
-        Configuration update = configurationDAO.getByID(configuration.getId());
+        Configuration update = configurationDAO.getById(configuration.getId());
         
         Assert.assertEquals("Name was not changed by DAO layer.", "say my name", update.getName());
     }

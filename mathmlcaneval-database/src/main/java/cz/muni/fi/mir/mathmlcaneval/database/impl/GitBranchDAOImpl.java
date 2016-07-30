@@ -17,29 +17,27 @@ package cz.muni.fi.mir.mathmlcaneval.database.impl;
 
 import cz.muni.fi.mir.mathmlcaneval.database.GitBranchDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.GitBranch;
-import javax.persistence.NoResultException;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.NoResultException;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Repository
-public class GitBranchDAOImpl extends GenericDAOImpl<GitBranch, Long> implements GitBranchDAO
+public class GitBranchDAOImpl extends AbstractDAO<GitBranch, Long> implements GitBranchDAO
 {
 
-    public GitBranchDAOImpl()
-    {
-        super(GitBranch.class, "GitBranch.getAll");
-    }
 
     @Override
     public GitBranch getBranchByName(String branchName)
     {
         try
         {
-            return entityManager.createNamedQuery("GitBranch.getByName", type)
-                    .setParameter("branchname", branchName)
+            return getEntityManager()
+                    .createQuery("SELECT gb FROM gitbranch gb WHERE gb.name = :branchname",getClassType())
+                    .setParameter("branchname",branchName)
                     .getSingleResult();
         }
         catch (NoResultException nre)
@@ -48,4 +46,9 @@ public class GitBranchDAOImpl extends GenericDAOImpl<GitBranch, Long> implements
         }
     }
 
+    @Override
+    public Class<GitBranch> getClassType()
+    {
+        return GitBranch.class;
+    }
 }

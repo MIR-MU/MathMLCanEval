@@ -20,14 +20,15 @@ import cz.muni.fi.mir.mathmlcaneval.database.domain.Source;
 import org.springframework.stereotype.Repository;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 @Repository
-public class SourceDAOImpl extends GenericDAOImpl<Source, Long> implements SourceDAO
+public class SourceDAOImpl extends AbstractDAO<Source, Long> implements SourceDAO
 {
-    public SourceDAOImpl()
+
+    @Override
+    public Class<Source> getClassType()
     {
-        super(Source.class, "Source.getAll");
+        return Source.class;
     }
 }

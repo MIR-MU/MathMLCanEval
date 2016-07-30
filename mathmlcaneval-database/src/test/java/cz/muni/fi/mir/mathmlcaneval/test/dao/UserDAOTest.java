@@ -20,8 +20,6 @@ import cz.muni.fi.mir.mathmlcaneval.database.UserRoleDAO;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.User;
 import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
 import cz.muni.fi.mir.mathmlcaneval.database.factories.DomainFactory;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -39,6 +37,9 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 import uk.co.jemos.podam.api.PodamFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -100,7 +101,7 @@ public class UserDAOTest
     public void testGetById()
     {
         userDAO.create(workingUser);
-        User result = userDAO.getByID(Long.valueOf("1"));
+        User result = userDAO.getById(Long.valueOf("1"));
         
         Assert.assertEquals("UserDAO returned user with different ID than expected.", workingUser.getId(), result.getId());
         Assert.assertEquals("UserDAO returned user with different username than expected.", workingUser.getUsername(), result.getUsername());
@@ -112,20 +113,20 @@ public class UserDAOTest
         userDAO.create(workingUser);
         Long id = workingUser.getId();
         userDAO.delete(id);
-        Assert.assertNull("UserDAO did not delete user", userDAO.getByID(id));
+        Assert.assertNull("UserDAO did not delete user", userDAO.getById(id));
     }
 
     @Test
     public void testUpdate()
     {
         userDAO.create(workingUser);
-        User toUpdate = userDAO.getByID(workingUser.getId());
+        User toUpdate = userDAO.getById(workingUser.getId());
         toUpdate.setEmail("new@email.com");
         toUpdate.setRealName("Norton Bond");
         
         userDAO.update(toUpdate);
         
-        User updated = userDAO.getByID(toUpdate.getId());
+        User updated = userDAO.getById(toUpdate.getId());
         
         Assert.assertEquals("UserDAO did not change users email.", "new@email.com", updated.getEmail());
         Assert.assertEquals("UserDAO did not change users real name.", "Norton Bond", updated.getRealName());

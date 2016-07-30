@@ -13,6 +13,7 @@ import cz.muni.fi.mir.mathmlcaneval.database.domain.UserRole;
  */
 public interface UserRoleDAO extends GenericDAO<UserRole, Long>
 {
+    //todo needed?
     /**
      * Method takes {@code roleName} as input and returns matched
      * {@code UserRole} as result.
