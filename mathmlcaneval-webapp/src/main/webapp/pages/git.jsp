@@ -3,6 +3,14 @@
 <tiles:insertDefinition name="default">
     <tiles:putAttribute name="body">
         <h1>Git Dashboard</h1>
+        <div class="row text-xs-center">
+            <div class="col-xs-1 nav-block nav-block-blue">
+                <a href="#"><i class="fa fa-cloud-download fa-4x"></i><br />Pull</a>
+            </div>
+            <div class="col-xs-1 nav-block nav-block-yellow">
+                <a href="#"><i class="fa fa-cogs fa-4x"></i><br />Build</a>
+            </div>
+        </div>
         <h2 class="text-muted">${currentBranch}</h2>
         <div class="row">
             <div class="col-md-6">

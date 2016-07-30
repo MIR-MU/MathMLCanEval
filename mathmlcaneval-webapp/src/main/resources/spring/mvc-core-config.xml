@@ -33,7 +33,7 @@ http://www.springframework.org/schema/task/spring-task.xsd
     
     <mvc:interceptors>
         <ref bean="localeChangeInterceptor"/>
-        <bean class="org.springframework.web.sitetitle.SiteTitleInterceptor" p:mainTitle="Mathmlcaneval" p:modelVariable="siteTitle" p:separator="|" />
+        <!--<bean class="org.springframework.web.sitetitle.SiteTitleInterceptor" p:mainTitle="Meditor" p:modelVariable="siteTitle" p:separator="|" />-->
     </mvc:interceptors>
 
     <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
@@ -43,7 +43,7 @@ http://www.springframework.org/schema/task/spring-task.xsd
         - POJOs labeled with the @Controller and @Service annotations are auto-detected.
     -->
     <context:component-scan
-        base-package="cz.muni.fi.mir.mathmlcaneval.webapp"/>
+        base-package="cz.muni.fi.meditor.meditor.webapp"/>
 
     <mvc:annotation-driven conversion-service="conversionService" validator="validator"/>
 
@@ -84,14 +84,14 @@ http://www.springframework.org/schema/task/spring-task.xsd
     <mvc:default-servlet-handler />
 
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <property name="formatters">
+<!--        <property name="formatters">
             <set>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.UserRoleFormatter"/>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.ProgramFormatter"/>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.ConfigurationFormatter"/>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.UserFormatter" />
             </set>
-        </property>
+        </property>-->
     </bean>
 
     <!--

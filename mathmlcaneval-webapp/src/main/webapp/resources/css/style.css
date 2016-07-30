@@ -61,7 +61,7 @@ ul.sidebar-nav > li > a:link
     text-decoration: none;
 }
 
-.sidebar-nav-block
+.nav-block
 {
     height: 100px;
     margin: 5px 0 5px 0;
@@ -69,73 +69,73 @@ ul.sidebar-nav > li > a:link
     padding: 10px;
 }
 
-.sidebar-nav-block:first-of-type{
+li.nav-block:first-of-type{
     margin: 0 0 5px 0;
 }
-.sidebar-nav-block:last-of-type{
+li.nav-block:last-of-type{
     margin: 5px 0 0 0;
 }
 
-.sidebar-nav-block-black
+.nav-block-black
 {
     background-color: #FF0000;
 }
 
-.sidebar-nav-block-magneta
+.nav-block-magneta
 {
     background-color: #FF0097;
 }
 
-.sidebar-nav-block-purple
+.nav-block-purple
 {
     background-color:  #A200FF;
 }
 
-.sidebar-nav-block-teal
+.nav-block-teal
 {
     background-color: #00ABA9;
 }
 
-.sidebar-nav-block-lime
+.nav-block-lime
 {
     background-color: #8CBF26;
 }
 
-.sidebar-nav-block-brown
+.nav-block-brown
 {
     background-color: #A05000;
 }
 
-.sidebar-nav-block-pink
+.nav-block-pink
 {
     background-color: #E671B8;
 }
 
-.sidebar-nav-block-orange
+.nav-block-orange
 {
     background-color: #F09609;
 }
 
-.sidebar-nav-block-blue
+.nav-block-blue
 {
     background-color: #1BA1E2;
 }
 
-.sidebar-nav-block-red
+.nav-block-red
 {
     background-color: #E51400;
 }
 
-.sidebar-nav-block-green
+.nav-block-green
 {
     background-color: #339933;
 }
 
-.sidebar-nav-block-yellow
+.nav-block-yellow
 {
     background-color: #fba919;
 }
-.sidebar-nav-block-violet
+.nav-block-violet
 {
     background-color: #5b39b6;
 }
