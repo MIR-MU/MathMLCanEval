@@ -15,26 +15,20 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Data
 public class MavenTask extends Task
 {
-    private final List<String> defaultGoals = Arrays.asList("clean install");
+    private final List<String> defaultGoals = Collections.unmodifiableList(Arrays.asList("clean install"));
     private List<String> userGoals = new ArrayList<>();
-
-    public List<String> getUserGoals()
-    {
-        return userGoals;
-    }
-
-    public void setUserGoals(List<String> userGoals)
-    {
-        this.userGoals = userGoals;
-    }
 }
