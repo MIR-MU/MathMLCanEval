@@ -6,6 +6,11 @@ nbdist/
 nbactions.xml
 .nb-gradle/
 
+nb-configuration.xml
+.project
+.settings
+.classpath
+
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -21,3 +26,5 @@ hs_err_pid*
 
 .idea
 *.iml
+
+target
