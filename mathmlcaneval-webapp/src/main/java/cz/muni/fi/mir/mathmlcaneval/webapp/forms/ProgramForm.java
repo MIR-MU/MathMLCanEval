@@ -15,85 +15,17 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.webapp.forms;
 
-import java.util.Objects;
+import lombok.Data;
 
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class ProgramForm
+@Data
+public class ProgramForm implements Form
 {
     private Long id;
     private String name;
     private String parameters;
     private String note;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getParameters()
-    {
-        return parameters;
-    }
-
-    public void setParameters(String parameters)
-    {
-        this.parameters = parameters;
-    }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public void setNote(String note)
-    {
-        this.note = note;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final ProgramForm other = (ProgramForm) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ProgramForm{" + "id=" + id + ", name=" + name + ", parameters=" + parameters + ", note=" + note + '}';
-    }
 }

@@ -15,20 +15,22 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.webapp.forms;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import javax.validation.constraints.Size;
+import lombok.Data;
 import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.list.LazyList;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class UserForm
+@Data
+public class UserForm implements Form
 {
     private Long id;
     @Email
@@ -43,108 +45,4 @@ public class UserForm
     private String realName;
     @Size(min = 1)
     private List<UserRoleForm> roles = LazyList.lazyList(new ArrayList<UserRoleForm>(), FactoryUtils.instantiateFactory(UserRoleForm.class));
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
-
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public String getRealName()
-    {
-        return realName;
-    }
-
-    public void setRealName(String realName)
-    {
-        this.realName = realName;
-    }
-
-    public List<UserRoleForm> getRoles()
-    {
-        return roles;
-    }
-
-    public void setRoles(List<UserRoleForm> roles)
-    {
-        this.roles = roles;
-    }
-
-    public String getPasswordRepeat()
-    {
-        return passwordRepeat;
-    }
-
-    public void setPasswordRepeat(String passwordRepeat)
-    {
-        this.passwordRepeat = passwordRepeat;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 73 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final UserForm other = (UserForm) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "UserForm{" + "id=" + id + ", email=" + email + ", username=" + username + ", password=" + password + ", realName=" + realName + ", roles=" + roles + '}';
-    }
-
 }

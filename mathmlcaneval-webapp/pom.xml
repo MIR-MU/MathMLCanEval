@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>mathmlcaneval</artifactId>
@@ -17,33 +18,32 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     </properties>
-    
+
     <dependencies>
         <dependency>
-            <groupId>cz.muni.fi.mir</groupId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mathmlcaneval-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>cz.muni.fi.mir</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mathmlcaneval-dependencies</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>cz.muni.fi.mir</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mathmlcaneval-services</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-        </dependency> 
+        </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -76,7 +76,7 @@
         <dependency>
             <groupId>net.sf.dozer</groupId>
             <artifactId>dozer</artifactId>
-        </dependency>       
+        </dependency>
     </dependencies>
 
     <build>
@@ -90,10 +90,10 @@
                     <server>localhost</server>
                     <!--                    <username>admin</username>
                     <password>password</password>-->
-                    <update>true</update> 
+                    <update>true</update>
                     <path>/MathMLCanEval</path>
-                    <port>9082</port>   
-                </configuration>   
+                    <port>9082</port>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

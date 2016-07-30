@@ -15,65 +15,16 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.webapp.forms;
 
-import java.util.Objects;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
-public class UserRoleForm
+@Data
+public class UserRoleForm implements Form
 {
     private Long id;
     @NotEmpty
     private String roleName;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getRoleName()
-    {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName)
-    {
-        this.roleName = roleName;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "UserRoleForm{" + "id=" + id + ", roleName=" + roleName + '}';
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final UserRoleForm other = (UserRoleForm) obj;
-        return Objects.equals(this.id, other.id);
-    }    
 }
