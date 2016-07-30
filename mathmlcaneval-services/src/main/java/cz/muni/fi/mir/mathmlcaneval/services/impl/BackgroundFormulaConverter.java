@@ -19,17 +19,18 @@ import cz.muni.fi.mir.mathmlcaneval.api.FormulaService;
 import cz.muni.fi.mir.mathmlcaneval.api.dto.FormulaDTO;
 import cz.muni.fi.mir.mathmlcaneval.services.tasks.FormulaLoadTask;
 import cz.muni.fi.mir.mathmlcaneval.services.tasks.TaskStatus;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -77,7 +78,7 @@ public class BackgroundFormulaConverter implements Runnable
                     {
                         f.setContent(new String(Files.readAllBytes(path), Charset.forName("UTF-8")));
                         f.setPath(path);
-                        f.setImportTime(DateTime.now());
+                        f.setImportTime(LocalTime.now());
                         f.setFormulaHash(DigestUtils.sha1Hex(f.getContent()));
                         LOGGER.debug("Formula at path {} was added to chunks.", path);
                     }
@@ -109,7 +110,6 @@ public class BackgroundFormulaConverter implements Runnable
     /**
      * Method checks whether task queue is empty or not
      *
-     * @param task to be checked
      * @return true if task queue is empty, false otherwise
      */
     private boolean isQueueEmpty()
@@ -120,7 +120,6 @@ public class BackgroundFormulaConverter implements Runnable
     /**
      * Method checks whether subtask for formula loading is finished
      *
-     * @param task to be checked
      * @return true if formula load task is finished, false otherwise
      */
     private boolean taskIsFinished()

@@ -17,9 +17,9 @@ package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
-import org.joda.time.DateTime;
 
 /**
  *
@@ -32,7 +32,7 @@ public class FormulaDTO implements Serializable, Searchable
     private String content;
     private String formulaHash;
     private String note;
-    private DateTime importTime;
+    private LocalTime importTime;
     private Path path;
     private List<AnnotationDTO> annotations;
     private SourceDTO source;
@@ -81,12 +81,12 @@ public class FormulaDTO implements Serializable, Searchable
         this.note = note;
     }
 
-    public DateTime getImportTime()
+    public LocalTime getImportTime()
     {
         return importTime;
     }
 
-    public void setImportTime(DateTime importTime)
+    public void setImportTime(LocalTime importTime)
     {
         this.importTime = importTime;
     }

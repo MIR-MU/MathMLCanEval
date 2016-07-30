@@ -15,20 +15,20 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
+
 import java.io.Serializable;
+import java.time.LocalTime;
 import java.util.Objects;
-import org.joda.time.DateTime;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 public class ApplicationRunDTO implements Serializable
 {
     private static final long serialVersionUID = -3367780482829168589L;
     private Long id;
-    private DateTime startTime;
-    private DateTime endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private String note;
     private GitRevisionDTO gitRevision;
     private ConfigurationDTO configuration;
@@ -44,22 +44,22 @@ public class ApplicationRunDTO implements Serializable
         this.id = id;
     }
 
-    public DateTime getStartTime()
+    public LocalTime getStartTime()
     {
         return startTime;
     }
 
-    public void setStartTime(DateTime startTime)
+    public void setStartTime(LocalTime startTime)
     {
         this.startTime = startTime;
     }
 
-    public DateTime getEndTime()
+    public LocalTime getEndTime()
     {
         return endTime;
     }
 
-    public void setEndTime(DateTime endTime)
+    public void setEndTime(LocalTime endTime)
     {
         this.endTime = endTime;
     }
@@ -130,10 +130,10 @@ public class ApplicationRunDTO implements Serializable
     @Override
     public String toString()
     {
-        return "ApplicationRunDTO{" + "id=" + id + ", startTime=" + startTime + ", endTime=" + endTime + ", note=" + note + 
-                ", gitRevision=" + gitRevision.getId() + ", configuration=" + configuration.getId() + ", canonicOutputs=" + 
-               ", user=" + user.getId() + '}';
+        return "ApplicationRunDTO{" + "id=" + id + ", startTime=" + startTime + ", endTime=" + endTime + ", note=" + note +
+                ", gitRevision=" + gitRevision.getId() + ", configuration=" + configuration.getId() + ", canonicOutputs=" +
+                ", user=" + user.getId() + '}';
     }
-    
-    
+
+
 }

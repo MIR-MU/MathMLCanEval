@@ -10,12 +10,5 @@
     <packaging>jar</packaging>
     
     <name>MathMLCanEval - API</name>
-    
-    <dependencies>
-        <dependency>
-            <!-- date and time library -->
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency> 
-    </dependencies>
+
 </project>

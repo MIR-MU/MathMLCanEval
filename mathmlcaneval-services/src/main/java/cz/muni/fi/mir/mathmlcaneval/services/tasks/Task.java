@@ -16,8 +16,9 @@
 package cz.muni.fi.mir.mathmlcaneval.services.tasks;
 
 import cz.muni.fi.mir.mathmlcaneval.api.dto.UserDTO;
+
+import java.time.LocalTime;
 import java.util.Objects;
-import org.joda.time.DateTime;
 
 /**
  *
@@ -28,8 +29,8 @@ public class Task
     protected String id;
     protected UserDTO owner;    
     protected TaskStatus taskStatus;    
-    protected DateTime start;
-    protected DateTime end;
+    protected LocalTime start;
+    protected LocalTime end;
 
     public String getId()
     {
@@ -61,22 +62,22 @@ public class Task
         this.taskStatus = taskStatus;
     }
 
-    public DateTime getStart()
+    public LocalTime getStart()
     {
         return start;
     }
 
-    public void setStart(DateTime start)
+    public void setStart(LocalTime start)
     {
         this.start = start;
     }
 
-    public DateTime getEnd()
+    public LocalTime getEnd()
     {
         return end;
     }
 
-    public void setEnd(DateTime end)
+    public void setEnd(LocalTime end)
     {
         this.end = end;
     }
