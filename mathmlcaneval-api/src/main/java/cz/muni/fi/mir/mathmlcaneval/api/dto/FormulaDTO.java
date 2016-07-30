@@ -15,16 +15,17 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Objects;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Data
 public class FormulaDTO implements Serializable, Searchable
 {
     private static final long serialVersionUID = -6538649199225913330L;
@@ -39,144 +40,10 @@ public class FormulaDTO implements Serializable, Searchable
     private UserDTO user;
     private List<CanonicOutputDTO> canonicOutputs;
 
-    @Override
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    @Override
-    public String getContent()
-    {
-        return content;
-    }
-
-    public void setContent(String content)
-    {
-        this.content = content;
-    }
-
-    public String getFormulaHash()
-    {
-        return formulaHash;
-    }
-
-    public void setFormulaHash(String formulaHash)
-    {
-        this.formulaHash = formulaHash;
-    }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public void setNote(String note)
-    {
-        this.note = note;
-    }
-
-    public LocalTime getImportTime()
-    {
-        return importTime;
-    }
-
-    public void setImportTime(LocalTime importTime)
-    {
-        this.importTime = importTime;
-    }
-
-    public Path getPath()
-    {
-        return path;
-    }
-
-    public void setPath(Path path)
-    {
-        this.path = path;
-    }
-
-    public List<AnnotationDTO> getAnnotations()
-    {
-        return annotations;
-    }
-
-    public void setAnnotations(List<AnnotationDTO> annotations)
-    {
-        this.annotations = annotations;
-    }
-
-    public SourceDTO getSource()
-    {
-        return source;
-    }
-
-    public void setSource(SourceDTO source)
-    {
-        this.source = source;
-    }
-
-    public UserDTO getUser()
-    {
-        return user;
-    }
-
-    public void setUser(UserDTO user)
-    {
-        this.user = user;
-    }
-
-    public List<CanonicOutputDTO> getCanonicOutputs()
-    {
-        return canonicOutputs;
-    }
-
-    public void setCanonicOutputs(List<CanonicOutputDTO> canonicOutputs)
-    {
-        this.canonicOutputs = canonicOutputs;
-    }
 
     @Override
     public Class<?> getType()
     {
-        return getClass();
+        return FormulaDTO.class;
     }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 13 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final FormulaDTO other = (FormulaDTO) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "FormulaDTO{" + "id=" + id + ", formulaContent=" + content + ", formulaHash=" + formulaHash + ", note="
-                + note + ", importTime=" + importTime + ", path=" + path + ", annotations="
-                + annotations + ", source=" + source + ", user=" + user
-                + ", canonicOutputs=" + (canonicOutputs != null ? canonicOutputs.size() : 0) + '}';
-    }
-
 }

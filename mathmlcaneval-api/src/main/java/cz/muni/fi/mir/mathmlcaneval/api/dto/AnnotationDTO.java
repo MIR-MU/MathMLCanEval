@@ -15,76 +15,18 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Data
 public class AnnotationDTO implements Serializable
 {
     private static final long serialVersionUID = 3559559865505183582L;
     private Long id;
     private String comment;
     private UserDTO user;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getComment()
-    {
-        return comment;
-    }
-
-    public void setComment(String comment)
-    {
-        this.comment = comment;
-    }
-
-    public UserDTO getUser()
-    {
-        return user;
-    }
-
-    public void setUser(UserDTO user)
-    {
-        this.user = user;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final AnnotationDTO other = (AnnotationDTO) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "AnnotationDTO{" + "id=" + id + ", comment=" + comment + ", user=" + user + '}';
-    }
 }

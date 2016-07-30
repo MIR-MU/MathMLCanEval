@@ -15,13 +15,14 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Data
 public class GitBranchDTO implements Serializable
 {
     private static final long serialVersionUID = 1411567983243778087L;
@@ -29,63 +30,4 @@ public class GitBranchDTO implements Serializable
     private Long id;
     private String name;
     private boolean active = false;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public boolean isActive()
-    {
-        return active;
-    }
-
-    public void setActive(boolean active)
-    {
-        this.active = active;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final GitBranchDTO other = (GitBranchDTO) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "GitBranchDTO{" + "id=" + id + ", name=" + name + ", active=" + active + '}';
-    }
 }

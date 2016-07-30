@@ -16,12 +16,13 @@
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
 public interface Searchable
 {
     Long getId();
+
     String getContent();
+
     Class<?> getType();
 }

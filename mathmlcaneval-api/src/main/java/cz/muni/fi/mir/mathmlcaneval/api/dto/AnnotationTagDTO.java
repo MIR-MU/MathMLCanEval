@@ -15,13 +15,14 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Data
 public class AnnotationTagDTO implements Serializable
 {
     private static final long serialVersionUID = -2860804904918776363L;
@@ -29,73 +30,4 @@ public class AnnotationTagDTO implements Serializable
     private String color;
     private String icon;
     private Integer priority;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getColor()
-    {
-        return color;
-    }
-
-    public void setColor(String color)
-    {
-        this.color = color;
-    }
-
-    public String getIcon()
-    {
-        return icon;
-    }
-
-    public void setIcon(String icon)
-    {
-        this.icon = icon;
-    }
-
-    public Integer getPriority()
-    {
-        return priority;
-    }
-
-    public void setPriority(Integer priority)
-    {
-        this.priority = priority;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final AnnotationTagDTO other = (AnnotationTagDTO) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "AnnotationTagDTO{" + "id=" + id + ", color=" + color + ", icon=" + icon + ", priority=" + priority + '}';
-    }
 }

@@ -16,13 +16,15 @@
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.time.LocalTime;
-import java.util.Objects;
 
 /**
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Data
 public class ApplicationRunDTO implements Serializable
 {
     private static final long serialVersionUID = -3367780482829168589L;
@@ -33,107 +35,4 @@ public class ApplicationRunDTO implements Serializable
     private GitRevisionDTO gitRevision;
     private ConfigurationDTO configuration;
     private UserDTO user;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public LocalTime getStartTime()
-    {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime)
-    {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime()
-    {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime)
-    {
-        this.endTime = endTime;
-    }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public void setNote(String note)
-    {
-        this.note = note;
-    }
-
-    public GitRevisionDTO getGitRevision()
-    {
-        return gitRevision;
-    }
-
-    public void setGitRevision(GitRevisionDTO gitRevision)
-    {
-        this.gitRevision = gitRevision;
-    }
-
-    public ConfigurationDTO getConfiguration()
-    {
-        return configuration;
-    }
-
-    public void setConfiguration(ConfigurationDTO configuration)
-    {
-        this.configuration = configuration;
-    }
-
-    public UserDTO getUser()
-    {
-        return user;
-    }
-
-    public void setUser(UserDTO user)
-    {
-        this.user = user;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final ApplicationRunDTO other = (ApplicationRunDTO) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ApplicationRunDTO{" + "id=" + id + ", startTime=" + startTime + ", endTime=" + endTime + ", note=" + note +
-                ", gitRevision=" + gitRevision.getId() + ", configuration=" + configuration.getId() + ", canonicOutputs=" +
-                ", user=" + user.getId() + '}';
-    }
-
-
 }

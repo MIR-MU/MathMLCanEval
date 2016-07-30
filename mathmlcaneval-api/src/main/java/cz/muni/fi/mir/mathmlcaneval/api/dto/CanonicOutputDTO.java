@@ -15,14 +15,15 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Data
 public class CanonicOutputDTO implements Serializable, Searchable
 {
     private static final long serialVersionUID = -4779832594830201080L;
@@ -34,99 +35,8 @@ public class CanonicOutputDTO implements Serializable, Searchable
     private List<AnnotationDTO> annotations;
 
     @Override
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    @Override
-    public String getContent()
-    {
-        return content;
-    }
-
-    public void setContent(String content)
-    {
-        this.content = content;
-    }
-
-    public String getOutputHash()
-    {
-        return outputHash;
-    }
-
-    public void setOutputHash(String outputHash)
-    {
-        this.outputHash = outputHash;
-    }
-
-    public Integer getRunningTime()
-    {
-        return runningTime;
-    }
-
-    public void setRunningTime(Integer runningTime)
-    {
-        this.runningTime = runningTime;
-    }
-
-    public ApplicationRunDTO getApplicationRun()
-    {
-        return applicationRun;
-    }
-
-    public void setApplicationRun(ApplicationRunDTO applicationRun)
-    {
-        this.applicationRun = applicationRun;
-    }
-
-    public List<AnnotationDTO> getAnnotations()
-    {
-        return annotations;
-    }
-
-    public void setAnnotations(List<AnnotationDTO> annotations)
-    {
-        this.annotations = annotations;
-    }
-
-    @Override
     public Class<?> getType()
     {
-        return getClass();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final CanonicOutputDTO other = (CanonicOutputDTO) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "CanonicOutputDTO{" + "id=" + id + ", outputContent=" + content + ", outputHash=" + outputHash + ", runningTime=" + runningTime + ", applicationRun=" + applicationRun + ", annotations=" + annotations + '}';
+        return CanonicOutputDTO.class;
     }
 }

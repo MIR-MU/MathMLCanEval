@@ -15,13 +15,14 @@
  */
 package cz.muni.fi.mir.mathmlcaneval.api.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
- *
  * @author Dominik Szalai - emptulik at gmail.com
  */
+@Data
 public class GitRevisionDTO implements Serializable
 {
     private static final long serialVersionUID = -2978703782523234778L;
@@ -30,73 +31,4 @@ public class GitRevisionDTO implements Serializable
     private String revisionHash;
     private String note;
     private GitBranchDTO gitBranch;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public String getRevisionHash()
-    {
-        return revisionHash;
-    }
-
-    public void setRevisionHash(String revisionHash)
-    {
-        this.revisionHash = revisionHash;
-    }
-
-    public String getNote()
-    {
-        return note;
-    }
-
-    public void setNote(String note)
-    {
-        this.note = note;
-    }
-
-    public GitBranchDTO getGitBranch()
-    {
-        return gitBranch;
-    }
-
-    public void setGitBranch(GitBranchDTO gitBranch)
-    {
-        this.gitBranch = gitBranch;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 73 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final GitRevisionDTO other = (GitRevisionDTO) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "GitRevisionDTO{" + "id=" + id + ", revisionHash=" + revisionHash + ", note=" + note + ", gitBranch=" + gitBranch + '}';
-    }
 }
