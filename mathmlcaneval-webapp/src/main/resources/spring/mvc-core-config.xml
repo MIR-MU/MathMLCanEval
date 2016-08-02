@@ -16,25 +16,27 @@ http://www.springframework.org/schema/task/spring-task.xsd
 
     <mvc:view-resolvers>
         <mvc:content-negotiation use-not-acceptable="true">
-            <mvc:default-views>	    		
+            <mvc:default-views>
                 <bean class="org.springframework.web.servlet.view.JstlView">
-                    <property name="url" value="" />
+                    <property name="url" value=""/>
                 </bean>
             </mvc:default-views>
         </mvc:content-negotiation>
-	
+
         <!-- Registering BeanNameViewResolver and InternalViewResolver -->
-        <mvc:bean-name />
+        <mvc:bean-name/>
         <mvc:jsp prefix="/pages/" suffix=".jsp"/>
         <!--<mvc:-->
-        <mvc:tiles view-class="org.springframework.web.servlet.view.tiles3.TilesView" />
+        <mvc:tiles view-class="org.springframework.web.servlet.view.tiles3.TilesView"/>
         <!--<mvc:jsp prefix="/pages/" suffix=".jsp"/>-->
     </mvc:view-resolvers>
-    
+
     <mvc:interceptors>
         <ref bean="localeChangeInterceptor"/>
         <!--<bean class="org.springframework.web.sitetitle.SiteTitleInterceptor" p:mainTitle="Meditor" p:modelVariable="siteTitle" p:separator="|" />-->
     </mvc:interceptors>
+
+    <context:component-scan base-package="cz.muni.fi.mir.mathmlcaneval.webapp"/>
 
     <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
         <property name="paramName" value="lang"/>
@@ -43,35 +45,29 @@ http://www.springframework.org/schema/task/spring-task.xsd
         - POJOs labeled with the @Controller and @Service annotations are auto-detected.
     -->
     <context:component-scan
-        base-package="cz.muni.fi.meditor.meditor.webapp"/>
+            base-package="cz.muni.fi.meditor.meditor.webapp"/>
 
     <mvc:annotation-driven conversion-service="conversionService" validator="validator"/>
 
     <!--  all resources inside folder src/main/webapp/resources are mapped so they can be refered to inside JSP files
     (see header.jsp for more details) -->
     <mvc:resources mapping="/resources/**" location="/resources/"/>
-    
-    <!--     <bean
-        id="multipartResolver"
-        class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-        p:defaultEncoding="UTF-8"
-        p:maxUploadSize="104857600"
-    />-->
-    
+
+
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
     </bean>
-    
+
     <bean
-        id="localeResolver"
-        class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
-        p:defaultLocale="en"
+            id="localeResolver"
+            class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
+            p:defaultLocale="en"
     />
-    
+
     <bean
-        id="validator"
-        class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
-        p:validationMessageSource-ref="messageSource"
+            id="validator"
+            class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
+            p:validationMessageSource-ref="messageSource"
     />
 
     <!-- uses WebJars so Javascript and CSS libs can be declared as Maven dependencies (Bootstrap, jQuery...) -->
@@ -81,17 +77,17 @@ http://www.springframework.org/schema/task/spring-task.xsd
 
     <!-- serve static resources (*.html, ...) from src/main/webapp/ 
     Required when both servlet-mapping is '/' and static resources need to be served -->
-    <mvc:default-servlet-handler />
+    <mvc:default-servlet-handler/>
 
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-<!--        <property name="formatters">
+        <property name="formatters">
             <set>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.UserRoleFormatter"/>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.ProgramFormatter"/>
                 <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.ConfigurationFormatter"/>
-                <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.UserFormatter" />
+                <bean class="cz.muni.fi.mir.mathmlcaneval.webapp.formatters.UserFormatter"/>
             </set>
-        </property>-->
+        </property>
     </bean>
 
     <!--
@@ -99,16 +95,16 @@ http://www.springframework.org/schema/task/spring-task.xsd
         - Files are stored inside src/main/resources
     -->
     <bean
-        id="messageSource"
-        class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
-        p:defaultEncoding="UTF-8"
-        p:useCodeAsDefaultMessage="true"
-        p:basenames="classpath:i18n/messages,classpath:i18n/validator"
+            id="messageSource"
+            class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+            p:defaultEncoding="UTF-8"
+            p:useCodeAsDefaultMessage="true"
+            p:basenames="classpath:i18n/messages,classpath:i18n/validator"
     />
-    
+
     <bean
-        id="tilesConfigurer"
-        class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"
-        p:definitions="/WEB-INF/tiles-configuration.xml"
+            id="tilesConfigurer"
+            class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"
+            p:definitions="/WEB-INF/tiles-configuration.xml"
     />
 </beans>

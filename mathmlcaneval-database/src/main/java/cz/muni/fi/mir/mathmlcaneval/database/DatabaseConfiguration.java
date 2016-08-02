@@ -4,8 +4,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -18,8 +16,8 @@ import java.util.Map;
 /**
  * @author Dominik Szalai - emptulik at gmail.com on 30.07.2016.
  */
-@Configuration
-@ComponentScan("cz.muni.fi.mir.mathmlcaneval.database")
+//@Configuration
+//@ComponentScan("cz.muni.fi.mir.mathmlcaneval.database")
 @Log4j2
 public class DatabaseConfiguration
 {

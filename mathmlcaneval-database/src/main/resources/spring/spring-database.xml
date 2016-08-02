@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"        
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx" 
-       xmlns:p="http://www.springframework.org/schema/p"      
-       xmlns:util="http://www.springframework.org/schema/util" 
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
                             http://www.springframework.org/schema/beans/spring-beans.xsd
                             http://www.springframework.org/schema/context 
@@ -29,51 +29,53 @@ limitations under the License.
                             http://www.springframework.org/schema/tx 
                             http://www.springframework.org/schema/tx/spring-tx.xsd"
 >
-    
+
     <beans
-        profile="test">     
+        profile="test">
         <bean
             id="transactionManager"
             class="org.springframework.orm.jpa.JpaTransactionManager"
             p:entityManagerFactory-ref="entityManagerFactory"
         />
-    
+
         <tx:annotation-driven
             transaction-manager="transactionManager"
-        />  
+        />
         <context:property-placeholder
             location="classpath:config/database-test.properties"
             ignore-unresolvable="true"
             order="1"
             properties-ref="defaultProperties"
         />
-        
+
         <bean
             id="podamFactory"
             class="cz.muni.fi.mir.mathmlcaneval.test.support.PodamFactoryImpl"
         />
     </beans>
-    
+
     <beans
-        profile="production">       
+        profile="production">
         <context:property-placeholder
             location="classpath:config/database.properties"
+            properties-ref="defaultProperties"
+            order="1"
             ignore-unresolvable="true"
         />
     </beans>
-    
+
     <beans
         profile="production,test"
     >
-        
+
         <util:properties id="defaultProperties" />
-        
+
         <context:annotation-config />
-        
-        <context:component-scan 
-            base-package="cz.muni.fi.mir.mathmlcaneval.database" 
+
+        <context:component-scan
+            base-package="cz.muni.fi.mir.mathmlcaneval.database"
         />
-        
+
         <bean
             id="dataSource"
             class="com.mchange.v2.c3p0.ComboPooledDataSource"
@@ -90,7 +92,7 @@ limitations under the License.
             p:initialPoolSize="${database.hibernate.connection.poolsize.init}"
             p:preferredTestQuery="${database.hibernate.preferredTestQuery}"
         />
-        
+
         <bean
             id="entityManagerFactory"
             class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
@@ -109,14 +111,14 @@ limitations under the License.
                     <prop key="hibernate.jdbc.batch_size">${database.hibernate.jdbc.batch_size}</prop>
                     <prop key="hibernate.default_schema">${database.hibernate.default_schema}</prop>
                     <!--<prop key="jadira.usertype.autoRegisterUserTypes">${database.hibernate.jadira.usertype.autoRegisterUserTypes}</prop>-->
-                    <!--                <prop key="hibernate.cache.region.factory_class">${database.hibernate.cache.region.factory_class}</prop> 
-                    <prop key="hibernate.cache.provider_class">${database.hibernate.cache.provider_class}</prop> 
-                    <prop key="hibernate.cache.use_second_level_cache">${database.hibernate.cache.use_second_level_cache}</prop>  
-                    <prop key="hibernate.cache.use_query_cache">${database.hibernate.cache.use_query_cache}</prop>  
-                    <prop key="hibernate.search.default.indexBase">${database.hibernate.search.default.indexBase}</prop>                  
+                    <!--                <prop key="hibernate.cache.region.factory_class">${database.hibernate.cache.region.factory_class}</prop>
+                    <prop key="hibernate.cache.provider_class">${database.hibernate.cache.provider_class}</prop>
+                    <prop key="hibernate.cache.use_second_level_cache">${database.hibernate.cache.use_second_level_cache}</prop>
+                    <prop key="hibernate.cache.use_query_cache">${database.hibernate.cache.use_query_cache}</prop>
+                    <prop key="hibernate.search.default.indexBase">${database.hibernate.search.default.indexBase}</prop>
                     <prop key="hibernate.search.default.directory_provider">${database.hibernate.search.default.directory_provider}</prop>
                     <prop key="hibernate.search.lucene_version">${database.hibernate.search.lucene_version}</prop>-->
-                </props>            
+                </props>
             </property>
         </bean>
     </beans>

@@ -48,13 +48,13 @@ limitations under the License.
                 </set>
             </property>
         </bean>
-        
+
         <context:property-placeholder
             location="classpath:config/services.properties"
             ignore-unresolvable="true"
             order="2"
             properties-ref="defaultProperties"
-            
+
         />
         
         <context:annotation-config />

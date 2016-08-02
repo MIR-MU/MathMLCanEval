@@ -25,14 +25,6 @@ import cz.muni.fi.mir.mathmlcaneval.database.domain.GitRevision;
 import cz.muni.fi.mir.mathmlcaneval.services.Mapper;
 import cz.muni.fi.mir.mathmlcaneval.services.MavenService;
 import cz.muni.fi.mir.mathmlcaneval.services.WorkingDirectoryLocker;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,8 +39,14 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  *
@@ -65,8 +63,10 @@ public class GitServiceImpl implements GitService, InitializingBean, DisposableB
     @Autowired
     private WorkingDirectoryLocker gitOperationProgress;
     @Autowired
+    private Environment environment;
+    @Autowired
     private Mapper mapper;
-    private static final Path REPO_FOLDER = Paths.get("C:\\Users\\emptak\\Documents\\NetBeansProjects\\MathMLCan\\.git");
+    private Path repoFolder;
     private Repository repository = null;
     private Git git = null;
 
@@ -299,7 +299,9 @@ public class GitServiceImpl implements GitService, InitializingBean, DisposableB
     @Override
     public void afterPropertiesSet() throws Exception
     {
-        repository = new FileRepositoryBuilder().setGitDir(REPO_FOLDER.toFile()).build();
+        System.err.println(environment.getProperty("services.git.folder"));
+        repoFolder = Paths.get(environment.getProperty("services.git.folder"));
+        repository = new FileRepositoryBuilder().setGitDir(repoFolder.toFile()).build();
         git = new Git(repository);
     }
 
