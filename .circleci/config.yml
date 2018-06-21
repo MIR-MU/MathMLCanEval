@@ -38,7 +38,7 @@ jobs:
             mvn clean install
             popd
           fi
-          mvn dependency:go-offline
+          mvn clean install
 
       - save_cache:
           paths:
