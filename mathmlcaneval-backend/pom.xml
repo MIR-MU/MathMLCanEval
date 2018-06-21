@@ -133,7 +133,7 @@
         <dependency>
             <groupId>cz.muni.fi.mir</groupId>
             <artifactId>mathml-canonicalizer</artifactId>
-            <version>1.0.0</version>
+            <version>1.4.0</version>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
