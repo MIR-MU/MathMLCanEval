@@ -1,0 +1,42 @@
+name: Build
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  MathMLCan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '8'
+    - uses: actions/checkout@v2
+      with:
+        repository: MIR-MU/MathMLCan
+    - run: mvn clean install
+    - run: mvn integration-test
+    - uses: actions/upload-artifact@v2
+      with:
+        name: MathMLCan
+        path: .
+  MathMLCanEval:
+    needs: MathMLCan
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '8'
+    - uses: actions/download-artifact@v2
+      with:
+        name: MathMLCan
+        path: MathMLCan
+    - run: mvn install -f MathMLCan/pom.xml
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mvn clean install
+    - run: mvn integration-test
+    - uses: actions/upload-artifact@v2
+      with:
+        name: MathMLCanEval
+        path: .
