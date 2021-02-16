@@ -19,8 +19,24 @@ jobs:
       with:
         name: MathMLCan
         path: .
+  log4jwebtracker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '8'
+    - uses: actions/checkout@v2
+      with:
+        repository: mrsarm/log4jwebtracker
+        ref: log4jwebtracker-1.0.1
+    - run: mvn clean install
+    - run: mvn integration-test
+    - uses: actions/upload-artifact@v2
+      with:
+        name: log4jwebtracker
+        path: .
   MathMLCanEval:
-    needs: MathMLCan
+    needs: [MathMLCan, log4jwebtracker]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-java@v1
@@ -31,6 +47,11 @@ jobs:
         name: MathMLCan
         path: MathMLCan
     - run: mvn install -f MathMLCan/pom.xml
+    - uses: actions/download-artifact@v2
+      with:
+        name: log4jwebtracker
+        path: log4jwebtracker
+    - run: mvn install -f log4jwebtracker/pom.xml
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0

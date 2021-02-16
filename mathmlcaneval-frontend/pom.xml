@@ -126,13 +126,6 @@
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>log4jwebtracker-releases</id>
-            <url>http://repo.log4jwebtracker.com/maven2</url>
-        </repository>
-    </repositories>
-
     <build> 
         <!-- GIT COMMIT ID PLUGIN CONFIGURATION -->
 
