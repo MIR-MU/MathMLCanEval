@@ -1,8 +1,10 @@
 MathMLCanEval – A web application for evaluating the [MathML Canonicalizer][mathmlcan]
 ======================================================================================
-[![CircleCI](https://circleci.com/gh/MIR-MU/MathMLCanEval/tree/master.svg?style=shield)][ci]
+[![CircleCI](https://circleci.com/gh/MIR-MU/MathMLCanEval/tree/master.svg?style=shield)][CircleCI]
+[![GitHub Actions](https://github.com/MIR-MU/MIaS/workflows/Build/badge.svg)][GitHub Actions]
 
- [ci]: https://circleci.com/gh/MIR-MU/MathMLCanEval/tree/master (CircleCI)
+ [circleci]: https://circleci.com/gh/MIR-MU/MathMLCanEval/tree/master (CircleCI)
+ [github actions]: https://github.com/MIR-MU/MathMLCanEval/actions (GitHub Actions)
 
 The development of the [MathML Canonicalizer][mathmlcan] requires proper
 testing. To meet these needs, we have developed [MathMLCanEval][] – a web
